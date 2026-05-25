@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Option Strategy Interactive Lab</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="strategy-rail" aria-label="策略库">
+        <div class="rail-header">
+          <p class="eyebrow">Options Lab</p>
+          <h1>期权策略库</h1>
+          <p class="rail-copy">复刻 options-viewer 的交互结构，并补充常见策略。</p>
+        </div>
+
+        <label class="search-box">
+          <span>搜索</span>
+          <input id="searchInput" type="search" placeholder="Long Call / Iron / Wheel / 收租" />
+        </label>
+
+        <div id="filterRow" class="filter-row" aria-label="策略分类"></div>
+
+        <div class="stat-list" aria-label="策略数量">
+          <div class="stat"><span>原站</span><strong id="originCount">0</strong></div>
+          <div class="stat"><span>补充</span><strong id="extraCount">0</strong></div>
+          <div class="stat"><span>显示</span><strong id="visibleCount">0</strong></div>
+        </div>
+
+        <div id="strategyList" class="strategy-list"></div>
+      </aside>
+
+      <section class="workspace">
+        <header class="topbar">
+          <div>
+            <p id="strategyMeta" class="eyebrow">策略详情</p>
+            <h2 id="strategyTitle"></h2>
+            <p id="strategySubtitle" class="strategy-subtitle"></p>
+          </div>
+          <div class="top-actions">
+            <button id="markCompletedBtn" class="primary-button" type="button" style="margin-right:8px">✓ 已理解</button>
+            <button id="resetStrategy" class="primary-button" type="button">重置模板</button>
+          </div>
+        </header>
+        <div id="learningPathBar" class="learning-path-bar"></div>
+
+        <section class="layout-grid">
+          <section class="analysis-column">
+            <section class="panel chart-panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">Payoff</p>
+                  <h3>主损益图</h3>
+                </div>
+                <div class="chart-toggles">
+                  <button id="viewCombined" class="toggle-btn active" type="button">组合</button>
+                  <button id="viewPerLeg" class="toggle-btn" type="button">逐腿</button>
+                  <button id="viewProbability" class="toggle-btn" type="button">概率锥</button>
+                </div>
+              </div>
+
+              <div class="slider-grid">
+                <label class="range-control">
+                  <span class="range-label-row"><span>IV 变动(%)</span><output id="ivShiftReadout" class="readout"></output></span>
+                  <input id="ivShiftSlider" type="range" min="-80" max="200" step="1" value="0" />
+                </label>
+                <label class="range-control">
+                  <span class="range-label-row"><span>Date / DTE</span><output id="dateReadout" class="readout"></output></span>
+                  <input id="timeSlider" type="range" min="0" max="45" step="1" value="0" />
+                  <span class="play-controls">
+                    <button id="playBtn" class="play-btn" type="button" title="播放时间衰减">▶</button>
+                    <button id="pauseBtn" class="play-btn" type="button" title="暂停">⏸</button>
+                    <button id="resetTimeBtn" class="play-btn" type="button" title="重置">↺</button>
+                    <select id="playSpeed" class="play-speed">
+                      <option value="1">1x</option>
+                      <option value="2">2x</option>
+                      <option value="5">5x</option>
+                    </select>
+                  </span>
+                </label>
+              </div>
+
+              <div id="chartLegend" class="legend"></div>
+              <div id="mainChart" class="main-chart" aria-label="主损益图"></div>
+              <div id="chartTooltip" class="chart-tooltip" hidden></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">The Greeks</p>
+                  <h3>Risk / Greeks 六联图</h3>
+                </div>
+              </div>
+              <div id="multiLegend" class="curve-legend"></div>
+              <div id="greekGrid" class="greek-grid"></div>
+              <div id="conceptCard" class="concept-card" hidden>
+                <button id="closeConceptCard" class="concept-close" type="button" aria-label="关闭">&times;</button>
+                <div id="conceptContent"></div>
+              </div>
+              <div id="diffWarnModal" class="concept-card" hidden>
+                <button id="closeDiffWarn" class="concept-close" type="button" aria-label="关闭">&times;</button>
+                <div id="diffWarnContent"></div>
+              </div>
+            </section>
+          </section>
+
+          <aside class="control-column">
+            <section class="panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">Scenario</p>
+                  <h3>情景参数</h3>
+                </div>
+              </div>
+              <div id="scenarioControls" class="control-grid"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">Risk</p>
+                  <h3>风险指标</h3>
+                </div>
+              </div>
+              <div id="metricsGrid" class="metrics-grid"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">Legs</p>
+                  <h3>腿组合</h3>
+                </div>
+              </div>
+              <div id="legsEditor" class="legs-editor"></div>
+            </section>
+          </aside>
+        </section>
+
+        <section class="panel education-panel">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">Notes</p>
+              <h3>策略说明与管理口径</h3>
+            </div>
+          </div>
+          <div id="educationGrid" class="education-grid"></div>
+        </section>
+
+        <section class="panel coverage-panel">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">Coverage</p>
+              <h3>补充策略与来源</h3>
+            </div>
+          </div>
+          <p id="coverageSummary" class="coverage-copy"></p>
+          <div id="missingList" class="missing-list"></div>
+          <p class="source-copy">
+            参考：<a href="https://options-viewer.netlify.app/" target="_blank" rel="noreferrer">options-viewer.netlify.app</a>、
+            <a href="https://www.optionseducation.org/strategies/all-strategies-en" target="_blank" rel="noreferrer">OIC</a>、
+            <a href="https://res-certification.cboe.com/resources/options/Trading_Strategies.pdf" target="_blank" rel="noreferrer">Cboe</a>、
+            <a href="https://www.fidelity.com/learning-center/investment-products/options/options-strategy-guide/long-condor-spread-calls" target="_blank" rel="noreferrer">Fidelity</a>。
+          </p>
+        </section>
+
+        <section class="panel disclaimer-panel" aria-label="交易免责声明">
+          <p>本工具仅用于期权策略学习、网页复刻和情景模拟，不构成证券、期权、税务、法律或投资建议。所有图表均为简化模型，真实交易会受报价、流动性、滑点、手续费、保证金、提前行权和税务影响。</p>
+        </section>
+      </section>
+    </main>
+
+    <script src="./data/strategies.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

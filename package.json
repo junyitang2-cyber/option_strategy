@@ -1,0 +1,20 @@
+{
+  "name": "option_strategy",
+  "version": "1.0.0",
+  "description": "本项目用于学习并复刻 `https://options-viewer.netlify.app/` 的期权策略查看网页。",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:smoke": "playwright test tests/smoke.spec.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}
