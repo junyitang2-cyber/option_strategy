@@ -65,6 +65,70 @@ const PROFESSIONAL_CONTENT = {
     ]
   },
 
+  // Long Put - 买入看跌期权
+  "long-put": {
+    exposure: {
+      directional: "-Delta (看跌方向暴露)",
+      volatility: "+Vega (做多波动率)",
+      time: "-Theta (时间衰减是敌人)",
+      convexity: "+Gamma (正凸性，价格下跌加速盈利)"
+    },
+
+    profitLogic: {
+      makesMoneyFrom: "标的下跌带来的Delta收益 + 恐慌时IV上升带来的Vega收益",
+      losesMoneyFrom: "时间流逝(Theta) + IV下跌 + 标的不跌或上涨",
+      bestMarketCondition: "低IV环境买入，预期标的会快速下跌且IV可能飙升(恐慌)",
+      worstScenario: "横盘不动或缓慢上涨，Theta持续侵蚀，IV回落"
+    },
+
+    clientPerspective: {
+      whyClientDoes: [
+        "看跌但不想承担卖空股票的无限上行风险和借券成本",
+        "用有限亏损(权利金)换取下行杠杆",
+        "对冲现有多头仓位(保护性Put)",
+        "事件驱动(财报、监管风险)预期下跌",
+        "恐慌时期做多波动率"
+      ],
+      clientType: "散户投机、机构对冲、对冲基金事件驱动、尾部风险保护",
+      suitability: "理解期权、能承受全部权利金损失、有明确下跌预期或对冲需求"
+    },
+
+    dealerPerspective: {
+      whenDealerSells: "Dealer卖出Long Put给客户后，面临：",
+      exposure: "+Delta (多Delta，标的下跌亏损), -Gamma (需要追跌对冲), -Vega (IV上升亏损), +Theta (时间流逝盈利)",
+      hedging: [
+        "Delta对冲：卖空Delta数量的股票(如ATM put delta=-0.5，卖空50股/张)",
+        "Gamma管理：股价下跌时Delta变得更负，需要继续卖空股票；上涨时回补",
+        "Vega对冲：Put的Vega在恐慌时飙升，Dealer可能买入其他期权对冲",
+        "恐慌溢价：市场下跌时IV skew陡峭，OTM put非常贵，Dealer面临巨大Vega风险"
+      ],
+      profitSource: "Bid-ask价差 + 客户付出的IV溢价 + Put skew溢价(OTM put通常高估)"
+    },
+
+    interviewQuestions: [
+      {
+        q: "Long Put和卖空股票有什么区别？",
+        a: "Long Put有限亏损(权利金)，卖空股票理论上无限亏损。Long Put有正Vega，恐慌时IV上升会增值；卖空股票没有Vega暴露。Long Put有负Theta，时间流逝亏损；卖空股票没有时间衰减。Long Put不需要借券，卖空需要。"
+      },
+      {
+        q: "为什么Put的IV通常比Call高(Put skew)？",
+        a: "市场对下行风险的恐慌大于上行。机构持有股票需要买Put保护，需求推高Put价格。股市下跌通常快速且剧烈(crash)，上涨缓慢(grind)，realized vol在下跌时更高。这种不对称性导致OTM put的IV明显高于同等moneyness的OTM call。"
+      },
+      {
+        q: "Dealer卖出ATM put后如何对冲？",
+        a: "初始：卖空约50股(delta=-0.5)。股价下跌：delta变为-0.6，再卖空10股。股价继续跌：delta到-0.7，再卖空10股。这是追跌对冲 - 被迫'低卖高买'。对于short gamma position，如果realized vol高(尤其是下跌时)，动态对冲会亏损。Dealer赚的是Put skew溢价和bid-ask。"
+      },
+      {
+        q: "什么时候用Long Put做保护比用Stop Loss好？",
+        a: "1) 担心跳空gap down，stop loss无法执行；2) 想保留上行潜力，stop loss会完全退出；3) 财报或事件前，预期波动但方向不确定；4) 长期持仓不想频繁交易。但Long Put有成本(权利金)，如果没发生下跌就是纯损失。"
+      },
+      {
+        q: "如何选择Put的strike和DTE？",
+        a: "保护性Put: strike选择能接受的最大亏损点(如5-10% OTM)，DTE覆盖风险期。投机Put: ATM或略ITM胜率高但贵；OTM便宜但需要大跌。DTE: 30-60天平衡Theta和成本。恐慌时期IV高，可以考虑卖出更远DTE的Put做calendar spread降低成本。"
+      }
+    ]
+  },
+
   // Iron Condor - 铁秃鹰
   "iron-condor": {
     exposure: {
@@ -818,6 +882,385 @@ const PROFESSIONAL_CONTENT = {
       {
         q: "Box Spread教会我们什么？",
         a: "1) Put-Call Parity是fundamental - 违反它就有套利；2) 期权定价不是孤立的，call和put价格相互关联；3) 理论上的'risk-free'在实际中有很多摩擦(costs, assignment, execution)；4) 市场通常很有效，真正的套利机会很少且很小；5) 理解Box Spread帮助理解synthetic positions和hedging。"
+      }
+    ]
+  },
+
+  // Bear Call Spread - 熊市看涨价差
+  "bear-call-spread": {
+    exposure: {
+      directional: "-Delta (看跌方向暴露)",
+      volatility: "-Vega (做空波动率，但有限)",
+      time: "+Theta (时间衰减是朋友)",
+      convexity: "-Gamma (负凸性，价格上涨不利)"
+    },
+
+    profitLogic: {
+      makesMoneyFrom: "标的下跌或横盘 + 时间衰减 + IV下跌",
+      losesMoneyFrom: "标的上涨突破short call strike",
+      bestMarketCondition: "温和看跌或横盘，IV回落",
+      worstScenario: "标的快速上涨突破long call strike，亏损max loss"
+    },
+
+    clientPerspective: {
+      whyClientDoes: [
+        "看跌但不想承担naked short call的无限风险",
+        "用有限风险换取收租收益",
+        "比bull put spread更aggressive的看跌表达",
+        "对冲现有多头仓位"
+      ],
+      clientType: "散户收租、机构方向性表达、对冲基金",
+      suitability: "理解有限盈利和亏损、能承受max loss、有明确看跌预期"
+    },
+
+    dealerPerspective: {
+      whenDealerSells: "Dealer卖出Bear Call Spread给客户(即Dealer买入spread)：",
+      exposure: "Dealer long short call + short long call，net long call spread(bull call spread)",
+      hedging: [
+        "Dealer是long call spread，这是+delta, +gamma, +vega",
+        "Delta对冲：卖空股票对冲long delta",
+        "如果股价上涨，Dealer盈利；如果下跌，Dealer亏损(但有限)",
+        "Bear call spread对Dealer来说是标准产品，风险可控"
+      ],
+      profitSource: "Bid-ask价差(两个call各收一次)"
+    },
+
+    interviewQuestions: [
+      {
+        q: "Bear Call Spread和Bull Put Spread有什么区别？",
+        a: "都是看跌策略，但：Bear Call Spread用calls构建，收到credit，适合温和看跌。Bull Put Spread用puts构建，也收credit，适合温和看涨。在相同strikes下，两者的P&L profile相似，但Greeks略有不同：Bear Call Spread的Vega更负(calls的vega更高)。"
+      },
+      {
+        q: "为什么用Bear Call Spread而不是直接Short Call？",
+        a: "Short Call: 无限风险，保证金高，max profit = premium。Bear Call Spread: 有限风险(max loss = width - credit)，保证金低，max profit = credit。虽然max profit更低，但风险可控，适合账户较小或风险厌恶的交易员。"
+      },
+      {
+        q: "如何选择Bear Call Spread的strikes？",
+        a: "Short call: 选择阻力位或认为价格不会突破的点，通常delta 0.30-0.40。Long call: 在short call上方，width决定max loss。Narrow spread(如$5)：max profit高但max loss也高。Wide spread(如$10)：max profit低但max loss大。通常选择width = 2-3倍credit。"
+      },
+      {
+        q: "什么时候调整Bear Call Spread？",
+        a: "1) 价格接近short call(如距离<10%)：roll up整个spread或roll out到下个月；2) 快速盈利(如赚到max profit的50-70%)：考虑提前平仓；3) 价格突破short call：可以roll up and out，或止损；4) 不要等到到期 - 最后一周Gamma风险大。"
+      },
+      {
+        q: "Bear Call Spread vs Short Put，如何选择？",
+        a: "Bear Call Spread: 看跌策略，收credit，max profit有限。Short Put: 看涨策略，收credit，风险更大。如果看跌，用Bear Call Spread；如果温和看涨或想低价接货，用Short Put。Bear Call Spread更适合明确看跌，Short Put更适合收租或想持股。"
+      }
+    ]
+  },
+
+  // Short Strangle - 卖出宽跨式
+  "short-strangle": {
+    exposure: {
+      directional: "~0 Delta (OTM call和put的delta部分抵消)",
+      volatility: "-Vega (做空波动率)",
+      time: "+Theta (时间衰减是朋友)",
+      convexity: "-Gamma (负凸性，但比short straddle小)"
+    },
+
+    profitLogic: {
+      makesMoneyFrom: "价格停在两个strike之间 + 时间衰减 + IV下跌",
+      losesMoneyFrom: "价格突破任一strike + IV上升",
+      bestMarketCondition: "高IV环境开仓，随后IV回落，价格区间震荡",
+      worstScenario: "突发事件导致价格跳空突破strike，IV飙升"
+    },
+
+    clientPerspective: {
+      whyClientDoes: [
+        "预期标的会在区间内震荡",
+        "比short straddle更保守的收租策略",
+        "赚取OTM期权的时间价值和IV溢价",
+        "定期收入策略(如每月卖strangle)"
+      ],
+      clientType: "专业期权交易员、收租策略投资者、有风险管理的散户",
+      suitability: "理解无限风险、有足够保证金、能监控、有止损纪律"
+    },
+
+    dealerPerspective: {
+      whenDealerSells: "Dealer卖出Short Strangle给客户(即Dealer买入strangle)：",
+      exposure: "Dealer long OTM call + long OTM put，long gamma, long vega, short theta",
+      hedging: [
+        "Dealer是long gamma，但因为OTM，gamma较小",
+        "Delta hedge：根据net delta调整股票仓位",
+        "如果realized vol > implied vol，Dealer可以盈利",
+        "Short strangle对Dealer来说是好产品 - 客户承担主要风险"
+      ],
+      profitSource: "Bid-ask价差 + 如果realized vol > implied vol"
+    },
+
+    interviewQuestions: [
+      {
+        q: "Short Strangle和Short Straddle有什么区别？",
+        a: "Short Strangle: strikes分开(OTM)，profit zone更宽，max profit更低，风险稍小。Short Straddle: strikes都在ATM，profit zone更窄，max profit更高，风险更大。Strangle更适合保守交易员，Straddle更aggressive。"
+      },
+      {
+        q: "如何选择Short Strangle的strikes？",
+        a: "通常选择delta 0.20-0.30的OTM期权。例如：16 delta call和16 delta put，理论上有68%概率两个都到期OTM。更aggressive：选择delta 0.30(更接近ATM)，max profit更高但风险更大。更保守：选择delta 0.10-0.15(更远OTM)，max profit更低但profit zone更宽。"
+      },
+      {
+        q: "Short Strangle的保证金要求是多少？",
+        a: "Reg-T: 两个naked short中较大的一个(通常是short put) + 另一个的premium。Portfolio Margin: 基于stress test，通常更低。例如：卖95P和105C，可能需要$2000-3000保证金/合约。这比short straddle低，因为OTM期权风险较小。"
+      },
+      {
+        q: "什么时候调整Short Strangle？",
+        a: "1) 价格接近任一strike(如距离<5%)：roll strike away或convert to iron strangle；2) IV飙升：考虑平仓止损；3) 时间衰减加速(最后2周)：可以close获利或roll到下个月；4) Delta失衡：调整一侧strike保持中性。不要等到被突破才调整。"
+      },
+      {
+        q: "Short Strangle vs Iron Condor，如何选择？",
+        a: "Short Strangle: 无限风险，保证金高，max profit高，适合有经验的交易员。Iron Condor: 有限风险(有long wings保护)，保证金低，max profit低，适合保守交易员。如果账户小或风险承受力低，用Iron Condor；如果账户大且有经验，Short Strangle的risk/reward更好。"
+      }
+    ]
+  },
+
+  // Short Straddle - 卖出跨式
+  "short-straddle": {
+    exposure: {
+      directional: "0 Delta (ATM call和put的delta抵消)",
+      volatility: "-Vega (做空波动率，IV下跌盈利)",
+      time: "+Theta (时间衰减是朋友，ATM期权Theta最高)",
+      convexity: "-Gamma (负凸性，价格大幅波动快速亏损)"
+    },
+
+    profitLogic: {
+      makesMoneyFrom: "价格停在ATM + 时间衰减 + IV下跌",
+      losesMoneyFrom: "价格大幅偏离ATM(任何方向) + IV上升",
+      bestMarketCondition: "高IV环境开仓，随后IV崩溃，价格横盘",
+      worstScenario: "突发事件导致价格跳空，IV飙升，理论上无限亏损"
+    },
+
+    clientPerspective: {
+      whyClientDoes: [
+        "预期标的会横盘不动(如重要支撑/阻力位)",
+        "财报后IV crush交易(预期价格反应平淡)",
+        "赚取ATM期权的最高时间价值和IV溢价",
+        "专业交易员的高风险高收益策略"
+      ],
+      clientType: "专业期权交易员、做市商、对冲基金(有严格风险管理)",
+      suitability: "理解无限风险、有足够保证金、能24/7监控、有止损纪律"
+    },
+
+    dealerPerspective: {
+      whenDealerSells: "Dealer卖出Short Straddle给客户(即Dealer买入straddle)：",
+      exposure: "Dealer long ATM call + long ATM put，这是long gamma, long vega, short theta",
+      hedging: [
+        "Dealer是long gamma，这是好的 - 可以通过gamma scalping盈利",
+        "Dealer delta hedge：卖空股票对冲call的delta，买入股票对冲put的delta",
+        "如果realized vol > implied vol，Dealer通过rehedging盈利",
+        "Short straddle对Dealer来说是理想产品 - 客户承担无限风险"
+      ],
+      profitSource: "Bid-ask价差 + 如果realized vol > implied vol(gamma scalping profit)"
+    },
+
+    interviewQuestions: [
+      {
+        q: "Short Straddle的最大风险是什么？",
+        a: "理论上无限亏损 - 如果价格大幅上涨，short call亏损无限；如果价格大幅下跌，short put亏损巨大(到零)。而且是naked short，保证金要求高。最危险的是gap risk - 价格跳空，无法及时止损。这是为什么只有专业交易员才做short straddle。"
+      },
+      {
+        q: "Short Straddle和Short Strangle有什么区别？",
+        a: "Short Straddle: strikes都在ATM，max profit更高，但profit zone更窄，风险更大。Short Strangle: strikes分开(OTM call和OTM put)，max profit更低，但profit zone更宽，风险稍小。Straddle更aggressive，Strangle更保守。"
+      },
+      {
+        q: "什么时候做Short Straddle最合适？",
+        a: "1) IV rank非常高(>80)，IV溢价明显；2) 预期价格会横盘(如重要技术位、财报后无surprise)；3) 有能力24/7监控和快速止损；4) 账户有足够保证金承受波动。不适合：低IV环境、重大事件前、无法监控时。"
+      },
+      {
+        q: "如何管理Short Straddle的风险？",
+        a: "1) 止损：如果亏损超过max profit的2-3倍，立即平仓；2) Delta hedge：保持delta中性，避免方向性风险；3) 转换：如果价格突破，convert to iron butterfly(买入wings)限制亏损；4) 时间管理：不要hold到最后一周，Gamma风险太大；5) Position sizing：不要超过账户的5-10%。"
+      },
+      {
+        q: "Dealer为什么喜欢客户做Short Straddle？",
+        a: "因为Dealer是对手方 - long straddle，这是long gamma position。如果realized vol高，Dealer可以通过gamma scalping(动态delta hedge)盈利。而且客户承担无限风险，Dealer风险有限(最多亏掉收到的premium)。Short straddle是Dealer最喜欢的客户交易之一。"
+      }
+    ]
+  },
+
+  // Collar - 领口策略
+  "collar": {
+    exposure: {
+      directional: "~+Delta (持股 + protective put - covered call，略减少)",
+      volatility: "~0 Vega (long put和short call的Vega部分抵消)",
+      time: "~0 Theta (long put的负Theta被short call的正Theta抵消)",
+      convexity: "有限上行和下行(类似bull call spread但基于持股)"
+    },
+
+    profitLogic: {
+      makesMoneyFrom: "股票在put strike和call strike之间上涨",
+      losesMoneyFrom: "股票跌破put strike(但亏损有限) 或 涨破call strike(上行被封顶)",
+      bestMarketCondition: "温和上涨，停在call strike附近",
+      worstScenario: "大幅上涨突破call strike，错过大部分上行"
+    },
+
+    clientPerspective: {
+      whyClientDoes: [
+        "持有股票但担心下跌，又不想支付protective put的全部成本",
+        "用卖call的收入支付买put的成本(zero-cost或low-cost collar)",
+        "锁定利润区间，适合已有盈利的持仓",
+        "税务原因不能卖出，但需要限制风险",
+        "机构portfolio保护的标准做法"
+      ],
+      clientType: "长期投资者、机构、高净值个人、公司高管(锁定股票收益)",
+      suitability: "持有股票、能接受上行被封顶、想要低成本或零成本保护"
+    },
+
+    dealerPerspective: {
+      whenDealerSells: "Dealer面对Collar客户(客户买put卖call)，Dealer是：",
+      exposure: "卖put给客户(Dealer +delta) + 买call从客户(Dealer +delta)，Dealer整体long delta",
+      hedging: [
+        "Dealer需要卖空股票对冲long delta",
+        "Put和Call的Greeks部分抵消，net exposure较小",
+        "如果是zero-cost collar，put和call的premium相等，Dealer主要赚bid-ask",
+        "Collar对Dealer来说是相对简单的产品，风险可控"
+      ],
+      profitSource: "Bid-ask价差(put和call各收一次) + skew(put通常比call贵)"
+    },
+
+    interviewQuestions: [
+      {
+        q: "Collar和Protective Put有什么区别？",
+        a: "Protective Put: 保留全部上行，但有成本(put premium)。Collar: 卖call支付put成本，zero-cost或low-cost，但上行被封顶在call strike。选择取决于：如果认为上行有限或想降低成本，用Collar；如果想保留上行潜力，用Protective Put。"
+      },
+      {
+        q: "如何构建zero-cost collar？",
+        a: "选择put strike(下行保护点)，然后调整call strike直到call premium = put premium。通常call strike会比较接近当前价格(如5% OTM)，put strike较远(如10% OTM)。如果想要更多下行保护(put strike更高)，就要接受更低的call strike(更早被封顶)。"
+      },
+      {
+        q: "Collar适合什么市场环境？",
+        a: "1) 高IV环境：put和call都贵，容易构建zero-cost collar；2) 不确定方向但想限制风险；3) 已有盈利想锁定；4) 预期温和上涨但担心下跌。不适合：低IV环境(难以zero-cost)、预期大幅上涨(会错过上行)。"
+      },
+      {
+        q: "公司高管为什么常用Collar？",
+        a: "高管持有大量公司股票，但有lock-up period或税务原因不能卖出。Collar可以：1) 锁定当前价值，避免股价暴跌；2) 保留部分上行(到call strike)；3) zero-cost，不需要额外资金；4) 不触发税务事件(没有卖出股票)。这是高管常用的风险管理工具。"
+      },
+      {
+        q: "Collar的最大风险是什么？",
+        a: "机会成本 - 如果股价大幅上涨，上行被call strike封顶，错过大部分收益。而且如果提前平仓collar，可能需要支付成本(Greeks变化导致put和call的价值不再相等)。另一个风险是assignment：short call可能被提前行权，尤其是分红前。"
+      }
+    ]
+  },
+
+  // Iron Butterfly - 铁蝴蝶
+  "iron-butterfly": {
+    exposure: {
+      directional: "0 Delta (完全中性，ATM short straddle + OTM long wings)",
+      volatility: "-Vega (做空波动率，比Iron Condor更aggressive)",
+      time: "+Theta (时间衰减是朋友，peak theta at ATM)",
+      convexity: "-Gamma (负凸性，价格大幅波动不利)"
+    },
+
+    profitLogic: {
+      makesMoneyFrom: "价格停在ATM(short straddle strike) + 时间衰减 + IV下跌",
+      losesMoneyFrom: "价格突破任一wing + IV上升 + 大幅波动",
+      bestMarketCondition: "高IV环境开仓，随后IV崩溃，价格钉在ATM",
+      worstScenario: "突发事件导致价格跳空突破wing，IV同时飙升"
+    },
+
+    clientPerspective: {
+      whyClientDoes: [
+        "预期标的会停在特定价格(如重要支撑/阻力位)",
+        "财报后IV crush交易(预期价格不动但IV暴跌)",
+        "比Iron Condor更aggressive的收租策略",
+        "赚取ATM期权的最高时间价值"
+      ],
+      clientType: "专业期权交易员、做市商、高频IV交易者",
+      suitability: "理解short gamma风险、能承受快速亏损、有风险管理纪律"
+    },
+
+    dealerPerspective: {
+      whenDealerSells: "Dealer卖出Iron Butterfly给客户后，面临：",
+      exposure: "客户short ATM straddle + long wings，Dealer是对手方：long ATM straddle + short wings",
+      hedging: [
+        "Dealer实际上是long gamma(long ATM straddle)，这是好的",
+        "但Dealer short wings，如果价格大幅波动到wings之外，Dealer亏损",
+        "通常Dealer会hedge掉delta，保留gamma和vega exposure",
+        "Iron Butterfly对Dealer来说是相对安全的产品(客户承担主要风险)"
+      ],
+      profitSource: "Bid-ask价差 + 如果客户在亏损时panic close"
+    },
+
+    interviewQuestions: [
+      {
+        q: "Iron Butterfly和Iron Condor有什么区别？",
+        a: "Iron Butterfly: short strikes都在ATM，profit zone更窄，max profit更高，更aggressive。Iron Condor: short strikes分开(OTM call和OTM put)，profit zone更宽，max profit更低，更保守。Butterfly适合强烈认为价格不动；Condor适合认为价格在区间内。"
+      },
+      {
+        q: "为什么Iron Butterfly的Theta比Iron Condor高？",
+        a: "因为short strikes在ATM，ATM期权的时间价值最高，Theta也最高。Iron Condor的short strikes在OTM，时间价值较低。但Iron Butterfly的风险也更高 - ATM的Gamma最大，价格稍微偏离就快速亏损。"
+      },
+      {
+        q: "什么时候用Iron Butterfly做IV crush交易？",
+        a: "财报前：IV elevated，买入Iron Butterfly。财报后：如果价格没有大幅波动(符合预期)，IV崩溃，Iron Butterfly快速盈利。关键是：1) IV要足够高(IV rank > 70)；2) 预期财报结果不会surprise；3) 在财报当天或次日平仓，不要持有太久。"
+      },
+      {
+        q: "Iron Butterfly的最大风险是什么？",
+        a: "Gap risk - 如果价格跳空突破wing，亏损接近max loss。因为short strikes在ATM，任何方向的大幅波动都会快速亏损。而且Iron Butterfly的short gamma非常集中在ATM，需要频繁调整。不适合overnight hold在重大事件前。"
+      },
+      {
+        q: "如何调整亏损的Iron Butterfly？",
+        a: "1) 价格突破上方：roll up整个结构，或convert to call butterfly；2) 价格突破下方：roll down，或convert to put butterfly；3) IV飙升：可以close short straddle，保留long wings作为long strangle；4) 止损：如果亏损超过max profit的2-3倍，直接平仓。不要'希望'价格回来。"
+      }
+    ]
+  },
+
+  // Protective Put - 保护性看跌期权
+  "protective-put": {
+    exposure: {
+      directional: "~+Delta (接近持股，略减少因为买Put)",
+      volatility: "+Vega (买入Put带来正Vega)",
+      time: "-Theta (Put的时间衰减)",
+      convexity: "+Gamma (Put提供下行保护的凸性)"
+    },
+
+    profitLogic: {
+      makesMoneyFrom: "股票上涨 - Put权利金成本",
+      losesMoneyFrom: "股票下跌(但Put限制最大亏损) + Put权利金 + 时间衰减",
+      bestMarketCondition: "温和上涨，Put不被触发但提供安心",
+      worstScenario: "横盘不动，股票不涨不跌，Put权利金白付"
+    },
+
+    clientPerspective: {
+      whyClientDoes: [
+        "持有股票但担心短期下跌风险(财报、市场波动)",
+        "不想卖出股票(税务、长期看好)但需要下行保护",
+        "替代stop loss，避免被震出后错过反弹",
+        "事件驱动保护(如持有科技股过财报季)"
+      ],
+      clientType: "长期投资者、机构portfolio保护、高净值个人",
+      suitability: "持有股票、能承受保护成本、有明确风险事件或时间窗口"
+    },
+
+    dealerPerspective: {
+      whenDealerSells: "Dealer卖出Protective Put(即卖Put给持股客户)后，面临：",
+      exposure: "+Delta (多Delta，股价下跌亏损), -Gamma, -Vega, +Theta",
+      hedging: [
+        "Delta对冲：卖空股票对冲Put的short delta",
+        "Gamma管理：股价下跌时Put的delta变得更负，需要继续卖空",
+        "Vega风险：市场恐慌时Put的IV飙升，Dealer面临mark-to-market亏损",
+        "Put skew：OTM put通常有skew溢价，Dealer可以赚取这部分"
+      ],
+      profitSource: "Bid-ask价差 + Put skew溢价 + 如果realized vol < implied vol"
+    },
+
+    interviewQuestions: [
+      {
+        q: "Protective Put和Stop Loss有什么区别？",
+        a: "Protective Put: 1) 保留上行潜力，股价上涨仍能获利；2) 避免被gap down震出；3) 有确定的最大亏损；4) 有成本(权利金)。Stop Loss: 1) 触发后完全退出，错过反弹；2) gap down无法执行；3) 无前期成本；4) 可能被intraday波动触发。"
+      },
+      {
+        q: "如何选择Protective Put的strike？",
+        a: "取决于能接受的最大亏损。ATM put最贵但保护最全；5-10% OTM put便宜但有deductible；15-20% OTM put很便宜但只保护极端下跌。类比保险：高strike = 低免赔额高保费，低strike = 高免赔额低保费。"
+      },
+      {
+        q: "Protective Put的成本如何计算？",
+        a: "直接成本是Put权利金。机会成本是如果股价不跌，权利金就白付了。年化成本 = (权利金/股价) × (365/DTE)。例如：股价$100，买3个月95P花$3，年化成本约12%。这就是为什么长期持有者通常不用Protective Put - 太贵。"
+      },
+      {
+        q: "什么时候用Protective Put最合适？",
+        a: "1) 短期事件风险(财报、FDA批准、选举)；2) 市场波动加剧但长期看好；3) 已有大幅盈利想锁定；4) 税务原因不能卖出但需要保护；5) IV相对便宜时买入。不适合：长期保护(太贵)、已经大幅下跌后(马后炮)。"
+      },
+      {
+        q: "Protective Put vs Collar，如何选择？",
+        a: "Protective Put: 保留全部上行，但有成本。Collar: 卖出upside call来支付put成本，zero-cost或low-cost，但上行被封顶。选择取决于：如果认为上行有限，用Collar；如果想保留上行潜力且能承受成本，用Protective Put。"
       }
     ]
   },

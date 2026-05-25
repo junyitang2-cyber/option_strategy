@@ -3,13 +3,16 @@
 ## 已完成的工作
 
 ### 1. 核心数据文件
-✅ **data/professional-content.js** (已创建)
-- 13个核心策略的完整Trader Memo
-  - Long Call, Iron Condor, Covered Call, Cash-Secured Put
-  - Bull Call Spread, Bear Put Spread
-  - Straddle, Strangle
-  - Long Call Butterfly, Calendar Call Spread
-  - Long Synthetic Future, Risk Reversal, Box Spread
+✅ **data/professional-content.js** (已创建并扩展)
+- 20个核心策略的完整Trader Memo
+  - **基础方向**: Long Call, Long Put, Covered Call, Cash-Secured Put
+  - **价差策略**: Bull Call Spread, Bear Put Spread, Bear Call Spread
+  - **波动率策略**: Straddle, Strangle, Short Straddle, Short Strangle
+  - **收租策略**: Iron Condor, Iron Butterfly
+  - **蝶式策略**: Long Call Butterfly
+  - **日历策略**: Calendar Call Spread
+  - **对冲策略**: Protective Put, Collar
+  - **合成策略**: Long Synthetic Future, Risk Reversal, Box Spread
   - Butterfly, Calendar Spread
   - Synthetic Future, Risk Reversal
 - 每个策略包含：
@@ -88,7 +91,7 @@
 ## 关键设计决策
 
 ### 1. 务实的范围
-- ✅ 先做13个核心策略，不是全部71个
+- ✅ 先做20个核心策略，覆盖面试最常问的策略类型
 - ✅ 每个策略5个高质量问题，不是8-12个
 - ✅ 教育性估算，明确标注不是专业系统
 
@@ -174,7 +177,7 @@
 
 ## 已知限制
 
-1. **策略覆盖**：仅13个核心策略有专业内容（long-call, iron-condor, covered-call, cash-secured-put, bull-call-spread, bear-put-spread, straddle, strangle, long-call-butterfly, calendar-call-spread, long-synthetic-future, risk-reversal, box-spread），其余58个策略待Phase 2添加
+1. **策略覆盖**：20个核心策略有专业内容（long-call, long-put, iron-condor, covered-call, cash-secured-put, bull-call-spread, bear-put-spread, bear-call-spread, straddle, strangle, short-straddle, short-strangle, long-call-butterfly, calendar-call-spread, long-synthetic-future, risk-reversal, box-spread, protective-put, collar, iron-butterfly），其余51个策略待后续添加
 2. **保证金计算**：未实现实际保证金计算器（需要更准确的broker规则）
 3. **Portfolio Greeks聚合**：未实现（Phase 2功能）
 4. **波动率曲面**：未实现（Phase 2功能）
