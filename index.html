@@ -39,6 +39,11 @@
             <p id="strategySubtitle" class="strategy-subtitle"></p>
           </div>
           <div class="top-actions">
+            <div class="mode-toggle">
+              <button id="modeBasic" class="mode-btn active" type="button" title="基础学习模式">基础</button>
+              <button id="modePro" class="mode-btn" type="button" title="专业交易员视角">专业</button>
+              <button id="modeInterview" class="mode-btn" type="button" title="面试准备模式">面试</button>
+            </div>
             <button id="markCompletedBtn" class="primary-button" type="button" style="margin-right:8px">✓ 已理解</button>
             <button id="resetStrategy" class="primary-button" type="button">重置模板</button>
           </div>
@@ -149,6 +154,78 @@
           <div id="educationGrid" class="education-grid"></div>
         </section>
 
+        <section class="panel professional-panel pro-content" id="professionalPanel" style="display:none">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">Professional</p>
+              <h3>专业交易员视角 Trader Memo</h3>
+            </div>
+          </div>
+          <div id="professionalContent" class="professional-content">
+            <div class="trader-memo-grid">
+              <div class="memo-section">
+                <h4>📊 Exposure 分解</h4>
+                <div id="exposureBreakdown"></div>
+              </div>
+              <div class="memo-section">
+                <h4>💰 盈利逻辑与风险</h4>
+                <div id="profitLogic"></div>
+              </div>
+              <div class="memo-section">
+                <h4>👤 客户视角</h4>
+                <div id="clientPerspective"></div>
+              </div>
+              <div class="memo-section">
+                <h4>🏦 Dealer 对冲视角</h4>
+                <div id="dealerPerspective"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel interview-panel interview-content" id="interviewPanel" style="display:none">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">Interview</p>
+              <h3>面试问答 Q&A</h3>
+            </div>
+          </div>
+          <div id="interviewQuestions" class="interview-questions"></div>
+        </section>
+
+        <section class="panel stress-test-panel pro-content" id="stressTestPanel" style="display:none">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">Stress Test</p>
+              <h3>压力测试矩阵 Spot × IV</h3>
+            </div>
+            <button id="runStressTest" class="primary-button" type="button">运行压力测试</button>
+          </div>
+          <div id="stressTestResults" class="stress-test-results"></div>
+          <div id="greekShockEstimate" class="greek-shock-estimate"></div>
+        </section>
+
+        <section class="panel parity-panel pro-content" id="parityPanel" style="display:none">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">Put-Call Parity</p>
+              <h3>Put-Call Parity 教学计算器</h3>
+            </div>
+          </div>
+          <div class="parity-calculator">
+            <div class="parity-inputs">
+              <label><span>Call Price:</span><input type="number" id="parityCallPrice" step="0.01" value="5.00" /></label>
+              <label><span>Put Price:</span><input type="number" id="parityPutPrice" step="0.01" value="4.00" /></label>
+              <label><span>Stock Price:</span><input type="number" id="paritySpot" step="0.5" value="100" /></label>
+              <label><span>Strike:</span><input type="number" id="parityStrike" step="0.5" value="100" /></label>
+              <label><span>DTE:</span><input type="number" id="parityDte" step="1" value="30" /></label>
+              <label><span>Rate (%):</span><input type="number" id="parityRate" step="0.25" value="4" /></label>
+              <button id="checkParity" class="primary-button" type="button">检查 Parity</button>
+            </div>
+            <div id="parityResults" class="parity-results"></div>
+          </div>
+        </section>
+
         <section class="panel coverage-panel">
           <div class="panel-heading compact">
             <div>
@@ -173,6 +250,7 @@
     </main>
 
     <script src="./data/strategies.js"></script>
+    <script src="./data/professional-content.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>

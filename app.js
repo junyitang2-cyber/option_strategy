@@ -14,6 +14,7 @@ const state = {
   entrySpot: SPOT,
   scenario: defaultScenario(),
   legs: [],
+  mode: "basic", // "basic" | "professional" | "interview"
 };
 
 const greekPanels = [
@@ -485,6 +486,120 @@ function riskMetrics() {
     greeks: current.greeks,
   };
 }
+
+// Stress Test Matrix: Spot × IV scenarios
+function runStressTest() {
+  const spotShifts = [-0.10, -0.05, 0, 0.05, 0.10]; // -10%, -5%, 0%, +5%, +10%
+  const ivShifts = [-0.30, 0, 0.30, 0.50]; // -30%, 0%, +30%, +50%
+
+  const baseSpot = state.scenario.spot;
+  const baseDaysElapsed = state.scenario.daysElapsed;
+  const baseIvShift = state.scenario.ivShift;
+
+  const results = [];
+
+  for (const spotShift of spotShifts) {
+    for (const ivShift of ivShifts) {
+      const testSpot = baseSpot * (1 + spotShift);
+      const testIvShift = baseIvShift + ivShift;
+      const testScenario = { ...state.scenario, ivShift: testIvShift };
+
+      const result = portfolioResult(testSpot, baseDaysElapsed, testScenario);
+
+      results.push({
+        spotShift: spotShift * 100, // Convert to percentage
+        ivShift: ivShift * 100,
+        spot: testSpot,
+        pnl: result.pnl,
+        delta: result.greeks.delta,
+        gamma: result.greeks.gamma,
+        vega: result.greeks.vega,
+        theta: result.greeks.theta
+      });
+    }
+  }
+
+  // Find worst and best case
+  const sortedByPnl = [...results].sort((a, b) => a.pnl - b.pnl);
+  const worstCase = sortedByPnl[0];
+  const bestCase = sortedByPnl[sortedByPnl.length - 1];
+
+  return {
+    matrix: results,
+    worstCase,
+    bestCase,
+    spotShifts: spotShifts.map(s => s * 100), // Convert to percentage for display
+    ivShifts: ivShifts.map(iv => iv * 100)
+  };
+}
+
+// Greek Shock Estimate (simplified VaR-like calculation)
+// Note: This is educational estimate, not professional VaR
+function calculateGreekShockEstimate() {
+  const metrics = riskMetrics();
+  const spot = state.scenario.spot;
+
+  // Assume typical daily moves
+  const dailySpotMove = 0.02; // 2% daily move (typical for equity)
+  const dailyIvMove = 0.02; // 2 percentage points IV move
+
+  // Delta risk: how much P&L changes with spot move
+  const deltaRisk = Math.abs(metrics.greeks.delta * spot * dailySpotMove);
+
+  // Gamma risk: second-order effect
+  const gammaRisk = 0.5 * Math.abs(metrics.greeks.gamma) * Math.pow(spot * dailySpotMove, 2);
+
+  // Vega risk: how much P&L changes with IV move
+  const vegaRisk = Math.abs(metrics.greeks.vega * dailyIvMove);
+
+  // Theta risk: time decay (1 day)
+  const thetaRisk = Math.abs(metrics.greeks.theta);
+
+  // Total estimated 1-day risk (simplified, not true VaR)
+  const totalRisk = deltaRisk + gammaRisk + vegaRisk;
+
+  return {
+    deltaRisk,
+    gammaRisk,
+    vegaRisk,
+    thetaRisk,
+    totalRisk,
+    note: "教育性估算 - 非专业VaR计算"
+  };
+}
+
+// Put-Call Parity checker (teaching tool)
+function checkPutCallParity(callPrice, putPrice, spot, strike, dte, rate) {
+  const t = dte / 365;
+  const syntheticForward = callPrice - putPrice;
+  const theoreticalForward = spot - strike * Math.exp(-rate * t);
+  const mispricing = syntheticForward - theoreticalForward;
+
+  let interpretation = "";
+  let arbitrageTrade = "";
+
+  if (Math.abs(mispricing) < 0.05) {
+    interpretation = "Put-Call Parity基本成立，无明显套利机会";
+    arbitrageTrade = "无套利";
+  } else if (mispricing > 0) {
+    interpretation = "Synthetic forward被高估";
+    arbitrageTrade = "卖出synthetic (卖call + 买put)，买入股票";
+  } else {
+    interpretation = "Synthetic forward被低估";
+    arbitrageTrade = "买入synthetic (买call + 卖put)，卖出股票";
+  }
+
+  return {
+    syntheticForward,
+    theoreticalForward,
+    mispricing,
+    mispricingPercent: (mispricing / theoreticalForward) * 100,
+    interpretation,
+    arbitrageTrade,
+    note: "教学工具 - 实际套利需考虑bid-ask、交易成本、提前行权风险"
+  };
+}
+
 
 function svgPath(points, xScale, yScale) {
   return points.map((point, index) => `${index === 0 ? "M" : "L"} ${xScale(point.spot).toFixed(1)} ${yScale(point.value).toFixed(1)}`).join(" ");
@@ -1255,6 +1370,187 @@ function renderEducation() {
     .join("");
 }
 
+// Render Professional Content (Trader Memo)
+function renderProfessionalContent() {
+  const strategy = selectedStrategy();
+  const professionalData = PROFESSIONAL_CONTENT[strategy.id];
+
+  if (!professionalData) {
+    // Show message in each section, preserving the container structure
+    document.getElementById("exposureBreakdown").innerHTML = `<p class="muted" style="text-align: center; padding: 1rem;">该策略暂无专业内容</p>`;
+    document.getElementById("profitLogic").innerHTML = `<p class="muted" style="text-align: center; padding: 1rem;">该策略暂无专业内容</p>`;
+    document.getElementById("clientPerspective").innerHTML = `<p class="muted" style="text-align: center; padding: 1rem;">该策略暂无专业内容</p>`;
+    document.getElementById("dealerPerspective").innerHTML = `<p class="muted" style="text-align: center; padding: 1rem;">该策略暂无专业内容</p>`;
+    return;
+  }
+
+  // Exposure Breakdown
+  const exposureHtml = `
+    <div class="exposure-grid">
+      <div class="exposure-item"><strong>方向:</strong> ${professionalData.exposure.directional}</div>
+      <div class="exposure-item"><strong>波动率:</strong> ${professionalData.exposure.volatility}</div>
+      <div class="exposure-item"><strong>时间:</strong> ${professionalData.exposure.time}</div>
+      <div class="exposure-item"><strong>凸性:</strong> ${professionalData.exposure.convexity}</div>
+    </div>
+  `;
+  document.getElementById("exposureBreakdown").innerHTML = exposureHtml;
+
+  // Profit Logic
+  const profitHtml = `
+    <div class="profit-logic">
+      <p><strong>赚钱来源:</strong> ${professionalData.profitLogic.makesMoneyFrom}</p>
+      <p><strong>亏钱来源:</strong> ${professionalData.profitLogic.losesMoneyFrom}</p>
+      <p><strong>最佳市场环境:</strong> ${professionalData.profitLogic.bestMarketCondition}</p>
+      <p><strong>最差情景:</strong> ${professionalData.profitLogic.worstScenario}</p>
+    </div>
+  `;
+  document.getElementById("profitLogic").innerHTML = profitHtml;
+
+  // Client Perspective
+  const clientHtml = `
+    <div class="client-perspective">
+      <p><strong>客户为什么做:</strong></p>
+      <ul>${professionalData.clientPerspective.whyClientDoes.map(reason => `<li>${reason}</li>`).join('')}</ul>
+      <p><strong>客户类型:</strong> ${professionalData.clientPerspective.clientType}</p>
+      <p><strong>适当性:</strong> ${professionalData.clientPerspective.suitability}</p>
+    </div>
+  `;
+  document.getElementById("clientPerspective").innerHTML = clientHtml;
+
+  // Dealer Perspective
+  const dealerHtml = `
+    <div class="dealer-perspective">
+      <p><strong>${professionalData.dealerPerspective.whenDealerSells}</strong></p>
+      <p><strong>Exposure:</strong> ${professionalData.dealerPerspective.exposure}</p>
+      <p><strong>对冲方法:</strong></p>
+      <ul>${professionalData.dealerPerspective.hedging.map(method => `<li>${method}</li>`).join('')}</ul>
+      <p><strong>利润来源:</strong> ${professionalData.dealerPerspective.profitSource}</p>
+    </div>
+  `;
+  document.getElementById("dealerPerspective").innerHTML = dealerHtml;
+}
+
+// Render Interview Questions
+function renderInterviewQuestions() {
+  const strategy = selectedStrategy();
+  const professionalData = PROFESSIONAL_CONTENT[strategy.id];
+
+  const interviewQuestions = document.getElementById("interviewQuestions");
+
+  if (!professionalData || !professionalData.interviewQuestions) {
+    interviewQuestions.innerHTML = `<p class="muted" style="text-align: center; padding: 2rem;">该策略暂无面试问答内容。当前支持12个核心策略的面试问答。</p>`;
+    return;
+  }
+
+  const questionsHtml = professionalData.interviewQuestions.map((qa, index) => `
+    <div class="interview-qa">
+      <div class="qa-question">
+        <strong>Q${index + 1}:</strong> ${qa.q}
+      </div>
+      <div class="qa-answer">
+        <strong>A:</strong> ${qa.a}
+      </div>
+    </div>
+  `).join('');
+
+  interviewQuestions.innerHTML = questionsHtml;
+}
+
+// Render Stress Test Results
+function renderStressTestResults() {
+  const stressTest = runStressTest();
+
+  // Build matrix table
+  let tableHtml = `
+    <div class="stress-matrix">
+      <table class="stress-table">
+        <thead>
+          <tr>
+            <th>Spot \\ IV</th>
+            ${stressTest.ivShifts.map(iv => `<th>${iv > 0 ? '+' : ''}${iv}%</th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>
+  `;
+
+  stressTest.spotShifts.forEach(spotShift => {
+    tableHtml += `<tr><th>${spotShift > 0 ? '+' : ''}${spotShift}%</th>`;
+    stressTest.ivShifts.forEach(ivShift => {
+      const result = stressTest.matrix.find(r => r.spotShift === spotShift && r.ivShift === ivShift);
+      const pnlClass = result.pnl >= 0 ? 'positive' : 'negative';
+      tableHtml += `<td class="${pnlClass}" title="Delta: ${formatNumber(result.delta)}, Vega: ${formatNumber(result.vega)}">${formatMoney(result.pnl)}</td>`;
+    });
+    tableHtml += `</tr>`;
+  });
+
+  tableHtml += `
+        </tbody>
+      </table>
+    </div>
+    <div class="stress-summary">
+      <div class="stress-case worst-case">
+        <h4>最差情景</h4>
+        <p>Spot ${stressTest.worstCase.spotShift > 0 ? '+' : ''}${stressTest.worstCase.spotShift}%, IV ${stressTest.worstCase.ivShift > 0 ? '+' : ''}${stressTest.worstCase.ivShift}%</p>
+        <p class="large negative">${formatMoney(stressTest.worstCase.pnl)}</p>
+      </div>
+      <div class="stress-case best-case">
+        <h4>最佳情景</h4>
+        <p>Spot ${stressTest.bestCase.spotShift > 0 ? '+' : ''}${stressTest.bestCase.spotShift}%, IV ${stressTest.bestCase.ivShift > 0 ? '+' : ''}${stressTest.bestCase.ivShift}%</p>
+        <p class="large positive">${formatMoney(stressTest.bestCase.pnl)}</p>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("stressTestResults").innerHTML = tableHtml;
+
+  // Greek Shock Estimate
+  const shockEstimate = calculateGreekShockEstimate();
+  const shockHtml = `
+    <div class="shock-estimate">
+      <h4>Greek Shock 估算 (1-day)</h4>
+      <p class="note">${shockEstimate.note}</p>
+      <div class="shock-grid">
+        <div class="shock-item"><strong>Delta Risk:</strong> ${formatMoney(shockEstimate.deltaRisk)}</div>
+        <div class="shock-item"><strong>Gamma Risk:</strong> ${formatMoney(shockEstimate.gammaRisk)}</div>
+        <div class="shock-item"><strong>Vega Risk:</strong> ${formatMoney(shockEstimate.vegaRisk)}</div>
+        <div class="shock-item"><strong>Theta (1-day):</strong> ${formatMoney(shockEstimate.thetaRisk)}</div>
+        <div class="shock-item total"><strong>Total Risk:</strong> ${formatMoney(shockEstimate.totalRisk)}</div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("greekShockEstimate").innerHTML = shockHtml;
+}
+
+// Handle Mode Toggle
+function handleModeToggle(mode) {
+  state.mode = mode;
+  localStorage.setItem('os_mode', mode);
+
+  // Update button states
+  document.getElementById("modeBasic").classList.toggle("active", mode === "basic");
+  document.getElementById("modePro").classList.toggle("active", mode === "professional");
+  document.getElementById("modeInterview").classList.toggle("active", mode === "interview");
+
+  // Show/hide panels
+  const proContent = document.querySelectorAll(".pro-content");
+  const interviewContent = document.querySelectorAll(".interview-content");
+
+  if (mode === "basic") {
+    proContent.forEach(el => el.style.display = "none");
+    interviewContent.forEach(el => el.style.display = "none");
+  } else if (mode === "professional") {
+    proContent.forEach(el => el.style.display = "block");
+    interviewContent.forEach(el => el.style.display = "none");
+    renderProfessionalContent();
+  } else if (mode === "interview") {
+    proContent.forEach(el => el.style.display = "block");
+    interviewContent.forEach(el => el.style.display = "block");
+    renderProfessionalContent();
+    renderInterviewQuestions();
+  }
+}
+
 function renderCoverage() {
   const extras = STRATEGIES.filter((strategy) => strategy.source === "补充");
   document.getElementById("coverageSummary").textContent = `目标站覆盖 ${STRATEGIES.length - extras.length} 个条目；本页额外补充 ${extras.length} 个常见策略。`;
@@ -1326,6 +1622,15 @@ function refreshAnalysis(options = {}) {
   renderEducation();
   if (options.legs !== false) renderLegsEditor();
   if (options.controls !== false) renderScenarioControls();
+
+  // Render professional content if in professional or interview mode
+  if (state.mode === 'professional' || state.mode === 'interview') {
+    renderProfessionalContent();
+  }
+  if (state.mode === 'interview') {
+    renderInterviewQuestions();
+  }
+
   saveStateToURL();
 }
 
@@ -1483,6 +1788,54 @@ function handleChange(event) {
 }
 
 function handleClick(event) {
+  // Mode toggle buttons
+  if (event.target.id === "modeBasic") {
+    handleModeToggle("basic");
+    return;
+  }
+  if (event.target.id === "modePro") {
+    handleModeToggle("professional");
+    return;
+  }
+  if (event.target.id === "modeInterview") {
+    handleModeToggle("interview");
+    return;
+  }
+  // Run stress test button
+  if (event.target.id === "runStressTest") {
+    renderStressTestResults();
+    return;
+  }
+  // Check Put-Call Parity button
+  if (event.target.id === "checkParity") {
+    const callPrice = Number(document.getElementById("parityCallPrice").value);
+    const putPrice = Number(document.getElementById("parityPutPrice").value);
+    const spot = Number(document.getElementById("paritySpot").value);
+    const strike = Number(document.getElementById("parityStrike").value);
+    const dte = Number(document.getElementById("parityDte").value);
+    const rate = Number(document.getElementById("parityRate").value) / 100;
+
+    const result = checkPutCallParity(callPrice, putPrice, spot, strike, dte, rate);
+
+    const resultsHtml = `
+      <div class="parity-result">
+        <h4>Put-Call Parity 检查结果</h4>
+        <div class="parity-calc">
+          <p><strong>Synthetic Forward (C - P):</strong> $${result.syntheticForward.toFixed(2)}</p>
+          <p><strong>Theoretical Forward (S - K·e^(-rT)):</strong> $${result.theoreticalForward.toFixed(2)}</p>
+          <p class="${result.mispricing >= 0 ? 'positive' : 'negative'}"><strong>Mispricing:</strong> $${result.mispricing.toFixed(2)} (${result.mispricingPercent.toFixed(2)}%)</p>
+        </div>
+        <div class="parity-interpretation">
+          <p><strong>解读:</strong> ${result.interpretation}</p>
+          <p><strong>套利交易:</strong> ${result.arbitrageTrade}</p>
+          <p class="note">${result.note}</p>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("parityResults").innerHTML = resultsHtml;
+    return;
+  }
   // Mark strategy as completed
   if (event.target.id === "markCompletedBtn") {
     const id = state.selectedId;
@@ -1535,6 +1888,11 @@ function handleClick(event) {
 
 function boot() {
   loadStateFromURL();
+
+  // Load saved mode from localStorage
+  const savedMode = localStorage.getItem('os_mode') || 'basic';
+  state.mode = savedMode;
+
   const first = selectedStrategy();
   state.entrySpot = state.scenario.spot;
   state.legs = normalizeLegs(first.legs, state.entrySpot);
@@ -1549,6 +1907,9 @@ function boot() {
   document.getElementById("pauseBtn").addEventListener("click", stopTimeAnimation);
   document.getElementById("resetTimeBtn").addEventListener("click", resetTimeAnimation);
   renderAll();
+
+  // Initialize mode after rendering
+  handleModeToggle(state.mode);
 }
 
 boot();
