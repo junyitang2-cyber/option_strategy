@@ -25,13 +25,13 @@
 
 - 40 个策略的 Trader Memo。
 - Professional Concepts 独立面板。
-- Portfolio Greeks 聚合器。
-- 保证金教育估算。
-- 压力测试矩阵。
-- Put-Call Parity 计算器。
-- Gamma P&L 与动态对冲模拟。
-- Vol Surface 教育性 smile/skew。
-- 组合级 Greeks Decay：按当前所有期权腿聚合 Gamma/Theta/Vega，支持 ATM/ITM/OTM 和自定义中心行权价。
+- 专业工具面板（Tabbed Interface）：
+  - 压力测试矩阵
+  - Put-Call Parity 计算器
+  - Portfolio Greeks 聚合器
+  - Gamma P&L 与动态对冲模拟
+  - Vol Surface 教育性 smile/skew
+  - 组合级 Greeks Decay
 
 ### 面试模式
 
