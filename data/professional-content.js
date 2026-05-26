@@ -592,7 +592,7 @@ const PROFESSIONAL_CONTENT = {
         "有明确目标价预期",
         "想用低成本表达range-bound观点",
         "预期IV会下降",
-        "不想承担Iron Condor的unlimited risk(虽然butterfly也有limited profit)"
+        "比Iron Condor更精确的目标价表达(盈利区间更窄但成本更低)"
       ],
       clientType: "精确目标价交易者、低成本中性策略爱好者",
       suitability: "有明确价格预期、理解盈利窗口很窄、能接受低胜率高赔率"
@@ -755,7 +755,7 @@ const PROFESSIONAL_CONTENT = {
       },
       {
         q: "如何用Synthetic做套利？",
-        a: "如果C - P ≠ S - K·e^(-rT)，存在套利。例如：C - P = $1.50，但S - K·e^(-rT) = $1.00。买便宜的(synthetic)，卖贵的(stock)。Buy call, sell put(花$1.50), sell stock(收$S)。到期时net payoff = $0.50 risk-free。但实际中这种机会很少且很小，因为市场很有效。"
+        a: "如果C - P ≠ S - K·e^(-rT)，存在套利。例如：C - P = $1.50，但S - K·e^(-rT) = $1.00。Synthetic forward贵了$0.50。套利：sell synthetic (sell call, buy put)收$1.50，buy stock付$S。到期时：如果S_T > K，call被exercise你交股票收K；如果S_T < K，你exercise put交股票收K。Net = $1.50 - ($S - K·e^(-rT)) = $0.50 risk-free。实际中这种机会很少且很小，因为市场很有效且有交易成本。"
       }
     ]
   },
@@ -806,7 +806,7 @@ const PROFESSIONAL_CONTENT = {
       },
       {
         q: "为什么叫'Risk Reversal'？",
-        a: "因为你在'反转'风险方向。例如bullish RR：你放弃了下行保护(sell put = unlimited downside)来获得上行exposure(buy call)。你把'下行有限、上行有限'的profile反转成'下行unlimited、上行unlimited'，类似synthetic long但成本更低。"
+        a: "因为你在'反转'风险方向。例如bullish RR：你放弃了下行保护(sell put = 下行风险到0)来获得上行exposure(buy call)。你把'下行有限、上行有限'的profile反转成'下行大幅风险、上行unlimited'，类似synthetic long但成本更低。"
       },
       {
         q: "Risk Reversal vs Synthetic Long？",
@@ -818,7 +818,7 @@ const PROFESSIONAL_CONTENT = {
       },
       {
         q: "Risk Reversal的最大风险是什么？",
-        a: "Short option side的unlimited risk。Bullish RR：如果股价暴跌，short put亏损巨大。Bearish RR：如果股价暴涨，short call亏损unlimited。这不是'defined risk'策略。必须有严格止损和风险管理。很多人被'zero cost'吸引，忽略了unlimited risk。"
+        a: "Short option side的大幅风险。Bullish RR：如果股价暴跌到0，short put最大亏损 = strike × 100。Bearish RR：如果股价暴涨，short call理论上unlimited upside risk。这不是'defined risk'策略。必须有严格止损和风险管理。很多人被'zero cost'吸引，忽略了short option的风险。"
       }
     ]
   },
@@ -927,8 +927,8 @@ const PROFESSIONAL_CONTENT = {
 
     interviewQuestions: [
       {
-        q: "Bear Call Spread和Bull Put Spread有什么区别？",
-        a: "都是看跌策略，但：Bear Call Spread用calls构建，收到credit，适合温和看跌。Bull Put Spread用puts构建，也收credit，适合温和看涨。在相同strikes下，两者的P&L profile相似，但Greeks略有不同：Bear Call Spread的Vega更负(calls的vega更高)。"
+        q: "Bear Call Spread和Bear Put Spread有什么区别？",
+        a: "都是看跌策略，但构建方式不同：Bear Call Spread是credit spread（卖低strike call，买高strike call，收到net credit），适合温和看跌且预期IV下降。Bear Put Spread是debit spread（买高strike put，卖低strike put，支付net debit），适合明确看跌且预期快速下跌。Credit spread收Theta，debit spread付Theta。实际中，credit spread因为收入在手、保证金更低，更受欢迎。"
       },
       {
         q: "为什么用Bear Call Spread而不是直接Short Call？",
@@ -999,7 +999,7 @@ const PROFESSIONAL_CONTENT = {
       },
       {
         q: "Short Strangle的保证金要求是多少？",
-        a: "Reg-T: 两个naked short中较大的一个(通常是short put) + 另一个的premium。Portfolio Margin: 基于stress test，通常更低。例如：卖95P和105C，可能需要$2000-3000保证金/合约。这比short straddle低，因为OTM期权风险较小。"
+        a: "Reg-T: 两个naked short中较大的一个(通常是short put，因为equity put skew) + 另一个的premium。Portfolio Margin: 基于stress test，通常比Reg-T低20-40%。具体数字高度依赖于broker、spot price、strikes、IV、账户类型。这是broker-specific，无法给出通用公式。教育性估算：可能是strike价值的15-25%，但实际请咨询broker。"
       },
       {
         q: "什么时候调整Short Strangle？",

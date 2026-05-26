@@ -27,8 +27,8 @@
 
 ### 内容准确性验收
 - ✅ Long Call dealer hedging 逻辑正确（realized vol 对 short gamma 的影响）
-- ✅ 13 个策略的专业内容完整
-- ✅ 文档与实际实现一致（移除 Long Put 错误引用）
+- ✅ 20 个策略的专业内容完整
+- ✅ 文档与实际实现一致
 
 ---
 

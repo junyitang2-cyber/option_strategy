@@ -36,7 +36,7 @@ npx serve .
 - 左侧策略列表：71个期权策略
 - 搜索框：输入策略名称快速查找
 - 主损益图：实时显示策略的P&L曲线
-- Greeks六联图：Delta, Gamma, Theta, Vega, Rho, Vanna
+- Greeks六联图：Delta, Gamma, Theta, Vega, Rho, 以及组合P&L
 - 情景参数：调整Spot, IV, DTE等
 - 策略说明：中文解释策略逻辑
 
