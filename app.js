@@ -2913,10 +2913,10 @@ function renderGreeksDecay() {
     <!-- Vega curve (top half, shares right concept) -->
     <path class="decay-vega" d="${buildPath(vegaPts, vegaY)}"/>
     <!-- Labels -->
-    <text class="axis-label" x="${width - 14}" y="16" text-anchor="end">DTE →</text>
+    <text class="axis-label" x="${width - pad.right + 4}" y="16" text-anchor="start">DTE →</text>
     <text class="axis-label decay-axis-gamma" x="${pad.left - 8}" y="16">Gamma</text>
-    <text class="axis-label decay-axis-vega" x="${width - 14}" y="${pad.top + 14}">Vega</text>
-    <text class="axis-label decay-axis-theta" x="${width - 14}" y="${pad.top + 28}">Theta</text>
+    <text class="axis-label decay-axis-vega" x="${width - pad.right + 4}" y="${pad.top + 14}" text-anchor="start">Vega</text>
+    <text class="axis-label decay-axis-theta" x="${width - pad.right + 4}" y="${pad.top + 28}" text-anchor="start">Theta</text>
   </svg>`;
 
   // Legend with current values at maxDte
