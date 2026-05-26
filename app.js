@@ -15,6 +15,7 @@ const state = {
   scenario: defaultScenario(),
   legs: [],
   mode: "basic", // "basic" | "professional" | "interview"
+  activeTool: localStorage.getItem('activeTool') || 'stress',
   portfolio: {
     positions: [], // { id, strategyId, strategyName, quantity, legs, entrySpot }
     accountSize: 10000,
@@ -2120,6 +2121,7 @@ function handleModeToggle(mode) {
     renderPortfolioPanel();
     renderVolSurface();
     renderGreeksDecay();
+    switchTool(state.activeTool);
   } else if (mode === "interview") {
     proContent.forEach(el => el.style.display = "block");
     interviewContent.forEach(el => el.style.display = "block");
@@ -2129,7 +2131,29 @@ function handleModeToggle(mode) {
     renderPortfolioPanel();
     renderVolSurface();
     renderGreeksDecay();
+    switchTool(state.activeTool);
   }
+}
+
+function switchTool(toolId) {
+  // Validate toolId
+  const validTool = document.querySelector(`.tool-tab[data-tool="${toolId}"]`);
+  if (!validTool) {
+    toolId = 'stress'; // Fallback to default
+  }
+
+  state.activeTool = toolId;
+  localStorage.setItem('activeTool', toolId);
+
+  // Update tab buttons
+  document.querySelectorAll('.tool-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.tool === toolId);
+  });
+
+  // Update content panels
+  document.querySelectorAll('.tool-panel').forEach(panel => {
+    panel.classList.toggle('active', panel.dataset.tool === toolId);
+  });
 }
 
 function renderCoverage() {
@@ -2373,6 +2397,11 @@ function handleChange(event) {
 }
 
 function handleClick(event) {
+  // Tab click handler
+  if (event.target.matches('.tool-tab')) {
+    switchTool(event.target.dataset.tool);
+    return;
+  }
   // Mode toggle buttons
   if (event.target.id === "modeBasic") {
     handleModeToggle("basic");
@@ -2502,6 +2531,11 @@ function boot() {
 
   // Initialize mode after rendering
   handleModeToggle(state.mode);
+
+  // Initialize tool tabs for professional/interview modes
+  if (state.mode === "professional" || state.mode === "interview") {
+    switchTool(state.activeTool);
+  }
 }
 
 boot();
