@@ -984,6 +984,22 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
   padding: 16px;
 }
 
+.vol-summary {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.vol-summary span {
+  color: var(--text);
+}
+
+.vol-summary strong {
+  color: var(--cyan);
+  font-weight: 600;
+}
+
 .vol-note {
   font-size: 13px;
   line-height: 1.6;

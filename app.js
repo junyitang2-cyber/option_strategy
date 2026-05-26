@@ -2747,11 +2747,76 @@ function renderVolSurface() {
   const otmPutIV = smileData[Math.floor(smileData.length * 0.2)].iv;
   const putSkew = ((otmPutIV - atmIV) / atmIV * 100).toFixed(1);
 
-  chartDiv.innerHTML = '<p style="text-align:center;padding:2rem;">波动率 Smile 图表 (简化版)</p><p style="text-align:center;">ATM IV: ' + (atmIV * 100).toFixed(1) + '%, Put Skew: ' + putSkew + '%</p>';
-  
+  // Build SVG chart
+  const width = 720;
+  const height = 280;
+  const pad = { left: 58, right: 48, top: 24, bottom: 38 };
+  const plotW = width - pad.left - pad.right;
+  const plotH = height - pad.top - pad.bottom;
+
+  // Find IV range
+  const ivValues = smileData.map(d => d.iv);
+  const minIV = Math.min(...ivValues);
+  const maxIV = Math.max(...ivValues);
+  const ivPadding = (maxIV - minIV) * 0.1;
+  const ivMin = minIV - ivPadding;
+  const ivMax = maxIV + ivPadding;
+
+  // Scales
+  const xScale = (strike) => pad.left + ((strike - strikes[0]) / (strikes[strikes.length - 1] - strikes[0])) * plotW;
+  const yScale = (iv) => pad.top + ((ivMax - iv) / (ivMax - ivMin)) * plotH;
+
+  // Build path
+  const pathData = smileData.map((d, i) =>
+    `${i === 0 ? 'M' : 'L'} ${xScale(d.strike).toFixed(1)} ${yScale(d.iv).toFixed(1)}`
+  ).join(' ');
+
+  // Grid lines and labels
+  const xTicks = [strikes[0], spot * 0.9, spot, spot * 1.1, strikes[strikes.length - 1]];
+  const yTicks = [ivMin, (ivMin + ivMax) / 2, ivMax];
+
+  const gridLines = xTicks.map(strike =>
+    `<line class="grid-line" x1="${xScale(strike).toFixed(1)}" y1="${pad.top}" x2="${xScale(strike).toFixed(1)}" y2="${height - pad.bottom}"/>
+     <text class="tick-label" x="${xScale(strike).toFixed(1)}" y="${height - 10}" text-anchor="middle">${strike.toFixed(0)}</text>`
+  ).join('');
+
+  const yGridLines = yTicks.map(iv =>
+    `<line class="grid-line" x1="${pad.left}" y1="${yScale(iv).toFixed(1)}" x2="${width - pad.right}" y2="${yScale(iv).toFixed(1)}"/>
+     <text class="tick-label" x="${pad.left - 8}" y="${yScale(iv).toFixed(1) + 4}" text-anchor="end">${(iv * 100).toFixed(1)}%</text>`
+  ).join('');
+
+  // ATM marker
+  const atmMarker = `<circle cx="${xScale(spot).toFixed(1)}" cy="${yScale(atmIV).toFixed(1)}" r="4" fill="var(--cyan)" stroke="var(--bg-primary)" stroke-width="2"/>`;
+
+  const svg = `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Volatility Smile">
+    <defs>
+      <linearGradient id="volBg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(57,199,229,.08)"/>
+        <stop offset="100%" stop-color="rgba(57,199,229,.02)"/>
+      </linearGradient>
+    </defs>
+    <rect x="${pad.left}" y="${pad.top}" width="${plotW}" height="${plotH}" fill="url(#volBg)" rx="2"/>
+    ${gridLines}
+    ${yGridLines}
+    <path class="vol-smile-curve" d="${pathData}" stroke="var(--cyan)" stroke-width="2.5" fill="none"/>
+    ${atmMarker}
+    <text class="axis-label" x="${width / 2}" y="${height - 4}" text-anchor="middle">Strike</text>
+    <text class="axis-label" x="${pad.left - 8}" y="16">IV</text>
+    <text class="axis-label" x="${xScale(spot).toFixed(1)}" y="${pad.top - 6}" text-anchor="middle" fill="var(--cyan)">ATM</text>
+  </svg>`;
+
+  chartDiv.innerHTML = svg;
+
   const infoDiv = document.getElementById("volSurfaceInfo");
   if (infoDiv) {
-    infoDiv.innerHTML = '<p class="vol-note">💡 Equity 典型特征：Put skew（OTM put 比 ATM 贵），反映市场对下行风险的恐慌溢价</p>';
+    infoDiv.innerHTML = `
+      <div class="vol-summary">
+        <span><strong>ATM IV:</strong> ${(atmIV * 100).toFixed(1)}%</span>
+        <span><strong>Put Skew:</strong> ${putSkew}%</span>
+        <span><strong>DTE:</strong> ${dte}d</span>
+      </div>
+      <p class="vol-note">💡 Equity 典型特征：Put skew（OTM put 比 ATM 贵），反映市场对下行风险的恐慌溢价</p>
+    `;
   }
 }
 
