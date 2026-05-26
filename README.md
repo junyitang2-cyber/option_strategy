@@ -24,11 +24,39 @@
 
 ## 本地使用
 
+### Windows
+
+直接打开：
+
+```powershell
+cd D:\option_strategy
+start index.html
+```
+
+或使用静态服务器：
+
+```powershell
+cd D:\option_strategy
+npx serve .
+```
+
+运行测试：
+
+```powershell
+cd D:\option_strategy
+npm install
+npx playwright install chromium
+npm test
+```
+
+### Linux/Mac
+
 直接打开：
 
 ```bash
 cd /home/option_strategy
-xdg-open index.html
+xdg-open index.html    # Linux
+open index.html        # Mac
 ```
 
 也可以用任意静态服务器打开：

@@ -625,7 +625,7 @@ const PROFESSIONAL_CONTENT = {
       },
       {
         q: "什么时候应该用Butterfly？",
-        a: "1) 有非常明确的目标价(技术分析、事件驱动)；2) IV偏高，预期会回落；3) 想用小成本赌一个精确结果；4) 作为Iron Condor的替代(如果不想收credit或担心unlimited risk)。不适合：方向不明确、预期大波动、需要高胜率。"
+        a: "1) 有非常明确的目标价(技术分析、事件驱动)；2) IV偏高，预期会回落；3) 想用小成本赌一个精确结果；4) 作为Iron Condor的替代(如果想要更窄的盈利区间和更低的成本)。不适合：方向不明确、预期大波动、需要高胜率。"
       },
       {
         q: "如何管理Butterfly？",
@@ -771,7 +771,7 @@ const PROFESSIONAL_CONTENT = {
 
     profitLogic: {
       makesMoneyFrom: "朝预期方向的大幅移动",
-      losesMoneyFrom: "反向移动(unlimited risk on short side)",
+      losesMoneyFrom: "反向移动(short side风险很大：bullish RR的short put下行到0，bearish RR的short call理论无限上行)",
       bestMarketCondition: "强烈方向观点 + 想用short option降低成本",
       worstScenario: "方向判断错误，朝short option方向大幅移动"
     },
@@ -784,7 +784,7 @@ const PROFESSIONAL_CONTENT = {
         "作为现有仓位的方向性对冲"
       ],
       clientType: "方向性交易者、对冲基金、专业交易员",
-      suitability: "有强烈方向观点、理解unlimited risk、能管理short option"
+      suitability: "有强烈方向观点、理解short option风险、能管理大幅反向移动"
     },
 
     dealerPerspective: {

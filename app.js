@@ -1804,7 +1804,7 @@ function renderInterviewQuestions() {
   const interviewQuestions = document.getElementById("interviewQuestions");
 
   if (!professionalData || !professionalData.interviewQuestions) {
-    interviewQuestions.innerHTML = `<p class="muted" style="text-align: center; padding: 2rem;">该策略暂无面试问答内容。当前支持12个核心策略的面试问答。</p>`;
+    interviewQuestions.innerHTML = `<p class="muted" style="text-align: center; padding: 2rem;">该策略暂无面试问答内容。当前已覆盖 40 个策略的专业内容，包含 141 个面试问答。</p>`;
     return;
   }
 

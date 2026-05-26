@@ -2,11 +2,38 @@
 
 ## 快速开始
 
+### Windows
+
+推荐直接打开本地文件：
+
+```powershell
+cd D:\option_strategy
+start index.html
+```
+
+也可以使用本地服务器：
+
+```powershell
+cd D:\option_strategy
+npx serve .
+```
+
+运行自动化测试：
+
+```powershell
+npm install
+npx playwright install chromium
+npm test
+```
+
+### Linux/Mac
+
 推荐直接打开本地文件：
 
 ```bash
 cd /home/option_strategy
-xdg-open index.html
+xdg-open index.html    # Linux
+open index.html        # Mac
 ```
 
 也可以使用本地服务器：
