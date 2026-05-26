@@ -405,9 +405,12 @@ function positionValue(leg, spot, daysElapsed, scenario, useEntry = false) {
   };
 }
 
-function portfolioResult(spot = state.scenario.spot, daysElapsed = state.scenario.daysElapsed, scenario = state.scenario) {
-  const entryValue = state.legs.reduce((sum, leg) => sum + positionValue(leg, state.entrySpot, 0, scenario, true).value, 0);
-  const current = state.legs.reduce(
+function portfolioResult(spot = state.scenario.spot, daysElapsed = state.scenario.daysElapsed, scenario = state.scenario, legs = null, entrySpot = null) {
+  const useLegs = legs || state.legs;
+  // Use provided entrySpot, or fall back to state.entrySpot for current strategy
+  const actualEntrySpot = entrySpot !== null ? entrySpot : state.entrySpot;
+  const entryValue = useLegs.reduce((sum, leg) => sum + positionValue(leg, actualEntrySpot, 0, scenario, true).value, 0);
+  const current = useLegs.reduce(
     (acc, leg) => {
       const result = positionValue(leg, spot, daysElapsed, scenario, false);
       acc.value += result.value;
@@ -660,12 +663,13 @@ function calculatePortfolioGreeks() {
   };
 
   state.portfolio.positions.forEach(position => {
-    // Calculate Greeks for this position
+    // Calculate Greeks for this position using its entry spot
     const result = portfolioResult(
       state.scenario.spot,
       state.scenario.daysElapsed,
       state.scenario,
-      position.legs
+      position.legs,
+      position.entrySpot  // Pass the position's entry spot
     );
 
     // Aggregate Greeks (multiply by quantity)
@@ -690,12 +694,36 @@ function calculatePortfolioMargin() {
   let regTMargin = 0;
 
   state.portfolio.positions.forEach(position => {
-    const positionMargin = calculatePositionMargin(position.legs, position.quantity);
+    const positionMargin = calculatePositionMargin(position.legs, position.quantity, position.entrySpot);
     regTMargin += positionMargin.regT;
   });
 
-  // Portfolio Margin: simplified stress test (typically 20-40% less than Reg-T)
-  const portfolioMargin = regTMargin * 0.7; // Simplified: 30% reduction
+  // Portfolio Margin: simplified stress test
+  // Run 16 scenarios: ±15% spot, ±25% IV
+  const spotShifts = [-0.15, -0.10, 0, 0.10, 0.15];
+  const ivShifts = [-0.25, 0, 0.25];
+
+  let maxLoss = 0;
+
+  spotShifts.forEach(spotShift => {
+    ivShifts.forEach(ivShift => {
+      const testSpot = state.scenario.spot * (1 + spotShift);
+      const testScenario = { ...state.scenario, ivShift: state.scenario.ivShift + ivShift };
+
+      let scenarioLoss = 0;
+      state.portfolio.positions.forEach(position => {
+        const result = portfolioResult(testSpot, state.scenario.daysElapsed, testScenario, position.legs, position.entrySpot);
+        scenarioLoss += result.pnl * position.quantity;
+      });
+
+      if (scenarioLoss < maxLoss) {
+        maxLoss = scenarioLoss;
+      }
+    });
+  });
+
+  // Portfolio Margin = worst-case loss from stress test
+  const portfolioMargin = Math.abs(maxLoss);
 
   return {
     regT: regTMargin,
@@ -704,9 +732,10 @@ function calculatePortfolioMargin() {
 }
 
 // Calculate margin for a single position
-function calculatePositionMargin(legs, quantity = 1) {
+function calculatePositionMargin(legs, quantity = 1, entrySpot = null) {
   const strategyType = detectStrategyType(legs);
   const multiplier = state.scenario.multiplier;
+  const spotForCalculation = entrySpot !== null ? entrySpot : state.scenario.spot;
 
   if (strategyType === 'long-only') {
     // Long options: premium × qty × multiplier
@@ -714,7 +743,7 @@ function calculatePositionMargin(legs, quantity = 1) {
       if (leg.side === 'long' && leg.type === 'option') {
         const price = optionModel(
           leg.optionType,
-          state.scenario.spot,
+          spotForCalculation,
           leg.strike,
           leg.dte,
           state.scenario.rate,
@@ -729,9 +758,9 @@ function calculatePositionMargin(legs, quantity = 1) {
   }
 
   if (strategyType === 'defined-risk') {
-    // Defined-risk spreads: max loss
-    const maxLoss = calculateMaxLoss(legs);
-    return { regT: maxLoss * quantity * multiplier, portfolio: maxLoss * quantity * multiplier * 0.7 };
+    // Defined-risk spreads: max loss (already in dollars, don't multiply by multiplier again)
+    const maxLoss = calculateMaxLoss(legs, entrySpot);
+    return { regT: maxLoss * quantity, portfolio: maxLoss * quantity * 0.7 };
   }
 
   if (strategyType === 'short-naked') {
@@ -741,14 +770,14 @@ function calculatePositionMargin(legs, quantity = 1) {
       if (leg.side === 'short' && leg.type === 'option') {
         const price = optionModel(
           leg.optionType,
-          state.scenario.spot,
+          spotForCalculation,
           leg.strike,
           leg.dte,
           state.scenario.rate,
           state.scenario.dividend,
           leg.iv
         ).price;
-        const spot = state.scenario.spot;
+        const spot = spotForCalculation;
         const strike = leg.strike;
         const otmAmount = leg.optionType === 'call'
           ? Math.max(strike - spot, 0)
@@ -768,7 +797,7 @@ function calculatePositionMargin(legs, quantity = 1) {
     if (leg.type === 'option') {
       const price = optionModel(
         leg.optionType,
-        state.scenario.spot,
+        spotForCalculation,
         leg.strike,
         leg.dte,
         state.scenario.rate,
@@ -792,22 +821,40 @@ function detectStrategyType(legs) {
 
   // Check if defined risk (has protective long options)
   if (hasLong && hasShort) {
-    // Simplified: if has both long and short, assume defined risk
-    return 'defined-risk';
+    // Check if it's a vertical spread (same expiry, same type, different strikes)
+    const calls = legs.filter(l => l.type === 'option' && l.optionType === 'call');
+    const puts = legs.filter(l => l.type === 'option' && l.optionType === 'put');
+
+    // Vertical spread: one long, one short, same type
+    const isCallSpread = calls.length === 2 && calls.some(l => l.side === 'long') && calls.some(l => l.side === 'short');
+    const isPutSpread = puts.length === 2 && puts.some(l => l.side === 'long') && puts.some(l => l.side === 'short');
+
+    // Iron Condor/Butterfly: multiple spreads
+    const isIronStructure = calls.length >= 2 && puts.length >= 2;
+
+    if (isCallSpread || isPutSpread || isIronStructure) {
+      return 'defined-risk';
+    }
+
+    // Otherwise (calendar, diagonal, risk reversal, etc.) treat as mixed
+    return 'short-naked'; // Conservative: treat as naked for margin
   }
 
   return 'unknown';
 }
 
 // Calculate max loss for defined-risk strategies
-function calculateMaxLoss(legs) {
+function calculateMaxLoss(legs, entrySpot = null) {
   // Simplified: calculate max loss at various spot prices
-  const spot = state.scenario.spot;
+  const spot = entrySpot !== null ? entrySpot : state.scenario.spot;
   const testPrices = [spot * 0.5, spot * 0.8, spot, spot * 1.2, spot * 1.5];
+
+  // Use DTE from legs if available, otherwise use current scenario
+  const dte = legs.length > 0 && legs[0].dte ? legs[0].dte : state.scenario.daysElapsed;
 
   let maxLoss = 0;
   testPrices.forEach(testSpot => {
-    const result = portfolioResult(testSpot, state.scenario.dte, state.scenario, legs);
+    const result = portfolioResult(testSpot, dte, state.scenario, legs, spot);
     if (result.pnl < maxLoss) {
       maxLoss = result.pnl;
     }
@@ -1871,11 +1918,11 @@ function renderPortfolioPanel() {
             <span>${formatMoney(margin.regT)}</span>
           </div>
           <div class="margin-item">
-            <span>Portfolio Margin:</span>
+            <span>PM 估算 (教育性):</span>
             <span>${formatMoney(margin.portfolio)}</span>
           </div>
           <div class="margin-item">
-            <span>当前使用 (${marginType === 'regT' ? 'Reg-T' : 'PM'}):</span>
+            <span>当前使用 (${marginType === 'regT' ? 'Reg-T' : 'PM估算'}):</span>
             <span class="${marginPercent > 80 ? 'warning' : ''}">${formatMoney(currentMargin)} (${marginPercent.toFixed(1)}%)</span>
           </div>
           <div class="margin-item">
@@ -1883,6 +1930,11 @@ function renderPortfolioPanel() {
             <span class="${buyingPower < 0 ? 'negative' : 'positive'}">${formatMoney(buyingPower)}</span>
           </div>
         </div>
+
+        <p class="note" style="font-size:0.85em;color:var(--text-secondary);margin-top:8px;">
+          ⚠️ PM 估算为教育性简化计算（15场景压力测试），不代表真实 broker 的 Portfolio Margin。
+          真实 PM 基于 FINRA Rule 4210 和 broker 风险模型。
+        </p>
 
         ${marginPercent > 80 ? '<p class="warning-text">⚠️ 保证金使用超过80%，建议降低仓位</p>' : ''}
         ${buyingPower < 0 ? '<p class="error-text">❌ 保证金不足，需要追加保证金或平仓</p>' : ''}
@@ -1957,12 +2009,16 @@ function handleModeToggle(mode) {
     interviewContent.forEach(el => el.style.display = "none");
     renderProfessionalContent();
     renderPortfolioPanel();
+    renderVolSurface();
+    renderGreeksDecay();
   } else if (mode === "interview") {
     proContent.forEach(el => el.style.display = "block");
     interviewContent.forEach(el => el.style.display = "block");
     renderProfessionalContent();
     renderInterviewQuestions();
     renderPortfolioPanel();
+    renderVolSurface();
+    renderGreeksDecay();
   }
 }
 
@@ -2347,7 +2403,8 @@ function simulateGammaPnL(finalSpot, steps = 20) {
   const path = [];
   let spot = initialSpot;
   let hedgeShares = 0;
-  let cashPnL = 0;
+  let cashBalance = 0;  // Cash balance from trading
+  let prevSpot = initialSpot;
   const stepSize = (finalSpot - initialSpot) / steps;
 
   // Initial position
@@ -2355,28 +2412,37 @@ function simulateGammaPnL(finalSpot, steps = 20) {
   const initialValue = initialResult.value;
 
   for (let i = 0; i <= steps; i++) {
+    // Observe current delta and rehedge
     const result = portfolioResult(spot, state.scenario.daysElapsed);
-    const targetDelta = result.greeks.delta;
+    const targetDelta = -result.greeks.delta;  // Hedge is opposite direction of delta
     const rehedge = targetDelta - hedgeShares;
 
-    // Rehedging cost: buy high, sell low hurts short gamma
-    cashPnL -= rehedge * spot;
+    // Rehedging cost: buying stock costs cash, selling stock generates cash
+    cashBalance -= rehedge * spot;
     hedgeShares = targetDelta;
+
+    // Calculate total hedge P&L: cash balance + stock position value
+    const stockPositionValue = hedgeShares * spot;
+    const hedgePnL = cashBalance + stockPositionValue;
 
     const optionValue = result.value;
     const optionPnL = optionValue - initialValue;
-    const totalPnL = optionPnL + cashPnL;
+    const totalPnL = optionPnL + hedgePnL;
 
     path.push({
       step: i,
       spot: spot,
       optionPnL: optionPnL,
-      cashPnL: cashPnL,
+      cashPnL: hedgePnL,  // Total hedge P&L (cash + stock value)
       totalPnL: totalPnL,
       delta: result.greeks.delta,
-      gamma: result.greeks.gamma
+      gamma: result.greeks.gamma,
+      hedgeShares: hedgeShares,
+      cashBalance: cashBalance,
+      stockValue: stockPositionValue
     });
 
+    prevSpot = spot;
     spot += stepSize;
   }
 
@@ -2556,15 +2622,18 @@ function renderVolSurface() {
   const spot = state.scenario.spot;
   const strikes = [];
   for (let i = 0.8; i <= 1.2; i += 0.05) strikes.push(spot * i);
-  const smileData = calculateVolSmile(strikes, state.scenario.dte);
+
+  // Use correct DTE field: state.legs[0].dte or default to 30
+  const dte = (state.legs.length > 0 && state.legs[0].dte) ? state.legs[0].dte : 30;
+  const smileData = calculateVolSmile(strikes, dte);
   const chartDiv = document.getElementById("volSurfaceChart");
   if (!chartDiv) return;
-  
+
   const atmIndex = Math.floor(smileData.length / 2);
   const atmIV = smileData[atmIndex].iv;
   const otmPutIV = smileData[Math.floor(smileData.length * 0.2)].iv;
   const putSkew = ((otmPutIV - atmIV) / atmIV * 100).toFixed(1);
-  
+
   chartDiv.innerHTML = '<p style="text-align:center;padding:2rem;">波动率 Smile 图表 (简化版)</p><p style="text-align:center;">ATM IV: ' + (atmIV * 100).toFixed(1) + '%, Put Skew: ' + putSkew + '%</p>';
   
   const infoDiv = document.getElementById("volSurfaceInfo");
@@ -2576,7 +2645,18 @@ function renderVolSurface() {
 function renderGreeksDecay() {
   const chartDiv = document.getElementById("greeksDecayChart");
   if (!chartDiv) return;
-  chartDiv.innerHTML = '<p style="text-align:center;padding:2rem;">Greeks 衰减图表 (简化版)</p><p style="text-align:center;">💡 Gamma 在到期前最后一周急剧上升，风险最大</p>';
+
+  chartDiv.innerHTML = `
+    <p style="text-align:center;padding:2rem;color:var(--text-secondary);">
+      Greeks 衰减图表功能待实现
+    </p>
+    <p style="text-align:center;font-size:0.9em;">
+      ⚠️ 当前为占位符。完整实现需要绘制 Gamma/Theta/Vega 随 DTE 变化的曲线图。
+    </p>
+    <p style="text-align:center;font-size:0.85em;color:var(--text-secondary);margin-top:1rem;">
+      💡 预期功能：显示 ATM 期权的 Gamma 在到期前最后一周急剧上升，Theta 加速衰减，Vega 逐渐降低。
+    </p>
+  `;
 }
 
 document.addEventListener("DOMContentLoaded", () => {

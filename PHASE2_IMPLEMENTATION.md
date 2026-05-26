@@ -397,14 +397,19 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 
 ## 总结
 
-Phase 2 成功实现了所有高优先级面试必备功能：
+Phase 2 实现了核心面试必备功能：
 
 ✅ **Portfolio Greeks 聚合器**：组合风险管理的核心工具  
-✅ **保证金计算器**：理解 Reg-T vs Portfolio Margin  
+✅ **保证金计算器**：理解 Reg-T vs Portfolio Margin（教育性估算）  
 ✅ **Gamma P&L 模拟**：理解 gamma scalping 和动态对冲  
 ✅ **波动率曲面**：理解 volatility smile 和 skew  
-✅ **Greeks 衰减**：理解时间对 Greeks 的影响  
+⚠️ **Greeks 衰减**：当前为静态占位，待实现真实衰减图表  
 
-**Phase 2 完成度：100%**
+**Phase 2 完成度：80-85%**
 
-工具现在是一个**世界级的 Derivatives Trading 面试准备平台**！
+**已知限制**：
+- Greeks Decay 需要实现真实的 Gamma/Theta/Vega 随 DTE 变化的图表
+- Portfolio Margin 是教育性简化估算，不符合真实 FINRA Rule 4210 或 Cboe 规则
+- 需要在 UI 中明确标注 Portfolio Margin 为"教育性估算"
+
+工具现在可用于**学习和面试准备**，但需要理解其教育性质和限制。
