@@ -193,110 +193,110 @@
           <div id="interviewQuestions" class="interview-questions"></div>
         </section>
 
-        <section class="panel stress-test-panel pro-content" id="stressTestPanel" style="display:none">
+        <section class="panel professional-tools-panel pro-content" id="professionalToolsPanel" style="display:none">
           <div class="panel-heading compact">
             <div>
-              <p class="eyebrow">Stress Test</p>
-              <h3>压力测试矩阵 Spot × IV</h3>
+              <p class="eyebrow">Professional Tools</p>
+              <h3>专业工具</h3>
             </div>
-            <button id="runStressTest" class="primary-button" type="button">运行压力测试</button>
           </div>
-          <div id="stressTestResults" class="stress-test-results"></div>
-          <div id="greekShockEstimate" class="greek-shock-estimate"></div>
-        </section>
 
-        <section class="panel parity-panel pro-content" id="parityPanel" style="display:none">
-          <div class="panel-heading compact">
-            <div>
-              <p class="eyebrow">Put-Call Parity</p>
-              <h3>Put-Call Parity 教学计算器</h3>
-            </div>
+          <div class="tools-tabs">
+            <button class="tool-tab active" data-tool="stress" type="button">压力测试</button>
+            <button class="tool-tab" data-tool="parity" type="button">Put-Call Parity</button>
+            <button class="tool-tab" data-tool="portfolio" type="button">组合管理</button>
+            <button class="tool-tab" data-tool="gamma" type="button">Gamma P&L</button>
+            <button class="tool-tab" data-tool="vol" type="button">波动率曲面</button>
+            <button class="tool-tab" data-tool="decay" type="button">Greeks Decay</button>
           </div>
-          <div class="parity-calculator">
-            <div class="parity-inputs">
-              <label><span>Call Price:</span><input type="number" id="parityCallPrice" step="0.01" value="5.00" /></label>
-              <label><span>Put Price:</span><input type="number" id="parityPutPrice" step="0.01" value="4.00" /></label>
-              <label><span>Stock Price:</span><input type="number" id="paritySpot" step="0.5" value="100" /></label>
-              <label><span>Strike:</span><input type="number" id="parityStrike" step="0.5" value="100" /></label>
-              <label><span>DTE:</span><input type="number" id="parityDte" step="1" value="30" /></label>
-              <label><span>Rate (%):</span><input type="number" id="parityRate" step="0.25" value="4" /></label>
-              <button id="checkParity" class="primary-button" type="button">检查 Parity</button>
-            </div>
-            <div id="parityResults" class="parity-results"></div>
-          </div>
-        </section>
 
-        <section class="panel portfolio-panel pro-content" id="portfolioPanel" style="display:none">
-          <div class="panel-heading compact">
-            <div>
-              <p class="eyebrow">Portfolio</p>
-              <h3>组合 Greeks 聚合器</h3>
+          <div class="tool-content">
+            <!-- Stress Test -->
+            <div class="tool-panel active" data-tool="stress">
+              <div class="tool-header">
+                <h4>压力测试矩阵 Spot × IV</h4>
+                <button id="runStressTest" class="primary-button" type="button">运行压力测试</button>
+              </div>
+              <div id="stressTestResults" class="stress-test-results"></div>
+              <div id="greekShockEstimate" class="greek-shock-estimate"></div>
             </div>
-          </div>
-          <div id="portfolioContent" class="portfolio-content"></div>
-        </section>
 
-        <section class="panel gamma-pnl-panel pro-content" id="gammaPnlPanel" style="display:none">
-          <div class="panel-heading compact">
-            <div>
-              <p class="eyebrow">Gamma P&L</p>
-              <h3>Gamma P&L 模拟 - 动态对冲</h3>
+            <!-- Put-Call Parity -->
+            <div class="tool-panel" data-tool="parity">
+              <h4>Put-Call Parity 教学计算器</h4>
+              <div class="parity-calculator">
+                <div class="parity-inputs">
+                  <label><span>Call Price:</span><input type="number" id="parityCallPrice" step="0.01" value="5.00" /></label>
+                  <label><span>Put Price:</span><input type="number" id="parityPutPrice" step="0.01" value="4.00" /></label>
+                  <label><span>Stock Price:</span><input type="number" id="paritySpot" step="0.5" value="100" /></label>
+                  <label><span>Strike:</span><input type="number" id="parityStrike" step="0.5" value="100" /></label>
+                  <label><span>DTE:</span><input type="number" id="parityDte" step="1" value="30" /></label>
+                  <label><span>Rate (%):</span><input type="number" id="parityRate" step="0.25" value="4" /></label>
+                  <button id="checkParity" class="primary-button" type="button">检查 Parity</button>
+                </div>
+                <div id="parityResults" class="parity-results"></div>
+              </div>
             </div>
-            <button id="runGammaPnl" class="primary-button" type="button">运行模拟</button>
-          </div>
-          <div class="gamma-pnl-controls">
-            <label>
-              <span>最终价格:</span>
-              <input type="range" id="gammaPnlSpot" min="80" max="120" step="1" value="110" />
-              <output id="gammaPnlSpotOutput">110</output>
-            </label>
-            <label>
-              <span>对冲步数:</span>
-              <input type="range" id="gammaPnlSteps" min="10" max="50" step="5" value="20" />
-              <output id="gammaPnlStepsOutput">20</output>
-            </label>
-          </div>
-          <div id="gammaPnlChart" class="gamma-pnl-chart"></div>
-          <div id="gammaPnlResults" class="gamma-pnl-results"></div>
-        </section>
 
-        <section class="panel vol-surface-panel pro-content" id="volSurfacePanel" style="display:none">
-          <div class="panel-heading compact">
-            <div>
-              <p class="eyebrow">Volatility Surface</p>
-              <h3>波动率曲面 - Smile & Skew</h3>
+            <!-- Portfolio -->
+            <div class="tool-panel" data-tool="portfolio">
+              <h4>组合 Greeks 聚合器</h4>
+              <div id="portfolioContent" class="portfolio-content"></div>
             </div>
-          </div>
-          <div id="volSurfaceChart" class="vol-surface-chart"></div>
-          <div id="volSurfaceInfo" class="vol-surface-info"></div>
-        </section>
 
-        <section class="panel greeks-decay-panel pro-content" id="greeksDecayPanel" style="display:none">
-          <div class="panel-heading compact">
-            <div>
-              <p class="eyebrow">Greeks Decay</p>
-              <h3>Greeks 随时间衰减</h3>
+            <!-- Gamma P&L -->
+            <div class="tool-panel" data-tool="gamma">
+              <div class="tool-header">
+                <h4>Gamma P&L 模拟 - 动态对冲</h4>
+                <button id="runGammaPnl" class="primary-button" type="button">运行模拟</button>
+              </div>
+              <div class="gamma-pnl-controls">
+                <label>
+                  <span>最终价格:</span>
+                  <input type="range" id="gammaPnlSpot" min="80" max="120" step="1" value="110" />
+                  <output id="gammaPnlSpotOutput">110</output>
+                </label>
+                <label>
+                  <span>对冲步数:</span>
+                  <input type="range" id="gammaPnlSteps" min="10" max="50" step="5" value="20" />
+                  <output id="gammaPnlStepsOutput">20</output>
+                </label>
+              </div>
+              <div id="gammaPnlChart" class="gamma-pnl-chart"></div>
+              <div id="gammaPnlResults" class="gamma-pnl-results"></div>
+            </div>
+
+            <!-- Vol Surface -->
+            <div class="tool-panel" data-tool="vol">
+              <h4>波动率曲面 - Smile & Skew</h4>
+              <div id="volSurfaceChart" class="vol-surface-chart"></div>
+              <div id="volSurfaceInfo" class="vol-surface-info"></div>
+            </div>
+
+            <!-- Greeks Decay -->
+            <div class="tool-panel" data-tool="decay">
+              <h4>Greeks 随时间衰减</h4>
+              <div class="greeks-decay-controls">
+                <label>
+                  <span>最大 DTE:</span>
+                  <input type="range" id="greeksDecayDte" min="0" max="45" step="1" value="30" />
+                  <output id="greeksDecayDteOutput">30</output>
+                </label>
+                <div class="moneyness-toggle">
+                  <span>中心行权价:</span>
+                  <button class="moneyness-btn active" data-moneyness="atm" type="button">ATM</button>
+                  <button class="moneyness-btn" data-moneyness="itm" type="button">ITM</button>
+                  <button class="moneyness-btn" data-moneyness="otm" type="button">OTM</button>
+                  <button class="moneyness-btn" data-moneyness="custom" type="button">自定义</button>
+                </div>
+                <label id="customStrikeControl" style="display:none">
+                  <span>自定义行权价:</span>
+                  <input type="number" id="customStrike" step="1" value="100" />
+                </label>
+              </div>
+              <div id="greeksDecayChart" class="greeks-decay-chart"></div>
             </div>
           </div>
-          <div class="greeks-decay-controls">
-            <label>
-              <span>最大 DTE:</span>
-              <input type="range" id="greeksDecayDte" min="10" max="90" step="5" value="45" />
-              <output id="greeksDecayDteOutput">45</output>
-            </label>
-            <label class="decay-strike-row">
-              <span>行权价:</span>
-              <span class="decay-presets">
-                <button class="decay-preset-btn active" data-decay-moneyness="atm" type="button">ATM</button>
-                <button class="decay-preset-btn" data-decay-moneyness="itm" type="button">ITM</button>
-                <button class="decay-preset-btn" data-decay-moneyness="otm" type="button">OTM</button>
-                <input type="number" id="greeksDecayStrike" step="0.5" style="width:80px" />
-              </span>
-            </label>
-            <span id="greeksDecayInfo" class="greeks-decay-info"></span>
-          </div>
-          <div id="greeksDecayChart" class="greeks-decay-chart"></div>
-          <p class="greeks-decay-note">曲线基于当前策略所有腿的组合 Greeks；ATM/ITM/OTM 与自定义行权价会移动组合中心，并保留原有价差宽度。Gamma、Theta、Vega 会随 DTE 接近到期而非线性变化。</p>
         </section>
 
         <section class="panel concepts-panel pro-content" id="proConceptsPanel" style="display:none">
