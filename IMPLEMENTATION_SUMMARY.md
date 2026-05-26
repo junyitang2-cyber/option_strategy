@@ -13,8 +13,6 @@
   - **日历策略**: Calendar Call Spread
   - **对冲策略**: Protective Put, Collar
   - **合成策略**: Long Synthetic Future, Risk Reversal, Box Spread
-  - Butterfly, Calendar Spread
-  - Synthetic Future, Risk Reversal
 - 每个策略包含：
   - Exposure分解（方向、波动率、时间、凸性）
   - 盈利逻辑与风险
