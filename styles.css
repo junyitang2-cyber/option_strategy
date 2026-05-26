@@ -1067,3 +1067,65 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 @media (max-width: 860px) {
   .concepts-content { grid-template-columns: 1fr; }
 }
+
+/* Professional Tools Tabbed Interface */
+.professional-tools-panel {
+  margin-top: 24px;
+}
+
+.tools-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+
+.tool-tab {
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tool-tab:hover {
+  color: var(--text);
+  background: var(--panel-2);
+}
+
+.tool-tab.active {
+  color: var(--cyan);
+  border-bottom: 2px solid var(--cyan);
+}
+
+.tool-tab:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: -2px;
+}
+
+.tool-content {
+  min-height: 400px;
+}
+
+.tool-panel {
+  display: none;
+}
+
+.tool-panel.active {
+  display: block;
+}
+
+.tool-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.tool-header h4 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text);
+}
