@@ -1919,7 +1919,7 @@ function renderPortfolioPanel() {
         <span>保证金类型:</span>
         <select id="marginTypeSelect">
           <option value="regT" ${marginType === 'regT' ? 'selected' : ''}>Reg-T</option>
-          <option value="portfolio" ${marginType === 'portfolio' ? 'selected' : ''}>Portfolio Margin</option>
+          <option value="portfolio" ${marginType === 'portfolio' ? 'selected' : ''}>PM 估算 (教育性)</option>
         </select>
       </label>
       <label class="account-size-input">
@@ -2869,9 +2869,9 @@ function renderGreeksDecay() {
     return;
   }
 
-  const strikeInput = document.getElementById("greeksDecayStrike");
-  const moneynessBtn = document.querySelector(".decay-preset-btn.active");
-  const moneyness = moneynessBtn ? moneynessBtn.dataset.decayMoneyness : "atm";
+  const strikeInput = document.getElementById("customStrike");
+  const moneynessBtn = document.querySelector(".moneyness-btn.active");
+  const moneyness = moneynessBtn ? moneynessBtn.dataset.moneyness : "atm";
   const originalStrikes = optionLegs.map((leg) => Number(leg.strike) || spot);
   const anchorStrike = originalStrikes.reduce((sum, strike) => sum + strike, 0) / originalStrikes.length;
   const optionTypes = new Set(optionLegs.map((leg) => leg.optionType));
@@ -3041,19 +3041,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   // Greeks Decay: moneyness preset buttons
-  document.querySelectorAll(".decay-preset-btn").forEach(btn => {
+  document.querySelectorAll(".moneyness-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      document.querySelectorAll(".decay-preset-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".moneyness-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
-      const strikeInput = document.getElementById("greeksDecayStrike");
-      if (strikeInput) strikeInput.value = "";
+
+      // Show/hide custom strike input
+      const customControl = document.getElementById("customStrikeControl");
+      if (btn.dataset.moneyness === "custom") {
+        if (customControl) customControl.style.display = "block";
+      } else {
+        if (customControl) customControl.style.display = "none";
+        const strikeInput = document.getElementById("customStrike");
+        if (strikeInput) strikeInput.value = "";
+      }
+
       renderGreeksDecay();
     });
   });
-  const greeksDecayStrike = document.getElementById("greeksDecayStrike");
-  if (greeksDecayStrike) {
-    greeksDecayStrike.addEventListener("input", () => {
-      document.querySelectorAll(".decay-preset-btn").forEach(b => b.classList.remove("active"));
+  const customStrike = document.getElementById("customStrike");
+  if (customStrike) {
+    customStrike.addEventListener("input", () => {
       renderGreeksDecay();
     });
   }

@@ -37,6 +37,27 @@ test("professional and interview mode panels stay interactive", async ({ page })
   await page.locator("#greeksDecayDte").dispatchEvent("input");
   await expect(page.locator("#greeksDecayDteOutput")).toHaveText("45");
 
+  // Test moneyness buttons (ITM/OTM/Custom)
+  await page.locator('[data-moneyness="itm"]').click();
+  await expect(page.locator('[data-moneyness="itm"]')).toHaveClass(/active/);
+  await expect(page.locator("#greeksDecayChart svg")).toBeVisible();
+
+  await page.locator('[data-moneyness="otm"]').click();
+  await expect(page.locator('[data-moneyness="otm"]')).toHaveClass(/active/);
+  await expect(page.locator("#greeksDecayChart svg")).toBeVisible();
+
+  // Test custom strike input
+  await page.locator('[data-moneyness="custom"]').click();
+  await expect(page.locator('[data-moneyness="custom"]')).toHaveClass(/active/);
+  await expect(page.locator("#customStrikeControl")).toBeVisible();
+  await page.locator("#customStrike").fill("110");
+  await page.locator("#customStrike").dispatchEvent("input");
+  await expect(page.locator("#greeksDecayChart svg")).toBeVisible();
+
+  // Switch back to ATM
+  await page.locator('[data-moneyness="atm"]').click();
+  await expect(page.locator("#customStrikeControl")).toBeHidden();
+
   // Test strategy switching
   await page.locator("#searchInput").fill("Iron Condor");
   await page.locator('#strategyList [data-strategy="iron-condor"]').click();
