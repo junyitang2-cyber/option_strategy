@@ -18,6 +18,23 @@ test("interactive lab renders and core teaching controls work", async ({ page })
   await expect(page.locator(".loss-area").first()).toBeAttached();
   await expect(page.locator(".break-label").first()).toBeAttached();
 
+  await page.locator("#strategyList .strategy-item").first().hover();
+  await expect(page.locator("#strategyPreviewTip")).toBeVisible();
+  await expect(page.locator("#strategyPreviewTip")).toContainText("买入看涨期权");
+  await page.locator("#strategyList .strategy-item").first().dispatchEvent("mouseleave");
+  await expect(page.locator("#strategyPreviewTip")).toHaveCount(0);
+
+  let resetDialogType = "";
+  let resetDialogMessage = "";
+  page.once("dialog", async (dialog) => {
+    resetDialogType = dialog.type();
+    resetDialogMessage = dialog.message();
+    await dialog.dismiss();
+  });
+  await page.locator("#resetStrategy").click();
+  expect(resetDialogType).toBe("confirm");
+  expect(resetDialogMessage).toContain("确定要重置");
+
   await page.locator('[data-concept="delta"]').click();
   await expect(page.locator("#conceptCard")).toBeVisible();
   await expect(page.locator("#conceptContent")).toContainText("当前策略解读");

@@ -17,6 +17,8 @@ test("phase 3 probability view and richer notes work", async ({ page }) => {
   await expect(page.locator(".payoff-probability")).toBeAttached();
   await expect(page.locator(".payoff-expiry")).toBeAttached();
   await expect(page.locator(".payoff-current")).toBeAttached();
+  await expect(page.locator(".sigma-band")).toHaveCount(4);
+  await expect(page.locator(".sigma-label")).toHaveText(["−2σ", "−1σ", "+1σ", "+2σ"]);
   await expect(page.locator("#chartLegend")).toContainText("盈利概率约 34%");
 
   await page.locator("#searchInput").fill("Straddle");

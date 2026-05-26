@@ -225,6 +225,13 @@ function markCompleted(strategyId) {
   if (!prog.completed.includes(strategyId)) { prog.completed.push(strategyId); saveProgress(prog); }
 }
 
+function unmarkCompleted(strategyId) {
+  const prog = loadProgress();
+  if (!prog.completed) return;
+  prog.completed = prog.completed.filter(id => id !== strategyId);
+  saveProgress(prog);
+}
+
 function isCompleted(strategyId) {
   return (loadProgress().completed || []).includes(strategyId);
 }
@@ -973,12 +980,38 @@ function chartSvg(series, options = {}) {
     lossArea = buildArea((v) => v < 0, "loss-area");
   }
 
-  // Breakeven labels
+  // Breakeven labels — avoid axis overlap and keep readable
+  const zeroY = yScale(0);
+  const zeroRatio = (zeroY - pad.top) / (plotH || 1);
+  const labelY = zeroRatio > 0.72 ? pad.top + plotH * 0.5 : zeroY - 14;
+  const spotX = xScale(state.scenario.spot);
   const breakLabels = (options.breakevens || [])
-    .map((spot) => {
-      const bx = xScale(spot).toFixed(1);
-      const by = (yScale(0) - 14).toFixed(1);
-      return `<text class="break-label" x="${bx}" y="${by}" text-anchor="middle">$${spot.toFixed(2)}</text>`;
+    .map((spot, i, arr) => {
+      let bx = xScale(spot);
+      // Shift label away from spot line if too close
+      const distFromSpot = Math.abs(bx - spotX);
+      if (distFromSpot < 36) bx = spotX + (bx >= spotX ? 36 : -36);
+      // Stagger y if two breakevens overlap horizontally
+      let by = labelY;
+      const prev = arr[i - 1];
+      if (prev && Math.abs(xScale(spot) - xScale(prev)) < 55) {
+        by = labelY - (i % 2 === 0 ? 16 : 0);
+      }
+      const bxStr = bx.toFixed(1);
+      const byStr = by.toFixed(1);
+      const lbl = `$${spot.toFixed(2)}`;
+      return `<rect class="break-label-bg" x="${(bx - 22).toFixed(1)}" y="${(by - 12).toFixed(1)}" width="44" height="16" rx="3"/><text class="break-label" x="${bxStr}" y="${byStr}" text-anchor="middle">${lbl}</text>`;
+    })
+    .join("");
+
+  // Annotations: vertical dashed lines with labels (used for sigma bands etc.)
+  const annotations = (options.annotations || [])
+    .map(a => {
+      const ax = xScale(a.spot).toFixed(1);
+      const topY = pad.top;
+      const botY = height - pad.bottom;
+      return `<line class="sigma-band" x1="${ax}" y1="${topY}" x2="${ax}" y2="${botY}"/>
+        <text class="sigma-label" x="${ax}" y="${topY + 14}" text-anchor="middle">${escapeHtml(a.label)}</text>`;
     })
     .join("");
 
@@ -992,7 +1025,7 @@ function chartSvg(series, options = {}) {
   }
 
   return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(options.label || "chart")}">
-    ${grid}${profitArea}${lossArea}${zeroLine}${breakLines}${breakLabels}${spotLine}${paths}${overlay}
+    ${grid}${profitArea}${lossArea}${zeroLine}${breakLines}${breakLabels}${spotLine}${paths}${annotations}${overlay}
     <text class="axis-label" x="${width - 18}" y="${height - 10}" text-anchor="end">标的价格</text>
     <text class="axis-label" x="${pad.left}" y="12">${escapeHtml(options.yLabel || "值")}</text>
   </svg>`;
@@ -1038,15 +1071,52 @@ function renderStrategyList() {
   document.getElementById("visibleCount").textContent = strategies.length;
   document.getElementById("strategyList").innerHTML = strategies
     .map(
-      (strategy) => `<button class="strategy-item ${strategy.id === state.selectedId ? "is-selected" : ""}" type="button" data-strategy="${strategy.id}">
-        <span><span class="strategy-name">${escapeHtml(strategy.name)}</span><span class="strategy-description">${escapeHtml(strategy.cn)} · ${escapeHtml(strategy.outlook)}</span></span>
-        <span class="strategy-tags">
-          <span class="diff-badge ${DIFF_CLASS[strategy.difficulty] || ""}" title="${DIFF_LABEL[strategy.difficulty] || strategy.difficulty}"></span>
-          <span class="${strategy.source === "补充" ? "source-extra" : ""}">${escapeHtml(strategy.category)}</span>
-        </span>
-      </button>`,
+      (strategy) => {
+        const maxP = strategy.money?.maxProfit || "";
+        const maxL = strategy.money?.maxLoss || "";
+        const riskSummary = maxP && maxL ? `最大盈利: ${maxP} / 最大亏损: ${maxL}` : (maxP ? `最大盈利: ${maxP}` : (maxL ? `最大亏损: ${maxL}` : ""));
+        const legsSummary = (strategy.legs || []).map(l => `${l.side === "long" ? "买" : "卖"}${l.qty || 1}${l.type === "stock" ? "股" : (l.optionType === "call" ? "Call" : "Put")}`).join(" + ");
+        const preview = `${strategy.cn} · ${strategy.outlook}\n${legsSummary || strategy.name}\n${riskSummary}\n${strategy.when || ""}`;
+        return `<button class="strategy-item ${strategy.id === state.selectedId ? "is-selected" : ""}" type="button"
+          data-strategy="${strategy.id}"
+          data-preview="${escapeHtml(preview)}"
+          title="${escapeHtml(strategy.cn + " · " + strategy.outlook)}">
+          <span><span class="strategy-name">${escapeHtml(strategy.name)}</span><span class="strategy-description">${escapeHtml(strategy.cn)} · ${escapeHtml(strategy.outlook)}</span></span>
+          <span class="strategy-tags">
+            <span class="diff-badge ${DIFF_CLASS[strategy.difficulty] || ""}" title="${DIFF_LABEL[strategy.difficulty] || strategy.difficulty}"></span>
+            <span class="${strategy.source === "补充" ? "source-extra" : ""}">${escapeHtml(strategy.category)}</span>
+          </span>
+        </button>`;
+      },
     )
     .join("");
+
+  // Strategy hover mini-preview
+  const list = document.getElementById("strategyList");
+  list.querySelectorAll(".strategy-item").forEach(btn => {
+    btn.addEventListener("mouseenter", (e) => {
+      const preview = btn.dataset.preview;
+      if (!preview) return;
+      const existingTip = document.getElementById("strategyPreviewTip");
+      if (existingTip) existingTip.remove();
+      const tip = document.createElement("div");
+      tip.className = "strategy-preview-tip";
+      tip.id = "strategyPreviewTip";
+      preview.split("\n").filter(Boolean).forEach((line) => {
+        const span = document.createElement("span");
+        span.textContent = line;
+        tip.appendChild(span);
+      });
+      document.body.appendChild(tip);
+      const rect = btn.getBoundingClientRect();
+      tip.style.left = Math.min(rect.right + 10, window.innerWidth - 250) + "px";
+      tip.style.top = Math.min(rect.top, window.innerHeight - 140) + "px";
+    });
+    btn.addEventListener("mouseleave", () => {
+      const tip = document.getElementById("strategyPreviewTip");
+      if (tip) tip.remove();
+    });
+  });
 }
 
 function renderTopbar() {
@@ -1061,8 +1131,8 @@ function renderTopbar() {
   const doneMark = isCompleted(strategy.id);
   const markBtn = document.getElementById("markCompletedBtn");
   if (markBtn) {
-    markBtn.textContent = doneMark ? "✓ 已理解" : "○ 标记已理解";
-    markBtn.style.opacity = doneMark ? "1" : "0.6";
+    markBtn.textContent = doneMark ? "✓ 已理解" : "○ 已理解";
+    markBtn.style.opacity = doneMark ? "1" : "0.55";
   }
 
   let pathHTML = "";
@@ -1222,7 +1292,7 @@ function renderMainChart() {
       }
       probProfit = Math.round(clamp(probability, 0, 1) * 100);
     }
-    probStats = { probProfit, sigma, T };
+    probStats = { probProfit, sigma, T, mu, sd };
   }
 
   function maxY(curve) { return Math.max(...curve.map(p => p.value)); }
@@ -1297,9 +1367,20 @@ function renderMainChart() {
   // Store curve data + horizon for tooltip lookup
   const tooltipData = { horizon, current: currentCurve, expiry: expiryCurve, baseline, legCurves: visibleLegCurves, allLegCurves, isPerLeg };
 
+  // Sigma band annotations for probability cone
+  const chartAnnotations = [];
+  if (isProbability && probStats) {
+    [{ mult: -2, label: "−2σ" }, { mult: -1, label: "−1σ" }, { mult: 1, label: "+1σ" }, { mult: 2, label: "+2σ" }]
+      .forEach(b => {
+        const s = Math.exp(probStats.mu + b.mult * probStats.sd);
+        if (s > 0 && isFinite(s)) chartAnnotations.push({ spot: s, label: b.label });
+      });
+  }
+
   document.getElementById("mainChart").innerHTML = chartSvg(
     series,
     { label: "主损益图", yLabel: "PnL", breakevens: isPerLeg ? findBreakevens(combinedCurve) : breakevens, interactive: true,
+      annotations: chartAnnotations,
       onRender: (scale) => { chartScale = scale; chartScale._ttData = tooltipData; } },
   );
 
@@ -1857,7 +1938,8 @@ function renderPortfolioPanel() {
         state.scenario.spot,
         state.scenario.daysElapsed,
         state.scenario,
-        position.legs
+        position.legs,
+        position.entrySpot
       );
       const pnl = posResult.pnl * position.quantity;
       const pnlClass = pnl >= 0 ? 'positive' : 'negative';
@@ -1987,6 +2069,32 @@ function renderPortfolioPanel() {
   }
 }
 
+function renderProfessionalConcepts() {
+  const panel = document.getElementById("proConceptsContent");
+  if (!panel) return;
+  const concepts = PROFESSIONAL_CONTENT.professionalConcepts;
+  if (!concepts) { panel.innerHTML = ""; return; }
+
+  const { greeksRelationships, clientTypes, dealerHedgingPrinciples, marginAndCapital } = concepts;
+
+  const renderSection = (title, items) => {
+    const rows = Object.entries(items).map(([key, item]) => {
+      if (typeof item === "string") return `<li>${item}</li>`;
+      const header = item.concept || item.goal || key;
+      const body = item.explanation || item.method || item.commonStrategies?.join(" / ") || item.formula || item.profitLogic || item.note || (item.longOptions ? [item.longOptions, item.shortNaked, item.definedRiskSpreads, item.note].filter(Boolean).join(" | ") : "");
+      return `<li><strong>${header}</strong><br><span class="concept-detail">${typeof body === "string" ? body : ""}</span></li>`;
+    }).join("");
+    return `<div class="concept-block"><h4>${title}</h4><ul>${rows}</ul></div>`;
+  };
+
+  panel.innerHTML = `
+    ${renderSection("Greeks 关系", greeksRelationships)}
+    ${renderSection("客户类型", clientTypes)}
+    ${renderSection("Dealer 对冲原则", dealerHedgingPrinciples)}
+    ${renderSection("保证金与资本管理", marginAndCapital)}
+  `;
+}
+
 // Handle Mode Toggle
 function handleModeToggle(mode) {
   state.mode = mode;
@@ -2008,6 +2116,7 @@ function handleModeToggle(mode) {
     proContent.forEach(el => el.style.display = "block");
     interviewContent.forEach(el => el.style.display = "none");
     renderProfessionalContent();
+    renderProfessionalConcepts();
     renderPortfolioPanel();
     renderVolSurface();
     renderGreeksDecay();
@@ -2015,6 +2124,7 @@ function handleModeToggle(mode) {
     proContent.forEach(el => el.style.display = "block");
     interviewContent.forEach(el => el.style.display = "block");
     renderProfessionalContent();
+    renderProfessionalConcepts();
     renderInterviewQuestions();
     renderPortfolioPanel();
     renderVolSurface();
@@ -2097,6 +2207,9 @@ function refreshAnalysis(options = {}) {
   // Render professional content if in professional or interview mode
   if (state.mode === 'professional' || state.mode === 'interview') {
     renderProfessionalContent();
+    renderPortfolioPanel();
+    renderVolSurface();
+    renderGreeksDecay();
   }
   if (state.mode === 'interview') {
     renderInterviewQuestions();
@@ -2179,8 +2292,9 @@ function selectStrategy(id) {
 }
 
 function resetCurrentStrategy() {
-  state.scenario = defaultScenario();
   const strategy = selectedStrategy();
+  if (!confirm(`确定要重置「${strategy.cn || strategy.name}」的所有参数吗？\n\n将恢复默认情景、入场价、腿组合、IV 变动和 DTE 偏移。`)) return;
+  state.scenario = defaultScenario();
   state.entrySpot = state.scenario.spot;
   state.legs = normalizeLegs(strategy.legs, state.entrySpot);
   renderAll();
@@ -2315,8 +2429,7 @@ function handleClick(event) {
   // Mark strategy as completed
   if (event.target.id === "markCompletedBtn") {
     const id = state.selectedId;
-    if (isCompleted(id)) return; // already done, no toggle-off
-    markCompleted(id);
+    if (isCompleted(id)) { unmarkCompleted(id); } else { markCompleted(id); }
     renderTopbar();
     return;
   }
@@ -2646,17 +2759,175 @@ function renderGreeksDecay() {
   const chartDiv = document.getElementById("greeksDecayChart");
   if (!chartDiv) return;
 
+  const spot = state.scenario.spot;
+  const optionLegs = (state.legs || []).filter((leg) => leg.type === "option");
+  const info = document.getElementById("greeksDecayInfo");
+  if (!optionLegs.length) {
+    if (info) info.textContent = "组合级 | 当前策略没有期权腿";
+    chartDiv.innerHTML = '<p class="empty-state">当前策略没有期权腿，因此 Gamma / Theta / Vega Decay 接近 0。</p>';
+    return;
+  }
+
+  const strikeInput = document.getElementById("greeksDecayStrike");
+  const moneynessBtn = document.querySelector(".decay-preset-btn.active");
+  const moneyness = moneynessBtn ? moneynessBtn.dataset.decayMoneyness : "atm";
+  const originalStrikes = optionLegs.map((leg) => Number(leg.strike) || spot);
+  const anchorStrike = originalStrikes.reduce((sum, strike) => sum + strike, 0) / originalStrikes.length;
+  const optionTypes = new Set(optionLegs.map((leg) => leg.optionType));
+  const firstType = optionLegs[0]?.optionType || "call";
+  const isMixedType = optionTypes.size > 1;
+
+  let centerStrike;
+  let presetLabel = moneyness.toUpperCase();
+  if (strikeInput && strikeInput.value) {
+    centerStrike = Number(strikeInput.value);
+    presetLabel = "Custom";
+  } else if (moneyness === "itm") {
+    centerStrike = !isMixedType && firstType === "put" ? spot * 1.05 : spot * 0.95;
+  } else if (moneyness === "otm") {
+    centerStrike = !isMixedType && firstType === "put" ? spot * 0.95 : spot * 1.05;
+  } else {
+    centerStrike = spot;
+  }
+  if (!Number.isFinite(centerStrike) || centerStrike <= 0) centerStrike = spot;
+
+  const adjustedLegs = (state.legs || []).map((leg) => {
+    if (leg.type !== "option") return leg;
+    const originalStrike = Number(leg.strike) || anchorStrike;
+    return {
+      ...leg,
+      strike: Math.max(0.01, centerStrike + (originalStrike - anchorStrike)),
+    };
+  });
+
+  const avgIv = optionLegs.reduce((sum, leg) => sum + (Number(leg.iv) || 0.32), 0) / optionLegs.length;
+  const rate = state.scenario.rate || 0.05;
+  const dividend = state.scenario.dividend || 0;
+  const multiplier = Number.isFinite(Number(state.scenario.multiplier)) ? Number(state.scenario.multiplier) : 100;
+  const frontDte = Math.min(...optionLegs.map((leg) => Number(leg.dte) || 45));
+
+  const dteSlider = document.getElementById("greeksDecayDte");
+  const maxDte = dteSlider ? Number(dteSlider.value) : 45;
+
+  if (info) {
+    const typeLabel = isMixedType ? "MIXED" : firstType.toUpperCase();
+    info.textContent = `组合级 | ${optionLegs.length} 条期权腿 | ${typeLabel} | Center=$${centerStrike.toFixed(0)} (${presetLabel}) | Avg IV=${(avgIv * 100).toFixed(0)}%`;
+  }
+
+  const aggregateGreeksAtDte = (frontRemainingDte) => {
+    return adjustedLegs.reduce((sum, leg) => {
+      const qty = Number.isFinite(Number(leg.qty)) ? Number(leg.qty) : 1;
+      const scale = sideSign(leg.side) * qty * multiplier;
+      if (leg.type === "stock") {
+        sum.delta += scale;
+        return sum;
+      }
+
+      const originalDte = Number(leg.dte) || frontDte;
+      const remainingDte = Math.max(0.2, frontRemainingDte + (originalDte - frontDte));
+      const legIv = Math.max(0.01, (Number(leg.iv) || 0.32) + (state.scenario.ivShift || 0));
+      const model = optionModel(leg.optionType, spot, Number(leg.strike), remainingDte, rate, dividend, legIv);
+      sum.delta += scale * model.delta;
+      sum.gamma += scale * model.gamma;
+      sum.theta += scale * model.theta;
+      sum.vega += scale * model.vega;
+      return sum;
+    }, { delta: 0, gamma: 0, theta: 0, vega: 0 });
+  };
+
+  const valueRange = (pts) => {
+    const values = pts.map((p) => p.value).filter(Number.isFinite);
+    let min = Math.min(0, ...values);
+    let max = Math.max(0, ...values);
+    if (!Number.isFinite(min) || !Number.isFinite(max)) {
+      min = -1;
+      max = 1;
+    }
+    if (Math.abs(max - min) < 1e-6) {
+      const padding = Math.max(Math.abs(max) * 0.2, 1);
+      min -= padding;
+      max += padding;
+    } else {
+      const padding = (max - min) * 0.08;
+      min -= padding;
+      max += padding;
+    }
+    return { min, max };
+  }
+
+  // Sample Greeks at 70 points from 0.2 to maxDte
+  const numPoints = 70;
+  const gammaPts = [];
+  const thetaPts = [];
+  const vegaPts = [];
+  for (let i = 0; i <= numPoints; i++) {
+    const dte = Math.max(0.2, maxDte * i / numPoints);
+    const result = aggregateGreeksAtDte(dte);
+    gammaPts.push({ dte, value: result.gamma });
+    thetaPts.push({ dte, value: result.theta });
+    vegaPts.push({ dte, value: result.vega });
+  }
+
+  const gammaRange = valueRange(gammaPts);
+  const thetaRange = valueRange(thetaPts);
+  const vegaRange = valueRange(vegaPts);
+
+  // SVG dimensions
+  const width = 720;
+  const height = 320;
+  const pad = { left: 58, right: 58, top: 24, bottom: 38 };
+  const plotW = width - pad.left - pad.right;
+  const plotH = height - pad.top - pad.bottom;
+
+  const xScale = (dte) => pad.left + ((dte - 0) / (maxDte || 1)) * plotW;
+  const rangeY = (range) => (v) => pad.top + ((range.max - v) / (range.max - range.min || 1)) * plotH;
+  const gammaY = rangeY(gammaRange);
+  const vegaY = rangeY(vegaRange);
+  const thetaY = rangeY(thetaRange);
+
+  // Build SVG paths
+  const buildPath = (pts, yFn) => pts.map((p, j) =>
+    `${j === 0 ? "M" : "L"} ${xScale(p.dte).toFixed(1)} ${yFn(p.value).toFixed(1)}`
+  ).join(" ");
+
+  // Grid + tick labels
+  const xTicks = [0, maxDte * 0.25, maxDte * 0.5, maxDte * 0.75, maxDte];
+  const gridLines = xTicks.map(t =>
+    `<line class="grid-line" x1="${xScale(t).toFixed(1)}" y1="${pad.top}" x2="${xScale(t).toFixed(1)}" y2="${height - pad.bottom}"/>
+     <text class="tick-label" x="${xScale(t).toFixed(1)}" y="${height - 10}" text-anchor="middle">${t.toFixed(0)}d</text>`
+  ).join("");
+
+  const svg = `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Greeks Decay">
+    <defs>
+      <linearGradient id="decayBg" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="rgba(159,131,255,.06)"/>
+        <stop offset="100%" stop-color="rgba(159,131,255,.01)"/>
+      </linearGradient>
+    </defs>
+    <rect x="${pad.left}" y="${pad.top}" width="${plotW}" height="${plotH}" fill="url(#decayBg)" rx="2"/>
+    ${gridLines}
+    <!-- Gamma curve (left axis) -->
+    <path class="decay-gamma" d="${buildPath(gammaPts, gammaY)}"/>
+    <!-- Theta curve (bottom half of right axis) -->
+    <path class="decay-theta" d="${buildPath(thetaPts, thetaY)}"/>
+    <!-- Vega curve (top half, shares right concept) -->
+    <path class="decay-vega" d="${buildPath(vegaPts, vegaY)}"/>
+    <!-- Labels -->
+    <text class="axis-label" x="${width - 14}" y="16" text-anchor="end">DTE →</text>
+    <text class="axis-label decay-axis-gamma" x="${pad.left - 8}" y="16">Gamma</text>
+    <text class="axis-label decay-axis-vega" x="${width - 14}" y="${pad.top + 14}">Vega</text>
+    <text class="axis-label decay-axis-theta" x="${width - 14}" y="${pad.top + 28}">Theta</text>
+  </svg>`;
+
+  // Legend with current values at maxDte
+  const cur = aggregateGreeksAtDte(maxDte);
   chartDiv.innerHTML = `
-    <p style="text-align:center;padding:2rem;color:var(--text-secondary);">
-      Greeks 衰减图表功能待实现
-    </p>
-    <p style="text-align:center;font-size:0.9em;">
-      ⚠️ 当前为占位符。完整实现需要绘制 Gamma/Theta/Vega 随 DTE 变化的曲线图。
-    </p>
-    <p style="text-align:center;font-size:0.85em;color:var(--text-secondary);margin-top:1rem;">
-      💡 预期功能：显示 ATM 期权的 Gamma 在到期前最后一周急剧上升，Theta 加速衰减，Vega 逐渐降低。
-    </p>
-  `;
+    <div class="decay-legend">
+      <span class="legend-item" style="color:var(--violet)"><span class="legend-line"></span>Gamma ${cur.gamma.toFixed(4)}</span>
+      <span class="legend-item" style="color:var(--cyan)"><span class="legend-line"></span>Theta ${cur.theta.toFixed(4)}/day</span>
+      <span class="legend-item" style="color:var(--green)"><span class="legend-line"></span>Vega ${cur.vega.toFixed(4)}</span>
+    </div>
+    ${svg}`;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -2665,6 +2936,23 @@ document.addEventListener("DOMContentLoaded", () => {
   if (greeksDecayDte && greeksDecayDteOutput) {
     greeksDecayDte.addEventListener("input", (e) => {
       greeksDecayDteOutput.textContent = e.target.value;
+      renderGreeksDecay();
+    });
+  }
+  // Greeks Decay: moneyness preset buttons
+  document.querySelectorAll(".decay-preset-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".decay-preset-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const strikeInput = document.getElementById("greeksDecayStrike");
+      if (strikeInput) strikeInput.value = "";
+      renderGreeksDecay();
+    });
+  });
+  const greeksDecayStrike = document.getElementById("greeksDecayStrike");
+  if (greeksDecayStrike) {
+    greeksDecayStrike.addEventListener("input", () => {
+      document.querySelectorAll(".decay-preset-btn").forEach(b => b.classList.remove("active"));
       renderGreeksDecay();
     });
   }

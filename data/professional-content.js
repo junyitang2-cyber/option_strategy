@@ -1265,7 +1265,717 @@ const PROFESSIONAL_CONTENT = {
     ]
   },
 
-  // 通用专业交易概念
+  // Short Put - 卖出看跌期权
+  "short-put": {
+    exposure: {
+      directional: "+Delta (标的上涨盈利)",
+      volatility: "-Vega (做空波动率)",
+      time: "+Theta (时间流逝是朋友)",
+      convexity: "-Gamma (负凸性，方向不利时亏损加速)"
+    },
+    profitLogic: {
+      makesMoneyFrom: "时间流逝 + IV下降 + 标的不跌或上涨。权利金是主要收益来源。",
+      losesMoneyFrom: "标的暴跌 + IV飙升。亏损可能很大（向下到零）。",
+      bestMarketCondition: "中性偏多，高IV环境卖出，IV从高位回落。",
+      worstScenario: "标的崩盘式下跌，同时IV飙升，双重打击。"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "想低价买入标的（如果被行权）= 变相限价单",
+        "获取权利金收入（收租策略核心）",
+        "认为标的不会跌破某价位",
+        "Wheel Strategy 的第一步"
+      ],
+      clientType: "收入导向投资者、价值投资者（愿意在低价买入）、收租策略交易者",
+      suitability: "愿意以行权价买入标的，有足够资金接货，不恐慌于短期下跌"
+    },
+    dealerPerspective: {
+      whenDealerSells: "Dealer买入Short Put（客户卖出put）后，面临：",
+      exposure: "+Delta (长Delta)，-Gamma (需要追卖对冲)，+Vega (IV上升盈利)，-Theta (时间流逝亏损)",
+      hedging: [
+        "Delta对冲：卖出Delta数量的股票",
+        "Gamma管理：Dealer是long put = long gamma，需要在股价下跌时卖更多、上涨时买回",
+        "Vega管理：Dealer long put = long vega，客户卖出put = short vega。Dealer通过bid-ask价差赚取vega溢价"
+      ],
+      profitSource: "Bid-ask价差 + Vega溢价（Dealer买入的IV低于卖给下一个客户的IV）"
+    },
+    interviewQuestions: [
+      { q: "Short Put vs Covered Call，有什么区别？", a: "盈亏图完全相同（Put-Call Parity: S - P = C - K·e^(-rT)）。区别在于：Short Put用保证金、不持有股票；Covered Call持有股票+卖出call。实际选择取决于资金效率、保证金要求和税务。" },
+      { q: "Short Put最大的风险是什么？", a: "尾事件风险：标的暴跌远超行权价。例如卖出$150 put，标的跌到$100。亏损$50 - 权利金。这种亏损远超权利金收入。需要严格止损或接受被行权。" },
+      { q: "如何选择Short Put的行权价和DTE？", a: "行权价：Delta 20-30（约80-70%概率OTM到期）。DTE：30-45天，Theta decay加速期。关键是在权利金收入和接货意愿之间权衡。" },
+      { q: "为什么说Short Put是'想低价买入'？", a: "卖出$145 put收$3权利金，如果被行权，实际成本=145-3=$142。这相当于设了一个$142的限价买单。如果本来就想在$142买入，这就是白赚权利金。" },
+      { q: "Short Put被行权后怎么办？", a: "三个选项：1) 持有股票（如果看好长期）；2) 卖出Covered Call（转入Wheel Strategy第二步）；3) 立即卖出股票止损。关键是行权前就要想好plan B。" }
+    ]
+  },
+
+  // Short Call - 卖出看涨期权
+  "short-call": {
+    exposure: {
+      directional: "-Delta (标的下跌盈利)",
+      volatility: "-Vega (做空波动率)",
+      time: "+Theta (时间流逝是朋友)",
+      convexity: "-Gamma (负凸性，上涨时亏损加速)"
+    },
+    profitLogic: {
+      makesMoneyFrom: "时间流逝 + IV下降 + 标的不涨或下跌。",
+      losesMoneyFrom: "标的暴涨 + IV飙升。理论上行亏损无限。",
+      bestMarketCondition: "中性偏空，高IV，预期标的横盘或小幅下跌。",
+      worstScenario: "标的暴涨远超行权价，short gamma导致Delta越来越负，亏损加速。"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "获取权利金收入",
+        "认为标的不会大涨",
+        "Covered Call的组成部分",
+        "价差策略的卖出腿"
+      ],
+      clientType: "有经验的交易者，通常作为价差的一部分而非裸卖",
+      suitability: "裸卖call只适合极有经验的交易者。大多数人通过spread限制风险。"
+    },
+    dealerPerspective: {
+      whenDealerSells: "Dealer买入Short Call（客户卖出call）后，面临：",
+      exposure: "-Delta (短Delta)，-Gamma (追涨亏损)，+Vega (IV上升盈利)，-Theta (时间流逝亏损)",
+      hedging: [
+        "Delta对冲：买入股票来hedge短Delta",
+        "Gamma管理：Dealer long call = long gamma，股价上涨时delta增加，自动'追涨'。但客户卖出call = short gamma"
+      ],
+      profitSource: "Bid-ask价差 + Vega/Skew溢价"
+    },
+    interviewQuestions: [
+      { q: "Naked Call vs Call Spread，风险差异有多大？", a: "Naked Call理论亏损无限（标的可以无限上涨）。Call Spread最大亏损=spread width - credit。差异是灾难性的。大多数经纪商不允许零售客户裸卖call。" },
+      { q: "Short Call的Gamma风险是什么？", a: "股价上涨→Delta变得更负→需要买更多股票对冲→股价继续涨→Delta继续变负→恶性循环。这就是'被Gamma碾压'。Short gamma是option seller最大的噩梦。" },
+      { q: "什么情况下Short Call比买Put更好？", a: "1) 预期横盘而不是大跌时（Short Call赚Theta+IV跌，Long Put亏Theta+IV跌）；2) IV极高时卖出权利金更有吸引力；3) 作为价差或Covered Call的一部分。" },
+      { q: "如何管理Short Call的尾事件风险？", a: "1) 永远不要裸卖（用spread限制风险）；2) 设止损（价格跌破某水平时平仓）；3) 控制仓位（单腿不超过账户2%）；4) 避免财报等事件前。" },
+      { q: "为什么做市商可以裸卖Call而散户不行？", a: "做市商：1) 持续Delta对冲（不是裸卖后不管）；2) 组合层面管理（不是单腿赌方向）；3) 有资本和风控系统；4) 赚的是bid-ask和vol spread，不是方向性赌注。" }
+    ]
+  },
+
+  // Calendar Put Spread - 日历看跌价差
+  "calendar-put-spread": {
+    exposure: {
+      directional: "Delta接近中性（可通过调整strike偏向方向）",
+      volatility: "+Vega (远月vega更大 → 做多波动率期限结构)",
+      time: "+Theta on near month / -Theta on far month (net depends on structure)",
+      convexity: "近月Gamma效应更强，远月较缓"
+    },
+    profitLogic: {
+      makesMoneyFrom: "近月时间衰减快于远月 + 波动率期限结构变化 + 标的在近月行权价附近的微小移动",
+      losesMoneyFrom: "标的远离行权价 + IV整体下降 + 近远月IV差收窄",
+      bestMarketCondition: "预期标的短期横盘、近月时间价值快速衰减，远月保留价值",
+      worstScenario: "标的在近月到期前大幅移动，两个期权的内在价值差异缩小"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "认为近月IV被高估（相对远月）",
+        "想从时间衰减差异中获利",
+        "比单一方向性put风险更低",
+        "日历价差是理解波动率期限结构的基础"
+      ],
+      clientType: "中级以上交易者，理解波动率期限结构",
+      suitability: "需要理解近远月IV关系和时间衰减差异"
+    },
+    dealerPerspective: {
+      whenDealerSells: "Dealer对冲Calendar Put Spread时关注：",
+      exposure: "Vega集中在远月，Gamma集中在近月。需要用不同工具管理不同月份的风险。",
+      hedging: ["近月Gamma用标的对冲（频率高）", "远月Vega用其他远月期权对冲", "监视近远月IV差的变化"],
+      profitSource: "Volatility term structure mispricing"
+    },
+    interviewQuestions: [
+      { q: "Calendar Spread赚钱的核心逻辑是什么？", a: "三个来源：1) 时间衰减差异（近月Theta > 远月Theta，net positive）；2) 波动率期限结构变化；3) 如果标的在近月到期时接近strike，近月归零但远月仍有时间价值。" },
+      { q: "Calendar vs Diagonal Spread的区别？", a: "Calendar: 同strike不同DTE。Diagonal: 不同strike不同DTE。Diagonal多了一个strike维度，可以做方向性倾斜+时间衰减。" },
+      { q: "什么时候Calendar Spread会亏钱？", a: "1) 标的剧烈移动远离strike；2) IV整体大幅下降（远月vega损失>近月vega收益）；3) 近远月IV差收窄（contango变backwardation）。" }
+    ]
+  },
+
+  // Diagonal Call Spread - 对角看涨价差
+  "diagonal-call-spread": {
+    exposure: {
+      directional: "+Delta (通常——远月/strike选择可调整方向)",
+      volatility: "远月Vega > 近月Vega（净做多波动率）",
+      time: "近月Theta衰减 > 远月Theta衰减（净赚时间价值）",
+      convexity: "近月Gamma更强，提供短期凸性保护"
+    },
+    profitLogic: {
+      makesMoneyFrom: "时间流逝（近月快于远月）+ 标的温和上涨 + IV期限结构有利",
+      losesMoneyFrom: "标的下跌 + IV整体崩塌 + 近远月IV差压缩",
+      bestMarketCondition: "温和看涨，近月IV偏高，预期标的缓慢上行",
+      worstScenario: "标的下跌，近月IV spike而远月不动（calendar risk反转）"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "比直接Long Call资金效率更高（有近月short leg补贴）",
+        "Poor Man's Covered Call的逻辑基础",
+        "看涨但不想全额付远月权利金"
+      ],
+      clientType: "方向性看涨但想降低成本的中级交易者",
+      suitability: "理解calendar spread原理+方向性判断"
+    },
+    dealerPerspective: {
+      whenDealerSells: "Diagonal spread的Delta/Vega/Gamma分布在两个不同月份：",
+      exposure: "Delta和Gamma主要来自近月（因为近月gamma更大），Vega主要来自远月",
+      hedging: ["Delta对冲要考虑两个leg的综合Delta", "近月Gamma风险更大，需要更高频对冲"],
+      profitSource: "为客户提供杠杆化方向表达时收取的spread"
+    },
+    interviewQuestions: [
+      { q: "Diagonal Call Spread和Poor Man's Covered Call的关系？", a: "Poor Man's Covered Call就是Diagonal Call Spread的一个特例：买远月ITM call（delta~0.8-0.9，模拟股票）+ 卖近月OTM call。因为有远月deep ITM call替代持股，所以叫'穷人的Covered Call'。" },
+      { q: "选择strike时有什么考虑？", a: "远月leg：Delta越高越像持股（但成本高），越低越像裸买call。近月leg：strike越接近远月strike，最大盈利空间越小但credit越大。需要权衡credit收入vs上行空间。" }
+    ]
+  },
+
+  // Diagonal Put Spread - 对角看跌价差
+  "diagonal-put-spread": {
+    exposure: {
+      directional: "-Delta (看跌)",
+      volatility: "远月Vega > 近月Vega (净做多波动率)",
+      time: "近月Theta > 远月Theta (净正Theta)",
+      convexity: "近月Gamma提供下行保护"
+    },
+    profitLogic: {
+      makesMoneyFrom: "时间衰减差异 + 标的温和下跌 + IV期限结构有利",
+      losesMoneyFrom: "标的上涨 + IV崩塌",
+      bestMarketCondition: "温和看跌，高IV环境",
+      worstScenario: "标的上涨，IV下降，双重不利"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "比直接Long Put成本更低",
+        "看跌但想降低时间衰减成本",
+        "利用波动率期限结构获利"
+      ],
+      clientType: "温和看跌的中级交易者",
+      suitability: "需要同时判断方向和波动率期限结构"
+    },
+    dealerPerspective: {
+      whenDealerSells: "与Diagonal Call对称，但方向相反",
+      exposure: "-Delta + +Vega (远月主导) + +Gamma (近月主导)",
+      hedging: ["Delta对冲（买入股票）", "监视近远月波动率差"],
+      profitSource: "客户的方向性和波动率观点在spread中体现，Dealer从spread中获利"
+    },
+    interviewQuestions: [
+      { q: "Diagonal Put Spread vs Calendar Put Spread？", a: "Diagonal多了一个strike维度：Diagonal可以做方向性倾斜。Calendar是同strike，纯时间/波动率交易。Diagonal更适合有方向性观点的场景。" }
+    ]
+  },
+
+  // Wheel Strategy - 轮转策略
+  "wheel-strategy": {
+    exposure: {
+      directional: "+Delta (两个阶段都暴露于上涨)",
+      volatility: "第一阶段Short Put: -Vega；第二阶段Covered Call: -Vega",
+      time: "两个阶段都是+Theta",
+      convexity: "两个阶段都是-Gamma"
+    },
+    profitLogic: {
+      makesMoneyFrom: "Short Put的权利金 + Covered Call的权利金 + 可能的股票增值",
+      losesMoneyFrom: "标的持续下跌（被行权买入后股票贬值）+ 标的暴涨（Covered Call封顶）",
+      bestMarketCondition: "温和牛市或震荡市，IV中等偏高",
+      worstScenario: "标的持续阴跌——被行权后继续跌，Covered Call权利金不够弥补股票亏损"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "系统性的收租策略，重复执行",
+        "不追求timing the market，靠概率和重复获利",
+        "适合有耐心、愿意长期持有的投资者"
+      ],
+      clientType: "收入导向零售交易者、退休账户策略",
+      suitability: "选择你愿意长期持有的标的，不要在垃圾股上做Wheel"
+    },
+    dealerPerspective: {
+      whenDealerSells: "Wheel是纯客户侧策略。Dealer在这个策略的另一侧：",
+      exposure: "客户不断卖出put和call → Dealer不断买入 → Dealer是long gamma/long vega侧",
+      hedging: ["Delta对冲客户的每笔put/call", "累积的short vega需要管理"],
+      profitSource: "Bid-ask spread（每轮客户都要交易）"
+    },
+    interviewQuestions: [
+      { q: "Wheel Strategy为什么受散户欢迎？", a: "1) 逻辑简单：卖put收租→被行权→卖call收租→被call走→重复；2) 不需要精准timing；3) 持续现金流（每月/每轮收权利金）；4) 比直接买股票心理压力小。" },
+      { q: "Wheel Strategy的致命弱点？", a: "1) 标的持续下跌：被行权后股票浮亏，covered call的权利金不够弥补；2) 牛市踏空：股票被call走，错过后续大涨；3) 频繁交易成本。Tastytrade研究：选择基本面好的标的+坚持纪律，长期期望值为正。" },
+      { q: "Wheel vs Buy and Hold？", a: "震荡/温和牛市：Wheel更优（持续收租）。单边大牛：Buy-and-Hold更优（Wheel会提前被call走踏空）。单边大熊：两者都亏，但Wheel有权利金缓冲。关键在于市场环境。" }
+    ]
+  },
+
+  // Poor Man's Covered Call - 穷人的备兑看涨
+  "poor-man-s-covered-call": {
+    exposure: {
+      directional: "+Delta (远月ITM call delta 0.7-0.9)",
+      volatility: "+Vega (远月) - Vega (近月) → 通常净做多Vega",
+      time: "+Theta (近月) - Theta (远月) → 通常净正Theta",
+      convexity: "远月leg有Gamma，近月leg有Gamma（但近月更大）"
+    },
+    profitLogic: {
+      makesMoneyFrom: "标的温和上涨 + 近月时间衰减 + 远月期权增值",
+      losesMoneyFrom: "标的下跌（远月ITM call贬值）+ IV崩塌 + 暴涨（近月short call封顶）",
+      bestMarketCondition: "温和上涨、预期标的不会超过近月short strike",
+      worstScenario: "标的暴跌（远月ITM call深度亏损）或暴涨突破short strike（利润被限定）"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "用更少资金模拟Covered Call（不用买入100股）",
+        "利用远月期权替代持股",
+        "小资金账户也能做收租策略"
+      ],
+      clientType: "资金有限、想降低capital requirement的零售交易者",
+      suitability: "需要深刻理解Diagonal spread和杠杆风险"
+    },
+    dealerPerspective: {
+      whenDealerSells: "两个calendar legs的Delta/Gamma在不同月份：",
+      exposure: "Delta net通常正但小于1.0。Gamma sign取决于远近月leg的net。",
+      hedging: ["两个月份的Delta分别hedge", "近月Gamma风险更大"],
+      profitSource: "两个leg的bid-ask + 客户的方向性观点mispricing"
+    },
+    interviewQuestions: [
+      { q: "Poor Man's Covered Call vs 传统Covered Call？", a: "传统CC：买100股+卖call。资金需求=100×股价-权利金。PMCC：买远月ITM call+卖近月OTM call。资金需求=远月call成本-近月权利金。PMCC资金效率高（可能只需20-30%的资金），但多了远月期权的时间衰减风险。" },
+      { q: "PMCC的strike选择有什么讲究？", a: "远月leg：选ITM越多delta越高（越像持股），但extrinsic value越低效率越差。通常选delta 0.7-0.85的ITM call。近月leg：strike要高于远月strike（否则是倒挂），且要确保credit能补偿远月的时间衰减。" }
+    ]
+  },
+
+  // Jade Lizard - 翡翠蜥蜴
+  "jade-lizard": {
+    exposure: {
+      directional: "中性偏多（结构有净credit）",
+      volatility: "-Vega (做空波动率)",
+      time: "+Theta",
+      convexity: "-Gamma (负凸性)"
+    },
+    profitLogic: {
+      makesMoneyFrom: "时间流逝 + IV下降 + 标的在short strikes之间",
+      losesMoneyFrom: "标的跌破put spread的long strike或暴涨突破naked call",
+      bestMarketCondition: "震荡或温和上涨，IV偏高的环境",
+      worstScenario: "标的暴跌（put spread全额亏损）"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "Tastytrade推广的高胜率收租策略",
+        "下行保护（有put spread），上行不要保护（裸call取更高credit）",
+        "在标的温和上涨时没有上行封顶（naked call端）"
+      ],
+      clientType: "Tastytrade流派的收租交易者",
+      suitability: "需要承受naked call的无限风险（虽然概率低）"
+    },
+    dealerPerspective: {
+      whenDealerSells: "Jade Lizard = Short Put Spread + Short Naked Call",
+      exposure: "Short gamma集中在两个short strikes附近",
+      hedging: ["整体Delta管理", "Put spread侧的Gamma比naked call侧更危险（下行风险更大）"],
+      profitSource: "三腿的bid-ask汇总"
+    },
+    interviewQuestions: [
+      { q: "Jade Lizard和Iron Condor的区别？", a: "Jade Lizard是3腿（short put spread + naked call），Iron Condor是4腿（两个spreads）。Jade Lizard的上行是裸的（更大风险、更高credit），Iron Condor上下都被保护。" },
+      { q: "Jade Lizard的上行风险怎么管理？", a: "1) 选delta足够低的call strike（如delta 10-15）；2) 设止损（标的突破某价位时买入call对冲）；3) 只在波动率足够高时卖出（credit够大才能补偿裸call风险）。" }
+    ]
+  },
+
+  // Long Call Condor - 买入看涨鹰式价差
+  "long-call-condor": {
+    exposure: {
+      directional: "中性（四个strikes对称分布）",
+      volatility: "+Vega (买入翅膀，做多波动率)",
+      time: "-Theta (四个leg，时间衰减成本高)",
+      convexity: "正Gamma在strikes附近"
+    },
+    profitLogic: {
+      makesMoneyFrom: "标的在某个strike区间之外大幅移动 + IV上升",
+      losesMoneyFrom: "标的横盘不动（四腿theta侵蚀）+ IV下降",
+      bestMarketCondition: "预期大波动但不确定方向，IV低时买入",
+      worstScenario: "标的完全不动，所有时间价值耗尽"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "比Straddle更便宜的大波动策略",
+        "定义的亏损（四个leg都是有限风险）",
+        "比裸买straddle更精确（可以定制盈利区间）"
+      ],
+      clientType: "想买波动率但不想付straddle高价的交易者",
+      suitability: "IV必须够低，否则四腿的theta和bid-ask成本太高"
+    },
+    dealerPerspective: {
+      whenDealerSells: "客户买入long condor = Dealer卖出四腿：",
+      exposure: "Short vega, short gamma (Dealer承担尾部风险)",
+      hedging: ["四腿的净Greeks汇总hedge", "Wing的gamma风险需管理"],
+      profitSource: "四腿的spread汇总 + 客户对vol的错误定价"
+    },
+    interviewQuestions: [
+      { q: "Long Call Condor和Iron Condor的区别？", a: "名字容易混淆。Long Call Condor = 买波动率（期望突破），等距的四个call strikes。Iron Condor = 卖波动率（期望横盘），Short Put Spread + Short Call Spread。两者结构完全相反。" },
+      { q: "Condor vs Butterfly的核心区别？", a: "Butterfly的body是同一个strike（3个strikes），Condor的body是两个相邻strikes（4个strikes）。Condor的盈利平台更宽（两个body strikes之间的区域），但credit/cost更低。" }
+    ]
+  },
+
+  // Long Put Condor - 买入看跌鹰式价差
+  "long-put-condor": {
+    exposure: {
+      directional: "中性",
+      volatility: "+Vega (做多波动率)",
+      time: "-Theta",
+      convexity: "正Gamma，strikes附近凸性"
+    },
+    profitLogic: {
+      makesMoneyFrom: "标的突破condor范围 + IV上升",
+      losesMoneyFrom: "横盘 + IV下降 + 时间流逝",
+      bestMarketCondition: "预期大波动，IV低位",
+      worstScenario: "标的在condor body范围内不动"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "用put侧构建的波动率买入策略",
+        "与call condor对称",
+        "适合有put skew的市场（put wing更便宜）"
+      ],
+      clientType: "大波动预期的交易者",
+      suitability: "注意put skew对各个leg定价的影响"
+    },
+    dealerPerspective: {
+      whenDealerSells: "与Call Condor对称，在put侧。",
+      exposure: "Short vega/short gamma",
+      hedging: ["Put skew使得不同strike的IV不同 → 对冲时要考虑skew"],
+      profitSource: "Put skew带来的额外spread"
+    },
+    interviewQuestions: [
+      { q: "Put Condor vs Call Condor，在有put skew的市场中哪个更便宜？", a: "通常在equity市场（put skew），Put Condor的wing更便宜（因为OTM put IV更高 → 买wing反而划算）。但body strikes的IV差异也需要考虑。" }
+    ]
+  },
+
+  // Inverse Iron Condor - 逆向铁鹰
+  "inverse-iron-condor": {
+    exposure: {
+      directional: "中性",
+      volatility: "+Vega (买翅膀，做多波动率)",
+      time: "-Theta",
+      convexity: "+Gamma (正凸性)"
+    },
+    profitLogic: {
+      makesMoneyFrom: "标的突破Iron Condor区间 + IV大幅上升",
+      losesMoneyFrom: "横盘不动 + IV下降 + 时间流逝",
+      bestMarketCondition: "低IV买入，等待波动爆发",
+      worstScenario: "市场安静横盘，IV持续下降"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "比Straddle便宜的波动率买入方式",
+        "有限亏损（四个leg都有限）",
+        "预期有catalyst但不确定方向"
+      ],
+      clientType: "想买波动率但预算有限的交易者",
+      suitability: "需要IV够低才能有好的盈亏比"
+    },
+    dealerPerspective: {
+      whenDealerSells: "客户买入inverse iron condor = Dealer卖出四腿 → short gamma + short vega",
+      exposure: "承担tail risk（客户在极端波动时盈利）",
+      hedging: ["Delta hedge四腿净暴露", "Tail risk需要特别注意"],
+      profitSource: "通常交易量小，spread较宽"
+    },
+    interviewQuestions: [
+      { q: "Inverse Iron Condor什么时候比Straddle更好？", a: "1) 你觉得波动会大但不够大到cover straddle的成本时；2) 想精确限定风险（straddle+两翼保护=max loss defined）。代价是最大盈利有上限（straddle理论无限）。" }
+    ]
+  },
+
+  // Inverse Iron Butterfly - 逆向铁蝶
+  "inverse-iron-butterfly": {
+    exposure: {
+      directional: "中性",
+      volatility: "+Vega (做多波动率)",
+      time: "-Theta",
+      convexity: "+Gamma"
+    },
+    profitLogic: {
+      makesMoneyFrom: "标的突破butterfly的body区域 + IV上升",
+      losesMoneyFrom: "标的精确停在body strike(s) + IV下降",
+      bestMarketCondition: "低IV买入，预期大幅移动",
+      worstScenario: "标的不动"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "比裸straddle更便宜（有wing保护降低了成本）",
+        "定义的亏损",
+        "预期catalyst事件"
+      ],
+      clientType: "事件驱动交易者",
+      suitability: "IV必须低。不要在高IV环境买入inverse butterfly。"
+    },
+    dealerPerspective: {
+      whenDealerSells: "客户买入 = Dealer卖出 → short gamma/short vega",
+      exposure: "如果事件发生导致大波动，Dealer亏损",
+      hedging: ["在事件前可能需要提前hedge或调整价格"],
+      profitSource: "事件前后的IV spread"
+    },
+    interviewQuestions: [
+      { q: "Inverse Iron Butterfly和Inverse Iron Condor的区别？", a: "Butterfly的body是一个strike（3个strikes架构），Condor的body是两个strikes（4个strikes）。Butterfly更精确（盈利区间窄），但成本也更低。" }
+    ]
+  },
+
+  // Short Call Butterfly - 卖出看涨蝶式
+  "short-call-butterfly": {
+    exposure: {
+      directional: "中性",
+      volatility: "-Vega (做空波动率)",
+      time: "+Theta",
+      convexity: "-Gamma (负凸性)"
+    },
+    profitLogic: {
+      makesMoneyFrom: "时间流逝 + 标的区间震荡",
+      losesMoneyFrom: "标的突破butterfly范围",
+      bestMarketCondition: "区间震荡，IV下降",
+      worstScenario: "标的突破wing strikes"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "收租金（short body，long wings保护）",
+        "比short straddle风险更低（有wing保护）",
+        "预期标的在body附近小幅波动"
+      ],
+      clientType: "区间交易者",
+      suitability: "理解butterfly的pin risk"
+    },
+    dealerPerspective: {
+      whenDealerSells: "客户卖出butterfly = Dealer买入 → long gamma/long vega",
+      exposure: "Body strike的gamma集中",
+      hedging: ["在body附近频繁Delta对冲"],
+      profitSource: "客户对波动率的误判"
+    },
+    interviewQuestions: [
+      { q: "Short Butterfly vs Iron Butterfly？", a: "Short Butterfly是call-only或put-only的三腿结构。Iron Butterfly用call+put构建（四腿）。Short Butterfly更简单但可能不对称。Iron Butterfly更干净对称。" }
+    ]
+  },
+
+  // Short Put Butterfly - 卖出看跌蝶式
+  "short-put-butterfly": {
+    exposure: {
+      directional: "中性",
+      volatility: "-Vega",
+      time: "+Theta",
+      convexity: "-Gamma"
+    },
+    profitLogic: {
+      makesMoneyFrom: "标的在body strike附近 + 时间流逝",
+      losesMoneyFrom: "标的突破",
+      bestMarketCondition: "区间震荡",
+      worstScenario: "标的远离body"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "与short call butterfly对称，用put侧构建",
+        "在put skew环境中可能定价更有利"
+      ],
+      clientType: "区间交易者",
+      suitability: "理解skew对put侧定价的影响"
+    },
+    dealerPerspective: {
+      whenDealerSells: "与call butterfly对称",
+      exposure: "Put skew影响各个strike的IV → Greeks不对称",
+      hedging: ["考虑put skew的Delta hedge调整"],
+      profitSource: "Skew带来的额外利润"
+    },
+    interviewQuestions: [
+      { q: "Short Put Butterfly vs Short Call Butterfly？", a: "理论盈亏相同（如果有Put-Call Parity），但实践中put skew可能使得put侧更便宜（或更贵）。在equity市场（put skew大），put butterfly的wing可能更贵，影响定价。" }
+    ]
+  },
+
+  // Call Ratio Backspread - 看涨比率反向价差
+  "call-ratio-backspread": {
+    exposure: {
+      directional: "+Delta (bullish bias)",
+      volatility: "+Vega (net long options → long vega)",
+      time: "-Theta (net long → time decay cost)",
+      convexity: "+Gamma (net long → 正凸性)"
+    },
+    profitLogic: {
+      makesMoneyFrom: "标的暴涨 + IV上升。盈利潜力无限（long calls > short calls）",
+      losesMoneyFrom: "标的横盘或小幅上涨（short ATM call亏损 + long OTM calls吃theta）",
+      bestMarketCondition: "低IV买入，预期有极端上行",
+      worstScenario: "标的在小幅上涨区间横盘（最大亏损点）"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "强烈看涨但想降低净成本（通过卖出ATM call补贴）",
+        "预期有大的上行catalyst",
+        "比直接买call更便宜（但有小幅上涨的亏损区间）"
+      ],
+      clientType: "激进看涨的交易者",
+      suitability: "需要对大幅上涨有强烈信心。如果判断错（标的横盘），亏损可能比裸买call更大。"
+    },
+    dealerPerspective: {
+      whenDealerSells: "客户做Call Ratio Backspread = Short 1 ATM call + Long 2 OTM calls",
+      exposure: "Net long gamma (long calls > short call)",
+      hedging: ["Gamma集中在OTM strikes附近", "Delta hedge需要考虑ratio"],
+      profitSource: "客户对波动率和方向的联合判断"
+    },
+    interviewQuestions: [
+      { q: "Ratio Backspread的精髓是什么？", a: "用ratio（如1:2）来创造'免费'杠杆：卖1个ATM call获得credit，买2个OTM calls。如果标的暴涨，2个long calls跑赢1个short call。如果标的下跌，net credit提供了缓冲。但如果在short strike附近小幅上涨，short call亏但long calls还没赚——这是最大亏损区。" },
+      { q: "如何选择ratio？", a: "1:2（标准）：卖1买2，需要较大涨幅才能盈利。1:3：更激进，更大杠杆。1:1.5：较保守。关键是要算好在哪个价格开始盈利。Zero-cost backspread是理想状态：short leg的credit完全cover long legs的成本。" }
+    ]
+  },
+
+  // Put Ratio Backspread - 看跌比率反向价差
+  "put-ratio-backspread": {
+    exposure: {
+      directional: "-Delta (bearish bias)",
+      volatility: "+Vega",
+      time: "-Theta",
+      convexity: "+Gamma"
+    },
+    profitLogic: {
+      makesMoneyFrom: "标的暴跌 + IV飙升。盈利潜力大（long puts > short put）",
+      losesMoneyFrom: "横盘或小幅下跌（最大亏损区）",
+      bestMarketCondition: "低IV买入，预期黑天鹅事件",
+      worstScenario: "标的在short strike附近波动"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "强烈看跌但降低成本",
+        "预期有下行catalyst",
+        "正Gamma在暴跌时加速盈利"
+      ],
+      clientType: "激进看跌的交易者",
+      suitability: "在put skew环境中，long puts更贵，需要更强的下跌幅度来break even"
+    },
+    dealerPerspective: {
+      whenDealerSells: "客户做Put Ratio Backspread = Short 1 ATM put + Long 2 OTM puts",
+      exposure: "Net long gamma, long vega",
+      hedging: ["Put skew使得OTM puts更贵 → backspread成本更高"],
+      profitSource: "Put skew溢价"
+    },
+    interviewQuestions: [
+      { q: "Put Ratio Backspread vs 直接买Put？", a: "Backspread便宜（short ATM put补贴），但有最大亏损区（标的停在short strike附近）。裸买Put没有亏损区但成本更高。选择取决于：你对'会有大跌'vs'不会不大不小'的判断。" }
+    ]
+  },
+
+  // Strip - 条式价差
+  "strip": {
+    exposure: {
+      directional: "-Delta (bearish bias —— 2 puts vs 1 call)",
+      volatility: "+Vega (做多波动率)",
+      time: "-Theta",
+      convexity: "+Gamma"
+    },
+    profitLogic: {
+      makesMoneyFrom: "标的剧烈移动（特别是下跌——2 puts使得下行盈利更大）",
+      losesMoneyFrom: "标的横盘（三腿theta侵蚀）",
+      bestMarketCondition: "预期大波动，偏向下行风险更大。IV低时买入。",
+      worstScenario: "标的不动"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "比Straddle更偏下行（2:1 put:call ratio）",
+        "预期波动率会很高且下行风险更大",
+        "对下行有不对称保护"
+      ],
+      clientType: "预期大波动但偏bearish的交易者",
+      suitability: "理解ratio带来的不对称盈亏"
+    },
+    dealerPerspective: {
+      whenDealerSells: "Strip = 1 ATM Call + 2 ATM Puts → Dealer short 3 legs",
+      exposure: "Net short gamma/short vega，偏short delta (因为2 puts)",
+      hedging: ["净Delta偏负，需要买股票对冲", "Gamma管理：3个ATM legs gamma都很高"],
+      profitSource: "客户为不对称波动保护付出的溢价"
+    },
+    interviewQuestions: [
+      { q: "Strip vs Straddle vs Strap？", a: "Straddle：1C+1P（对称）。Strip：1C+2P（偏下行）。Strap：2C+1P（偏上行）。选择取决于你对波动方向的判断。Strip最贵（2个puts），Strap次之（2个calls）。" },
+      { q: "为什么有人做Strip而不是买Straddle+额外Put？", a: "通常Strip的定价更好（做为一个package），且保证金计算更有效率。但从盈亏角度看，确实是straddle+额外put的组合。" }
+    ]
+  },
+
+  // Strap - 带式价差
+  "strap": {
+    exposure: {
+      directional: "+Delta (bullish bias —— 2 calls vs 1 put)",
+      volatility: "+Vega",
+      time: "-Theta",
+      convexity: "+Gamma"
+    },
+    profitLogic: {
+      makesMoneyFrom: "标的剧烈移动（特别是上涨——2 calls使得上行盈利更大）",
+      losesMoneyFrom: "横盘不动",
+      bestMarketCondition: "预期大波动，偏向上行。IV低。",
+      worstScenario: "标的横盘"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "比Straddle更偏上行（2:1 call:put ratio）",
+        "看涨且预期大波动",
+        "上行杠杆更大"
+      ],
+      clientType: "激进看涨的波动率买家",
+      suitability: "需要标的真正大幅上涨来盈利（2个calls成本高）"
+    },
+    dealerPerspective: {
+      whenDealerSells: "Strap = 2 ATM Calls + 1 ATM Put → Dealer short 3 legs",
+      exposure: "Net short gamma/short vega，偏short delta (因为2 calls)",
+      hedging: ["净Delta偏正，需要卖股票对冲", "Gamma管理"],
+      profitSource: "客户的bullish vol观点mispricing"
+    },
+    interviewQuestions: [
+      { q: "Strap什么时候比Straddle好？", a: "当你确信波动会来但方向偏向上行时。但代价是：如果下跌（1个put），盈利不如straddle（1C+1P）。如果横盘，亏损比straddle大（3腿theta vs 2腿）。" }
+    ]
+  },
+
+  // Seagull / Fence - 海鸥/围栏策略
+  "seagull-fence": {
+    exposure: {
+      directional: "取决于结构，通常是bullish（保护下行、卖上行）",
+      volatility: "净Vega取决于三条腿的相对IV",
+      time: "净Theta取决于结构",
+      convexity: "结构性的——在保护区内有Gamma保护"
+    },
+    profitLogic: {
+      makesMoneyFrom: "标的在long put和short call之间的区域 + 时间流逝（如果net credit）",
+      losesMoneyFrom: "标的跌破put protection（但有保护）或暴涨突破short call（上行封顶）",
+      bestMarketCondition: "温和看涨，高IV卖出call补贴put成本",
+      worstScenario: "标的暴跌（但有put保护）或暴涨（封顶）"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "Zero-cost collar的变体（三腿：Long underlying + Long OTM put + Short OTM call）",
+        "保护下行 + 卖出上行来支付保护成本",
+        "企业和机构常用的对冲策略"
+      ],
+      clientType: "机构投资者、企业财务（对冲持仓）、私人银行客户",
+      suitability: "持有大量标的且有明确的价格保护目标"
+    },
+    dealerPerspective: {
+      whenDealerSells: "Dealer在Seagull的反侧：",
+      exposure: "Dealer买入客户的short call → short delta。Dealer卖出客户的long put → long delta。净Delta取决于结构。",
+      hedging: ["Delta hedge净暴露", "Vega集中在OTM wings"],
+      profitSource: "结构化产品的spread（通常比单腿宽）"
+    },
+    interviewQuestions: [
+      { q: "Seagull/Fence策略的商业应用是什么？", a: "企业用Seagull对冲外汇或商品风险：买入put保护不利方向，卖出call（放弃有利方向的超额收益）来zero-cost。例如：航空公司想保护油价上涨风险，卖出油价下跌的call来支付put的成本。" },
+      { q: "Seagull和Collar的区别？", a: "Collar是两腿（Long underlying + Long put + Short call）。Seagull是Collar的一种叫法/变体。有些定义中Seagull=三腿（无underlying，纯期权腿构建），Collar=两腿+underlying。实践中经常混用。" }
+    ]
+  },
+
+  // Guts - 胆识策略
+  "guts": {
+    exposure: {
+      directional: "取决于结构（Long Guts = 买ITM call + 买ITM put）",
+      volatility: "+Vega (做多波动率)",
+      time: "-Theta (两条腿的时间衰减)",
+      convexity: "+Gamma (正凸性)"
+    },
+    profitLogic: {
+      makesMoneyFrom: "标的剧烈移动（ITM options delta更高 → 对移动更敏感）",
+      losesMoneyFrom: "横盘（ITM options extrinsic value持续衰减）",
+      bestMarketCondition: "预期大波动，IV低",
+      worstScenario: "标的停在两个ITM strikes之间"
+    },
+    clientPerspective: {
+      whyClientDoes: [
+        "比Straddle有更高的Delta（ITM legs delta之和 > 1.0）",
+        "对标的移动更敏感",
+        "但成本也更高（ITM options更贵）"
+      ],
+      clientType: "强烈预期大波动的交易者",
+      suitability: "需要理解ITM options的特性（高Delta、低extrinsic value、高成本）"
+    },
+    dealerPerspective: {
+      whenDealerSells: "客户做Long Guts = 买ITM Call + ITM Put → Dealer short 两个ITM legs",
+      exposure: "ITM options delta接近1 → 两个方向的Delta接近对冲。但Gamma和Vega仍然暴露。",
+      hedging: ["ITM options liquidity通常较差（大部分volume在ATM/OTM）", "Wider spreads"],
+      profitSource: "ITM options的wider spreads"
+    },
+    interviewQuestions: [
+      { q: "Guts vs Straddle的核心区别？", a: "Straddle使用ATM options（strike=spot），Guts使用ITM options（call strike < spot，put strike > spot）。Guts的Delta更高（更敏感），但extrinsic value更少（时间价值占比小），且bid-ask更宽（ITM流动性差）。" },
+      { q: "谁会做Guts策略？", a: "极少人做纯Guts（成本高、流动性差）。更常见的是Short Guts（卖出ITM options获取高premium，但风险也大）。Guts更多是理解option moneyness和定价的教学工具。" },
+      { q: "Short Guts的动机是什么？", a: "卖出ITM call+ITM put获取大额premium（ITM options权利金高）。如果标的在两个strikes之间不动，两者都归零赚全部premium。但如果大幅移动，亏损也大。本质是极高Theta换取高风险。" }
+    ]
+  },
+
+  // Generic Professional Trading Concepts
   professionalConcepts: {
     greeksRelationships: {
       gammaThetaTradeoff: {

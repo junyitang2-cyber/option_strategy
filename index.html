@@ -280,12 +280,33 @@
           </div>
           <div class="greeks-decay-controls">
             <label>
-              <span>DTE (天数):</span>
-              <input type="range" id="greeksDecayDte" min="0" max="45" step="1" value="30" />
-              <output id="greeksDecayDteOutput">30</output>
+              <span>最大 DTE:</span>
+              <input type="range" id="greeksDecayDte" min="10" max="90" step="5" value="45" />
+              <output id="greeksDecayDteOutput">45</output>
             </label>
+            <label class="decay-strike-row">
+              <span>行权价:</span>
+              <span class="decay-presets">
+                <button class="decay-preset-btn active" data-decay-moneyness="atm" type="button">ATM</button>
+                <button class="decay-preset-btn" data-decay-moneyness="itm" type="button">ITM</button>
+                <button class="decay-preset-btn" data-decay-moneyness="otm" type="button">OTM</button>
+                <input type="number" id="greeksDecayStrike" step="0.5" style="width:80px" />
+              </span>
+            </label>
+            <span id="greeksDecayInfo" class="greeks-decay-info"></span>
           </div>
           <div id="greeksDecayChart" class="greeks-decay-chart"></div>
+          <p class="greeks-decay-note">曲线基于当前策略所有腿的组合 Greeks；ATM/ITM/OTM 与自定义行权价会移动组合中心，并保留原有价差宽度。Gamma、Theta、Vega 会随 DTE 接近到期而非线性变化。</p>
+        </section>
+
+        <section class="panel concepts-panel pro-content" id="proConceptsPanel" style="display:none">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">Professional Concepts</p>
+              <h3>交易员核心概念</h3>
+            </div>
+          </div>
+          <div id="proConceptsContent" class="concepts-content"></div>
         </section>
 
         <section class="panel coverage-panel">

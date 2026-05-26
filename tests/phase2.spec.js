@@ -32,7 +32,7 @@ test("phase 2 learning path and per-leg decomposition work", async ({ page }) =>
   await expect(page.locator(".leg-color-bar")).toHaveCount(4);
 
   await page.locator("#markCompletedBtn").click();
-  await expect(page.locator("#markCompletedBtn")).toContainText("已理解");
+  await expect(page.locator("#markCompletedBtn")).toContainText("✓ 已理解");
   await expect(page.locator("#learningPathBar")).toContainText("已学");
   const progress = await page.evaluate(() => JSON.parse(localStorage.getItem("os_learning")));
   expect(progress.visited).toContain("box-spread");
