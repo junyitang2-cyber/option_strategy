@@ -1,0 +1,1059 @@
+- main [ref=e2]:
+  - complementary "策略库" [ref=e3]:
+    - generic [ref=e4]:
+      - paragraph [ref=e5]: Options Lab
+      - heading "期权策略库" [level=1] [ref=e6]
+      - paragraph [ref=e7]: 复刻 options-viewer 的交互结构，并补充常见策略。
+    - generic [ref=e8]:
+      - generic [ref=e9]: 搜索
+      - searchbox "搜索" [ref=e10]
+    - generic "策略分类" [ref=e11]:
+      - button "全部" [ref=e12] [cursor=pointer]
+      - button "新手" [ref=e13] [cursor=pointer]
+      - button "中级" [ref=e14] [cursor=pointer]
+      - button "高级" [ref=e15] [cursor=pointer]
+      - button "专家" [ref=e16] [cursor=pointer]
+      - button "原站" [ref=e17] [cursor=pointer]
+      - button "补充" [ref=e18] [cursor=pointer]
+      - button "方向" [ref=e19] [cursor=pointer]
+      - button "收租" [ref=e20] [cursor=pointer]
+      - button "波动率" [ref=e21] [cursor=pointer]
+      - button "跨期" [ref=e22] [cursor=pointer]
+      - button "复杂" [ref=e23] [cursor=pointer]
+      - button "合成" [ref=e24] [cursor=pointer]
+      - button "股票覆盖" [ref=e25] [cursor=pointer]
+      - button "向导" [ref=e26] [cursor=pointer]
+    - generic "策略数量" [ref=e27]:
+      - generic [ref=e28]:
+        - generic [ref=e29]: 原站
+        - strong [ref=e30]: "60"
+      - generic [ref=e31]:
+        - generic [ref=e32]: 补充
+        - strong [ref=e33]: "11"
+      - generic [ref=e34]:
+        - generic [ref=e35]: 显示
+        - strong [ref=e36]: "71"
+    - generic [ref=e37]:
+      - button "Long Call 买入看涨期权 · 强看涨 新手 方向" [ref=e38] [cursor=pointer]:
+        - generic [ref=e39]:
+          - generic [ref=e40]: Long Call
+          - generic [ref=e41]: 买入看涨期权 · 强看涨
+        - generic [ref=e42]:
+          - generic "新手" [ref=e43]
+          - text: 方向
+      - button "Long Put 买入看跌期权 · 强看跌 新手 方向" [ref=e44] [cursor=pointer]:
+        - generic [ref=e45]:
+          - generic [ref=e46]: Long Put
+          - generic [ref=e47]: 买入看跌期权 · 强看跌
+        - generic [ref=e48]:
+          - generic "新手" [ref=e49]
+          - text: 方向
+      - button "Covered Call 备兑看涨 · 温和看涨 / 收租 新手 收租" [ref=e50] [cursor=pointer]:
+        - generic [ref=e51]:
+          - generic [ref=e52]: Covered Call
+          - generic [ref=e53]: 备兑看涨 · 温和看涨 / 收租
+        - generic [ref=e54]:
+          - generic "新手" [ref=e55]
+          - text: 收租
+      - button "Cash-Secured Put 现金担保卖 Put · 温和看涨 / 想低价接货 新手 收租" [ref=e56] [cursor=pointer]:
+        - generic [ref=e57]:
+          - generic [ref=e58]: Cash-Secured Put
+          - generic [ref=e59]: 现金担保卖 Put · 温和看涨 / 想低价接货
+        - generic [ref=e60]:
+          - generic "新手" [ref=e61]
+          - text: 收租
+      - button "Protective Put 保护性 Put · 保护性看涨 新手 方向" [ref=e62] [cursor=pointer]:
+        - generic [ref=e63]:
+          - generic [ref=e64]: Protective Put
+          - generic [ref=e65]: 保护性 Put · 保护性看涨
+        - generic [ref=e66]:
+          - generic "新手" [ref=e67]
+          - text: 方向
+      - button "Bull Put Spread 牛市 Put 信用价差 · 温和看涨 中级 收租" [ref=e68] [cursor=pointer]:
+        - generic [ref=e69]:
+          - generic [ref=e70]: Bull Put Spread
+          - generic [ref=e71]: 牛市 Put 信用价差 · 温和看涨
+        - generic [ref=e72]:
+          - generic "中级" [ref=e73]
+          - text: 收租
+      - button "Bear Call Spread 熊市 Call 信用价差 · 温和看跌 中级 收租" [ref=e74] [cursor=pointer]:
+        - generic [ref=e75]:
+          - generic [ref=e76]: Bear Call Spread
+          - generic [ref=e77]: 熊市 Call 信用价差 · 温和看跌
+        - generic [ref=e78]:
+          - generic "中级" [ref=e79]
+          - text: 收租
+      - button "Iron Butterfly 铁蝶 · 中性 中级 收租" [ref=e80] [cursor=pointer]:
+        - generic [ref=e81]:
+          - generic [ref=e82]: Iron Butterfly
+          - generic [ref=e83]: 铁蝶 · 中性
+        - generic [ref=e84]:
+          - generic "中级" [ref=e85]
+          - text: 收租
+      - button "Iron Condor 铁秃鹰 · 区间震荡 中级 收租" [ref=e86] [cursor=pointer]:
+        - generic [ref=e87]:
+          - generic [ref=e88]: Iron Condor
+          - generic [ref=e89]: 铁秃鹰 · 区间震荡
+        - generic [ref=e90]:
+          - generic "中级" [ref=e91]
+          - text: 收租
+      - button "Long Put Butterfly 买入 Put 蝶式 · 中性 / 目标价 中级 复杂" [ref=e92] [cursor=pointer]:
+        - generic [ref=e93]:
+          - generic [ref=e94]: Long Put Butterfly
+          - generic [ref=e95]: 买入 Put 蝶式 · 中性 / 目标价
+        - generic [ref=e96]:
+          - generic "中级" [ref=e97]
+          - text: 复杂
+      - button "Long Call Butterfly 买入 Call 蝶式 · 中性 / 目标价 中级 复杂" [ref=e98] [cursor=pointer]:
+        - generic [ref=e99]:
+          - generic [ref=e100]: Long Call Butterfly
+          - generic [ref=e101]: 买入 Call 蝶式 · 中性 / 目标价
+        - generic [ref=e102]:
+          - generic "中级" [ref=e103]
+          - text: 复杂
+      - button "Calendar Call Spread Call 日历价差 · 中性偏多 中级 跨期" [ref=e104] [cursor=pointer]:
+        - generic [ref=e105]:
+          - generic [ref=e106]: Calendar Call Spread
+          - generic [ref=e107]: Call 日历价差 · 中性偏多
+        - generic [ref=e108]:
+          - generic "中级" [ref=e109]
+          - text: 跨期
+      - button "Calendar Put Spread Put 日历价差 · 中性偏空 中级 跨期" [ref=e110] [cursor=pointer]:
+        - generic [ref=e111]:
+          - generic [ref=e112]: Calendar Put Spread
+          - generic [ref=e113]: Put 日历价差 · 中性偏空
+        - generic [ref=e114]:
+          - generic "中级" [ref=e115]
+          - text: 跨期
+      - button "Diagonal Call Spread Call 斜跨价差 · 温和看涨 中级 跨期" [ref=e116] [cursor=pointer]:
+        - generic [ref=e117]:
+          - generic [ref=e118]: Diagonal Call Spread
+          - generic [ref=e119]: Call 斜跨价差 · 温和看涨
+        - generic [ref=e120]:
+          - generic "中级" [ref=e121]
+          - text: 跨期
+      - button "Diagonal Put Spread Put 斜跨价差 · 温和看跌 中级 跨期" [ref=e122] [cursor=pointer]:
+        - generic [ref=e123]:
+          - generic [ref=e124]: Diagonal Put Spread
+          - generic [ref=e125]: Put 斜跨价差 · 温和看跌
+        - generic [ref=e126]:
+          - generic "中级" [ref=e127]
+          - text: 跨期
+      - button "Bull Call Spread 牛市 Call 借记价差 · 温和看涨 中级 方向" [ref=e128] [cursor=pointer]:
+        - generic [ref=e129]:
+          - generic [ref=e130]: Bull Call Spread
+          - generic [ref=e131]: 牛市 Call 借记价差 · 温和看涨
+        - generic [ref=e132]:
+          - generic "中级" [ref=e133]
+          - text: 方向
+      - button "Bear Put Spread 熊市 Put 借记价差 · 温和看跌 中级 方向" [ref=e134] [cursor=pointer]:
+        - generic [ref=e135]:
+          - generic [ref=e136]: Bear Put Spread
+          - generic [ref=e137]: 熊市 Put 借记价差 · 温和看跌
+        - generic [ref=e138]:
+          - generic "中级" [ref=e139]
+          - text: 方向
+      - button "Inverse Iron Butterfly 反向铁蝶 / Long Iron Fly · 大波动 中级 波动率" [ref=e140] [cursor=pointer]:
+        - generic [ref=e141]:
+          - generic [ref=e142]: Inverse Iron Butterfly
+          - generic [ref=e143]: 反向铁蝶 / Long Iron Fly · 大波动
+        - generic [ref=e144]:
+          - generic "中级" [ref=e145]
+          - text: 波动率
+      - button "Inverse Iron Condor 反向铁秃鹰 / Long Iron Condor · 大波动 中级 波动率" [ref=e146] [cursor=pointer]:
+        - generic [ref=e147]:
+          - generic [ref=e148]: Inverse Iron Condor
+          - generic [ref=e149]: 反向铁秃鹰 / Long Iron Condor · 大波动
+        - generic [ref=e150]:
+          - generic "中级" [ref=e151]
+          - text: 波动率
+      - button "Short Put Butterfly 卖出 Put 蝶式 · 突破 / 非中心 中级 复杂" [ref=e152] [cursor=pointer]:
+        - generic [ref=e153]:
+          - generic [ref=e154]: Short Put Butterfly
+          - generic [ref=e155]: 卖出 Put 蝶式 · 突破 / 非中心
+        - generic [ref=e156]:
+          - generic "中级" [ref=e157]
+          - text: 复杂
+      - button "Short Call Butterfly 卖出 Call 蝶式 · 突破 / 非中心 中级 复杂" [ref=e158] [cursor=pointer]:
+        - generic [ref=e159]:
+          - generic [ref=e160]: Short Call Butterfly
+          - generic [ref=e161]: 卖出 Call 蝶式 · 突破 / 非中心
+        - generic [ref=e162]:
+          - generic "中级" [ref=e163]
+          - text: 复杂
+      - button "Straddle 买入跨式 · 大波动 中级 波动率" [ref=e164] [cursor=pointer]:
+        - generic [ref=e165]:
+          - generic [ref=e166]: Straddle
+          - generic [ref=e167]: 买入跨式 · 大波动
+        - generic [ref=e168]:
+          - generic "中级" [ref=e169]
+          - text: 波动率
+      - button "Strangle 买入宽跨式 · 大波动 中级 波动率" [ref=e170] [cursor=pointer]:
+        - generic [ref=e171]:
+          - generic [ref=e172]: Strangle
+          - generic [ref=e173]: 买入宽跨式 · 大波动
+        - generic [ref=e174]:
+          - generic "中级" [ref=e175]
+          - text: 波动率
+      - button "Collar 领口策略 · 保护性看涨 中级 方向" [ref=e176] [cursor=pointer]:
+        - generic [ref=e177]:
+          - generic [ref=e178]: Collar
+          - generic [ref=e179]: 领口策略 · 保护性看涨
+        - generic [ref=e180]:
+          - generic "中级" [ref=e181]
+          - text: 方向
+      - button "Short Put 裸卖 Put · 看涨 / 不看跌 高级 收租" [ref=e182] [cursor=pointer]:
+        - generic [ref=e183]:
+          - generic [ref=e184]: Short Put
+          - generic [ref=e185]: 裸卖 Put · 看涨 / 不看跌
+        - generic [ref=e186]:
+          - generic "高级" [ref=e187]
+          - text: 收租
+      - button "Short Call 裸卖 Call · 看跌 / 不看涨 高级 收租" [ref=e188] [cursor=pointer]:
+        - generic [ref=e189]:
+          - generic [ref=e190]: Short Call
+          - generic [ref=e191]: 裸卖 Call · 看跌 / 不看涨
+        - generic [ref=e192]:
+          - generic "高级" [ref=e193]
+          - text: 收租
+      - button "Short Straddle 卖出跨式 · 强中性 高级 收租" [ref=e194] [cursor=pointer]:
+        - generic [ref=e195]:
+          - generic [ref=e196]: Short Straddle
+          - generic [ref=e197]: 卖出跨式 · 强中性
+        - generic [ref=e198]:
+          - generic "高级" [ref=e199]
+          - text: 收租
+      - button "Short Strangle 卖出宽跨式 · 区间震荡 高级 收租" [ref=e200] [cursor=pointer]:
+        - generic [ref=e201]:
+          - generic [ref=e202]: Short Strangle
+          - generic [ref=e203]: 卖出宽跨式 · 区间震荡
+        - generic [ref=e204]:
+          - generic "高级" [ref=e205]
+          - text: 收租
+      - button "Long Call Condor 买入 Call 秃鹰 · 中性区间 高级 复杂" [ref=e206] [cursor=pointer]:
+        - generic [ref=e207]:
+          - generic [ref=e208]: Long Call Condor
+          - generic [ref=e209]: 买入 Call 秃鹰 · 中性区间
+        - generic [ref=e210]:
+          - generic "高级" [ref=e211]
+          - text: 复杂
+      - button "Long Put Condor 买入 Put 秃鹰 · 中性区间 高级 复杂" [ref=e212] [cursor=pointer]:
+        - generic [ref=e213]:
+          - generic [ref=e214]: Long Put Condor
+          - generic [ref=e215]: 买入 Put 秃鹰 · 中性区间
+        - generic [ref=e216]:
+          - generic "高级" [ref=e217]
+          - text: 复杂
+      - button "Call Ratio Backspread Call 反比率价差 · 看涨尾部 高级 波动率" [ref=e218] [cursor=pointer]:
+        - generic [ref=e219]:
+          - generic [ref=e220]: Call Ratio Backspread
+          - generic [ref=e221]: Call 反比率价差 · 看涨尾部
+        - generic [ref=e222]:
+          - generic "高级" [ref=e223]
+          - text: 波动率
+      - button "Put Broken Wing Put 破翼蝶式 · 偏多 / 防守 高级 复杂" [ref=e224] [cursor=pointer]:
+        - generic [ref=e225]:
+          - generic [ref=e226]: Put Broken Wing
+          - generic [ref=e227]: Put 破翼蝶式 · 偏多 / 防守
+        - generic [ref=e228]:
+          - generic "高级" [ref=e229]
+          - text: 复杂
+      - button "Inverse Call Broken Wing 反向 Call 破翼蝶式 · 偏多突破 高级 复杂" [ref=e230] [cursor=pointer]:
+        - generic [ref=e231]:
+          - generic [ref=e232]: Inverse Call Broken Wing
+          - generic [ref=e233]: 反向 Call 破翼蝶式 · 偏多突破
+        - generic [ref=e234]:
+          - generic "高级" [ref=e235]
+          - text: 复杂
+      - button "Put Ratio Backspread Put 反比率价差 · 看跌尾部 高级 波动率" [ref=e236] [cursor=pointer]:
+        - generic [ref=e237]:
+          - generic [ref=e238]: Put Ratio Backspread
+          - generic [ref=e239]: Put 反比率价差 · 看跌尾部
+        - generic [ref=e240]:
+          - generic "高级" [ref=e241]
+          - text: 波动率
+      - button "Call Broken Wing Call 破翼蝶式 · 偏空 / 上方防守 高级 复杂" [ref=e242] [cursor=pointer]:
+        - generic [ref=e243]:
+          - generic [ref=e244]: Call Broken Wing
+          - generic [ref=e245]: Call 破翼蝶式 · 偏空 / 上方防守
+        - generic [ref=e246]:
+          - generic "高级" [ref=e247]
+          - text: 复杂
+      - button "Inverse Put Broken Wing 反向 Put 破翼蝶式 · 偏空突破 高级 复杂" [ref=e248] [cursor=pointer]:
+        - generic [ref=e249]:
+          - generic [ref=e250]: Inverse Put Broken Wing
+          - generic [ref=e251]: 反向 Put 破翼蝶式 · 偏空突破
+        - generic [ref=e252]:
+          - generic "高级" [ref=e253]
+          - text: 复杂
+      - button "Covered Short Straddle 持股卖跨式 · 偏多收租 高级 收租" [ref=e254] [cursor=pointer]:
+        - generic [ref=e255]:
+          - generic [ref=e256]: Covered Short Straddle
+          - generic [ref=e257]: 持股卖跨式 · 偏多收租
+        - generic [ref=e258]:
+          - generic "高级" [ref=e259]
+          - text: 收租
+      - button "Covered Short Strangle 持股卖宽跨式 · 偏多区间收租 高级 收租" [ref=e260] [cursor=pointer]:
+        - generic [ref=e261]:
+          - generic [ref=e262]: Covered Short Strangle
+          - generic [ref=e263]: 持股卖宽跨式 · 偏多区间收租
+        - generic [ref=e264]:
+          - generic "高级" [ref=e265]
+          - text: 收租
+      - button "Short Call Condor 卖出 Call 秃鹰 · 非中性 / 大移动 高级 波动率" [ref=e266] [cursor=pointer]:
+        - generic [ref=e267]:
+          - generic [ref=e268]: Short Call Condor
+          - generic [ref=e269]: 卖出 Call 秃鹰 · 非中性 / 大移动
+        - generic [ref=e270]:
+          - generic "高级" [ref=e271]
+          - text: 波动率
+      - button "Short Put Condor 卖出 Put 秃鹰 · 非中性 / 大移动 高级 波动率" [ref=e272] [cursor=pointer]:
+        - generic [ref=e273]:
+          - generic [ref=e274]: Short Put Condor
+          - generic [ref=e275]: 卖出 Put 秃鹰 · 非中性 / 大移动
+        - generic [ref=e276]:
+          - generic "高级" [ref=e277]
+          - text: 波动率
+      - button "Bull Call Ladder 牛市 Call 梯式 · 温和看涨 高级 复杂" [ref=e278] [cursor=pointer]:
+        - generic [ref=e279]:
+          - generic [ref=e280]: Bull Call Ladder
+          - generic [ref=e281]: 牛市 Call 梯式 · 温和看涨
+        - generic [ref=e282]:
+          - generic "高级" [ref=e283]
+          - text: 复杂
+      - button "Bear Call Ladder 熊市 Call 梯式 · 看跌但怕反弹 高级 复杂" [ref=e284] [cursor=pointer]:
+        - generic [ref=e285]:
+          - generic [ref=e286]: Bear Call Ladder
+          - generic [ref=e287]: 熊市 Call 梯式 · 看跌但怕反弹
+        - generic [ref=e288]:
+          - generic "高级" [ref=e289]
+          - text: 复杂
+      - button "Bull Put Ladder 牛市 Put 梯式 · 看涨但怕暴跌 高级 复杂" [ref=e290] [cursor=pointer]:
+        - generic [ref=e291]:
+          - generic [ref=e292]: Bull Put Ladder
+          - generic [ref=e293]: 牛市 Put 梯式 · 看涨但怕暴跌
+        - generic [ref=e294]:
+          - generic "高级" [ref=e295]
+          - text: 复杂
+      - button "Bear Put Ladder 熊市 Put 梯式 · 温和看跌 高级 复杂" [ref=e296] [cursor=pointer]:
+        - generic [ref=e297]:
+          - generic [ref=e298]: Bear Put Ladder
+          - generic [ref=e299]: 熊市 Put 梯式 · 温和看跌
+        - generic [ref=e300]:
+          - generic "高级" [ref=e301]
+          - text: 复杂
+      - button "Jade Lizard 玉蜥蜴 · 中性偏多 高级 收租" [ref=e302] [cursor=pointer]:
+        - generic [ref=e303]:
+          - generic [ref=e304]: Jade Lizard
+          - generic [ref=e305]: 玉蜥蜴 · 中性偏多
+        - generic [ref=e306]:
+          - generic "高级" [ref=e307]
+          - text: 收租
+      - button "Reverse Jade Lizard 反向玉蜥蜴 · 中性偏空 高级 收租" [ref=e308] [cursor=pointer]:
+        - generic [ref=e309]:
+          - generic [ref=e310]: Reverse Jade Lizard
+          - generic [ref=e311]: 反向玉蜥蜴 · 中性偏空
+        - generic [ref=e312]:
+          - generic "高级" [ref=e313]
+          - text: 收租
+      - button "Call Ratio Spread Call 比率价差 · 温和看涨 专家 复杂" [ref=e314] [cursor=pointer]:
+        - generic [ref=e315]:
+          - generic [ref=e316]: Call Ratio Spread
+          - generic [ref=e317]: Call 比率价差 · 温和看涨
+        - generic [ref=e318]:
+          - generic "专家" [ref=e319]
+          - text: 复杂
+      - button "Put Ratio Spread Put 比率价差 · 温和看跌 专家 复杂" [ref=e320] [cursor=pointer]:
+        - generic [ref=e321]:
+          - generic [ref=e322]: Put Ratio Spread
+          - generic [ref=e323]: Put 比率价差 · 温和看跌
+        - generic [ref=e324]:
+          - generic "专家" [ref=e325]
+          - text: 复杂
+      - button "Long Synthetic Future 合成多头 · 看涨 专家 合成" [ref=e326] [cursor=pointer]:
+        - generic [ref=e327]:
+          - generic [ref=e328]: Long Synthetic Future
+          - generic [ref=e329]: 合成多头 · 看涨
+        - generic [ref=e330]:
+          - generic "专家" [ref=e331]
+          - text: 合成
+      - button "Short Synthetic Future 合成空头 · 看跌 专家 合成" [ref=e332] [cursor=pointer]:
+        - generic [ref=e333]:
+          - generic [ref=e334]: Short Synthetic Future
+          - generic [ref=e335]: 合成空头 · 看跌
+        - generic [ref=e336]:
+          - generic "专家" [ref=e337]
+          - text: 合成
+      - button "Synthetic Put 合成 Put · 看跌保护 专家 合成" [ref=e338] [cursor=pointer]:
+        - generic [ref=e339]:
+          - generic [ref=e340]: Synthetic Put
+          - generic [ref=e341]: 合成 Put · 看跌保护
+        - generic [ref=e342]:
+          - generic "专家" [ref=e343]
+          - text: 合成
+      - button "Long Combo 多头组合 / 风险反转别名 · 看涨 专家 合成" [ref=e344] [cursor=pointer]:
+        - generic [ref=e345]:
+          - generic [ref=e346]: Long Combo
+          - generic [ref=e347]: 多头组合 / 风险反转别名 · 看涨
+        - generic [ref=e348]:
+          - generic "专家" [ref=e349]
+          - text: 合成
+      - button "Short Combo 空头组合 · 看跌 专家 合成" [ref=e350] [cursor=pointer]:
+        - generic [ref=e351]:
+          - generic [ref=e352]: Short Combo
+          - generic [ref=e353]: 空头组合 · 看跌
+        - generic [ref=e354]:
+          - generic "专家" [ref=e355]
+          - text: 合成
+      - button "Strip 偏空跨式 · 偏空大波动 专家 波动率" [ref=e356] [cursor=pointer]:
+        - generic [ref=e357]:
+          - generic [ref=e358]: Strip
+          - generic [ref=e359]: 偏空跨式 · 偏空大波动
+        - generic [ref=e360]:
+          - generic "专家" [ref=e361]
+          - text: 波动率
+      - button "Strap 偏多跨式 · 偏多大波动 专家 波动率" [ref=e362] [cursor=pointer]:
+        - generic [ref=e363]:
+          - generic [ref=e364]: Strap
+          - generic [ref=e365]: 偏多跨式 · 偏多大波动
+        - generic [ref=e366]:
+          - generic "专家" [ref=e367]
+          - text: 波动率
+      - button "Guts 买入内跨式 · 大波动 专家 波动率" [ref=e368] [cursor=pointer]:
+        - generic [ref=e369]:
+          - generic [ref=e370]: Guts
+          - generic [ref=e371]: 买入内跨式 · 大波动
+        - generic [ref=e372]:
+          - generic "专家" [ref=e373]
+          - text: 波动率
+      - button "Short Guts 卖出内跨式 · 中性 专家 收租" [ref=e374] [cursor=pointer]:
+        - generic [ref=e375]:
+          - generic [ref=e376]: Short Guts
+          - generic [ref=e377]: 卖出内跨式 · 中性
+        - generic [ref=e378]:
+          - generic "专家" [ref=e379]
+          - text: 收租
+      - button "Double Diagonal 双斜跨价差 · 中性区间 专家 跨期" [ref=e380] [cursor=pointer]:
+        - generic [ref=e381]:
+          - generic [ref=e382]: Double Diagonal
+          - generic [ref=e383]: 双斜跨价差 · 中性区间
+        - generic [ref=e384]:
+          - generic "专家" [ref=e385]
+          - text: 跨期
+      - button "Vega 套利 波动率期限结构向导 · 交易 IV 向导 向导" [ref=e386] [cursor=pointer]:
+        - generic [ref=e387]:
+          - generic [ref=e388]: Vega 套利
+          - generic [ref=e389]: 波动率期限结构向导 · 交易 IV
+        - generic [ref=e390]:
+          - generic "向导" [ref=e391]
+          - text: 向导
+      - button "Delta Neutral（Delta 中性） Delta 中性向导 · 风险控制 向导 向导" [ref=e392] [cursor=pointer]:
+        - generic [ref=e393]:
+          - generic [ref=e394]: Delta Neutral（Delta 中性）
+          - generic [ref=e395]: Delta 中性向导 · 风险控制
+        - generic [ref=e396]:
+          - generic "向导" [ref=e397]
+          - text: 向导
+      - button "Covered Put 备兑 Put · 中性偏空 高级 股票覆盖" [ref=e398] [cursor=pointer]:
+        - generic [ref=e399]:
+          - generic [ref=e400]: Covered Put
+          - generic [ref=e401]: 备兑 Put · 中性偏空
+        - generic [ref=e402]:
+          - generic "高级" [ref=e403]
+          - text: 股票覆盖
+      - button "Stock Repair / Covered Ratio Spread 股票修复 / 备兑比率价差 · 修复持股 高级 股票覆盖" [ref=e404] [cursor=pointer]:
+        - generic [ref=e405]:
+          - generic [ref=e406]: Stock Repair / Covered Ratio Spread
+          - generic [ref=e407]: 股票修复 / 备兑比率价差 · 修复持股
+        - generic [ref=e408]:
+          - generic "高级" [ref=e409]
+          - text: 股票覆盖
+      - button "Double Bull Spread 双牛市价差 · 看涨 高级 复杂" [ref=e410] [cursor=pointer]:
+        - generic [ref=e411]:
+          - generic [ref=e412]: Double Bull Spread
+          - generic [ref=e413]: 双牛市价差 · 看涨
+        - generic [ref=e414]:
+          - generic "高级" [ref=e415]
+          - text: 复杂
+      - button "Double Bear Spread 双熊市价差 · 看跌 高级 复杂" [ref=e416] [cursor=pointer]:
+        - generic [ref=e417]:
+          - generic [ref=e418]: Double Bear Spread
+          - generic [ref=e419]: 双熊市价差 · 看跌
+        - generic [ref=e420]:
+          - generic "高级" [ref=e421]
+          - text: 复杂
+      - button "Box Spread 盒式价差 · 融资 / 利率 专家 合成" [ref=e422] [cursor=pointer]:
+        - generic [ref=e423]:
+          - generic [ref=e424]: Box Spread
+          - generic [ref=e425]: 盒式价差 · 融资 / 利率
+        - generic [ref=e426]:
+          - generic "专家" [ref=e427]
+          - text: 合成
+      - button "Short Call Calendar Spread 卖出 Call 日历价差 · 突破 / 远月 IV 下行 专家 跨期" [ref=e428] [cursor=pointer]:
+        - generic [ref=e429]:
+          - generic [ref=e430]: Short Call Calendar Spread
+          - generic [ref=e431]: 卖出 Call 日历价差 · 突破 / 远月 IV 下行
+        - generic [ref=e432]:
+          - generic "专家" [ref=e433]
+          - text: 跨期
+      - button "Short Put Calendar Spread 卖出 Put 日历价差 · 突破 / 远月 IV 下行 专家 跨期" [ref=e434] [cursor=pointer]:
+        - generic [ref=e435]:
+          - generic [ref=e436]: Short Put Calendar Spread
+          - generic [ref=e437]: 卖出 Put 日历价差 · 突破 / 远月 IV 下行
+        - generic [ref=e438]:
+          - generic "专家" [ref=e439]
+          - text: 跨期
+      - button "Risk Reversal 风险反转 · 方向 + 偏斜 高级 合成" [ref=e440] [cursor=pointer]:
+        - generic [ref=e441]:
+          - generic [ref=e442]: Risk Reversal
+          - generic [ref=e443]: 风险反转 · 方向 + 偏斜
+        - generic [ref=e444]:
+          - generic "高级" [ref=e445]
+          - text: 合成
+      - button "Wheel Strategy 轮动收租策略 · 长期偏多收租 中级 向导" [ref=e446] [cursor=pointer]:
+        - generic [ref=e447]:
+          - generic [ref=e448]: Wheel Strategy
+          - generic [ref=e449]: 轮动收租策略 · 长期偏多收租
+        - generic [ref=e450]:
+          - generic "中级" [ref=e451]
+          - text: 向导
+      - button "Seagull / Fence 海鸥 / 围栏保护 · 低成本保护 高级 股票覆盖" [ref=e452] [cursor=pointer]:
+        - generic [ref=e453]:
+          - generic [ref=e454]: Seagull / Fence
+          - generic [ref=e455]: 海鸥 / 围栏保护 · 低成本保护
+        - generic [ref=e456]:
+          - generic "高级" [ref=e457]
+          - text: 股票覆盖
+      - button "Poor Man's Covered Call 穷人备兑 Call · 温和看涨收租 中级 跨期" [ref=e458] [cursor=pointer]:
+        - generic [ref=e459]:
+          - generic [ref=e460]: Poor Man's Covered Call
+          - generic [ref=e461]: 穷人备兑 Call · 温和看涨收租
+        - generic [ref=e462]:
+          - generic "中级" [ref=e463]
+          - text: 跨期
+  - generic [ref=e464]:
+    - generic [ref=e465]:
+      - generic [ref=e466]:
+        - paragraph [ref=e467]: 原站 / 方向 / 强看涨 / Novice
+        - heading "Long Call" [level=2] [ref=e468]
+        - paragraph [ref=e469]: 买入看涨期权
+      - generic [ref=e470]:
+        - generic [ref=e471]:
+          - button "基础" [ref=e472] [cursor=pointer]
+          - button "专业" [ref=e473] [cursor=pointer]
+          - button "面试" [ref=e474] [cursor=pointer]
+        - button "○ 已理解" [ref=e475] [cursor=pointer]
+        - button "重置模板" [ref=e476] [cursor=pointer]
+    - generic [ref=e477]:
+      - generic [ref=e478]: Long Call 新手 · 0/5 已学
+      - button "Bull Call Spread 中级 →" [ref=e479] [cursor=pointer]
+    - generic [ref=e480]:
+      - generic [ref=e481]:
+        - generic [ref=e482]:
+          - generic [ref=e483]:
+            - generic [ref=e484]:
+              - paragraph [ref=e485]: Payoff
+              - heading "主损益图" [level=3] [ref=e486]
+            - generic [ref=e487]:
+              - button "组合" [ref=e488] [cursor=pointer]
+              - button "逐腿" [ref=e489] [cursor=pointer]
+              - button "概率锥" [ref=e490] [cursor=pointer]
+          - generic [ref=e491]:
+            - generic [ref=e492]:
+              - generic [ref=e493]:
+                - generic [ref=e494]: IV 变动(%)
+                - status "IV 变动(%) 0" [ref=e495]: 0%
+              - slider [ref=e496]: "0"
+            - generic [ref=e497]:
+              - generic [ref=e498]:
+                - generic [ref=e499]: Date / DTE
+                - status "Date / DTE 0 ▶ ⏸ ↺ 1x" [ref=e500]: 0 / 45 DTE
+              - slider [ref=e501]: "0"
+              - generic [ref=e502]:
+                - button "▶" [ref=e503] [cursor=pointer]
+                - button "⏸" [ref=e504] [cursor=pointer]
+                - button "↺" [ref=e505] [cursor=pointer]
+                - combobox [ref=e506] [cursor=pointer]:
+                  - option "1x" [selected]
+                  - option "2x"
+                  - option "5x"
+          - generic [ref=e507]:
+            - generic [ref=e508]: 当前情景
+            - generic [ref=e510]: 到期
+            - generic [ref=e512]: 开仓日
+            - generic [ref=e514]: 现价 / 盈亏平衡
+          - generic "主损益图" [ref=e516]:
+            - img "主损益图" [ref=e517]:
+              - generic [ref=e518]: "50"
+              - generic [ref=e519]: "75"
+              - generic [ref=e520]: "100"
+              - generic [ref=e521]: "125"
+              - generic [ref=e522]: "150"
+              - generic [ref=e523]: "-1151"
+              - generic [ref=e524]: "0"
+              - generic [ref=e525]: "5312"
+              - generic [ref=e529]: $104.44
+              - generic [ref=e534]: 标的价格
+              - generic [ref=e535]: PnL
+        - generic [ref=e536]:
+          - generic [ref=e538]:
+            - paragraph [ref=e539]: The Greeks
+            - heading "Risk / Greeks 六联图" [level=3] [ref=e540]
+          - generic [ref=e541]:
+            - generic [ref=e542]: Risk / PnL
+            - generic [ref=e544]: Delta
+            - generic [ref=e546]: Gamma
+            - generic [ref=e548]: Theta
+            - generic [ref=e550]: Vega
+            - generic [ref=e552]: Rho
+          - generic [ref=e554]:
+            - article [ref=e555]:
+              - heading "Risk / PnL" [level=4] [ref=e556]
+              - img "Risk / PnL" [ref=e558]:
+                - generic [ref=e559]: "50"
+                - generic [ref=e560]: "75"
+                - generic [ref=e561]: "100"
+                - generic [ref=e562]: "125"
+                - generic [ref=e563]: "150"
+                - generic [ref=e564]: "-1151"
+                - generic [ref=e565]: "0"
+                - generic [ref=e566]: "5312"
+                - generic [ref=e568]: 标的价格
+                - generic [ref=e569]: Risk / PnL
+              - paragraph [ref=e570]: 不同标的价格下的理论盈亏，包含当前 DTE 与 IV 情景。
+            - article [ref=e571]:
+              - heading "Delta 了解 Delta" [level=4] [ref=e572]:
+                - text: Delta
+                - button "了解 Delta" [ref=e573] [cursor=pointer]: "?"
+              - img "Delta" [ref=e575]:
+                - generic [ref=e576]: "50"
+                - generic [ref=e577]: "75"
+                - generic [ref=e578]: "100"
+                - generic [ref=e579]: "125"
+                - generic [ref=e580]: "150"
+                - generic [ref=e581]: "-14"
+                - generic [ref=e582]: "0"
+                - generic [ref=e583]: "114"
+                - generic [ref=e585]: 标的价格
+                - generic [ref=e586]: Delta
+              - paragraph [ref=e587]: 方向暴露；正值偏受益上涨，负值偏受益下跌。
+            - article [ref=e588]:
+              - heading "Gamma 了解 Gamma" [level=4] [ref=e589]:
+                - text: Gamma
+                - button "了解 Gamma" [ref=e590] [cursor=pointer]: "?"
+              - img "Gamma" [ref=e592]:
+                - generic [ref=e593]: "50"
+                - generic [ref=e594]: "75"
+                - generic [ref=e595]: "100"
+                - generic [ref=e596]: "125"
+                - generic [ref=e597]: "150"
+                - generic [ref=e598]: "-1"
+                - generic [ref=e599]: "0"
+                - generic [ref=e600]: "4"
+                - generic [ref=e602]: 标的价格
+                - generic [ref=e603]: Gamma
+              - paragraph [ref=e604]: Delta 对价格变化的敏感度；临近执行价和到期时会更尖锐。
+            - article [ref=e605]:
+              - heading "Theta 了解 Theta" [level=4] [ref=e606]:
+                - text: Theta
+                - button "了解 Theta" [ref=e607] [cursor=pointer]: "?"
+              - img "Theta" [ref=e609]:
+                - generic [ref=e610]: "50"
+                - generic [ref=e611]: "75"
+                - generic [ref=e612]: "100"
+                - generic [ref=e613]: "125"
+                - generic [ref=e614]: "150"
+                - generic [ref=e615]: "-6"
+                - generic [ref=e616]: "0"
+                - generic [ref=e617]: "1"
+                - generic [ref=e619]: 标的价格
+                - generic [ref=e620]: Theta
+              - paragraph [ref=e621]: 每日时间价值变化；卖方结构通常希望 Theta 为正。
+            - article [ref=e622]:
+              - heading "Vega 了解 Vega" [level=4] [ref=e623]:
+                - text: Vega
+                - button "了解 Vega" [ref=e624] [cursor=pointer]: "?"
+              - img "Vega" [ref=e626]:
+                - generic [ref=e627]: "50"
+                - generic [ref=e628]: "75"
+                - generic [ref=e629]: "100"
+                - generic [ref=e630]: "125"
+                - generic [ref=e631]: "150"
+                - generic [ref=e632]: "-2"
+                - generic [ref=e633]: "0"
+                - generic [ref=e634]: "16"
+                - generic [ref=e636]: 标的价格
+                - generic [ref=e637]: Vega
+              - paragraph [ref=e638]: IV 每变化 1 个百分点时组合理论价值的变化。
+            - article [ref=e639]:
+              - heading "Rho 了解 Rho" [level=4] [ref=e640]:
+                - text: Rho
+                - button "了解 Rho" [ref=e641] [cursor=pointer]: "?"
+              - img "Rho" [ref=e643]:
+                - generic [ref=e644]: "50"
+                - generic [ref=e645]: "75"
+                - generic [ref=e646]: "100"
+                - generic [ref=e647]: "125"
+                - generic [ref=e648]: "150"
+                - generic [ref=e649]: "-2"
+                - generic [ref=e650]: "0"
+                - generic [ref=e651]: "14"
+                - generic [ref=e653]: 标的价格
+                - generic [ref=e654]: Rho
+              - paragraph [ref=e655]: 利率每变化 1 个百分点时组合理论价值的变化。
+      - complementary [ref=e656]:
+        - generic [ref=e657]:
+          - generic [ref=e659]:
+            - paragraph [ref=e660]: Scenario
+            - heading "情景参数" [level=3] [ref=e661]
+          - generic [ref=e662]:
+            - generic [ref=e663]:
+              - generic [ref=e664]: 当前价格
+              - spinbutton "当前价格" [ref=e665]: "100.00"
+            - generic [ref=e666]:
+              - generic "控制图表X轴范围——增大可看到更远端的盈亏情况" [ref=e667]: 图表范围(%) ⓘ
+              - spinbutton "图表范围(%) ⓘ" [ref=e668]: "50.00"
+            - generic [ref=e669]:
+              - generic "更高利率 → Call更贵(Put更便宜)，因持有Call可推迟买入股票赚更多利息" [ref=e670]: 利率(%) ⓘ
+              - spinbutton "利率(%) ⓘ" [ref=e671]: "4.00"
+            - generic [ref=e672]:
+              - generic "更高股息 → Call更便宜(Put更贵)，因持有股票的人能收到股息而期权买方不能" [ref=e673]: 股息率(%) ⓘ
+              - spinbutton "股息率(%) ⓘ" [ref=e674]: "0.00"
+            - generic [ref=e675]:
+              - generic "美股期权通常为100，代表每份合约对应100股" [ref=e676]: 合约乘数 ⓘ
+              - spinbutton "合约乘数 ⓘ" [ref=e677]: "100"
+        - generic [ref=e678]:
+          - generic [ref=e680]:
+            - paragraph [ref=e681]: Risk
+            - heading "风险指标" [level=3] [ref=e682]
+          - generic [ref=e683]:
+            - generic [ref=e684]:
+              - generic [ref=e685]: 最大收益
+              - strong [ref=e686]: Unlimited
+            - generic [ref=e687]:
+              - generic [ref=e688]: 最大亏损
+              - strong [ref=e689]: "-$444.06"
+            - generic [ref=e690]:
+              - generic [ref=e691]: 盈亏平衡
+              - strong [ref=e692]: "104.44"
+            - generic [ref=e693]:
+              - generic [ref=e694]: 当前 PnL
+              - strong [ref=e695]: $0.00
+            - generic [ref=e696]:
+              - generic [ref=e697]: 净初始价值
+              - strong [ref=e698]: $444.06
+            - generic [ref=e699]:
+              - generic [ref=e700]: Delta
+              - strong [ref=e701]: "53.96"
+            - generic [ref=e702]:
+              - generic [ref=e703]: Gamma
+              - strong [ref=e704]: "3.7686"
+            - generic [ref=e705]:
+              - generic [ref=e706]: Theta/日
+              - strong [ref=e707]: "-$5.19"
+            - generic [ref=e708]:
+              - generic [ref=e709]: Vega/1%
+              - strong [ref=e710]: $13.94
+            - generic [ref=e711]:
+              - generic [ref=e712]: Rho/1%
+              - strong [ref=e713]: $6.11
+        - generic [ref=e714]:
+          - generic [ref=e716]:
+            - paragraph [ref=e717]: Legs
+            - heading "腿组合" [level=3] [ref=e718]
+          - generic [ref=e722]:
+            - generic [ref=e723]:
+              - strong [ref=e724]: Long 1 CALL @ 100
+              - generic [ref=e725]: Option
+            - generic [ref=e726]:
+              - generic [ref=e727]:
+                - generic [ref=e728]: 方向
+                - combobox "方向" [ref=e729]:
+                  - option "Long" [selected]
+                  - option "Short"
+              - generic [ref=e730]:
+                - generic [ref=e731]: 类型
+                - combobox "类型" [ref=e732]:
+                  - option "Call" [selected]
+                  - option "Put"
+              - generic [ref=e733]:
+                - generic [ref=e734]: 数量
+                - spinbutton "数量" [ref=e735]: "1"
+              - generic [ref=e736]:
+                - generic "ITM=实值(有内在价值), ATM=平值(≈现价), OTM=虚值(仅有时间价值)" [ref=e737]: 行权价 ⓘ
+                - spinbutton "行权价 (ITM=实值(有内在价值), ATM=平值(≈现价), OTM=虚值(仅有时间价值))" [ref=e738]: "100"
+              - generic [ref=e739]:
+                - generic [ref=e740]: DTE
+                - spinbutton "DTE" [ref=e741]: "45"
+              - generic [ref=e742]:
+                - generic [ref=e743]: IV(%)
+                - spinbutton "IV(%)" [ref=e744]: "30"
+    - generic [ref=e745]:
+      - generic [ref=e747]:
+        - paragraph [ref=e748]: Notes
+        - heading "策略说明与管理口径" [level=3] [ref=e749]
+      - generic [ref=e750]:
+        - generic [ref=e751]:
+          - heading "腿组合" [level=4] [ref=e752]
+          - list [ref=e753]:
+            - listitem [ref=e754]: 当前结构：Long 1 CALL @ 100。
+            - listitem [ref=e755]: 合约乘数 100，当前价格 100.00，你可以在右侧腿组合里直接改行权价、DTE、IV 和买卖方向。
+        - generic [ref=e756]:
+          - heading "具体什么场景怎么用" [level=4] [ref=e757]
+          - list [ref=e758]:
+            - listitem [ref=e759]: 当你有明确上行假设时使用：例如突破平台、回踩支撑后重新放量、财报后预期上修，或行业催化可能推动标的在当前 DTE 内上涨。
+            - listitem [ref=e760]: 适合强看涨、想用有限亏损换上行杠杆，且预期上涨速度足以覆盖 Theta 的情形。
+        - generic [ref=e761]:
+          - heading "开仓参数怎么选" [level=4] [ref=e762]
+          - list [ref=e763]:
+            - listitem [ref=e764]: 方向买方通常选 ATM 或略 ITM 提高胜率，选 OTM 降低成本但需要更大的价格移动。DTE 不宜太短，除非你交易的是明确事件；否则 Theta 会让方向判断来不及兑现。
+            - listitem [ref=e765]: 当前模板的期权行权价范围是 100 到 100，主图的到期参考窗口约 45 天；你可以先拖 DTE 滑杆看时间衰减，再拖 IV 变动看 Vega 敏感度。
+        - generic [ref=e766]:
+          - heading "如何看图和 Greeks" [level=4] [ref=e767]
+          - list [ref=e768]:
+            - listitem [ref=e769]: 看绿色到期线从哪个现货价开始转正——那就是你的盈亏平衡点。曲线弯曲度反映 Gamma 加速：价格越接近行权价，Delta 变化越快，赚钱加速但亏钱也加速。
+            - listitem [ref=e770]: 再看风险指标：当前 Delta 53.96，Theta/日 -$5.19，Vega/1% $13.94。Delta 告诉你方向暴露，Theta 告诉你每天时间损耗/收入，Vega 告诉你 IV 变动对净值的影响。
+            - listitem [ref=e771]: 拖动 IV 变动滑杆观察 Vega——IV 变化会改变所有期权腿的价值。拖动 DTE 滑杆观察 Theta——时间衰减对买方是敌人、对卖方是朋友。试试用 ▶ 播放按钮看连续时间衰减效果。
+        - generic [ref=e772]:
+          - heading "管理和调整路径" [level=4] [ref=e773]
+          - list [ref=e774]:
+            - listitem [ref=e775]: 方向买方可以用价格目标、权利金亏损比例或假设失效点止损。若方向对但速度慢，可以滚到更远 DTE；若 IV 已经很高，可以考虑改成价差降低 Vega 风险。
+            - listitem [ref=e776]: 先定义最大亏损和退出条件；到期前若价格靠近短腿或 Greeks 明显变化，应提前减仓、滚动或整体平仓，而不是只等到期。
+        - generic [ref=e777]:
+          - heading "容易踩坑的地方" [level=4] [ref=e778]
+          - list [ref=e779]:
+            - listitem [ref=e780]: 买太虚值（OTM）的期权虽然便宜但胜率极低。小单试水也要注意 bid-ask 价差，避免隐性成本吃掉潜在利润。
+            - listitem [ref=e781]: 净 Theta 为负时，时间站在你对面。方向或波动如果不尽快兑现，图上看似有限亏损，实际体验会是持续失血。
+        - generic [ref=e782]:
+          - heading "相关策略联动" [level=4] [ref=e783]
+          - generic [ref=e784]:
+            - button "Bull Call Spread 牛市 Call 借记价差 · 方向" [ref=e785] [cursor=pointer]:
+              - strong [ref=e786]: Bull Call Spread
+              - generic [ref=e787]: 牛市 Call 借记价差 · 方向
+            - button "Diagonal Call Spread Call 斜跨价差 · 跨期" [ref=e788] [cursor=pointer]:
+              - strong [ref=e789]: Diagonal Call Spread
+              - generic [ref=e790]: Call 斜跨价差 · 跨期
+            - button "Call Ratio Backspread Call 反比率价差 · 波动率" [ref=e791] [cursor=pointer]:
+              - strong [ref=e792]: Call Ratio Backspread
+              - generic [ref=e793]: Call 反比率价差 · 波动率
+            - button "Long Combo 多头组合 / 风险反转别名 · 合成" [ref=e794] [cursor=pointer]:
+              - strong [ref=e795]: Long Combo
+              - generic [ref=e796]: 多头组合 / 风险反转别名 · 合成
+            - button "Poor Man's Covered Call 穷人备兑 Call · 跨期" [ref=e797] [cursor=pointer]:
+              - strong [ref=e798]: Poor Man's Covered Call
+              - generic [ref=e799]: 穷人备兑 Call · 跨期
+            - button "Long Put 买入看跌期权 · 方向" [ref=e800] [cursor=pointer]:
+              - strong [ref=e801]: Long Put
+              - generic [ref=e802]: 买入看跌期权 · 方向
+          - paragraph [ref=e803]: "Bull Call Spread: 用来把观点改成更纯粹的方向表达，通常更依赖标的价格移动。 Diagonal Call Spread: 用来交易近远月 IV 和 Theta 差异，适合价格目标更稳定的场景。 Call Ratio Backspread: 用来把判断从方向切到波动大小，适合事件或突破预期。 Long Combo: 用来理解或复制正股/融资暴露，重点看保证金、利率和指派。 Poor Man's Covered Call: 用来交易近远月 IV 和 Theta 差异，适合价格目标更稳定的场景。 Long Put: 用来把观点改成更纯粹的方向表达，通常更依赖标的价格移动。"
+    - generic [ref=e829]:
+      - generic [ref=e831]:
+        - paragraph [ref=e832]: Professional
+        - heading "专业交易员视角 Trader Memo" [level=3] [ref=e833]
+      - generic [ref=e835]:
+        - generic [ref=e836]:
+          - heading "📊 Exposure 分解" [level=4] [ref=e837]
+          - generic [ref=e953]:
+            - generic [ref=e954]:
+              - strong [ref=e955]: "方向:"
+              - text: +Delta (看涨方向暴露)
+            - generic [ref=e956]:
+              - strong [ref=e957]: "波动率:"
+              - text: +Vega (做多波动率)
+            - generic [ref=e958]:
+              - strong [ref=e959]: "时间:"
+              - text: "-Theta (时间衰减是敌人)"
+            - generic [ref=e960]:
+              - strong [ref=e961]: "凸性:"
+              - text: +Gamma (正凸性，价格上涨加速盈利)
+        - generic [ref=e848]:
+          - heading "💰 盈利逻辑与风险" [level=4] [ref=e849]
+          - generic [ref=e962]:
+            - paragraph [ref=e963]:
+              - strong [ref=e964]: "赚钱来源:"
+              - text: 标的上涨带来的Delta收益 + IV上升带来的Vega收益
+            - paragraph [ref=e965]:
+              - strong [ref=e966]: "亏钱来源:"
+              - text: 时间流逝(Theta) + IV下跌 + 标的不涨或下跌
+            - paragraph [ref=e967]:
+              - strong [ref=e968]: "最佳市场环境:"
+              - text: 低IV环境买入，预期标的会快速上涨且IV可能上升
+            - paragraph [ref=e969]:
+              - strong [ref=e970]: "最差情景:"
+              - text: 横盘不动，Theta持续侵蚀，IV回落
+        - generic [ref=e860]:
+          - heading "👤 客户视角" [level=4] [ref=e861]
+          - generic [ref=e971]:
+            - paragraph [ref=e972]:
+              - strong [ref=e973]: "客户为什么做:"
+            - list [ref=e974]:
+              - listitem [ref=e975]: 看涨但不想承担买入股票的全部资金成本
+              - listitem [ref=e976]: 用有限亏损(权利金)换取上行杠杆
+              - listitem [ref=e977]: 事件驱动(财报、产品发布)预期上涨
+              - listitem [ref=e978]: 对冲现有空头仓位
+            - paragraph [ref=e979]:
+              - strong [ref=e980]: "客户类型:"
+              - text: 散户投机、机构方向性表达、对冲基金事件驱动
+            - paragraph [ref=e981]:
+              - strong [ref=e982]: "适当性:"
+              - text: 理解期权、能承受全部权利金损失、有明确上涨预期
+        - generic [ref=e875]:
+          - heading "🏦 Dealer 对冲视角" [level=4] [ref=e876]
+          - generic [ref=e983]:
+            - paragraph [ref=e984]:
+              - strong [ref=e985]: Dealer卖出Long Call给客户后，面临：
+            - paragraph [ref=e986]:
+              - strong [ref=e987]: "Exposure:"
+              - text: "-Delta (短Delta，标的上涨亏损), -Gamma (需要追涨对冲), -Vega (IV上升亏损), +Theta (时间流逝盈利)"
+            - paragraph [ref=e988]:
+              - strong [ref=e989]: "对冲方法:"
+            - list [ref=e990]:
+              - listitem [ref=e991]: Delta对冲：买入Delta数量的股票(如ATM call delta=0.5，买50股/张)
+              - listitem [ref=e992]: Gamma管理：股价上涨时Delta增加，需要继续买股票；下跌时卖股票
+              - listitem [ref=e993]: Vega对冲：如果不想承担IV风险，买入其他期权对冲Vega
+              - listitem [ref=e994]: 动态再平衡：Gamma越大，再平衡频率越高，成本越高
+            - paragraph [ref=e995]:
+              - strong [ref=e996]: "利润来源:"
+              - text: Bid-ask价差 + 客户付出的IV溢价(如果realized vol < implied vol)
+    - generic [ref=e997]:
+      - generic [ref=e999]:
+        - paragraph [ref=e1000]: Interview
+        - heading "面试问答 Q&A" [level=3] [ref=e1001]
+      - generic [ref=e1002]:
+        - generic [ref=e1003]:
+          - generic [ref=e1004]:
+            - strong [ref=e1005]: "Q1:"
+            - text: Long Call的最大风险是什么？
+          - generic [ref=e1006]:
+            - strong [ref=e1007]: "A:"
+            - text: 最大亏损是支付的权利金。但真正的风险是机会成本：如果标的横盘，Theta每天侵蚀价值，即使方向判断对但速度不够快，仍然亏损。
+        - generic [ref=e1008]:
+          - generic [ref=e1009]:
+            - strong [ref=e1010]: "Q2:"
+            - text: 为什么ATM call的Gamma最高？
+          - generic [ref=e1011]:
+            - strong [ref=e1012]: "A:"
+            - text: ATM期权处于最大不确定性：小幅价格变动就能让它从OTM变ITM或反之。这意味着Delta变化最快，即Gamma最高。远离ATM后，期权要么明显会到期ITM(Delta接近1)，要么明显会归零(Delta接近0)，不确定性降低，Gamma下降。
+        - generic [ref=e1013]:
+          - generic [ref=e1014]:
+            - strong [ref=e1015]: "Q3:"
+            - text: Dealer卖出ATM call后如何对冲？
+          - generic [ref=e1016]:
+            - strong [ref=e1017]: "A:"
+            - text: 初始：买入约50股(delta=0.5)。股价上涨：delta增加到0.6，再买10股。股价继续涨：delta到0.7，再买10股。这就是Gamma对冲 - 被迫'追涨杀跌'。对于short gamma position，如果realized vol高，这个动态对冲过程会亏损(高买低卖)；Dealer赚的是客户支付的implied vol溢价(bid-ask + IV > realized vol)。
+        - generic [ref=e1018]:
+          - generic [ref=e1019]:
+            - strong [ref=e1020]: "Q4:"
+            - text: 什么时候Long Call比买股票更好？
+          - generic [ref=e1021]:
+            - strong [ref=e1022]: "A:"
+            - text: 1) 资金有限但想要杠杆；2) 有明确催化剂(财报)且时间窗口短；3) 想要有限亏损而非股票的无限下行风险；4) 预期IV会上升(事件前)。但如果是长期看涨，买股票通常更好，因为没有Theta损耗。
+        - generic [ref=e1023]:
+          - generic [ref=e1024]:
+            - strong [ref=e1025]: "Q5:"
+            - text: 如何选择strike和DTE？
+          - generic [ref=e1026]:
+            - strong [ref=e1027]: "A:"
+            - text: "Strike: ATM或略ITM提高胜率但更贵；OTM便宜但需要更大涨幅。DTE: 太短Theta太重，太长权利金太贵。通常30-60天平衡Theta和成本。如果是事件驱动，DTE要覆盖事件日期。"
+    - generic [ref=e892]:
+      - generic [ref=e894]:
+        - paragraph [ref=e895]: Professional Tools
+        - heading "专业工具" [level=3] [ref=e896]
+      - tablist "Professional Tools" [ref=e897]:
+        - tab "压力测试" [active] [selected] [ref=e898] [cursor=pointer]
+        - tab "Put-Call Parity" [ref=e899] [cursor=pointer]
+        - tab "组合管理" [ref=e900] [cursor=pointer]
+        - tab "Gamma P&L" [ref=e901] [cursor=pointer]
+        - tab "波动率曲面" [ref=e902] [cursor=pointer]
+        - tab "Greeks Decay" [ref=e903] [cursor=pointer]
+      - tabpanel "压力测试" [ref=e905]:
+        - generic [ref=e906]:
+          - heading "压力测试矩阵 Spot × IV" [level=4] [ref=e907]
+          - button "运行压力测试" [ref=e908] [cursor=pointer]
+    - generic [ref=e909]:
+      - generic [ref=e911]:
+        - paragraph [ref=e912]: Professional Concepts
+        - heading "交易员核心概念" [level=3] [ref=e913]
+      - generic [ref=e914]:
+        - generic [ref=e1051]:
+          - heading "Greeks 关系" [level=4] [ref=e1052]
+          - list [ref=e1053]:
+            - listitem [ref=e1054]:
+              - strong [ref=e1055]: Gamma和Theta是同一枚硬币的两面
+              - text: 高Gamma(凸性收益)必然伴随高Theta(时间成本)。Long gamma = 付Theta买convexity。Short gamma = 收Theta承担rehedging risk。
+            - listitem [ref=e1056]:
+              - strong [ref=e1057]: Vega和Gamma都在ATM附近最高
+              - text: ATM期权有最大不确定性 → 最高time value → 最高Vega。同时Delta变化最快 → 最高Gamma。
+            - listitem [ref=e1058]:
+              - strong [ref=e1059]: Realized vol vs Implied vol决定期权交易盈亏
+              - text: Implied vol是市场对未来波动的预期(期权价格隐含)。Realized vol是实际发生的波动。
+        - generic [ref=e1060]:
+          - heading "客户类型" [level=4] [ref=e1061]
+          - list [ref=e1062]:
+            - listitem [ref=e1063]:
+              - strong [ref=e1064]: 降低现有仓位风险，不是speculation
+              - text: Protective Put(对冲多头) / Collar(限制上下行) / Bear Put Spread(对冲下跌)
+            - listitem [ref=e1065]:
+              - strong [ref=e1066]: 定期收入，愿意承担有限风险
+              - text: Covered Call / Cash-Secured Put / Iron Condor / Wheel Strategy
+            - listitem [ref=e1067]:
+              - strong [ref=e1068]: 方向性或波动率speculation，追求高回报
+              - text: Long Call/Put / Spreads / Straddle/Strangle / Butterfly
+            - listitem [ref=e1069]:
+              - strong [ref=e1070]: 捕捉mispricing，risk-free或low-risk profit
+              - text: Box Spread / Conversion/Reversal / Synthetic arbitrage
+        - generic [ref=e1071]:
+          - heading "Dealer 对冲原则" [level=4] [ref=e1072]
+          - list [ref=e1073]:
+            - listitem [ref=e1074]:
+              - strong [ref=e1075]: 用underlying hedge方向风险
+              - text: Short options → buy stock。Long options → sell stock。动态调整as delta changes。
+            - listitem [ref=e1076]:
+              - strong [ref=e1077]: 用其他options hedge波动率风险
+              - text: Short vega → buy other options。Long vega → sell other options。
+            - listitem [ref=e1078]:
+              - strong [ref=e1079]: Gamma是最难hedge的Greek
+        - generic [ref=e1080]:
+          - heading "保证金与资本管理" [level=4] [ref=e1081]
+          - list [ref=e1082]:
+            - listitem [ref=e1083]:
+              - strong [ref=e1084]: regTBasics
+              - text: 这是教育性估算。实际保证金由broker决定，可能更高。参考FINRA Rule 4210。
+            - listitem [ref=e1085]:
+              - strong [ref=e1086]: 基于风险的保证金(vs strategy-based Reg-T)
+              - text: 计算多个stress scenarios下的最大理论亏损
+            - listitem [ref=e1087]:
+              - strong [ref=e1088]: positionSizing
+    - generic [ref=e804]:
+      - generic [ref=e806]:
+        - paragraph [ref=e807]: Coverage
+        - heading "补充策略与来源" [level=3] [ref=e808]
+      - paragraph [ref=e809]: 目标站覆盖 60 个条目；本页额外补充 11 个常见策略。
+      - generic [ref=e810]:
+        - button "Covered Put" [ref=e811] [cursor=pointer]
+        - button "Stock Repair / Covered Ratio Spread" [ref=e812] [cursor=pointer]
+        - button "Double Bull Spread" [ref=e813] [cursor=pointer]
+        - button "Double Bear Spread" [ref=e814] [cursor=pointer]
+        - button "Box Spread" [ref=e815] [cursor=pointer]
+        - button "Short Call Calendar Spread" [ref=e816] [cursor=pointer]
+        - button "Short Put Calendar Spread" [ref=e817] [cursor=pointer]
+        - button "Risk Reversal" [ref=e818] [cursor=pointer]
+        - button "Wheel Strategy" [ref=e819] [cursor=pointer]
+        - button "Seagull / Fence" [ref=e820] [cursor=pointer]
+        - button "Poor Man's Covered Call" [ref=e821] [cursor=pointer]
+      - paragraph [ref=e822]:
+        - text: 参考：
+        - link "options-viewer.netlify.app" [ref=e823] [cursor=pointer]:
+          - /url: https://options-viewer.netlify.app/
+        - text: 、
+        - link "OIC" [ref=e824] [cursor=pointer]:
+          - /url: https://www.optionseducation.org/strategies/all-strategies-en
+        - text: 、
+        - link "Cboe" [ref=e825] [cursor=pointer]:
+          - /url: https://res-certification.cboe.com/resources/options/Trading_Strategies.pdf
+        - text: 、
+        - link "Fidelity" [ref=e826] [cursor=pointer]:
+          - /url: https://www.fidelity.com/learning-center/investment-products/options/options-strategy-guide/long-condor-spread-calls
+        - text: 。
+    - region "交易免责声明" [ref=e827]:
+      - paragraph [ref=e828]: 本工具仅用于期权策略学习、网页复刻和情景模拟，不构成证券、期权、税务、法律或投资建议。所有图表均为简化模型，真实交易会受报价、流动性、滑点、手续费、保证金、提前行权和税务影响。
