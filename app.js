@@ -15,6 +15,11 @@ const state = {
   scenario: defaultScenario(),
   legs: [],
   mode: "basic", // "basic" | "professional" | "interview"
+  portfolio: {
+    positions: [], // { id, strategyId, strategyName, quantity, legs, entrySpot }
+    accountSize: 10000,
+    marginType: "regT" // "regT" | "portfolio"
+  }
 };
 
 const greekPanels = [
@@ -598,6 +603,239 @@ function checkPutCallParity(callPrice, putPrice, spot, strike, dte, rate) {
     arbitrageTrade,
     note: "教学工具 - 实际套利需考虑bid-ask、交易成本、提前行权风险"
   };
+}
+
+// ============================================================================
+// Portfolio Greeks Aggregator
+// ============================================================================
+
+// Add current strategy to portfolio
+function addToPortfolio(quantity = 1) {
+  const strategy = selectedStrategy();
+  const positionId = Date.now().toString();
+
+  state.portfolio.positions.push({
+    id: positionId,
+    strategyId: strategy.id,
+    strategyName: strategy.name,
+    quantity: quantity,
+    legs: JSON.parse(JSON.stringify(state.legs)), // Deep copy
+    entrySpot: state.scenario.spot,
+    entryDate: new Date().toISOString()
+  });
+
+  savePortfolioToLocalStorage();
+  renderPortfolioPanel();
+}
+
+// Remove position from portfolio
+function removeFromPortfolio(positionId) {
+  state.portfolio.positions = state.portfolio.positions.filter(p => p.id !== positionId);
+  savePortfolioToLocalStorage();
+  renderPortfolioPanel();
+}
+
+// Calculate portfolio Greeks
+function calculatePortfolioGreeks() {
+  if (state.portfolio.positions.length === 0) {
+    return {
+      delta: 0,
+      gamma: 0,
+      theta: 0,
+      vega: 0,
+      rho: 0,
+      totalPnL: 0,
+      totalValue: 0
+    };
+  }
+
+  const aggregated = {
+    delta: 0,
+    gamma: 0,
+    theta: 0,
+    vega: 0,
+    rho: 0,
+    totalPnL: 0,
+    totalValue: 0
+  };
+
+  state.portfolio.positions.forEach(position => {
+    // Calculate Greeks for this position
+    const result = portfolioResult(
+      state.scenario.spot,
+      state.scenario.daysElapsed,
+      state.scenario,
+      position.legs
+    );
+
+    // Aggregate Greeks (multiply by quantity)
+    aggregated.delta += result.greeks.delta * position.quantity;
+    aggregated.gamma += result.greeks.gamma * position.quantity;
+    aggregated.theta += result.greeks.theta * position.quantity;
+    aggregated.vega += result.greeks.vega * position.quantity;
+    aggregated.rho += result.greeks.rho * position.quantity;
+    aggregated.totalPnL += result.pnl * position.quantity;
+    aggregated.totalValue += result.value * position.quantity;
+  });
+
+  return aggregated;
+}
+
+// Calculate portfolio margin
+function calculatePortfolioMargin() {
+  if (state.portfolio.positions.length === 0) {
+    return { regT: 0, portfolio: 0 };
+  }
+
+  let regTMargin = 0;
+
+  state.portfolio.positions.forEach(position => {
+    const positionMargin = calculatePositionMargin(position.legs, position.quantity);
+    regTMargin += positionMargin.regT;
+  });
+
+  // Portfolio Margin: simplified stress test (typically 20-40% less than Reg-T)
+  const portfolioMargin = regTMargin * 0.7; // Simplified: 30% reduction
+
+  return {
+    regT: regTMargin,
+    portfolio: portfolioMargin
+  };
+}
+
+// Calculate margin for a single position
+function calculatePositionMargin(legs, quantity = 1) {
+  const strategyType = detectStrategyType(legs);
+  const multiplier = state.scenario.multiplier;
+
+  if (strategyType === 'long-only') {
+    // Long options: premium × qty × multiplier
+    const premium = legs.reduce((sum, leg) => {
+      if (leg.side === 'long' && leg.type === 'option') {
+        const price = optionModel(
+          leg.optionType,
+          state.scenario.spot,
+          leg.strike,
+          leg.dte,
+          state.scenario.rate,
+          state.scenario.dividend,
+          leg.iv
+        ).price;
+        return sum + price * Math.abs(leg.qty);
+      }
+      return sum;
+    }, 0);
+    return { regT: premium * quantity * multiplier, portfolio: premium * quantity * multiplier };
+  }
+
+  if (strategyType === 'defined-risk') {
+    // Defined-risk spreads: max loss
+    const maxLoss = calculateMaxLoss(legs);
+    return { regT: maxLoss * quantity * multiplier, portfolio: maxLoss * quantity * multiplier * 0.7 };
+  }
+
+  if (strategyType === 'short-naked') {
+    // Naked short: Reg-T formula
+    let margin = 0;
+    legs.forEach(leg => {
+      if (leg.side === 'short' && leg.type === 'option') {
+        const price = optionModel(
+          leg.optionType,
+          state.scenario.spot,
+          leg.strike,
+          leg.dte,
+          state.scenario.rate,
+          state.scenario.dividend,
+          leg.iv
+        ).price;
+        const spot = state.scenario.spot;
+        const strike = leg.strike;
+        const otmAmount = leg.optionType === 'call'
+          ? Math.max(strike - spot, 0)
+          : Math.max(spot - strike, 0);
+        const requirement = Math.max(
+          price + 0.20 * spot - otmAmount,
+          price + 0.10 * spot
+        );
+        margin += requirement * Math.abs(leg.qty);
+      }
+    });
+    return { regT: margin * quantity * multiplier, portfolio: margin * quantity * multiplier * 0.6 };
+  }
+
+  // Default: conservative estimate
+  const totalPremium = legs.reduce((sum, leg) => {
+    if (leg.type === 'option') {
+      const price = optionModel(
+        leg.optionType,
+        state.scenario.spot,
+        leg.strike,
+        leg.dte,
+        state.scenario.rate,
+        state.scenario.dividend,
+        leg.iv
+      ).price;
+      return sum + price * Math.abs(leg.qty);
+    }
+    return sum;
+  }, 0);
+  return { regT: totalPremium * quantity * multiplier * 2, portfolio: totalPremium * quantity * multiplier * 1.4 };
+}
+
+// Detect strategy type for margin calculation
+function detectStrategyType(legs) {
+  const hasLong = legs.some(l => l.side === 'long' && l.type === 'option');
+  const hasShort = legs.some(l => l.side === 'short' && l.type === 'option');
+
+  if (hasLong && !hasShort) return 'long-only';
+  if (hasShort && !hasLong) return 'short-naked';
+
+  // Check if defined risk (has protective long options)
+  if (hasLong && hasShort) {
+    // Simplified: if has both long and short, assume defined risk
+    return 'defined-risk';
+  }
+
+  return 'unknown';
+}
+
+// Calculate max loss for defined-risk strategies
+function calculateMaxLoss(legs) {
+  // Simplified: calculate max loss at various spot prices
+  const spot = state.scenario.spot;
+  const testPrices = [spot * 0.5, spot * 0.8, spot, spot * 1.2, spot * 1.5];
+
+  let maxLoss = 0;
+  testPrices.forEach(testSpot => {
+    const result = portfolioResult(testSpot, state.scenario.dte, state.scenario, legs);
+    if (result.pnl < maxLoss) {
+      maxLoss = result.pnl;
+    }
+  });
+
+  return Math.abs(maxLoss);
+}
+
+// Save portfolio to localStorage
+function savePortfolioToLocalStorage() {
+  try {
+    localStorage.setItem('optionslab_portfolio', JSON.stringify(state.portfolio));
+  } catch (e) {
+    console.warn('Failed to save portfolio to localStorage', e);
+  }
+}
+
+// Load portfolio from localStorage
+function loadPortfolioFromLocalStorage() {
+  try {
+    const saved = localStorage.getItem('optionslab_portfolio');
+    if (saved) {
+      const portfolio = JSON.parse(saved);
+      state.portfolio = { ...state.portfolio, ...portfolio };
+    }
+  } catch (e) {
+    console.warn('Failed to load portfolio from localStorage', e);
+  }
 }
 
 
@@ -1522,6 +1760,181 @@ function renderStressTestResults() {
   document.getElementById("greekShockEstimate").innerHTML = shockHtml;
 }
 
+// Render Portfolio Panel
+function renderPortfolioPanel() {
+  const portfolioContent = document.getElementById("portfolioContent");
+  if (!portfolioContent) return;
+
+  const positions = state.portfolio.positions;
+  const portfolioGreeks = calculatePortfolioGreeks();
+  const margin = calculatePortfolioMargin();
+  const accountSize = state.portfolio.accountSize;
+  const marginType = state.portfolio.marginType;
+  const currentMargin = marginType === 'regT' ? margin.regT : margin.portfolio;
+  const buyingPower = accountSize - currentMargin;
+  const marginPercent = (currentMargin / accountSize) * 100;
+
+  // Greeks limits (for warnings)
+  const deltaLimit = 0.10;
+  const gammaLimit = 0.05;
+  const vegaLimit = 15;
+
+  const deltaWarning = Math.abs(portfolioGreeks.delta) > deltaLimit;
+  const gammaWarning = Math.abs(portfolioGreeks.gamma) > gammaLimit;
+  const vegaWarning = Math.abs(portfolioGreeks.vega) > vegaLimit;
+
+  let html = `
+    <div class="portfolio-controls">
+      <button id="addToPortfolioBtn" class="primary-button" type="button">+ 添加当前策略到组合</button>
+      <label class="margin-type-toggle">
+        <span>保证金类型:</span>
+        <select id="marginTypeSelect">
+          <option value="regT" ${marginType === 'regT' ? 'selected' : ''}>Reg-T</option>
+          <option value="portfolio" ${marginType === 'portfolio' ? 'selected' : ''}>Portfolio Margin</option>
+        </select>
+      </label>
+      <label class="account-size-input">
+        <span>账户规模:</span>
+        <input type="number" id="accountSizeInput" value="${accountSize}" step="1000" min="1000" />
+      </label>
+    </div>
+  `;
+
+  if (positions.length === 0) {
+    html += `<p class="muted" style="text-align: center; padding: 2rem;">组合为空。添加策略开始管理组合风险。</p>`;
+  } else {
+    // Positions list
+    html += `<div class="portfolio-positions">`;
+    positions.forEach((position, index) => {
+      const posResult = portfolioResult(
+        state.scenario.spot,
+        state.scenario.daysElapsed,
+        state.scenario,
+        position.legs
+      );
+      const pnl = posResult.pnl * position.quantity;
+      const pnlClass = pnl >= 0 ? 'positive' : 'negative';
+
+      html += `
+        <div class="portfolio-position">
+          <div class="position-header">
+            <span class="position-name">${index + 1}. ${position.strategyName} × ${position.quantity}</span>
+            <button class="position-remove" data-position-id="${position.id}" title="移除">×</button>
+          </div>
+          <div class="position-greeks">
+            <span>Δ: ${formatNumber(posResult.greeks.delta * position.quantity)}</span>
+            <span>Γ: ${formatNumber(posResult.greeks.gamma * position.quantity)}</span>
+            <span>Θ: ${formatNumber(posResult.greeks.theta * position.quantity)}</span>
+            <span>V: ${formatNumber(posResult.greeks.vega * position.quantity)}</span>
+            <span class="${pnlClass}">P&L: ${formatMoney(pnl)}</span>
+          </div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+
+    // Portfolio Greeks summary
+    html += `
+      <div class="portfolio-summary">
+        <h4>组合 Greeks</h4>
+        <div class="portfolio-greeks-grid">
+          <div class="greek-item ${deltaWarning ? 'warning' : ''}">
+            <span class="greek-label">Delta:</span>
+            <span class="greek-value">${formatNumber(portfolioGreeks.delta)}</span>
+            <span class="greek-limit">(限额: ±${deltaLimit}) ${deltaWarning ? '⚠️' : '✅'}</span>
+          </div>
+          <div class="greek-item ${gammaWarning ? 'warning' : ''}">
+            <span class="greek-label">Gamma:</span>
+            <span class="greek-value">${formatNumber(portfolioGreeks.gamma)}</span>
+            <span class="greek-limit">(限额: ${gammaLimit}) ${gammaWarning ? '⚠️' : '✅'}</span>
+          </div>
+          <div class="greek-item">
+            <span class="greek-label">Theta:</span>
+            <span class="greek-value">${formatNumber(portfolioGreeks.theta)}</span>
+            <span class="greek-limit">${portfolioGreeks.theta > 0 ? '(收租策略)' : '(付出时间价值)'}</span>
+          </div>
+          <div class="greek-item ${vegaWarning ? 'warning' : ''}">
+            <span class="greek-label">Vega:</span>
+            <span class="greek-value">${formatNumber(portfolioGreeks.vega)}</span>
+            <span class="greek-limit">(限额: ±${vegaLimit}) ${vegaWarning ? '⚠️' : '✅'}</span>
+          </div>
+          <div class="greek-item">
+            <span class="greek-label">总 P&L:</span>
+            <span class="greek-value ${portfolioGreeks.totalPnL >= 0 ? 'positive' : 'negative'}">${formatMoney(portfolioGreeks.totalPnL)}</span>
+          </div>
+        </div>
+
+        <h4>保证金与买入力</h4>
+        <div class="margin-summary">
+          <div class="margin-item">
+            <span>Reg-T 保证金:</span>
+            <span>${formatMoney(margin.regT)}</span>
+          </div>
+          <div class="margin-item">
+            <span>Portfolio Margin:</span>
+            <span>${formatMoney(margin.portfolio)}</span>
+          </div>
+          <div class="margin-item">
+            <span>当前使用 (${marginType === 'regT' ? 'Reg-T' : 'PM'}):</span>
+            <span class="${marginPercent > 80 ? 'warning' : ''}">${formatMoney(currentMargin)} (${marginPercent.toFixed(1)}%)</span>
+          </div>
+          <div class="margin-item">
+            <span>剩余买入力:</span>
+            <span class="${buyingPower < 0 ? 'negative' : 'positive'}">${formatMoney(buyingPower)}</span>
+          </div>
+        </div>
+
+        ${marginPercent > 80 ? '<p class="warning-text">⚠️ 保证金使用超过80%，建议降低仓位</p>' : ''}
+        ${buyingPower < 0 ? '<p class="error-text">❌ 保证金不足，需要追加保证金或平仓</p>' : ''}
+      </div>
+    `;
+  }
+
+  portfolioContent.innerHTML = html;
+
+  // Attach event listeners
+  const addBtn = document.getElementById("addToPortfolioBtn");
+  if (addBtn) {
+    addBtn.addEventListener("click", () => {
+      const quantity = prompt("输入数量（合约数）:", "1");
+      if (quantity && !isNaN(quantity) && parseInt(quantity) > 0) {
+        addToPortfolio(parseInt(quantity));
+      }
+    });
+  }
+
+  const removeButtons = document.querySelectorAll(".position-remove");
+  removeButtons.forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const positionId = e.target.getAttribute("data-position-id");
+      if (confirm("确定要移除这个头寸吗？")) {
+        removeFromPortfolio(positionId);
+      }
+    });
+  });
+
+  const marginTypeSelect = document.getElementById("marginTypeSelect");
+  if (marginTypeSelect) {
+    marginTypeSelect.addEventListener("change", (e) => {
+      state.portfolio.marginType = e.target.value;
+      savePortfolioToLocalStorage();
+      renderPortfolioPanel();
+    });
+  }
+
+  const accountSizeInput = document.getElementById("accountSizeInput");
+  if (accountSizeInput) {
+    accountSizeInput.addEventListener("change", (e) => {
+      const newSize = parseInt(e.target.value);
+      if (!isNaN(newSize) && newSize > 0) {
+        state.portfolio.accountSize = newSize;
+        savePortfolioToLocalStorage();
+        renderPortfolioPanel();
+      }
+    });
+  }
+}
+
 // Handle Mode Toggle
 function handleModeToggle(mode) {
   state.mode = mode;
@@ -1543,11 +1956,13 @@ function handleModeToggle(mode) {
     proContent.forEach(el => el.style.display = "block");
     interviewContent.forEach(el => el.style.display = "none");
     renderProfessionalContent();
+    renderPortfolioPanel();
   } else if (mode === "interview") {
     proContent.forEach(el => el.style.display = "block");
     interviewContent.forEach(el => el.style.display = "block");
     renderProfessionalContent();
     renderInterviewQuestions();
+    renderPortfolioPanel();
   }
 }
 
@@ -1806,6 +2221,11 @@ function handleClick(event) {
     renderStressTestResults();
     return;
   }
+  // Gamma P&L simulation button
+  if (event.target.id === "runGammaPnl") {
+    renderGammaPnL();
+    return;
+  }
   // Check Put-Call Parity button
   if (event.target.id === "checkParity") {
     const callPrice = Number(document.getElementById("parityCallPrice").value);
@@ -1893,6 +2313,9 @@ function boot() {
   const savedMode = localStorage.getItem('os_mode') || 'basic';
   state.mode = savedMode;
 
+  // Load portfolio from localStorage
+  loadPortfolioFromLocalStorage();
+
   const first = selectedStrategy();
   state.entrySpot = state.scenario.spot;
   state.legs = normalizeLegs(first.legs, state.entrySpot);
@@ -1913,3 +2336,256 @@ function boot() {
 }
 
 boot();
+
+// ============================================================================
+// Gamma P&L Simulation
+// ============================================================================
+
+// Simulate Gamma P&L with dynamic hedging
+function simulateGammaPnL(finalSpot, steps = 20) {
+  const initialSpot = state.scenario.spot;
+  const path = [];
+  let spot = initialSpot;
+  let hedgeShares = 0;
+  let cashPnL = 0;
+  const stepSize = (finalSpot - initialSpot) / steps;
+
+  // Initial position
+  const initialResult = portfolioResult(spot, state.scenario.daysElapsed);
+  const initialValue = initialResult.value;
+
+  for (let i = 0; i <= steps; i++) {
+    const result = portfolioResult(spot, state.scenario.daysElapsed);
+    const targetDelta = result.greeks.delta;
+    const rehedge = targetDelta - hedgeShares;
+
+    // Rehedging cost: buy high, sell low hurts short gamma
+    cashPnL -= rehedge * spot;
+    hedgeShares = targetDelta;
+
+    const optionValue = result.value;
+    const optionPnL = optionValue - initialValue;
+    const totalPnL = optionPnL + cashPnL;
+
+    path.push({
+      step: i,
+      spot: spot,
+      optionPnL: optionPnL,
+      cashPnL: cashPnL,
+      totalPnL: totalPnL,
+      delta: result.greeks.delta,
+      gamma: result.greeks.gamma
+    });
+
+    spot += stepSize;
+  }
+
+  // Calculate realized volatility
+  const spotMove = Math.abs(finalSpot - initialSpot);
+  const spotMovePercent = (spotMove / initialSpot) * 100;
+  const timeElapsed = Math.max(state.scenario.daysElapsed, 1) / 365;
+  const realizedVol = (spotMovePercent / Math.sqrt(timeElapsed)) / 100;
+
+  // Get implied volatility
+  const optionLegs = state.legs.filter(l => l.type === 'option');
+  const avgIV = optionLegs.length > 0 
+    ? optionLegs.reduce((sum, leg) => sum + leg.iv, 0) / optionLegs.length
+    : 0.20;
+
+  const finalResult = path[path.length - 1];
+  const initialGamma = portfolioResult(initialSpot, state.scenario.daysElapsed).greeks.gamma;
+
+  return {
+    path: path,
+    initialSpot: initialSpot,
+    finalSpot: finalSpot,
+    spotMove: spotMove,
+    spotMovePercent: spotMovePercent,
+    optionPnL: finalResult.optionPnL,
+    hedgePnL: finalResult.cashPnL,
+    totalPnL: finalResult.totalPnL,
+    realizedVol: realizedVol,
+    impliedVol: avgIV,
+    volDiff: realizedVol - avgIV,
+    isLongGamma: initialGamma > 0
+  };
+}
+
+// Render Gamma P&L simulation
+function renderGammaPnL() {
+  const finalSpot = parseFloat(document.getElementById("gammaPnlSpot").value);
+  const steps = parseInt(document.getElementById("gammaPnlSteps").value);
+
+  const simulation = simulateGammaPnL(finalSpot, steps);
+
+  // Render chart
+  const chartDiv = document.getElementById("gammaPnlChart");
+  const maxPnL = Math.max(...simulation.path.map(p => Math.abs(p.totalPnL)), 10);
+  const chartHeight = 200;
+
+  let chartHtml = '<div class="gamma-chart-container">';
+  chartHtml += '<svg width="100%" height="' + chartHeight + '" class="gamma-chart-svg">';
+
+  // Draw axes
+  chartHtml += '<line x1="40" y1="10" x2="40" y2="' + (chartHeight - 30) + '" stroke="var(--border)" stroke-width="1"/>';
+  chartHtml += '<line x1="40" y1="' + (chartHeight - 30) + '" x2="95%" y2="' + (chartHeight - 30) + '" stroke="var(--border)" stroke-width="1"/>';
+
+  // Draw zero line
+  const zeroY = chartHeight / 2;
+  chartHtml += '<line x1="40" y1="' + zeroY + '" x2="95%" y2="' + zeroY + '" stroke="var(--muted)" stroke-width="1" stroke-dasharray="2,2"/>';
+
+  // Draw P&L path
+  const width = 600;
+  const xScale = width / simulation.path.length;
+  const yScale = (chartHeight - 60) / (maxPnL * 2);
+
+  let pathD = '';
+  simulation.path.forEach((point, i) => {
+    const x = 40 + i * xScale;
+    const y = zeroY - point.totalPnL * yScale;
+    if (i === 0) {
+      pathD += 'M ' + x + ' ' + y;
+    } else {
+      pathD += ' L ' + x + ' ' + y;
+    }
+  });
+
+  const pathColor = simulation.totalPnL >= 0 ? 'var(--green)' : 'var(--red)';
+  chartHtml += '<path d="' + pathD + '" stroke="' + pathColor + '" stroke-width="2" fill="none"/>';
+
+  // Labels
+  chartHtml += '<text x="10" y="15" fill="var(--text)" font-size="11">P&L</text>';
+  chartHtml += '<text x="45" y="' + (chartHeight - 10) + '" fill="var(--text)" font-size="11">Spot: ' + simulation.initialSpot.toFixed(0) + ' → ' + simulation.finalSpot.toFixed(0) + '</text>';
+
+  chartHtml += '</svg></div>';
+
+  chartDiv.innerHTML = chartHtml;
+
+  // Render results
+  const resultsDiv = document.getElementById("gammaPnlResults");
+  const pnlClass = simulation.totalPnL >= 0 ? 'positive' : 'negative';
+
+  let resultsHtml = `
+    <div class="gamma-results-grid">
+      <div class="gamma-result-item">
+        <span class="result-label">期权 P&L:</span>
+        <span class="result-value ${simulation.optionPnL >= 0 ? 'positive' : 'negative'}">${formatMoney(simulation.optionPnL)}</span>
+      </div>
+      <div class="gamma-result-item">
+        <span class="result-label">对冲 P&L:</span>
+        <span class="result-value ${simulation.hedgePnL >= 0 ? 'positive' : 'negative'}">${formatMoney(simulation.hedgePnL)}</span>
+      </div>
+      <div class="gamma-result-item">
+        <span class="result-label">总 P&L:</span>
+        <span class="result-value ${pnlClass}">${formatMoney(simulation.totalPnL)}</span>
+      </div>
+      <div class="gamma-result-item">
+        <span class="result-label">Realized Vol:</span>
+        <span class="result-value">${(simulation.realizedVol * 100).toFixed(1)}%</span>
+      </div>
+      <div class="gamma-result-item">
+        <span class="result-label">Implied Vol:</span>
+        <span class="result-value">${(simulation.impliedVol * 100).toFixed(1)}%</span>
+      </div>
+      <div class="gamma-result-item">
+        <span class="result-label">Vol 差异:</span>
+        <span class="result-value">${(simulation.volDiff * 100).toFixed(1)}%</span>
+      </div>
+    </div>
+
+    <div class="gamma-interpretation">
+      <h4>解读</h4>
+      ${simulation.isLongGamma ? `
+        <p><strong>Long Gamma 策略</strong>：你持有正 Gamma，受益于价格波动。</p>
+        <ul>
+          <li>期权 P&L: ${simulation.optionPnL >= 0 ? '盈利' : '亏损'} ${formatMoney(Math.abs(simulation.optionPnL))}</li>
+          <li>对冲 P&L: ${simulation.hedgePnL >= 0 ? '盈利' : '亏损'} ${formatMoney(Math.abs(simulation.hedgePnL))} (动态对冲成本)</li>
+          <li>Realized Vol ${simulation.realizedVol > simulation.impliedVol ? '高于' : '低于'} Implied Vol</li>
+        </ul>
+      ` : `
+        <p><strong>Short Gamma 策略</strong>：你持有负 Gamma，害怕价格大幅波动。</p>
+        <ul>
+          <li>期权 P&L: ${simulation.optionPnL >= 0 ? '盈利' : '亏损'} ${formatMoney(Math.abs(simulation.optionPnL))} (Theta 收益)</li>
+          <li>对冲 P&L: ${simulation.hedgePnL >= 0 ? '盈利' : '亏损'} ${formatMoney(Math.abs(simulation.hedgePnL))} (追涨杀跌成本)</li>
+          <li>Realized Vol ${simulation.realizedVol > simulation.impliedVol ? '高于' : '低于'} Implied Vol</li>
+        </ul>
+      `}
+      <p class="note">💡 关键：${simulation.isLongGamma ? 'Long gamma 需要 realized vol > implied vol 才能盈利' : 'Short gamma 需要 realized vol < implied vol 才能盈利'}</p>
+    </div>
+  `;
+
+  resultsDiv.innerHTML = resultsHtml;
+}
+
+// Gamma P&L slider updates
+document.addEventListener("DOMContentLoaded", () => {
+  const gammaPnlSpot = document.getElementById("gammaPnlSpot");
+  const gammaPnlSpotOutput = document.getElementById("gammaPnlSpotOutput");
+  const gammaPnlSteps = document.getElementById("gammaPnlSteps");
+  const gammaPnlStepsOutput = document.getElementById("gammaPnlStepsOutput");
+
+  if (gammaPnlSpot && gammaPnlSpotOutput) {
+    gammaPnlSpot.addEventListener("input", (e) => {
+      gammaPnlSpotOutput.textContent = e.target.value;
+    });
+  }
+
+  if (gammaPnlSteps && gammaPnlStepsOutput) {
+    gammaPnlSteps.addEventListener("input", (e) => {
+      gammaPnlStepsOutput.textContent = e.target.value;
+    });
+  }
+});
+
+// Volatility Surface and Greeks Decay functions
+function calculateVolSmile(strikes, dte) {
+  const spot = state.scenario.spot;
+  const smileData = [];
+  strikes.forEach(strike => {
+    const k = Math.log(strike / spot);
+    const a = 0.04, b = 0.3, rho = -0.4, m = 0, sigma = 0.2;
+    const variance = a + b * (rho * (k - m) + Math.sqrt(Math.pow(k - m, 2) + sigma * sigma));
+    const termAdj = Math.sqrt(30 / dte);
+    const iv = Math.sqrt(Math.max(variance, 0.01)) * termAdj;
+    smileData.push({ strike: strike, iv: iv, moneyness: strike / spot });
+  });
+  return smileData;
+}
+
+function renderVolSurface() {
+  const spot = state.scenario.spot;
+  const strikes = [];
+  for (let i = 0.8; i <= 1.2; i += 0.05) strikes.push(spot * i);
+  const smileData = calculateVolSmile(strikes, state.scenario.dte);
+  const chartDiv = document.getElementById("volSurfaceChart");
+  if (!chartDiv) return;
+  
+  const atmIndex = Math.floor(smileData.length / 2);
+  const atmIV = smileData[atmIndex].iv;
+  const otmPutIV = smileData[Math.floor(smileData.length * 0.2)].iv;
+  const putSkew = ((otmPutIV - atmIV) / atmIV * 100).toFixed(1);
+  
+  chartDiv.innerHTML = '<p style="text-align:center;padding:2rem;">波动率 Smile 图表 (简化版)</p><p style="text-align:center;">ATM IV: ' + (atmIV * 100).toFixed(1) + '%, Put Skew: ' + putSkew + '%</p>';
+  
+  const infoDiv = document.getElementById("volSurfaceInfo");
+  if (infoDiv) {
+    infoDiv.innerHTML = '<p class="vol-note">💡 Equity 典型特征：Put skew（OTM put 比 ATM 贵），反映市场对下行风险的恐慌溢价</p>';
+  }
+}
+
+function renderGreeksDecay() {
+  const chartDiv = document.getElementById("greeksDecayChart");
+  if (!chartDiv) return;
+  chartDiv.innerHTML = '<p style="text-align:center;padding:2rem;">Greeks 衰减图表 (简化版)</p><p style="text-align:center;">💡 Gamma 在到期前最后一周急剧上升，风险最大</p>';
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const greeksDecayDte = document.getElementById("greeksDecayDte");
+  const greeksDecayDteOutput = document.getElementById("greeksDecayDteOutput");
+  if (greeksDecayDte && greeksDecayDteOutput) {
+    greeksDecayDte.addEventListener("input", (e) => {
+      greeksDecayDteOutput.textContent = e.target.value;
+      renderGreeksDecay();
+    });
+  }
+});

@@ -618,3 +618,386 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================================================
+   Portfolio Greeks Aggregator
+   ============================================================================ */
+
+.portfolio-panel {
+  margin-top: 24px;
+}
+
+.portfolio-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.margin-type-toggle,
+.account-size-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.margin-type-toggle select,
+.account-size-input input {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 13px;
+}
+
+.account-size-input input {
+  width: 120px;
+}
+
+.portfolio-positions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.portfolio-position {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.position-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.position-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.position-remove {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 8px;
+  line-height: 1;
+}
+
+.position-remove:hover {
+  color: var(--red);
+}
+
+.position-greeks {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.position-greeks span {
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.portfolio-summary {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.portfolio-summary h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cyan);
+}
+
+.portfolio-greeks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.greek-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  background: var(--bg);
+  border-radius: 4px;
+}
+
+.greek-item.warning {
+  border: 1px solid var(--orange);
+  background: rgba(255, 165, 0, 0.05);
+}
+
+.greek-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.greek-value {
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.greek-limit {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.margin-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.margin-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  background: var(--bg);
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.margin-item span:first-child {
+  color: var(--muted);
+}
+
+.margin-item span:last-child {
+  font-weight: 600;
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.warning-text {
+  color: var(--orange);
+  font-size: 13px;
+  margin-top: 12px;
+  padding: 8px;
+  background: rgba(255, 165, 0, 0.1);
+  border-radius: 4px;
+}
+
+.error-text {
+  color: var(--red);
+  font-size: 13px;
+  margin-top: 12px;
+  padding: 8px;
+  background: rgba(255, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+/* Responsive adjustments for portfolio */
+@media (max-width: 1180px) {
+  .portfolio-greeks-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .portfolio-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .portfolio-greeks-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .position-greeks {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+/* ============================================================================
+   Gamma P&L Simulation
+   ============================================================================ */
+
+.gamma-pnl-panel {
+  margin-top: 24px;
+}
+
+.gamma-pnl-controls {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.gamma-pnl-controls label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.gamma-pnl-controls input[type="range"] {
+  width: 200px;
+}
+
+.gamma-pnl-controls output {
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-weight: 600;
+  min-width: 40px;
+}
+
+.gamma-pnl-chart {
+  margin-bottom: 20px;
+  background: var(--panel-2);
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.gamma-chart-svg {
+  display: block;
+}
+
+.gamma-pnl-results {
+  background: var(--panel-2);
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.gamma-results-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.gamma-result-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  background: var(--bg);
+  border-radius: 4px;
+}
+
+.result-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.result-value {
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.gamma-interpretation {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.gamma-interpretation h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: var(--cyan);
+}
+
+.gamma-interpretation p {
+  margin: 8px 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.gamma-interpretation ul {
+  margin: 8px 0;
+  padding-left: 20px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.gamma-interpretation .note {
+  background: rgba(0, 255, 255, 0.1);
+  padding: 8px;
+  border-radius: 4px;
+  margin-top: 12px;
+}
+
+@media (max-width: 1180px) {
+  .gamma-results-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .gamma-pnl-controls {
+    flex-direction: column;
+  }
+  
+  .gamma-pnl-controls input[type="range"] {
+    width: 100%;
+  }
+  
+  .gamma-results-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Vol Surface and Greeks Decay */
+.vol-surface-panel, .greeks-decay-panel {
+  margin-top: 24px;
+}
+
+.vol-surface-chart, .greeks-decay-chart {
+  background: var(--panel-2);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.vol-surface-info {
+  background: var(--panel-2);
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.vol-note {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-top: 12px;
+}
+
+.greeks-decay-controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.greeks-decay-controls label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.greeks-decay-controls input[type="range"] {
+  width: 300px;
+}
+
+.greeks-decay-note {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 12px;
+  padding: 8px;
+  background: rgba(0, 255, 255, 0.1);
+  border-radius: 4px;
+}

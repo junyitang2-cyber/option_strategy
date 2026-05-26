@@ -226,6 +226,68 @@
           </div>
         </section>
 
+        <section class="panel portfolio-panel pro-content" id="portfolioPanel" style="display:none">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">Portfolio</p>
+              <h3>组合 Greeks 聚合器</h3>
+            </div>
+          </div>
+          <div id="portfolioContent" class="portfolio-content"></div>
+        </section>
+
+        <section class="panel gamma-pnl-panel pro-content" id="gammaPnlPanel" style="display:none">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">Gamma P&L</p>
+              <h3>Gamma P&L 模拟 - 动态对冲</h3>
+            </div>
+            <button id="runGammaPnl" class="primary-button" type="button">运行模拟</button>
+          </div>
+          <div class="gamma-pnl-controls">
+            <label>
+              <span>最终价格:</span>
+              <input type="range" id="gammaPnlSpot" min="80" max="120" step="1" value="110" />
+              <output id="gammaPnlSpotOutput">110</output>
+            </label>
+            <label>
+              <span>对冲步数:</span>
+              <input type="range" id="gammaPnlSteps" min="10" max="50" step="5" value="20" />
+              <output id="gammaPnlStepsOutput">20</output>
+            </label>
+          </div>
+          <div id="gammaPnlChart" class="gamma-pnl-chart"></div>
+          <div id="gammaPnlResults" class="gamma-pnl-results"></div>
+        </section>
+
+        <section class="panel vol-surface-panel pro-content" id="volSurfacePanel" style="display:none">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">Volatility Surface</p>
+              <h3>波动率曲面 - Smile & Skew</h3>
+            </div>
+          </div>
+          <div id="volSurfaceChart" class="vol-surface-chart"></div>
+          <div id="volSurfaceInfo" class="vol-surface-info"></div>
+        </section>
+
+        <section class="panel greeks-decay-panel pro-content" id="greeksDecayPanel" style="display:none">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">Greeks Decay</p>
+              <h3>Greeks 随时间衰减</h3>
+            </div>
+          </div>
+          <div class="greeks-decay-controls">
+            <label>
+              <span>DTE (天数):</span>
+              <input type="range" id="greeksDecayDte" min="0" max="45" step="1" value="30" />
+              <output id="greeksDecayDteOutput">30</output>
+            </label>
+          </div>
+          <div id="greeksDecayChart" class="greeks-decay-chart"></div>
+        </section>
+
         <section class="panel coverage-panel">
           <div class="panel-heading compact">
             <div>
