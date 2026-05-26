@@ -2147,7 +2147,9 @@ function switchTool(toolId) {
 
   // Update tab buttons
   document.querySelectorAll('.tool-tab').forEach(tab => {
-    tab.classList.toggle('active', tab.dataset.tool === toolId);
+    const isActive = tab.dataset.tool === toolId;
+    tab.classList.toggle('active', isActive);
+    tab.setAttribute('aria-selected', isActive.toString());
   });
 
   // Update content panels

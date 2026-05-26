@@ -201,18 +201,25 @@
             </div>
           </div>
 
-          <div class="tools-tabs">
-            <button class="tool-tab active" data-tool="stress" type="button">压力测试</button>
-            <button class="tool-tab" data-tool="parity" type="button">Put-Call Parity</button>
-            <button class="tool-tab" data-tool="portfolio" type="button">组合管理</button>
-            <button class="tool-tab" data-tool="gamma" type="button">Gamma P&L</button>
-            <button class="tool-tab" data-tool="vol" type="button">波动率曲面</button>
-            <button class="tool-tab" data-tool="decay" type="button">Greeks Decay</button>
+          <div class="tools-tabs" role="tablist" aria-label="Professional Tools">
+            <button class="tool-tab active" data-tool="stress" type="button"
+                    role="tab" aria-selected="true" aria-controls="stress-panel" id="stress-tab">压力测试</button>
+            <button class="tool-tab" data-tool="parity" type="button"
+                    role="tab" aria-selected="false" aria-controls="parity-panel" id="parity-tab">Put-Call Parity</button>
+            <button class="tool-tab" data-tool="portfolio" type="button"
+                    role="tab" aria-selected="false" aria-controls="portfolio-panel" id="portfolio-tab">组合管理</button>
+            <button class="tool-tab" data-tool="gamma" type="button"
+                    role="tab" aria-selected="false" aria-controls="gamma-panel" id="gamma-tab">Gamma P&L</button>
+            <button class="tool-tab" data-tool="vol" type="button"
+                    role="tab" aria-selected="false" aria-controls="vol-panel" id="vol-tab">波动率曲面</button>
+            <button class="tool-tab" data-tool="decay" type="button"
+                    role="tab" aria-selected="false" aria-controls="decay-panel" id="decay-tab">Greeks Decay</button>
           </div>
 
           <div class="tool-content">
             <!-- Stress Test -->
-            <div class="tool-panel active" data-tool="stress">
+            <div class="tool-panel active" data-tool="stress"
+                 role="tabpanel" aria-labelledby="stress-tab" id="stress-panel">
               <div class="tool-header">
                 <h4>压力测试矩阵 Spot × IV</h4>
                 <button id="runStressTest" class="primary-button" type="button">运行压力测试</button>
@@ -222,7 +229,8 @@
             </div>
 
             <!-- Put-Call Parity -->
-            <div class="tool-panel" data-tool="parity">
+            <div class="tool-panel" data-tool="parity"
+                 role="tabpanel" aria-labelledby="parity-tab" id="parity-panel">
               <h4>Put-Call Parity 教学计算器</h4>
               <div class="parity-calculator">
                 <div class="parity-inputs">
@@ -239,13 +247,15 @@
             </div>
 
             <!-- Portfolio -->
-            <div class="tool-panel" data-tool="portfolio">
+            <div class="tool-panel" data-tool="portfolio"
+                 role="tabpanel" aria-labelledby="portfolio-tab" id="portfolio-panel">
               <h4>组合 Greeks 聚合器</h4>
               <div id="portfolioContent" class="portfolio-content"></div>
             </div>
 
             <!-- Gamma P&L -->
-            <div class="tool-panel" data-tool="gamma">
+            <div class="tool-panel" data-tool="gamma"
+                 role="tabpanel" aria-labelledby="gamma-tab" id="gamma-panel">
               <div class="tool-header">
                 <h4>Gamma P&L 模拟 - 动态对冲</h4>
                 <button id="runGammaPnl" class="primary-button" type="button">运行模拟</button>
@@ -267,14 +277,16 @@
             </div>
 
             <!-- Vol Surface -->
-            <div class="tool-panel" data-tool="vol">
+            <div class="tool-panel" data-tool="vol"
+                 role="tabpanel" aria-labelledby="vol-tab" id="vol-panel">
               <h4>波动率曲面 - Smile & Skew</h4>
               <div id="volSurfaceChart" class="vol-surface-chart"></div>
               <div id="volSurfaceInfo" class="vol-surface-info"></div>
             </div>
 
             <!-- Greeks Decay -->
-            <div class="tool-panel" data-tool="decay">
+            <div class="tool-panel" data-tool="decay"
+                 role="tabpanel" aria-labelledby="decay-tab" id="decay-panel">
               <h4>Greeks 随时间衰减</h4>
               <div class="greeks-decay-controls">
                 <label>
