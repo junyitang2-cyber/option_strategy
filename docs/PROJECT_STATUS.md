@@ -1,10 +1,10 @@
 # Project Status And Roadmap
 
-最后更新：2026-05-26
+最后更新：2026-05-27
 
 ## 当前结论
 
-项目当前是一个本地静态期权策略教学与面试准备工具，核心功能已经可以验收。当前完成度按学习/面试用途评估为 95%+；剩余工作主要是模型真实性、市场数据、执行成本、更多专业内容和更高级策略扩展。
+项目当前是一个本地静态期权策略教学与面试准备工具，核心功能已经可以验收。当前完成度按学习/面试用途评估为 95%+；D1-to-Derivatives Learning Hub Phase 1 已实现，用于把用户的 commodities D1 经验系统转换成 equity derivatives 面试优势。
 
 ## 已完成范围
 
@@ -38,6 +38,18 @@
 - 141 个面试问答。
 - Q&A 覆盖 Greeks、策略构建、风险管理、客户视角、Dealer 对冲、参数选择和常见比较题。
 
+### D1-to-Derivatives Learning Hub
+
+- 六个月 roadmap，Phase 1 开放 Month 1。
+- Month 1 Greeks：Delta、Gamma、Vega、Theta/Rho。
+- Commodities Bridge：D1 commodities 经验到 equity derivatives 的迁移框架。
+- Scenario Bank：30 个 client/risk/P&L/market-making 场景。
+- 本地进度追踪：模块完成、场景完成、复习标记和当前学习 tab。
+- 已批准 Phase 1 MVP 规格：`docs/superpowers/specs/2026-05-27-d1-to-derivatives-learning-system-design.md`。
+- 已新增长期 Master Roadmap：`docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
+- 已新增 Phase 1 实施计划：`docs/superpowers/plans/2026-05-27-d1-learning-hub-phase1.md`。
+- 暂不实施：完整 250+ 题库、exotics 定价器、mock interview 高级 dashboard、真实行情或后端。
+
 ### 测试
 
 当前 Playwright 测试套件：
@@ -46,12 +58,14 @@
 - `tests/phase2.spec.js`：学习路径、难度提示、逐腿分解。
 - `tests/phase3.spec.js`：概率锥、sigma 标注、增强 Notes。
 - `tests/professional.spec.js`：专业/面试模式、Professional Concepts、组合级 Greeks Decay、压力测试、Parity、Portfolio、Gamma P&L。
+- `tests/learning-hub.spec.js`：D1 Learning Hub、tab、filter、answer reveal、progress persistence、策略跳转。
 
 最近验收命令：
 
 ```bash
 node --check app.js
 node --check data/professional-content.js
+node --check data/learning-content.js
 npm test
 ```
 
@@ -86,6 +100,21 @@ npm test
 - 合并旧 Phase/bugfix 文档。
 - 明确当前唯一准绳：`README.md`、`USER_GUIDE.md`、`docs/PROJECT_STATUS.md`、`docs/IMPLEMENTATION_HISTORY.md`。
 - 保留 `docs/superpowers/` 作为早期规格参考。
+
+### P1：D1-to-Derivatives 后续扩展
+
+目标：基于 Phase 1 使用反馈，继续扩展 Month 2-3 的策略构建和 vol trading 内容。
+
+建议顺序：
+
+1. Phase 2A：Month 2 strategy construction modules。
+2. Phase 2B：Client Recommendation Drill。
+3. Phase 3：RV/IV、skew、term structure、event vol framework。
+4. Phase 4：Dealer hedging、market making、P&L attribution。
+5. Phase 5：Asian、Barrier、Quanto、Structured Products bridge。
+6. Phase 6：Mock interview、wrong-answer notebook、readiness dashboard。
+
+详细蓝图见 `docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
 
 ### P1：内容覆盖扩展
 
@@ -145,9 +174,11 @@ npm test
 
 1. `node --check app.js` 通过。
 2. `node --check data/professional-content.js` 通过。
-3. `npm test` 通过。
-4. 浏览器手测覆盖新增 UI 的可见性、状态切换和关键计算。
-5. 文档同步更新，不再新增互相冲突的 Phase 文档。
+3. `node --check data/learning-content.js` 通过。
+4. `npm test` 通过。
+5. `git diff --check` 通过。
+6. 浏览器手测覆盖新增 UI 的可见性、状态切换和关键计算。
+7. 文档同步更新，不再新增互相冲突的 Phase 文档。
 
 ## 文档维护规则
 

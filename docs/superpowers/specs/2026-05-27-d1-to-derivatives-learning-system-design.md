@@ -1,689 +1,394 @@
 # D1 to Derivatives Trader Learning System Design
 
-**Date**: 2026-05-27  
-**Status**: Approved  
-**Topic**: Comprehensive learning platform redesign for Commodities D1 Trader transitioning to Equity Derivatives Trader
+**Date**: 2026-05-27
+**Status**: Approved for Phase 1 implementation
+**Topic**: Learning platform upgrade for a Commodities D1 Trader preparing for Equity Derivatives interviews
 
 ---
 
-## Context
+## Executive Decision
 
-**User Profile:**
-- **Current Role**: Commodities D1 Trader (LME/CME metals, oil, precious metals, agriculture)
-- **Experience**: 
-  - Physical hedging for clients
-  - Asian options (monthly average price options)
-  - LME 3M forward with Euro (currency swap)
-  - Hedging without full visibility of client positions
-- **Target Role**: Equity Derivatives Trader (primary), with understanding of Commodities Derivatives, Market Making, Structuring, and Vol Trading
-- **Timeline**: 6 months preparation
-- **Study Time**: 2 hours per day
-- **Learning Style**: Hybrid approach - systematic learning from basics + leveraging commodities experience for analogies
+The full six-month learning system remains the long-term vision, but implementation must start with a smaller Phase 1 MVP.
 
-**Current System Gaps:**
+Phase 1 should build a **D1-to-Derivatives Learning Hub** inside the existing static app. It should help the user translate current commodities D1 experience into options intuition, dealer language, and interview-ready answers.
 
-1. **No D1 → Options Bridge** - Missing transition content from linear to non-linear trading
-2. **Insufficient Dealer Perspective** - Limited market making and hedging workflow content
-3. **Weak Vol Trading Framework** - Vol Surface is educational only, lacks trading logic
-4. **Limited Real-World Scenarios** - Not enough stress scenarios and trade ideas
-5. **No Commodities Context** - Doesn't leverage user's existing LME/CME experience
-6. **Shallow Greeks Intuition** - Knows definitions but lacks practical application understanding
+The system must not become a second generic options course. The unique value is the bridge:
+
+- Linear D1 exposure -> option Greeks and convexity.
+- Physical/client hedging -> structured client suitability and risk disclosure.
+- LME/CME/Asian options/FX-linked hedges -> equity derivatives, vol surface, and exotics interview edge.
+- Trading execution instincts -> dealer risk management, P&L attribution, and market-making framing.
 
 ---
 
-## Solution: Dual-Track Parallel Learning System
+## User Context
 
-### Core Architecture
+**Current background**
 
+- Commodities D1 trader.
+- Familiar with LME/CME metals, oil, precious metals, and agriculture.
+- Handles client physical hedging and futures/forward exposure.
+- Has experience with Asian options, monthly average price optionality, LME 3M forwards, and FX/currency swap components.
+- Often hedges client needs without seeing the client's full book.
+
+**Target**
+
+- Primary target: Equity Derivatives Trader interviews.
+- Secondary knowledge areas: commodities derivatives, market making, structuring, volatility trading, and risk management.
+- Preparation rhythm: about 2 hours per day over six months.
+
+---
+
+## Current App Baseline
+
+The app already has a strong base:
+
+- 71 strategies.
+- Interactive payoff, probability cone, per-leg decomposition, Greeks six-panel chart, scenario controls, and leg editor.
+- Professional mode with Trader Memo, stress test, parity, portfolio Greeks, Gamma P&L, vol surface, and Greeks Decay.
+- Interview mode with 141 Q&A records.
+- LocalStorage progress for strategy completion.
+- Playwright regression tests.
+
+Phase 1 must extend this base rather than duplicate it.
+
+---
+
+## Scope
+
+### Phase 1 MVP
+
+Build these pieces first:
+
+1. **Learning Hub panel**
+   - A new guided panel in the workspace.
+   - Shows the six-month roadmap but unlocks only Month 1 content in the first implementation.
+   - Links each concept to current strategy lab tools when relevant.
+
+2. **Month 1 Greeks curriculum**
+   - Week 1: Delta from D1 directional exposure.
+   - Week 2: Gamma as non-linear exposure and rehedging risk.
+   - Week 3: Vega as implied volatility exposure.
+   - Week 4: Theta/Rho and carry analogies.
+
+3. **Commodities Bridge**
+   - Side-by-side comparison of D1 commodities concepts and equity derivatives concepts.
+   - Explicit guidance on which instincts transfer and which need to be unlearned.
+   - Keep statements regime-aware: commodity skew and seasonality vary by product and market state.
+
+4. **Scenario Bank MVP**
+   - 30 scenarios across client inquiry, risk management, P&L attribution, and market-making.
+   - Each scenario includes prompt, expected answer, follow-up, tags, and difficulty.
+   - Users can filter scenarios and mark them as understood/review-later.
+
+5. **Progress tracking**
+   - LocalStorage-based progress.
+   - Track completed modules, completed scenarios, review-later scenarios, and last active learning tab.
+   - No account system and no backend.
+
+6. **Test coverage**
+   - Add a Playwright suite for Learning Hub rendering, tab switching, filters, answer reveal, and progress persistence.
+   - Existing tests must continue to pass.
+
+### Later Phases
+
+Later phases are intentionally deferred until Phase 1 is useful:
+
+- Month 2-3 strategies and volatility trading expansion.
+- Month 4 dynamic hedging and market-making simulations.
+- Month 5 exotics and structured products.
+- Month 6 mock interview sprint and readiness dashboard.
+- Advanced spaced repetition, study-time analytics, and weakness heatmaps.
+
+The detailed post-Phase-1 roadmap is maintained in:
+
+- `docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`
+
+### Non-Goals For Phase 1
+
+- No real market data connection.
+- No broker-grade margin engine.
+- No live option chain import.
+- No advanced exotics pricing implementation.
+- No full 250-question interview bank yet.
+- No backend, login, database, or cloud sync.
+
+---
+
+## Product Architecture
+
+### Existing Files To Reuse
+
+- `index.html`: Add the Learning Hub panel and load the new data file.
+- `styles.css`: Add Learning Hub, bridge, scenario, and progress styles.
+- `app.js`: Add state, render functions, event handlers, and progress persistence.
+- `data/professional-content.js`: Keep current strategy-level Trader Memo and Q&A.
+- `tests/*.spec.js`: Keep existing regression tests.
+
+### New Files
+
+- `data/learning-content.js`
+  - Owns D1 learning modules, bridge comparisons, scenario bank, and roadmap data.
+  - Exposes a single global object, for example `window.D1_LEARNING_CONTENT`.
+
+- `tests/learning-hub.spec.js`
+  - Owns Playwright tests for the new learning experience.
+
+### Data Boundary
+
+Learning content should live in `data/learning-content.js`, not inside `app.js`.
+`app.js` should only render and manage state.
+
+---
+
+## Data Model
+
+### `roadmap`
+
+Each roadmap item should include:
+
+- `month`: number.
+- `title`: string.
+- `status`: `"active" | "locked"`.
+- `focus`: short description.
+- `deliverables`: array of strings.
+
+Only Month 1 is active in Phase 1.
+
+### `modules`
+
+Each module should include:
+
+- `id`: stable string, for example `delta-d1`.
+- `week`: number.
+- `title`: string.
+- `coreQuestion`: one sentence.
+- `d1Anchor`: how the user already thinks about this in commodities D1.
+- `derivativesUpgrade`: what changes in options.
+- `dealerLens`: how a dealer or market maker thinks about it.
+- `interviewTakeaway`: answer framing for interviews.
+- `strategyLinks`: array of strategy ids that already exist in `data/strategies.js`.
+- `practiceIds`: scenario ids tied to this module.
+
+### `bridgeComparisons`
+
+Each comparison should include:
+
+- `id`
+- `topic`
+- `d1World`
+- `equityDerivativesWorld`
+- `transferableInstinct`
+- `unlearnOrRefine`
+- `interviewLine`
+
+### `scenarios`
+
+Each scenario should include:
+
+- `id`
+- `category`: `"client" | "risk" | "pnl" | "market-making"`.
+- `level`: `"foundation" | "intermediate" | "advanced"`.
+- `title`
+- `prompt`
+- `expectedAnswer`
+- `followUp`
+- `commonMistake`
+- `tags`
+- `linkedModuleIds`
+
+### LocalStorage
+
+Use a new key:
+
+```text
+os_d1_learning
 ```
-┌─────────────────────────────────────────────────────────┐
-│                  Learning Path Navigation Hub             │
-│  ┌──────────────┐              ┌──────────────┐         │
-│  │  Main Track  │              │  Practice     │         │
-│  │  (Systematic)│◄────────────►│  Track        │         │
-│  └──────────────┘              └──────────────┘         │
-│         │                              │                 │
-│         ▼                              ▼                 │
-│  ┌──────────────────────────────────────────┐          │
-│  │      Commodities Bridge Module            │          │
-│  │  (LME/CME → Equity Knowledge Transfer)   │          │
-│  └──────────────────────────────────────────┘          │
-│         │                              │                 │
-│         ▼                              ▼                 │
-│  ┌──────────────┐              ┌──────────────┐         │
-│  │ Greeks       │              │ Interview     │         │
-│  │ Intuition    │              │ Scenario      │         │
-│  │ Builder      │              │ Bank          │         │
-│  └──────────────┘              └──────────────┘         │
-│                                                           │
-│  ┌─────────────────────────────────────────────┐        │
-│  │         Progress Dashboard                   │        │
-│  │  - Knowledge graph completion                │        │
-│  │  - Weakness identification                   │        │
-│  │  - Study time tracking                       │        │
-│  └─────────────────────────────────────────────┘        │
-└─────────────────────────────────────────────────────────┘
+
+Shape:
+
+```json
+{
+  "completedModules": ["delta-d1"],
+  "completedScenarios": ["client-collar-hedge"],
+  "reviewLaterScenarios": ["mm-short-gamma-gap"],
+  "activeLearningTab": "modules",
+  "scenarioFilter": "all"
+}
 ```
 
----
-
-## Main Track: 6-Month Systematic Curriculum
-
-### Month 1: Greeks Fundamentals & Intuition
-
-**Week 1: Delta (From D1 to Options)**
-- Delta as directional exposure (familiar concept)
-- Delta vs D1 position: similarities and differences
-- Delta hedging basics
-- Commodities comparison: Delta in futures vs options
-- Practice: Calculate Delta for various strikes and DTEs
-
-**Week 2: Gamma (The Essence of Non-Linear Risk)**
-- Why Gamma matters: Delta changes as spot moves
-- Gamma vs D1 thinking: convexity vs linearity
-- Long gamma vs short gamma P&L profiles
-- Gamma scalping introduction
-- Commodities comparison: Gamma in commodity options (backwardation/contango effects)
-
-**Week 3: Vega (Volatility Sensitivity)**
-- Vega as vol exposure
-- Why Vega doesn't exist in D1 world
-- Vega vs Gamma relationship
-- Commodities comparison: Equity vol skew (put skew) vs Commodity vol skew (call skew for supply disruption)
-- Practice: Vega hedging across different strikes
-
-**Week 4: Theta (Time Decay) + Rho**
-- Theta as time value erosion
-- Gamma-Theta tradeoff (fundamental relationship)
-- Theta collection strategies
-- Rho (interest rate sensitivity) - less important but needed for interviews
-- Commodities comparison: Carry in commodities (storage cost, convenience yield) vs equity (dividends, borrow cost)
-
-**Deliverables:**
-- Greeks Intuition Builder tool (interactive sliders)
-- 20 practice problems with solutions
-- Commodities Bridge: "Greeks in LME Copper Options vs SPY Options"
+This must be separate from existing `os_learning` strategy progress.
 
 ---
 
-### Month 2: Basic Strategies & Combinations
+## UI Design
 
-**Week 1: Spreads (Bull/Bear, Calendar, Diagonal)**
-- Vertical spreads: defined risk/reward
-- Calendar spreads: vol term structure play
-- Diagonal spreads: combining directional + vol views
-- When to use each type
-- Practice: Construct spreads for different market views
+### Placement
 
-**Week 2: Straddles/Strangles (Vol Trading Intro)**
-- Long straddle/strangle: betting on movement
-- Short straddle/strangle: collecting premium
-- Breakeven analysis
-- IV Rank/Percentile usage
-- Practice: Earnings vol crush trade
+Add the Learning Hub after the existing `learningPathBar` and before the main chart grid. It should be visible in all modes because it is the new study command center.
 
-**Week 3: Butterflies/Condors (Profit Optimization)**
-- Iron Condor: range-bound income
-- Iron Butterfly: precision betting
-- Risk/reward optimization
-- Adjustment techniques
-- Practice: Manage Iron Condor through spot movement
+The hub should be compact enough not to bury the current strategy analysis tools. Use tabs inside one panel:
 
-**Week 4: Collars/Protective (Risk Management)**
-- Protective put: downside protection
-- Collar: zero-cost hedge
-- Seagull/Fence: asymmetric protection
-- Client hedging scenarios
-- Commodities comparison: Hedging physical copper position with options vs futures
+- `Roadmap`
+- `Month 1 Greeks`
+- `Commodities Bridge`
+- `Scenario Bank`
 
-**Deliverables:**
-- Strategy comparison matrix
-- 30 practice scenarios
-- Client inquiry simulator: "Client wants X, recommend Y"
+### Roadmap Tab
 
----
+Shows all six months as a compact track:
 
-### Month 3: Volatility Trading Framework
+- Month 1 active.
+- Months 2-6 locked with short preview text.
+- Includes daily study rhythm: 1 hour concept, 1 hour scenarios.
 
-**Week 1: Realized Vol vs Implied Vol**
-- What is Realized Vol? (historical volatility calculation)
-- What is Implied Vol? (market's expectation)
-- Vol arbitrage: RV < IV → sell options + delta hedge
-- Vol risk premium concept
-- Practice: Calculate RV from historical data, compare to IV
+### Month 1 Greeks Tab
 
-**Week 2: Vol Skew (Equity Put Skew vs Commodity Call Skew)**
-- Why equity put skew exists (crash protection, leverage effect)
-- Why commodity call skew exists (supply disruption risk)
-- Trading skew: Risk Reversal, Butterfly spreads
-- Skew changes and portfolio impact
-- Commodities Bridge: LME copper skew vs SPY skew analysis
+Shows four module cards:
 
-**Week 3: Vol Term Structure (Calendar Spread in Practice)**
-- Normal term structure (upward sloping)
-- Inverted term structure (event-driven)
-- Calendar spread as term structure trade
-- Roll yield in vol trading
-- Practice: Earnings calendar spread (short front-month, long back-month)
+- Delta: from D1 directional exposure to option delta.
+- Gamma: from linear exposure to convexity and rehedging risk.
+- Vega: from no direct linear exposure to implied-vol exposure.
+- Theta/Rho: time decay, carry, dividends, rates, borrow, storage, convenience yield.
 
-**Week 4: Vol Surface & Arbitrage Opportunities**
-- Vol surface visualization (strike × DTE)
-- Put-call parity arbitrage
-- Box spread arbitrage
-- Conversion/reversal trades
-- Transaction cost considerations
+Each card should have:
 
-**Deliverables:**
-- Vol Surface interactive tool (3D visualization)
-- RV vs IV calculator
-- 25 vol trading scenarios
-- Commodities Bridge: "Vol Trading in Commodities vs Equities"
+- D1 anchor.
+- Options upgrade.
+- Dealer lens.
+- Interview takeaway.
+- Linked strategies.
+- Mark completed button.
+
+### Commodities Bridge Tab
+
+Shows comparison rows:
+
+- Directional exposure vs dynamic delta.
+- Forward curve/carry vs option forward input.
+- Commodity skew vs equity index/equity skew.
+- Physical delivery/logistics vs cash/stock settlement.
+- Asian options vs vanilla equity options.
+- Quanto/FX-linked hedges vs equity quanto products.
+
+### Scenario Bank Tab
+
+Shows filter pills and scenario cards:
+
+- All
+- Client
+- Risk
+- P&L
+- Market-making
+
+Each scenario card should have:
+
+- Prompt.
+- Hidden answer that can be revealed.
+- Follow-up question.
+- Common mistake.
+- Mark understood button.
+- Review later toggle.
 
 ---
 
-### Month 4: Dynamic Hedging & Market Making
+## Content Accuracy Rules
 
-**Week 1: Delta Hedging Basics**
-- Why delta hedge? (isolate other Greeks)
-- Hedging frequency tradeoffs
-- Transaction costs vs risk
-- Slippage and market impact
-- Practice: Delta hedge a straddle through spot movement
+The content must use interview-ready but precise language.
 
-**Week 2: Gamma Scalping (When to Rehedge)**
-- Gamma P&L mechanics
-- Rehedging decision tree (Delta threshold, Gamma size, transaction costs)
-- Long gamma: profit from rehedging
-- Short gamma: loss from rehedging
-- Practice: Simulate gamma scalping with different rehedge frequencies
+1. Do not say "Vega does not exist in D1" without qualification. Use: "linear outright D1 futures exposure has no direct Vega, but client optionality and embedded structures can introduce volatility exposure."
 
-**Week 3: Vega Hedging (Cross-Option Hedging)**
-- Vega hedging with different strikes
-- Vega hedging with different DTEs
-- Vega-Gamma correlation
-- Portfolio vega management
-- Practice: Construct vega-neutral portfolio
+2. Do not describe commodity call skew as universal. Use: "many supply-shock-sensitive commodity markets can show call skew, while the shape is product- and regime-dependent."
 
-**Week 4: Market Making Perspective**
-- Bid-ask spread pricing (Greeks-based)
-- Inventory management (how to guide client flow)
-- P&L attribution (Delta P&L, Gamma P&L, Vega P&L, Theta P&L)
-- When to refuse client orders
-- Practice: MM simulation - manage inventory through client orders
+3. Do not reduce vol selling to "RV < IV, sell options." Include transaction costs, jump risk, rehedging frequency, liquidity, and vol risk premium.
 
-**Deliverables:**
-- Enhanced Gamma P&L simulator (realistic dealer workflow)
-- Bid-ask spread calculator
-- P&L attribution tool
-- 30 MM scenarios
-- Dealer perspective case studies
+4. Distinguish client risk management from prop views. A client hedge recommendation must mention objective, horizon, liquidity, downside tolerance, and suitability.
+
+5. Keep all calculations labeled educational. The app is not a trading system.
 
 ---
 
-### Month 5: Exotic Options & Structured Products
+## Phase 1 Curriculum
 
-**Week 1: Asian Options (Leverage Your Experience)**
-- Arithmetic vs geometric average
-- Path dependency and vol impact
-- Pricing considerations
-- Hedging challenges
-- Commodities Bridge: Your LME monthly average price options experience
-- Practice: Price and hedge Asian call
+### Week 1: Delta
 
-**Week 2: Barrier Options (Knock-in/Knock-out)**
-- Barrier types (up-and-in, down-and-out, etc.)
-- Barrier monitoring (continuous vs discrete)
-- Rebate features
-- Hedging near barriers
-- Practice: Construct barrier option for cost reduction
+Core question: "How does a linear D1 trader translate directional exposure into option delta?"
 
-**Week 3: Quanto Options (Currency Risk)**
-- Quanto mechanics (foreign underlying, domestic payout)
-- Correlation risk (asset vs FX)
-- Pricing adjustments
-- Commodities Bridge: Your LME 3M forward with Euro experience
-- Practice: Price quanto call on Nikkei (JPY underlying, USD payout)
+Required teaching points:
 
-**Week 4: Structured Products (Client Need → Product Design)**
-- Principal protection notes
-- Yield enhancement products
-- Participation notes
-- Autocallables
-- Practice: Design product for client scenario
+- Futures D1 has roughly constant directional exposure.
+- Option delta changes with spot, strike, DTE, IV, and moneyness.
+- Long call, short put, and stock/futures can all create positive delta, but the risk profile differs.
+- Dealer hedge language: client buys calls -> dealer sells calls -> dealer is short delta/short gamma and may buy underlying to hedge.
 
-**Deliverables:**
-- Exotic options pricing tools
-- Structured product builder
-- 20 exotic scenarios
-- Commodities Bridge: "Exotic Options in Commodities vs Equities"
+### Week 2: Gamma
 
----
+Core question: "What changes when exposure is no longer linear?"
 
-### Month 6: Portfolio Management & Interview Sprint
+Required teaching points:
 
-**Week 1: Portfolio Greeks Limits**
-- Why set Greeks limits? (risk management)
-- Delta limit (directional risk)
-- Gamma limit (rehedging cost)
-- Vega limit (vol risk)
-- Theta target (income generation)
-- Practice: Construct portfolio within limits
+- Gamma is the change in delta as spot moves.
+- Long gamma benefits from movement but pays theta.
+- Short gamma collects theta but must manage adverse delta drift.
+- Rehedging is a trade-off between risk, cost, and liquidity.
 
-**Week 2: Risk Management (VaR, Stress Testing)**
-- VaR calculation (parametric method)
-- Stress testing scenarios
-- Tail risk management
-- Correlation and diversification
-- Practice: Run stress tests on portfolio
+### Week 3: Vega
 
-**Week 3: Interview High-Frequency Scenarios**
-- Stress scenarios (50+ questions)
-  - "Spot drops 10%, your Iron Condor is breached, what do you do?"
-  - "IV spikes 50%, your short straddle is underwater, how to adjust?"
-- Trade ideas (30+ questions)
-  - "Client bullish but worried about downside, recommend what?"
-  - "Earnings in 2 weeks, IV elevated, how to trade?"
-- Greeks relationship (20+ questions)
-  - "Why are Gamma and Theta usually opposite signs?"
-  - "Why is ATM option Vega highest?"
+Core question: "What does it mean to trade implied volatility instead of only direction?"
 
-**Week 4: Mock Interview**
-- Full mock interview simulation
-- Technical questions (Greeks, strategies, vol trading)
-- Scenario questions (client inquiry, risk management)
-- Behavioral questions (why derivatives, why this desk)
-- Feedback and improvement areas
+Required teaching points:
 
-**Deliverables:**
-- Portfolio risk dashboard
-- Interview question bank (200+ questions)
-- Mock interview simulator
-- Final assessment and gap analysis
+- Vega measures sensitivity to implied volatility.
+- Linear futures positions do not have direct Vega, but options and structured client hedges do.
+- RV vs IV is useful, but not a complete trade signal.
+- Equity index skew, single-name event vol, and commodity skew need separate mental models.
+
+### Week 4: Theta/Rho And Carry
+
+Core question: "How does time value connect to carry, funding, dividends, storage, and convenience yield?"
+
+Required teaching points:
+
+- Theta is time-value decay.
+- Gamma and theta are linked by no-arbitrage intuition.
+- Rho matters more for longer-dated/deeper ITM structures.
+- Commodity carry analogies help, but equity options add dividends, borrow cost, and early exercise considerations.
 
 ---
 
-## Practice Track: Real-World Scenarios (Weekly)
+## Acceptance Criteria
 
-### Scenario Categories
+Phase 1 is done when:
 
-**1. Client Inquiry Scenarios (30+ scenarios)**
-
-Examples:
-- "Client is bullish on AAPL but worried about 10% downside, what do you recommend?"
-  - Answer: Bull call spread or collar
-  - Follow-up: How to choose strike prices? What if client wants zero cost?
-
-- "Client wants to earn theta but doesn't want unlimited risk, what structure?"
-  - Answer: Iron Condor, Iron Butterfly, or Credit Spreads
-  - Follow-up: How to size position? What's max loss?
-
-- "Client thinks TSLA will move big but doesn't know direction, what to do?"
-  - Answer: Long straddle or strangle
-  - Follow-up: How to choose ATM vs OTM? What's breakeven?
-
-**2. Risk Management Scenarios (30+ scenarios)**
-
-Examples:
-- "You're short 1000 ATM straddles, spot suddenly jumps 5%, what do you do?"
-  - Answer: Delta hedge immediately, assess gamma exposure, consider closing
-  - Follow-up: How much stock to buy? What if IV also spikes?
-
-- "Spot is approaching your short put strike with 2 days to expiry, how to handle pin risk?"
-  - Answer: Close position before expiry, or prepare for assignment
-  - Follow-up: What if liquidity is poor? What's the cost of closing?
-
-- "Your portfolio is Delta-neutral but losing money, why?"
-  - Answer: Could be Gamma P&L (if short gamma), Vega P&L (if IV drops), or Theta P&L (if long options)
-  - Follow-up: How to diagnose? How to fix?
-
-**3. P&L Attribution Scenarios (20+ scenarios)**
-
-Examples:
-- "Today's P&L is +$50k. Spot up 2%, IV down 5%, 1 day passed. Break down P&L sources."
-  - Answer: Delta P&L = Delta × Spot move, Vega P&L = Vega × IV change, Theta P&L = Theta × 1 day
-  - Follow-up: Which contributed most? Is this expected?
-
-- "You're long gamma but lost money today despite spot moving 3%, why?"
-  - Answer: Vega loss (IV dropped) or Theta decay exceeded Gamma P&L
-  - Follow-up: How to prevent this? Should you hedge Vega?
-
-**4. Market Making Scenarios (20+ scenarios)**
-
-Examples:
-- "You're long 5000 deltas from client trades, how do you adjust bid-ask spread?"
-  - Answer: Widen offer (discourage buying), tighten bid (encourage selling)
-  - Follow-up: By how much? What if client is price-sensitive?
-
-- "Client wants to buy 10,000 OTM calls, how do you price?"
-  - Answer: Consider mid price + spread + inventory cost + gamma risk
-  - Follow-up: What if you're already long gamma? What if liquidity is poor?
+1. The Learning Hub appears on page load and does not break the existing strategy lab.
+2. The four Learning Hub tabs switch without console errors.
+3. Month 1 shows four complete module cards with D1 anchor, options upgrade, dealer lens, and interview takeaway.
+4. Commodities Bridge shows at least six comparison rows with precise caveats.
+5. Scenario Bank contains exactly 30 scenarios across the four categories.
+6. Scenario answers can be revealed.
+7. Module completion and scenario progress persist after page refresh.
+8. Existing Professional/Interview modes still work.
+9. `node --check app.js`, `node --check data/professional-content.js`, `node --check data/learning-content.js`, and `npm test` pass.
+10. `README.md`, `USER_GUIDE.md`, `docs/PROJECT_STATUS.md`, and `docs/IMPLEMENTATION_HISTORY.md` are updated if the UI is implemented.
 
 ---
 
-## Commodities Bridge Module
+## Implementation Handoff
 
-### Purpose
-Leverage user's existing LME/CME experience to accelerate learning by drawing parallels and highlighting differences between commodities and equity derivatives.
+Implementation plan:
 
-### Key Topics
+- `docs/superpowers/plans/2026-05-27-d1-learning-hub-phase1.md`
 
-**1. Vol Skew Direction**
-- **Equity**: Put skew (OTM puts expensive) - crash protection, leverage effect
-- **Commodity**: Call skew (OTM calls expensive) - supply disruption risk
-- **Why it matters**: Affects strategy selection (Risk Reversal direction, Butterfly positioning)
+Long-term roadmap:
 
-**2. Carry & Cost of Carry**
-- **Equity**: Dividends (positive carry for long stock), borrow cost (negative carry for short stock)
-- **Commodity**: Storage cost (negative carry), convenience yield (positive carry)
-- **Why it matters**: Affects forward pricing, early exercise decisions, calendar spread pricing
+- `docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`
 
-**3. Liquidity & Market Structure**
-- **Equity**: Deep liquidity in major names (SPY, AAPL), tight bid-ask spreads
-- **Commodity**: Varies widely (LME copper liquid, but many strikes illiquid)
-- **Why it matters**: Affects execution, hedging frequency, spread width
+Recommended execution style:
 
-**4. Seasonality & Event Risk**
-- **Equity**: Earnings (quarterly), dividends (quarterly/annual)
-- **Commodity**: Harvest seasons (agriculture), weather (energy), geopolitical (oil)
-- **Why it matters**: Vol term structure patterns, event-driven trading
+1. Build data and tests first.
+2. Add static UI scaffold.
+3. Add rendering and progress state.
+4. Add scenario interactions.
+5. Run browser verification and full Playwright regression.
 
-**5. Physical Delivery vs Cash Settlement**
-- **Equity**: Mostly cash-settled (index options) or stock delivery (equity options)
-- **Commodity**: Physical delivery common (LME), logistics matter
-- **Why it matters**: Assignment risk, delivery costs, squeeze risk
-
-**6. Asian Options (Your Strength)**
-- **Your experience**: LME monthly average price options
-- **Equity equivalent**: Rare, but used in structured products
-- **Key insight**: Path dependency reduces vol impact, harder to hedge
-
-**7. Quanto Options (Your Strength)**
-- **Your experience**: LME 3M forward with Euro (currency swap)
-- **Equity equivalent**: Quanto index options (e.g., Nikkei in USD)
-- **Key insight**: Correlation risk (asset vs FX), pricing adjustments
-
-### Implementation
-- Dedicated "Commodities Bridge" tab in each module
-- Side-by-side comparison tables
-- Real examples from LME copper vs SPY
-- Highlight when to apply commodities intuition vs when to unlearn
-
----
-
-## Greeks Intuition Builder
-
-### Purpose
-Transform theoretical Greeks knowledge into practical intuition through interactive visualization and real-time feedback.
-
-### Features
-
-**1. Interactive Sliders**
-- Adjust: Spot, Strike, DTE, IV, Rate, Dividend
-- See real-time updates: Option Price, Delta, Gamma, Vega, Theta, Rho
-- Visualize: Payoff diagram, Greeks curves
-
-**2. Scenario Simulator**
-- "What if spot moves 5%?" → See Delta P&L, new Delta, Gamma P&L
-- "What if IV spikes 10%?" → See Vega P&L, new Vega
-- "What if 7 days pass?" → See Theta P&L, new Greeks
-
-**3. Greeks Relationship Explorer**
-- Gamma-Theta tradeoff visualization
-- Vega-Gamma correlation
-- Delta-Gamma relationship (Delta changes as spot moves)
-- Moneyness effects (ATM vs ITM vs OTM)
-
-**4. Hedging Simulator**
-- Start with a position (e.g., short 100 ATM calls)
-- Spot moves randomly
-- You decide: hedge now or wait?
-- See P&L impact of your decisions
-- Learn optimal rehedging frequency
-
-**5. Quiz Mode**
-- "This option has Delta 0.6, Gamma 0.05, Theta -0.3. Spot moves up $1. What's new Delta?"
-- "You're short gamma. Spot is volatile. What happens to your P&L?"
-- Immediate feedback with explanations
-
-### Implementation
-- Enhance existing Greeks six-panel chart
-- Add interactive controls
-- Add scenario comparison (before/after)
-- Add quiz mode with 100+ questions
-
----
-
-## Interview Scenario Bank
-
-### Structure
-
-**Level 1: Fundamentals (50 questions)**
-- Greeks definitions and relationships
-- Basic strategy mechanics
-- Simple hedging scenarios
-
-**Level 2: Intermediate (80 questions)**
-- Strategy comparisons
-- Vol trading concepts
-- Client inquiry scenarios
-- P&L attribution
-
-**Level 3: Advanced (70 questions)**
-- Stress scenarios
-- Complex hedging
-- Market making
-- Exotic options
-
-**Level 4: Expert (50 questions)**
-- Multi-leg portfolio management
-- Correlation trading
-- Structured products design
-- Real-world edge cases
-
-### Question Types
-
-**1. Technical Questions**
-- "Explain gamma-theta tradeoff"
-- "Why is ATM option vega highest?"
-- "How does dividend affect call vs put pricing?"
-
-**2. Scenario Questions**
-- "Client wants X, what do you recommend?"
-- "Your position is losing money, what do you do?"
-- "How would you hedge this exposure?"
-
-**3. Market Questions**
-- "Why is equity vol skew negative?"
-- "What drives vol term structure inversion?"
-- "How do you price bid-ask spread?"
-
-**4. Behavioral Questions**
-- "Why derivatives trading?"
-- "Why this desk?"
-- "Describe a trade that went wrong"
-
-### Features
-- Filter by: Level, Type, Topic
-- Track: Attempted, Correct, Review Later
-- Spaced repetition: Review weak areas
-- Mock interview mode: Random selection, timed
-
----
-
-## Progress Dashboard
-
-### Metrics Tracked
-
-**1. Knowledge Graph Completion**
-- Greeks: 4/4 completed (Delta, Gamma, Vega, Theta)
-- Strategies: 15/30 completed
-- Vol Trading: 2/4 modules completed
-- Exotic Options: 0/4 completed
-
-**2. Weakness Identification**
-- Weak areas: Vega hedging, Barrier options
-- Recommended focus: Week 3 Month 4, Week 2 Month 5
-- Practice scenarios: 10 Vega hedging scenarios
-
-**3. Study Time Tracking**
-- Total: 120 hours (60 days × 2 hours)
-- Main track: 80 hours
-- Practice track: 40 hours
-- This week: 14 hours (on track)
-
-**4. Interview Readiness**
-- Questions attempted: 150/250
-- Accuracy: 75%
-- Weak topics: Vol skew, Exotic options
-- Estimated readiness: 60% (4 more weeks needed)
-
-### Visualization
-- Progress bars for each module
-- Heatmap of knowledge areas (green = strong, red = weak)
-- Time series of study hours
-- Accuracy trend over time
-
----
-
-## Learning Rhythm (Daily 2 Hours)
-
-### Weekly Schedule
-
-**Monday-Wednesday: Main Track + Practice**
-- 1 hour: Main track learning (video/reading/interactive)
-- 1 hour: Related practice scenarios (3-5 scenarios)
-
-**Thursday: Practice Track Deep Dive**
-- 2 hours: Complex scenarios integrating the week's learning
-- Focus on weak areas identified by dashboard
-
-**Friday: Review + Interview Prep**
-- 1 hour: Review week's content, quiz mode
-- 1 hour: Interview questions (10-15 questions)
-
-**Weekend: Flexible**
-- Rest or catch up on missed content
-- Explore advanced topics of interest
-- Mock interview practice (once per month)
-
-### Monthly Milestones
-
-**End of Month 1:**
-- Master all 4 Greeks
-- Complete 20 basic strategy scenarios
-- Attempt 30 Level 1 interview questions
-
-**End of Month 2:**
-- Master 10 basic strategies
-- Complete 30 client inquiry scenarios
-- Attempt 40 Level 2 interview questions
-
-**End of Month 3:**
-- Understand vol trading framework
-- Complete 25 vol trading scenarios
-- Attempt 30 Level 2 interview questions
-
-**End of Month 4:**
-- Master dynamic hedging
-- Complete 30 MM scenarios
-- Attempt 30 Level 3 interview questions
-
-**End of Month 5:**
-- Understand exotic options
-- Complete 20 exotic scenarios
-- Attempt 20 Level 3 interview questions
-
-**End of Month 6:**
-- Portfolio management proficiency
-- Complete 1 full mock interview
-- Attempt 50 Level 4 interview questions
-- Interview ready!
-
----
-
-## Success Criteria
-
-After 6 months, user should be able to:
-
-**1. Greeks Mastery**
-- Explain all Greeks intuitively (not just definitions)
-- Predict P&L changes from spot/vol/time moves
-- Design hedging strategies for any Greeks exposure
-
-**2. Strategy Proficiency**
-- Recommend appropriate strategy for any client scenario
-- Explain risk/reward tradeoffs
-- Adjust strategies under stress
-
-**3. Vol Trading Understanding**
-- Distinguish RV vs IV
-- Trade vol skew and term structure
-- Identify arbitrage opportunities
-
-**4. Dealer Perspective**
-- Think like a market maker
-- Price bid-ask spreads
-- Manage inventory and P&L
-
-**5. Interview Confidence**
-- Answer 80%+ of interview questions correctly
-- Handle stress scenarios calmly
-- Articulate trade ideas clearly
-
-**6. Commodities Advantage**
-- Leverage LME/CME experience in interviews
-- Explain exotic options (Asian, Quanto) from experience
-- Stand out from pure equity candidates
-
----
-
-## Implementation Priorities
-
-### Phase 1: Foundation (Weeks 1-4)
-1. Commodities Bridge module (highest priority - unique value)
-2. Greeks Intuition Builder (core learning tool)
-3. Month 1 main track content (Greeks fundamentals)
-4. 30 basic practice scenarios
-
-### Phase 2: Core Content (Weeks 5-12)
-1. Month 2-3 main track content (strategies + vol trading)
-2. 60 intermediate practice scenarios
-3. Interview Scenario Bank Level 1-2 (130 questions)
-4. Progress Dashboard basic version
-
-### Phase 3: Advanced Content (Weeks 13-20)
-1. Month 4-5 main track content (hedging + exotics)
-2. 50 advanced practice scenarios
-3. Interview Scenario Bank Level 3-4 (120 questions)
-4. Enhanced Gamma P&L simulator
-
-### Phase 4: Interview Prep (Weeks 21-24)
-1. Month 6 main track content (portfolio + interview)
-2. Mock interview simulator
-3. Progress Dashboard advanced features
-4. Final review and gap filling
-
----
-
-## Key Differentiators
-
-This learning system is unique because:
-
-1. **Commodities Bridge** - No other platform helps commodities traders transition to equity derivatives
-2. **Dual-Track System** - Balances systematic learning with practical scenarios
-3. **Greeks Intuition Builder** - Goes beyond definitions to build real intuition
-4. **Dealer Perspective** - Teaches market making and hedging workflows, not just client-side trading
-5. **Interview Focus** - 250+ interview questions directly aligned with real interviews
-6. **Personalized Dashboard** - Tracks progress and identifies weaknesses automatically
-7. **Realistic Timeline** - 6 months is achievable, not rushed or dragged out
-8. **Leverages Existing Strength** - Asian options and Quanto experience become advantages
-
----
-
-## Next Steps
-
-1. **User approval** of this design
-2. **Write implementation plan** using writing-plans skill
-3. **Execute in phases** over next 4-6 weeks of development
-4. **User begins learning** with completed Phase 1 content
-5. **Iterate based on feedback** as user progresses through curriculum
+The plan should be executed as Phase 1 only. Do not start exotics, full mock interview, or advanced dashboard work until the user has used and reviewed the MVP.

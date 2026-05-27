@@ -7,7 +7,7 @@
 - [USER_GUIDE.md](USER_GUIDE.md)：怎么使用这个工具。
 - [docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md)：当前进度、已知限制、未来规划。
 - [docs/IMPLEMENTATION_HISTORY.md](docs/IMPLEMENTATION_HISTORY.md)：实现过程、历史修复和被合并的旧文档索引。
-- [docs/superpowers/](docs/superpowers/)：早期规格与计划，作为设计参考保留。
+- [docs/superpowers/](docs/superpowers/)：规格、实施计划和 D1-to-Derivatives Master Roadmap。
 
 ## 当前能力
 
@@ -20,6 +20,7 @@
 - 情景参数、风险指标、腿组合编辑、学习路径追踪。
 - 专业模式：Portfolio Greeks、保证金教育估算、压力测试、Gamma P&L、波动率曲面、Greeks Decay、Put-Call Parity、交易员核心概念。
 - 面试模式：专业内容 + Q&A。
+- D1-to-Derivatives Learning Hub Phase 1：六个月 roadmap、Month 1 Greeks、Commodities Bridge、30 个实战/面试场景和本地进度追踪。
 - Playwright 真实浏览器回归测试。
 
 ## 本地使用
@@ -107,6 +108,7 @@ option_strategy/
 
 - `node --check app.js`
 - `node --check data/professional-content.js`
+- `node --check data/learning-content.js`
 - `npm test`
 
 Playwright 回归测试覆盖基础渲染、学习路径、概率锥 sigma 标注、hover 预览、重置确认、专业概念面板、组合级 Greeks Decay、Portfolio/Stress/Gamma P&L/Interview 面板。

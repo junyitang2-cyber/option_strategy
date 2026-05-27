@@ -51,6 +51,17 @@ npx playwright install chromium
 npm test
 ```
 
+## D1-to-Derivatives Learning Hub
+
+页面顶部的“交易员学习中枢”用于把 commodities D1 经验转成 equity derivatives 面试语言。
+
+- `Roadmap`：查看六个月学习路径。Phase 1 先开放 Month 1。
+- `Month 1 Greeks`：按 Delta、Gamma、Vega、Theta/Rho 学习，每张卡片包含 D1 anchor、options upgrade、dealer lens 和 interview takeaway。
+- `Commodities Bridge`：对比 commodities D1 与 equity derivatives 的相同点和需要修正的直觉。
+- `Scenario Bank`：按 Client、Risk、P&L、Market-making 练习场景题，可 reveal answer、标记理解、加入复习。
+
+进度保存在本机浏览器 localStorage，不会上传到服务器。
+
 ## 三种模式
 
 ### 基础模式

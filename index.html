@@ -50,6 +50,47 @@
         </header>
         <div id="learningPathBar" class="learning-path-bar"></div>
 
+        <section class="panel learning-hub-panel" id="learningHubPanel">
+          <div class="panel-heading compact">
+            <div>
+              <p class="eyebrow">D1 to Derivatives</p>
+              <h3>交易员学习中枢</h3>
+            </div>
+            <div id="learningProgressSummary" class="learning-progress-summary"></div>
+          </div>
+
+          <div class="learning-tabs" role="tablist" aria-label="D1 Learning Hub">
+            <button class="learning-tab active" data-learning-tab="roadmap" type="button"
+                    role="tab" aria-selected="true" aria-controls="learning-roadmap-panel" id="learning-roadmap-tab">Roadmap</button>
+            <button class="learning-tab" data-learning-tab="modules" type="button"
+                    role="tab" aria-selected="false" aria-controls="learning-modules-panel" id="learning-modules-tab">Month 1 Greeks</button>
+            <button class="learning-tab" data-learning-tab="bridge" type="button"
+                    role="tab" aria-selected="false" aria-controls="learning-bridge-panel" id="learning-bridge-tab">Commodities Bridge</button>
+            <button class="learning-tab" data-learning-tab="scenarios" type="button"
+                    role="tab" aria-selected="false" aria-controls="learning-scenarios-panel" id="learning-scenarios-tab">Scenario Bank</button>
+          </div>
+
+          <div class="learning-content">
+            <div class="learning-panel active" data-learning-panel="roadmap"
+                 role="tabpanel" aria-labelledby="learning-roadmap-tab" id="learning-roadmap-panel">
+              <div id="learningRoadmap"></div>
+            </div>
+            <div class="learning-panel" data-learning-panel="modules"
+                 role="tabpanel" aria-labelledby="learning-modules-tab" id="learning-modules-panel">
+              <div id="learningModules"></div>
+            </div>
+            <div class="learning-panel" data-learning-panel="bridge"
+                 role="tabpanel" aria-labelledby="learning-bridge-tab" id="learning-bridge-panel">
+              <div id="learningBridge"></div>
+            </div>
+            <div class="learning-panel" data-learning-panel="scenarios"
+                 role="tabpanel" aria-labelledby="learning-scenarios-tab" id="learning-scenarios-panel">
+              <div class="scenario-filter-row" id="scenarioFilterRow"></div>
+              <div id="learningScenarios"></div>
+            </div>
+          </div>
+        </section>
+
         <section class="layout-grid">
           <section class="analysis-column">
             <section class="panel chart-panel">
@@ -346,6 +387,7 @@
 
     <script src="./data/strategies.js"></script>
     <script src="./data/professional-content.js"></script>
+    <script src="./data/learning-content.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>

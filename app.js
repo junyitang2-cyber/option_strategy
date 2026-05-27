@@ -16,6 +16,7 @@ const state = {
   legs: [],
   mode: "basic", // "basic" | "professional" | "interview"
   activeTool: localStorage.getItem('activeTool') || 'stress',
+  learning: loadD1LearningProgress(),
   portfolio: {
     positions: [], // { id, strategyId, strategyName, quantity, legs, entrySpot }
     accountSize: 10000,
@@ -235,6 +236,37 @@ function unmarkCompleted(strategyId) {
 
 function isCompleted(strategyId) {
   return (loadProgress().completed || []).includes(strategyId);
+}
+
+function defaultD1LearningProgress() {
+  return {
+    completedModules: [],
+    completedScenarios: [],
+    reviewLaterScenarios: [],
+    activeLearningTab: "roadmap",
+    scenarioFilter: "all",
+  };
+}
+
+function loadD1LearningProgress() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("os_d1_learning") || "null");
+    return { ...defaultD1LearningProgress(), ...(saved || {}) };
+  } catch {
+    return defaultD1LearningProgress();
+  }
+}
+
+function saveD1LearningProgress() {
+  try {
+    localStorage.setItem("os_d1_learning", JSON.stringify(state.learning));
+  } catch {
+    // localStorage may be unavailable in hardened browser contexts.
+  }
+}
+
+function toggleArrayValue(values, value) {
+  return values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
 }
 
 function learningPathFor(strategy) {
@@ -2166,9 +2198,176 @@ function renderCoverage() {
     .join("");
 }
 
+function learningContent() {
+  return window.D1_LEARNING_CONTENT || { roadmap: [], modules: [], bridgeComparisons: [], scenarios: [] };
+}
+
+function renderLearningProgressSummary() {
+  const target = document.getElementById("learningProgressSummary");
+  if (!target) return;
+  const content = learningContent();
+  target.textContent = `Modules ${state.learning.completedModules.length}/${content.modules.length} · Scenarios ${state.learning.completedScenarios.length}/${content.scenarios.length}`;
+}
+
+function renderLearningTabs() {
+  const validTabs = new Set(["roadmap", "modules", "bridge", "scenarios"]);
+  const active = validTabs.has(state.learning.activeLearningTab) ? state.learning.activeLearningTab : "roadmap";
+  state.learning.activeLearningTab = active;
+  document.querySelectorAll(".learning-tab").forEach((tab) => {
+    const isActive = tab.dataset.learningTab === active;
+    tab.classList.toggle("active", isActive);
+    tab.setAttribute("aria-selected", String(isActive));
+  });
+  document.querySelectorAll(".learning-panel").forEach((panel) => {
+    panel.classList.toggle("active", panel.dataset.learningPanel === active);
+  });
+}
+
+function renderLearningRoadmap() {
+  const target = document.getElementById("learningRoadmap");
+  if (!target) return;
+  target.innerHTML = `
+    <p class="learning-copy">Daily rhythm: 1 hour concept study, 1 hour scenarios. Phase 1 opens Month 1 while later months stay as the long-term map.</p>
+    <div class="roadmap-grid">
+      ${learningContent().roadmap.map((item) => `
+        <article class="roadmap-card ${item.status === "locked" ? "locked" : "active"}">
+          <p class="learning-kicker">Month ${item.month} · ${item.status === "active" ? "Active" : "Locked"}</p>
+          <h4 class="learning-title">${escapeHtml(item.title)}</h4>
+          <p class="learning-copy">${escapeHtml(item.focus)}</p>
+          <span class="learning-label">Deliverables</span>
+          <ul>${item.deliverables.map((deliverable) => `<li>${escapeHtml(deliverable)}</li>`).join("")}</ul>
+        </article>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderLearningModules() {
+  const target = document.getElementById("learningModules");
+  if (!target) return;
+  const strategiesById = new Map(STRATEGIES.map((strategy) => [strategy.id, strategy]));
+  const cards = learningContent().modules.map((module) => {
+    const done = state.learning.completedModules.includes(module.id);
+    const links = module.strategyLinks.map((id) => {
+      const strategy = strategiesById.get(id);
+      if (!strategy) return "";
+      return `<button class="strategy-link-chip" type="button" data-select-strategy="${escapeHtml(id)}">${escapeHtml(strategy.name)}</button>`;
+    }).join("");
+    return `
+      <article class="module-card">
+        <p class="learning-kicker">Week ${module.week}</p>
+        <h4 class="learning-title">${escapeHtml(module.title)}</h4>
+        <p class="learning-copy"><strong>Core question:</strong> ${escapeHtml(module.coreQuestion)}</p>
+        <span class="learning-label">D1 anchor</span>
+        <p class="learning-copy">${escapeHtml(module.d1Anchor)}</p>
+        <span class="learning-label">Options upgrade</span>
+        <p class="learning-copy">${escapeHtml(module.derivativesUpgrade)}</p>
+        <span class="learning-label">Dealer lens</span>
+        <p class="learning-copy">${escapeHtml(module.dealerLens)}</p>
+        <span class="learning-label">Interview takeaway</span>
+        <p class="learning-copy">${escapeHtml(module.interviewTakeaway)}</p>
+        <div class="strategy-link-list">${links}</div>
+        <div class="learning-action-row">
+          <button class="learning-action ${done ? "active" : ""}" type="button" data-complete-module="${escapeHtml(module.id)}">
+            ${done ? "已完成" : "标记完成"}
+          </button>
+        </div>
+      </article>
+    `;
+  }).join("");
+  target.innerHTML = `<div class="module-grid">${cards}</div>`;
+}
+
+function renderLearningBridge() {
+  const target = document.getElementById("learningBridge");
+  if (!target) return;
+  const cards = learningContent().bridgeComparisons.map((item) => `
+    <article class="bridge-card">
+      <p class="learning-kicker">${escapeHtml(item.topic)}</p>
+      <span class="learning-label">D1 world</span>
+      <p class="learning-copy">${escapeHtml(item.d1World)}</p>
+      <span class="learning-label">Equity derivatives world</span>
+      <p class="learning-copy">${escapeHtml(item.equityDerivativesWorld)}</p>
+      <span class="learning-label">Transferable instinct</span>
+      <p class="learning-copy">${escapeHtml(item.transferableInstinct)}</p>
+      <span class="learning-label">Refine or unlearn</span>
+      <p class="learning-copy">${escapeHtml(item.unlearnOrRefine)}</p>
+      <span class="learning-label">Interview line</span>
+      <p class="learning-copy">${escapeHtml(item.interviewLine)}</p>
+    </article>
+  `).join("");
+  target.innerHTML = `<div class="bridge-grid">${cards}</div>`;
+}
+
+function renderScenarioFilters() {
+  const target = document.getElementById("scenarioFilterRow");
+  if (!target) return;
+  const filters = [
+    ["all", "All"],
+    ["client", "Client"],
+    ["risk", "Risk"],
+    ["pnl", "P&L"],
+    ["market-making", "Market-making"],
+  ];
+  target.innerHTML = filters.map(([id, label]) => `
+    <button class="scenario-filter ${state.learning.scenarioFilter === id ? "active" : ""}" type="button" data-scenario-filter="${id}">
+      ${label}
+    </button>
+  `).join("");
+}
+
+function renderLearningScenarios() {
+  const target = document.getElementById("learningScenarios");
+  if (!target) return;
+  const validFilters = new Set(["all", "client", "risk", "pnl", "market-making"]);
+  const filter = validFilters.has(state.learning.scenarioFilter) ? state.learning.scenarioFilter : "all";
+  state.learning.scenarioFilter = filter;
+  const scenarios = learningContent().scenarios.filter((scenario) => filter === "all" || scenario.category === filter);
+  const cards = scenarios.map((scenario) => {
+    const completed = state.learning.completedScenarios.includes(scenario.id);
+    const reviewLater = state.learning.reviewLaterScenarios.includes(scenario.id);
+    return `
+      <article class="scenario-card" data-scenario-card="${escapeHtml(scenario.id)}">
+        <div class="scenario-meta">
+          <span>${escapeHtml(scenario.category)}</span>
+          <span>${escapeHtml(scenario.level)}</span>
+          <span>${scenario.tags.map(escapeHtml).join(" · ")}</span>
+        </div>
+        <h4 class="learning-title">${escapeHtml(scenario.title)}</h4>
+        <p class="learning-copy">${escapeHtml(scenario.prompt)}</p>
+        <div class="learning-action-row">
+          <button class="learning-action" type="button" data-reveal-scenario="${escapeHtml(scenario.id)}">Reveal answer</button>
+          <button class="learning-action ${completed ? "active" : ""}" type="button" data-complete-scenario="${escapeHtml(scenario.id)}">${completed ? "已理解" : "标记理解"}</button>
+          <button class="learning-action ${reviewLater ? "active" : ""}" type="button" data-review-scenario="${escapeHtml(scenario.id)}">${reviewLater ? "已加入复习" : "Review later"}</button>
+        </div>
+        <div class="scenario-answer" id="scenario-answer-${escapeHtml(scenario.id)}" hidden>
+          <span class="learning-label">Expected answer</span>
+          <p class="learning-copy">${escapeHtml(scenario.expectedAnswer)}</p>
+          <span class="learning-label">Follow-up</span>
+          <p class="learning-copy">${escapeHtml(scenario.followUp)}</p>
+          <span class="learning-label">Common mistake</span>
+          <p class="learning-copy">${escapeHtml(scenario.commonMistake)}</p>
+        </div>
+      </article>
+    `;
+  }).join("");
+  target.innerHTML = `<div class="scenario-grid">${cards}</div>`;
+}
+
+function renderLearningHub() {
+  renderLearningProgressSummary();
+  renderLearningTabs();
+  renderLearningRoadmap();
+  renderLearningModules();
+  renderLearningBridge();
+  renderScenarioFilters();
+  renderLearningScenarios();
+}
+
 function renderStaticShell() {
   renderFilters();
   renderCoverage();
+  renderLearningHub();
 }
 
 function renderAll() {
@@ -2229,6 +2428,7 @@ function refreshAnalysis(options = {}) {
   renderEducation();
   if (options.legs !== false) renderLegsEditor();
   if (options.controls !== false) renderScenarioControls();
+  renderLearningProgressSummary();
 
   // Render professional content if in professional or interview mode
   if (state.mode === 'professional' || state.mode === 'interview') {
@@ -2399,6 +2599,45 @@ function handleChange(event) {
 }
 
 function handleClick(event) {
+  if (event.target.matches(".learning-tab")) {
+    state.learning.activeLearningTab = event.target.dataset.learningTab;
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches(".scenario-filter")) {
+    state.learning.scenarioFilter = event.target.dataset.scenarioFilter;
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches("[data-complete-module]")) {
+    state.learning.completedModules = toggleArrayValue(state.learning.completedModules, event.target.dataset.completeModule);
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches("[data-complete-scenario]")) {
+    state.learning.completedScenarios = toggleArrayValue(state.learning.completedScenarios, event.target.dataset.completeScenario);
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches("[data-review-scenario]")) {
+    state.learning.reviewLaterScenarios = toggleArrayValue(state.learning.reviewLaterScenarios, event.target.dataset.reviewScenario);
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches("[data-reveal-scenario]")) {
+    const answer = document.getElementById(`scenario-answer-${event.target.dataset.revealScenario}`);
+    if (answer) answer.hidden = !answer.hidden;
+    return;
+  }
+  if (event.target.matches("[data-select-strategy]")) {
+    selectStrategy(event.target.dataset.selectStrategy);
+    return;
+  }
   // Tab click handler
   if (event.target.matches('.tool-tab')) {
     switchTool(event.target.dataset.tool);
