@@ -1208,6 +1208,7 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .module-grid,
 .bridge-grid,
 .comparison-grid,
+.client-drill-grid,
 .scenario-grid {
   display: grid;
   gap: 12px;
@@ -1223,6 +1224,7 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 
 .bridge-grid,
 .comparison-grid,
+.client-drill-grid,
 .scenario-grid {
   grid-template-columns: 1fr;
 }
@@ -1231,6 +1233,7 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .module-card,
 .bridge-card,
 .comparison-card,
+.client-drill-card,
 .scenario-card {
   background: var(--panel-2);
   border: 1px solid var(--line);
@@ -1290,6 +1293,40 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .learning-action.active {
   border-color: var(--cyan);
   color: var(--cyan);
+}
+
+.learning-action:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.client-drill-steps {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.client-drill-step {
+  background: var(--panel-3);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.client-drill-step[hidden] {
+  display: none;
+}
+
+.client-drill-list {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+.client-drill-list li + li {
+  margin-top: 4px;
 }
 
 .strategy-link-list {

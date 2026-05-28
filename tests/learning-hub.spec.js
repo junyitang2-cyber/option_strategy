@@ -93,6 +93,42 @@ test("D1 phase 2A strategy construction content renders and filters", async ({ p
   await expect(page.locator("#learningScenarios")).toContainText("有定义风险");
 });
 
+test("D1 phase 2B client recommendation drills reveal steps and persist", async ({ page }) => {
+  await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
+
+  await expect(page.locator("#learningProgressSummary")).toContainText("演练 0/20");
+
+  await page.locator("#learning-client-drills-tab").click();
+  await expect(page.locator("#learningClientDrills .client-drill-card")).toHaveCount(20);
+
+  const firstDrill = page.locator('[data-client-drill-card="protect-concentrated-stock"]');
+  await expect(firstDrill).toContainText("集中持股客户需要下行保护");
+  await expect(firstDrill).toContainText("客户目标");
+  await expect(firstDrill).not.toContainText("推荐结构");
+
+  await firstDrill.locator('[data-reveal-client-drill="protect-concentrated-stock"]').click();
+  await expect(firstDrill).toContainText("客户背景");
+  await expect(firstDrill).not.toContainText("推荐结构");
+
+  await firstDrill.locator('[data-reveal-client-drill="protect-concentrated-stock"]').click();
+  await firstDrill.locator('[data-reveal-client-drill="protect-concentrated-stock"]').click();
+  await firstDrill.locator('[data-reveal-client-drill="protect-concentrated-stock"]').click();
+  await expect(firstDrill).toContainText("推荐结构");
+  await expect(firstDrill).toContainText("Collar");
+
+  await firstDrill.locator('[data-complete-client-drill="protect-concentrated-stock"]').click();
+  await expect(page.locator("#learningProgressSummary")).toContainText("演练 1/20");
+
+  await page.reload();
+  await expect(page.locator("#learning-client-drills-tab")).toHaveClass(/active/);
+  await expect(page.locator("#learningProgressSummary")).toContainText("演练 1/20");
+  await expect(page.locator('[data-client-drill-card="protect-concentrated-stock"]')).toContainText("推荐结构");
+
+  await page.locator('[data-client-drill-card="protect-concentrated-stock"] [data-select-strategy="collar"]').click();
+  await expect(page.locator("#strategyTitle")).toContainText("Collar");
+  await expect(page.locator("#mainChart svg")).toBeVisible();
+});
+
 test("strategy chips in learning modules select existing strategies", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 

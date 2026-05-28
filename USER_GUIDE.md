@@ -53,7 +53,7 @@ npm test
 
 ## D1-to-Derivatives Learning Hub
 
-Phase 2A is now available here: open Strategy Construction for comparison cards, and use Scenario Bank category/month/topic filters to isolate Month 2 strategy-construction drills.
+Phase 2B is now available here: open 客户推荐 for step-by-step client structure drills, use Strategy Construction for comparison cards, and use Scenario Bank category/month/topic filters to isolate Month 2 strategy-construction drills.
 
 
 页面顶部的“交易员学习中枢”用于把 commodities D1 经验转成 equity derivatives 专业表达。
@@ -61,10 +61,11 @@ Phase 2A is now available here: open Strategy Construction for comparison cards,
 - `Roadmap`：查看六个月学习路径。Phase 1 开放 Month 1，Phase 2A 开放 Month 2 Strategy Construction。
 - `Month 1 Greeks`：按 Delta、Gamma、Vega、Theta/Rho 学习，每张卡片包含 D1 anchor、options upgrade、dealer lens 和核心表达。
 - `Strategy Construction`：查看 Month 2 的策略选择对比，包括 straddle/strangle、iron condor/short strangle、collar/protective put 等。
+- `客户推荐`：做 20 个 client recommendation drills，按客户目标、约束条件、候选结构、推荐结构、风险披露、Dealer 视角和专业表达逐步展开。
 - `Commodities Bridge`：对比 commodities D1 与 equity derivatives 的相同点和需要修正的直觉。
 - `Scenario Bank`：按 category、month、topic 练习场景题，可 reveal answer、标记理解、加入复习。
 
-进度保存在本机浏览器 localStorage，不会上传到服务器。
+模块、场景题和客户推荐演练进度保存在本机浏览器 localStorage，不会上传到服务器。
 
 ## 三种模式
 

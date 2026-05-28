@@ -109,7 +109,7 @@ Existing platform foundation:
 
 ### Phase 2B: Client Recommendation Drill
 
-**Goal**: Convert strategy knowledge into interview-ready client advisory workflows.
+**Goal**: Convert strategy knowledge into professional client advisory workflows.
 
 **Core workflow**
 
@@ -405,25 +405,24 @@ Each phase must update:
 
 ## Recommended Next Implementation
 
-The next implementation should be **Phase 2B: Client Recommendation Drill**.
+The next implementation should be **Phase 3: Month 3 Volatility Trading Framework**.
 
 Reason:
 
-- Phase 2A already created the Month 2 strategy-construction foundation.
-- The user now needs interview-ready advisory workflow, not only strategy definitions.
-- Client drills bridge strategy comparison into recommendation language, suitability, risk disclosure, and follow-up questioning.
-- It creates a stronger base before moving into RV/IV, skew, and term-structure work in Phase 3.
+- Phase 2B has now bridged strategy comparison into client recommendation language, suitability, risk disclosure, and follow-up questioning.
+- The next capability gap is volatility as a tradable risk factor, not just a pricing input.
+- RV/IV, event vol, skew, and term structure are the natural next layer after strategy construction and client structure selection.
 
 Suggested next plan file:
 
 ```text
-docs/superpowers/plans/2026-05-28-d1-phase2b-client-recommendation-drill.md
+docs/superpowers/plans/2026-05-28-d1-phase3-volatility-trading-framework.md
 ```
 
 Suggested first acceptance target:
 
-- 20 client recommendation drills.
-- Guided reveal from objective to constraints, alternatives, recommendation, risks, and dealer note.
-- Progress persistence per drill.
-- Strategy links from drill recommendations.
-- Playwright coverage for drill rendering, step reveal, progress persistence, and strategy links.
+- RV vs IV module and checklist.
+- Event volatility and IV crush scenarios.
+- Skew and term-structure reading drills.
+- Strategy links into straddles, strangles, calendars, diagonals, collars, and verticals.
+- Playwright coverage for new modules, scenarios, filters, progress persistence, and strategy links.

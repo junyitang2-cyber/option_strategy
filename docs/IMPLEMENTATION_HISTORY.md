@@ -1,5 +1,20 @@
 # Implementation History
 
+## D1-to-Derivatives Learning Hub Phase 2B (2026-05-28)
+
+Scope:
+
+- Implemented Client Recommendation Drill as the next Month 2 step after Strategy Construction.
+- Added a Learning Hub `客户推荐` tab with 20 guided client structure drills.
+- Each drill covers client objective, profile, constraints, candidate structures, recommendation, risks, Dealer note, professional expression, follow-up questions, and strategy links.
+- Added step-by-step reveal, reset, completion tracking, and localStorage persistence for drill progress.
+- Kept the outward framing as professional training rather than public-facing preparation language.
+- Updated the Master Roadmap so the next recommended implementation is Phase 3 Volatility Trading Framework.
+
+Verification focus:
+
+- `tests/learning-hub.spec.js` now covers 20 client drills, step reveal, completion persistence, active-tab persistence, and strategy chip navigation from a drill.
+
 ## D1-to-Derivatives Learning Hub Phase 2A (2026-05-28)
 
 Scope:

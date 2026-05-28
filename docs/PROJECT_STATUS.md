@@ -1,20 +1,23 @@
 # Project Status And Roadmap
 
-## 2026-05-28 Update: D1 Learning Hub Phase 2A
+## 2026-05-28 Update: D1 Learning Hub Phase 2B
 
-Phase 2A (Month 2 Strategy Construction) is now implemented.
+Phase 2B (Client Recommendation Drill) is now implemented.
 
 - Learning Hub now contains 8 modules: Month 1 Greeks plus 4 Month 2 strategy-construction modules.
 - Scenario Bank now contains 70 scenarios: 30 Month 1 foundation records plus 40 Month 2 construction records.
 - New Strategy Construction tab renders 5 comparison cards: Straddle vs Strangle, Iron Condor vs Short Strangle, Collar vs Protective Put, Bull Call Spread vs Long Call, and Calendar Spread vs Vertical Spread.
+- New Client Recommendation tab renders 20 guided client structure drills.
+- Client drills reveal objective, profile, constraints, candidates, recommendation, risks, Dealer note, professional expression, and follow-ups step by step.
+- Client drill completion and revealed step progress persist in localStorage.
 - Scenario filters now support category, month, and topic.
-- Next D1 roadmap implementation should be Phase 2B: Client Recommendation Drill.
+- Next D1 roadmap implementation should be Phase 3: Volatility Trading Framework.
 
 最后更新：2026-05-28
 
 ## 当前结论
 
-项目当前是一个本地静态期权策略教学与专业训练工具，核心功能已经可以验收。当前完成度按学习/专业训练用途评估为 95%+；D1-to-Derivatives Learning Hub Phase 1 和 Phase 2A 已实现，用于把用户的 commodities D1 经验系统转换成 equity derivatives 专业优势。
+项目当前是一个本地静态期权策略教学与专业训练工具，核心功能已经可以验收。当前完成度按学习/专业训练用途评估为 95%+；D1-to-Derivatives Learning Hub Phase 1、Phase 2A 和 Phase 2B 已实现，用于把用户的 commodities D1 经验系统转换成 equity derivatives 专业优势。
 
 ## 已完成范围
 
@@ -55,8 +58,9 @@ Phase 2A (Month 2 Strategy Construction) is now implemented.
 - Month 2 Strategy Construction：vertical spreads、straddles/strangles、condors/butterflies、protection structures。
 - Commodities Bridge：D1 commodities 经验到 equity derivatives 的迁移框架。
 - Strategy Construction：5 个策略对比卡。
+- Client Recommendation：20 个客户结构推荐演练，支持逐步展开和策略链接跳转。
 - Scenario Bank：70 个 client/risk/P&L/market-making/strategy 场景，支持 category/month/topic 过滤。
-- 本地进度追踪：模块完成、场景完成、复习标记和当前学习 tab。
+- 本地进度追踪：模块完成、场景完成、客户推荐演练完成、逐步展开状态、复习标记和当前学习 tab。
 - 已批准 Phase 1 MVP 规格：`docs/superpowers/specs/2026-05-27-d1-to-derivatives-learning-system-design.md`。
 - 已新增长期 Master Roadmap：`docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
 - 已新增 Phase 1 实施计划：`docs/superpowers/plans/2026-05-27-d1-learning-hub-phase1.md`。
@@ -70,7 +74,7 @@ Phase 2A (Month 2 Strategy Construction) is now implemented.
 - `tests/phase2.spec.js`：学习路径、难度提示、逐腿分解。
 - `tests/phase3.spec.js`：概率锥、sigma 标注、增强 Notes。
 - `tests/professional.spec.js`：进阶/专业模式、Professional Concepts、组合级 Greeks Decay、压力测试、Parity、Portfolio、Gamma P&L。
-- `tests/learning-hub.spec.js`：D1 Learning Hub、tab、filter、answer reveal、progress persistence、策略跳转。
+- `tests/learning-hub.spec.js`：D1 Learning Hub、tab、filter、answer reveal、client drill step reveal、progress persistence、策略跳转。
 
 最近验收命令：
 
@@ -101,6 +105,7 @@ npm test
 
 - 71 个策略都有基础说明，但只有 40 个策略有专业 Trader Memo。
 - 141 个专业问答覆盖核心内容，但新增策略未必每个都有固定 5 问。
+- 20 个客户推荐演练覆盖常见结构推荐场景，但仍是教育性框架，不是实际 suitability advice。
 - 仍可继续补充真实案例、专业追问、错误答案示例和策略对比表。
 
 ## 近期优先级
@@ -115,15 +120,14 @@ npm test
 
 ### P1：D1-to-Derivatives 后续扩展
 
-目标：基于 Phase 1 + Phase 2A 使用反馈，继续扩展客户推荐 drill 和 Month 3 vol trading 内容。
+目标：基于 Phase 1 + Phase 2A + Phase 2B 使用反馈，进入 Month 3 vol trading 内容。
 
 建议顺序：
 
-1. Phase 2B：Client Recommendation Drill。
-2. Phase 3：RV/IV、skew、term structure、event vol framework。
-3. Phase 4：Dealer hedging、market making、P&L attribution。
-4. Phase 5：Asian、Barrier、Quanto、Structured Products bridge。
-5. Phase 6：Scenario drills、wrong-answer notebook、skill dashboard。
+1. Phase 3：RV/IV、skew、term structure、event vol framework。
+2. Phase 4：Dealer hedging、market making、P&L attribution。
+3. Phase 5：Asian、Barrier、Quanto、Structured Products bridge。
+4. Phase 6：Scenario drills、wrong-answer notebook、skill dashboard。
 
 详细蓝图见 `docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
 

@@ -242,7 +242,9 @@ function defaultD1LearningProgress() {
   return {
     completedModules: [],
     completedScenarios: [],
+    completedClientDrills: [],
     reviewLaterScenarios: [],
+    clientDrillStepCounts: {},
     activeLearningTab: "roadmap",
     scenarioFilter: "all",
     scenarioMonthFilter: "all",
@@ -254,7 +256,14 @@ function defaultD1LearningProgress() {
 function loadD1LearningProgress() {
   try {
     const saved = JSON.parse(localStorage.getItem("os_d1_learning") || "null");
-    return { ...defaultD1LearningProgress(), ...(saved || {}) };
+    const progress = { ...defaultD1LearningProgress(), ...(saved || {}) };
+    ["completedModules", "completedScenarios", "completedClientDrills", "reviewLaterScenarios"].forEach((key) => {
+      if (!Array.isArray(progress[key])) progress[key] = [];
+    });
+    if (!progress.clientDrillStepCounts || typeof progress.clientDrillStepCounts !== "object" || Array.isArray(progress.clientDrillStepCounts)) {
+      progress.clientDrillStepCounts = {};
+    }
+    return progress;
   } catch {
     return defaultD1LearningProgress();
   }
@@ -2202,7 +2211,7 @@ function renderCoverage() {
 }
 
 function learningContent() {
-  return window.D1_LEARNING_CONTENT || { roadmap: [], modules: [], bridgeComparisons: [], strategyComparisons: [], scenarios: [] };
+  return window.D1_LEARNING_CONTENT || { roadmap: [], modules: [], bridgeComparisons: [], strategyComparisons: [], clientDrills: [], scenarios: [] };
 }
 
 const LEARNING_UI_TEXT = {
@@ -2212,10 +2221,12 @@ const LEARNING_UI_TEXT = {
       modules: "第 1 月 Greeks",
       bridge: "Commodities 桥接",
       construction: "策略构建",
+      "client-drills": "客户推荐",
       scenarios: "场景题库",
     },
     progressModules: "模块",
     progressScenarios: "场景",
+    progressClientDrills: "演练",
     roadmapIntro: "每日节奏：1 小时概念学习 + 1 小时场景题训练。Phase 1 打底 Greeks，Phase 2A 进入策略构建。",
     active: "开放",
     locked: "未开放",
@@ -2241,6 +2252,20 @@ const LEARNING_UI_TEXT = {
     useA: "适用 A",
     useB: "适用 B",
     keyTradeoff: "关键权衡",
+    clientDrill: "客户推荐演练",
+    clientObjective: "客户目标",
+    clientProfile: "客户背景",
+    constraints: "约束条件",
+    candidateStructures: "候选结构",
+    preferredRecommendation: "推荐结构",
+    riskDisclosure: "风险披露",
+    professionalExpression: "专业表达",
+    followUpQuestions: "追问问题",
+    revealNextStep: "展开下一步",
+    allStepsRevealed: "全部步骤已展开",
+    resetDrill: "重置步骤",
+    completeDrill: "完成演练",
+    completedDrill: "已完成演练",
     all: "全部",
     client: "客户",
     risk: "风险",
@@ -2264,10 +2289,12 @@ const LEARNING_UI_TEXT = {
       modules: "Month 1 Greeks",
       bridge: "Commodities Bridge",
       construction: "Strategy Construction",
+      "client-drills": "Client Drill",
       scenarios: "Scenario Bank",
     },
     progressModules: "Modules",
     progressScenarios: "Scenarios",
+    progressClientDrills: "Drills",
     roadmapIntro: "Daily rhythm: 1 hour concept study, 1 hour scenarios. Phase 1 covers Greeks foundations; Phase 2A adds strategy construction drills.",
     active: "Active",
     locked: "Locked",
@@ -2293,6 +2320,20 @@ const LEARNING_UI_TEXT = {
     useA: "Use A",
     useB: "Use B",
     keyTradeoff: "Key tradeoff",
+    clientDrill: "Client recommendation drill",
+    clientObjective: "Client objective",
+    clientProfile: "Client profile",
+    constraints: "Constraints",
+    candidateStructures: "Candidate structures",
+    preferredRecommendation: "Recommended structure",
+    riskDisclosure: "Risk disclosure",
+    professionalExpression: "Professional phrasing",
+    followUpQuestions: "Follow-up questions",
+    revealNextStep: "Reveal next step",
+    allStepsRevealed: "All steps revealed",
+    resetDrill: "Reset steps",
+    completeDrill: "Complete drill",
+    completedDrill: "Completed drill",
     all: "All",
     client: "Client",
     risk: "Risk",
@@ -2351,11 +2392,11 @@ function renderLearningProgressSummary() {
   const target = document.getElementById("learningProgressSummary");
   if (!target) return;
   const content = learningContent();
-  target.textContent = `${learningUiText("progressModules")} ${state.learning.completedModules.length}/${content.modules.length} · ${learningUiText("progressScenarios")} ${state.learning.completedScenarios.length}/${content.scenarios.length}`;
+  target.textContent = `${learningUiText("progressModules")} ${state.learning.completedModules.length}/${content.modules.length} · ${learningUiText("progressScenarios")} ${state.learning.completedScenarios.length}/${content.scenarios.length} · ${learningUiText("progressClientDrills")} ${state.learning.completedClientDrills.length}/${(content.clientDrills || []).length}`;
 }
 
 function renderLearningTabs() {
-  const validTabs = new Set(["roadmap", "modules", "bridge", "construction", "scenarios"]);
+  const validTabs = new Set(["roadmap", "modules", "bridge", "construction", "client-drills", "scenarios"]);
   const active = validTabs.has(state.learning.activeLearningTab) ? state.learning.activeLearningTab : "roadmap";
   state.learning.activeLearningTab = active;
   const labels = LEARNING_UI_TEXT[learningLanguage()].tabs;
@@ -2478,6 +2519,81 @@ function renderLearningComparisons() {
   target.innerHTML = `<div class="comparison-grid">${cards}</div>`;
 }
 
+function clientDrillSteps() {
+  return [
+    { field: "clientProfile", label: "clientProfile", type: "text" },
+    { field: "constraints", label: "constraints", type: "list" },
+    { field: "candidates", label: "candidateStructures", type: "list" },
+    { field: "recommendation", label: "preferredRecommendation", type: "text" },
+    { field: "riskDisclosure", label: "riskDisclosure", type: "list" },
+    { field: "dealerNote", label: "dealerLens", type: "text" },
+    { field: "professionalExpression", label: "professionalExpression", type: "text" },
+    { field: "followUps", label: "followUpQuestions", type: "list" },
+  ];
+}
+
+function clientDrillStepCount(drill) {
+  const raw = Number(state.learning.clientDrillStepCounts?.[drill.id] || 0);
+  return clamp(Math.floor(raw), 0, clientDrillSteps().length);
+}
+
+function renderClientDrillStep(drill, step) {
+  const label = `<span class="learning-label">${escapeHtml(learningUiText(step.label))}</span>`;
+  if (step.type === "list") {
+    const items = localizedLearningList("clientDrills", drill, step.field);
+    return `${label}<ul class="client-drill-list">${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+  }
+  return `${label}<p class="learning-copy">${escapeHtml(localizedLearning("clientDrills", drill, step.field))}</p>`;
+}
+
+function renderLearningClientDrills() {
+  const target = document.getElementById("learningClientDrills");
+  if (!target) return;
+  const content = learningContent();
+  const drills = content.clientDrills || [];
+  const steps = clientDrillSteps();
+  const strategiesById = new Map(STRATEGIES.map((strategy) => [strategy.id, strategy]));
+  const cards = drills.map((drill) => {
+    const completed = state.learning.completedClientDrills.includes(drill.id);
+    const visibleStepCount = clientDrillStepCount(drill);
+    const allStepsVisible = visibleStepCount >= steps.length;
+    const links = (drill.strategyLinks || []).map((id) => {
+      const strategy = strategiesById.get(id);
+      if (!strategy) return "";
+      return `<button class="strategy-link-chip" type="button" data-select-strategy="${escapeHtml(id)}">${escapeHtml(strategy.name)}</button>`;
+    }).join("");
+    const stepCards = steps.slice(0, visibleStepCount).map((step) => `
+      <div class="client-drill-step">
+        ${renderClientDrillStep(drill, step)}
+      </div>
+    `).join("");
+    return `
+      <article class="client-drill-card" data-client-drill-card="${escapeHtml(drill.id)}">
+        <div class="scenario-meta">
+          <span>${escapeHtml(formatLearningPeriod("month", drill.month || 2))}</span>
+          <span>${escapeHtml(drill.level || "foundation")}</span>
+        </div>
+        <p class="learning-kicker">${escapeHtml(learningUiText("clientDrill"))}</p>
+        <h4 class="learning-title">${escapeHtml(localizedLearning("clientDrills", drill, "title"))}</h4>
+        <span class="learning-label">${escapeHtml(learningUiText("clientObjective"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("clientDrills", drill, "objective"))}</p>
+        <div class="client-drill-steps">${stepCards}</div>
+        <div class="strategy-link-list">${links}</div>
+        <div class="learning-action-row">
+          <button class="learning-action" type="button" data-reveal-client-drill="${escapeHtml(drill.id)}" ${allStepsVisible ? "disabled" : ""}>
+            ${escapeHtml(allStepsVisible ? learningUiText("allStepsRevealed") : learningUiText("revealNextStep"))}
+          </button>
+          <button class="learning-action" type="button" data-reset-client-drill="${escapeHtml(drill.id)}">${escapeHtml(learningUiText("resetDrill"))}</button>
+          <button class="learning-action ${completed ? "active" : ""}" type="button" data-complete-client-drill="${escapeHtml(drill.id)}">
+            ${escapeHtml(completed ? learningUiText("completedDrill") : learningUiText("completeDrill"))}
+          </button>
+        </div>
+      </article>
+    `;
+  }).join("");
+  target.innerHTML = `<div class="client-drill-grid">${cards}</div>`;
+}
+
 function renderScenarioFilters() {
   const target = document.getElementById("scenarioFilterRow");
   const monthTarget = document.getElementById("scenarioMonthFilterRow");
@@ -2594,6 +2710,7 @@ function renderLearningHub() {
   renderLearningModules();
   renderLearningBridge();
   renderLearningComparisons();
+  renderLearningClientDrills();
   renderScenarioFilters();
   renderLearningScenarios();
 }
@@ -2877,6 +2994,29 @@ function handleClick(event) {
   }
   if (event.target.matches("[data-review-scenario]")) {
     state.learning.reviewLaterScenarios = toggleArrayValue(state.learning.reviewLaterScenarios, event.target.dataset.reviewScenario);
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches("[data-reveal-client-drill]")) {
+    const drillId = event.target.dataset.revealClientDrill;
+    const drill = (learningContent().clientDrills || []).find((item) => item.id === drillId);
+    if (drill) {
+      const current = clientDrillStepCount(drill);
+      state.learning.clientDrillStepCounts[drillId] = Math.min(clientDrillSteps().length, current + 1);
+      saveD1LearningProgress();
+      renderLearningHub();
+    }
+    return;
+  }
+  if (event.target.matches("[data-reset-client-drill]")) {
+    delete state.learning.clientDrillStepCounts[event.target.dataset.resetClientDrill];
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches("[data-complete-client-drill]")) {
+    state.learning.completedClientDrills = toggleArrayValue(state.learning.completedClientDrills, event.target.dataset.completeClientDrill);
     saveD1LearningProgress();
     renderLearningHub();
     return;
