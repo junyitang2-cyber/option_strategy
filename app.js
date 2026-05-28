@@ -247,6 +247,7 @@ function defaultD1LearningProgress() {
     scenarioFilter: "all",
     scenarioMonthFilter: "all",
     scenarioTopicFilter: "all",
+    language: "cn",
   };
 }
 
@@ -2204,19 +2205,163 @@ function learningContent() {
   return window.D1_LEARNING_CONTENT || { roadmap: [], modules: [], bridgeComparisons: [], strategyComparisons: [], scenarios: [] };
 }
 
+const LEARNING_UI_TEXT = {
+  cn: {
+    tabs: {
+      roadmap: "路线图",
+      modules: "第 1 月 Greeks",
+      bridge: "Commodities 桥接",
+      construction: "策略构建",
+      scenarios: "场景题库",
+    },
+    progressModules: "模块",
+    progressScenarios: "场景",
+    roadmapIntro: "每日节奏：1 小时概念学习 + 1 小时场景题训练。Phase 1 打底 Greeks，Phase 2A 进入策略构建。",
+    active: "开放",
+    locked: "未开放",
+    deliverables: "交付内容",
+    month: "第",
+    monthSuffix: "月",
+    week: "第",
+    weekSuffix: "周",
+    coreQuestion: "核心问题",
+    d1Anchor: "D1 锚点",
+    d1World: "D1 世界",
+    equityWorld: "Equity derivatives 世界",
+    transferableInstinct: "可迁移直觉",
+    refineOrUnlearn: "需要修正",
+    interviewLine: "面试表达",
+    optionsUpgrade: "Options 升级",
+    dealerLens: "Dealer 视角",
+    interviewTakeaway: "面试表达",
+    completed: "已完成",
+    markComplete: "标记完成",
+    strategyConstruction: "策略构建",
+    clientQuestion: "客户问题",
+    useA: "适用 A",
+    useB: "适用 B",
+    keyTradeoff: "关键权衡",
+    all: "全部",
+    client: "客户",
+    risk: "风险",
+    pnl: "P&L",
+    marketMaking: "做市",
+    strategy: "策略",
+    allMonths: "全部月份",
+    allTopics: "全部主题",
+    revealAnswer: "查看答案",
+    understood: "已理解",
+    markUnderstood: "标记理解",
+    reviewLater: "稍后复习",
+    reviewAdded: "已加入复习",
+    expectedAnswer: "参考答案",
+    followUp: "追问",
+    commonMistake: "常见误区",
+  },
+  en: {
+    tabs: {
+      roadmap: "Roadmap",
+      modules: "Month 1 Greeks",
+      bridge: "Commodities Bridge",
+      construction: "Strategy Construction",
+      scenarios: "Scenario Bank",
+    },
+    progressModules: "Modules",
+    progressScenarios: "Scenarios",
+    roadmapIntro: "Daily rhythm: 1 hour concept study, 1 hour scenarios. Phase 1 covers Greeks foundations; Phase 2A adds strategy construction drills.",
+    active: "Active",
+    locked: "Locked",
+    deliverables: "Deliverables",
+    month: "Month",
+    monthSuffix: "",
+    week: "Week",
+    weekSuffix: "",
+    coreQuestion: "Core question",
+    d1Anchor: "D1 anchor",
+    d1World: "D1 world",
+    equityWorld: "Equity derivatives world",
+    transferableInstinct: "Transferable instinct",
+    refineOrUnlearn: "Refine or unlearn",
+    interviewLine: "Interview line",
+    optionsUpgrade: "Options upgrade",
+    dealerLens: "Dealer lens",
+    interviewTakeaway: "Interview takeaway",
+    completed: "已完成",
+    markComplete: "标记完成",
+    strategyConstruction: "Strategy construction",
+    clientQuestion: "Client question",
+    useA: "Use A",
+    useB: "Use B",
+    keyTradeoff: "Key tradeoff",
+    all: "All",
+    client: "Client",
+    risk: "Risk",
+    pnl: "P&L",
+    marketMaking: "Market-making",
+    strategy: "Strategy",
+    allMonths: "All Months",
+    allTopics: "All Topics",
+    revealAnswer: "Reveal answer",
+    understood: "已理解",
+    markUnderstood: "标记理解",
+    reviewLater: "Review later",
+    reviewAdded: "已加入复习",
+    expectedAnswer: "Expected answer",
+    followUp: "Follow-up",
+    commonMistake: "Common mistake",
+  },
+};
+
+function learningLanguage() {
+  return state.learning.language === "en" ? "en" : "cn";
+}
+
+function learningUiText(key) {
+  return LEARNING_UI_TEXT[learningLanguage()][key] || LEARNING_UI_TEXT.cn[key] || key;
+}
+
+function localizedLearning(kind, item, field) {
+  if (learningLanguage() === "en") return item[field];
+  const key = item.id || item.month;
+  const localized = window.D1_LEARNING_CONTENT_ZH?.[kind]?.[key]?.[field];
+  return localized ?? item[field];
+}
+
+function localizedLearningList(kind, item, field) {
+  const value = localizedLearning(kind, item, field);
+  return Array.isArray(value) ? value : item[field] || [];
+}
+
+function formatLearningPeriod(type, value) {
+  if (learningLanguage() === "cn") return `${learningUiText(type)} ${value} ${learningUiText(`${type}Suffix`)}`;
+  return `${learningUiText(type)} ${value}`;
+}
+
+function renderLanguageToggle() {
+  const language = learningLanguage();
+  document.querySelectorAll("[data-learning-language]").forEach((button) => {
+    const active = button.dataset.learningLanguage === language;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+  document.documentElement.lang = language === "cn" ? "zh-CN" : "en";
+}
+
 function renderLearningProgressSummary() {
   const target = document.getElementById("learningProgressSummary");
   if (!target) return;
   const content = learningContent();
-  target.textContent = `Modules ${state.learning.completedModules.length}/${content.modules.length} · Scenarios ${state.learning.completedScenarios.length}/${content.scenarios.length}`;
+  target.textContent = `${learningUiText("progressModules")} ${state.learning.completedModules.length}/${content.modules.length} · ${learningUiText("progressScenarios")} ${state.learning.completedScenarios.length}/${content.scenarios.length}`;
 }
 
 function renderLearningTabs() {
   const validTabs = new Set(["roadmap", "modules", "bridge", "construction", "scenarios"]);
   const active = validTabs.has(state.learning.activeLearningTab) ? state.learning.activeLearningTab : "roadmap";
   state.learning.activeLearningTab = active;
+  const labels = LEARNING_UI_TEXT[learningLanguage()].tabs;
   document.querySelectorAll(".learning-tab").forEach((tab) => {
     const isActive = tab.dataset.learningTab === active;
+    tab.textContent = labels[tab.dataset.learningTab] || tab.dataset.learningTab;
     tab.classList.toggle("active", isActive);
     tab.setAttribute("aria-selected", String(isActive));
   });
@@ -2229,15 +2374,15 @@ function renderLearningRoadmap() {
   const target = document.getElementById("learningRoadmap");
   if (!target) return;
   target.innerHTML = `
-    <p class="learning-copy">Daily rhythm: 1 hour concept study, 1 hour scenarios. Phase 1 covers Greeks foundations; Phase 2A adds strategy construction drills.</p>
+    <p class="learning-copy">${escapeHtml(learningUiText("roadmapIntro"))}</p>
     <div class="roadmap-grid">
       ${learningContent().roadmap.map((item) => `
         <article class="roadmap-card ${item.status === "locked" ? "locked" : "active"}">
-          <p class="learning-kicker">Month ${item.month} · ${item.status === "active" ? "Active" : "Locked"}</p>
-          <h4 class="learning-title">${escapeHtml(item.title)}</h4>
-          <p class="learning-copy">${escapeHtml(item.focus)}</p>
-          <span class="learning-label">Deliverables</span>
-          <ul>${item.deliverables.map((deliverable) => `<li>${escapeHtml(deliverable)}</li>`).join("")}</ul>
+          <p class="learning-kicker">${formatLearningPeriod("month", item.month)} · ${item.status === "active" ? learningUiText("active") : learningUiText("locked")}</p>
+          <h4 class="learning-title">${escapeHtml(localizedLearning("roadmap", item, "title"))}</h4>
+          <p class="learning-copy">${escapeHtml(localizedLearning("roadmap", item, "focus"))}</p>
+          <span class="learning-label">${escapeHtml(learningUiText("deliverables"))}</span>
+          <ul>${localizedLearningList("roadmap", item, "deliverables").map((deliverable) => `<li>${escapeHtml(deliverable)}</li>`).join("")}</ul>
         </article>
       `).join("")}
     </div>
@@ -2255,23 +2400,24 @@ function renderLearningModules() {
       if (!strategy) return "";
       return `<button class="strategy-link-chip" type="button" data-select-strategy="${escapeHtml(id)}">${escapeHtml(strategy.name)}</button>`;
     }).join("");
+    const completeLabel = done ? learningUiText("completed") : learningUiText("markComplete");
     return `
       <article class="module-card">
-        <p class="learning-kicker">Month ${module.month || 1} 路 Week ${module.week}</p>
-        <h4 class="learning-title">${escapeHtml(module.title)}</h4>
-        <p class="learning-copy"><strong>Core question:</strong> ${escapeHtml(module.coreQuestion)}</p>
-        <span class="learning-label">D1 anchor</span>
-        <p class="learning-copy">${escapeHtml(module.d1Anchor)}</p>
-        <span class="learning-label">Options upgrade</span>
-        <p class="learning-copy">${escapeHtml(module.derivativesUpgrade)}</p>
-        <span class="learning-label">Dealer lens</span>
-        <p class="learning-copy">${escapeHtml(module.dealerLens)}</p>
-        <span class="learning-label">Interview takeaway</span>
-        <p class="learning-copy">${escapeHtml(module.interviewTakeaway)}</p>
+        <p class="learning-kicker">${formatLearningPeriod("month", module.month || 1)} · ${formatLearningPeriod("week", module.week)}</p>
+        <h4 class="learning-title">${escapeHtml(localizedLearning("modules", module, "title"))}</h4>
+        <p class="learning-copy"><strong>${escapeHtml(learningUiText("coreQuestion"))}:</strong> ${escapeHtml(localizedLearning("modules", module, "coreQuestion"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("d1Anchor"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("modules", module, "d1Anchor"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("optionsUpgrade"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("modules", module, "derivativesUpgrade"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("dealerLens"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("modules", module, "dealerLens"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("interviewTakeaway"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("modules", module, "interviewTakeaway"))}</p>
         <div class="strategy-link-list">${links}</div>
         <div class="learning-action-row">
           <button class="learning-action ${done ? "active" : ""}" type="button" data-complete-module="${escapeHtml(module.id)}">
-            ${done ? "已完成" : "标记完成"}
+            ${completeLabel}
           </button>
         </div>
       </article>
@@ -2285,17 +2431,17 @@ function renderLearningBridge() {
   if (!target) return;
   const cards = learningContent().bridgeComparisons.map((item) => `
     <article class="bridge-card">
-      <p class="learning-kicker">${escapeHtml(item.topic)}</p>
-      <span class="learning-label">D1 world</span>
-      <p class="learning-copy">${escapeHtml(item.d1World)}</p>
-      <span class="learning-label">Equity derivatives world</span>
-      <p class="learning-copy">${escapeHtml(item.equityDerivativesWorld)}</p>
-      <span class="learning-label">Transferable instinct</span>
-      <p class="learning-copy">${escapeHtml(item.transferableInstinct)}</p>
-      <span class="learning-label">Refine or unlearn</span>
-      <p class="learning-copy">${escapeHtml(item.unlearnOrRefine)}</p>
-      <span class="learning-label">Interview line</span>
-      <p class="learning-copy">${escapeHtml(item.interviewLine)}</p>
+      <p class="learning-kicker">${escapeHtml(localizedLearning("bridgeComparisons", item, "topic"))}</p>
+      <span class="learning-label">${escapeHtml(learningUiText("d1World"))}</span>
+      <p class="learning-copy">${escapeHtml(localizedLearning("bridgeComparisons", item, "d1World"))}</p>
+      <span class="learning-label">${escapeHtml(learningUiText("equityWorld"))}</span>
+      <p class="learning-copy">${escapeHtml(localizedLearning("bridgeComparisons", item, "equityDerivativesWorld"))}</p>
+      <span class="learning-label">${escapeHtml(learningUiText("transferableInstinct"))}</span>
+      <p class="learning-copy">${escapeHtml(localizedLearning("bridgeComparisons", item, "transferableInstinct"))}</p>
+      <span class="learning-label">${escapeHtml(learningUiText("refineOrUnlearn"))}</span>
+      <p class="learning-copy">${escapeHtml(localizedLearning("bridgeComparisons", item, "unlearnOrRefine"))}</p>
+      <span class="learning-label">${escapeHtml(learningUiText("interviewLine"))}</span>
+      <p class="learning-copy">${escapeHtml(localizedLearning("bridgeComparisons", item, "interviewLine"))}</p>
     </article>
   `).join("");
   target.innerHTML = `<div class="bridge-grid">${cards}</div>`;
@@ -2313,18 +2459,18 @@ function renderLearningComparisons() {
     }).join("");
     return `
       <article class="comparison-card">
-        <p class="learning-kicker">Strategy construction</p>
-        <h4 class="learning-title">${escapeHtml(item.title)}</h4>
-        <span class="learning-label">Client question</span>
-        <p class="learning-copy">${escapeHtml(item.clientQuestion)}</p>
-        <span class="learning-label">Use A</span>
-        <p class="learning-copy">${escapeHtml(item.useA)}</p>
-        <span class="learning-label">Use B</span>
-        <p class="learning-copy">${escapeHtml(item.useB)}</p>
-        <span class="learning-label">Key tradeoff</span>
-        <p class="learning-copy">${escapeHtml(item.keyTradeoff)}</p>
-        <span class="learning-label">Dealer lens</span>
-        <p class="learning-copy">${escapeHtml(item.dealerLens)}</p>
+        <p class="learning-kicker">${escapeHtml(learningUiText("strategyConstruction"))}</p>
+        <h4 class="learning-title">${escapeHtml(localizedLearning("strategyComparisons", item, "title"))}</h4>
+        <span class="learning-label">${escapeHtml(learningUiText("clientQuestion"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("strategyComparisons", item, "clientQuestion"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("useA"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("strategyComparisons", item, "useA"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("useB"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("strategyComparisons", item, "useB"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("keyTradeoff"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("strategyComparisons", item, "keyTradeoff"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("dealerLens"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("strategyComparisons", item, "dealerLens"))}</p>
         <div class="strategy-link-list">${links}</div>
       </article>
     `;
@@ -2343,12 +2489,12 @@ function renderScenarioFilters() {
     state.learning.scenarioFilter = "all";
   }
   const filters = [
-    ["all", "All"],
-    ["client", "Client"],
-    ["risk", "Risk"],
-    ["pnl", "P&L"],
-    ["market-making", "Market-making"],
-    ["strategy", "Strategy"],
+    ["all", learningUiText("all")],
+    ["client", learningUiText("client")],
+    ["risk", learningUiText("risk")],
+    ["pnl", learningUiText("pnl")],
+    ["market-making", learningUiText("marketMaking")],
+    ["strategy", learningUiText("strategy")],
   ];
   target.innerHTML = filters.map(([id, label]) => `
     <button class="scenario-filter ${state.learning.scenarioFilter === id ? "active" : ""}" type="button" data-scenario-filter="${id}">
@@ -2363,7 +2509,7 @@ function renderScenarioFilters() {
   if (monthTarget) {
     const monthFilters = ["all", ...[...monthIds].filter((id) => id !== "all").sort((a, b) => Number(a) - Number(b))];
     monthTarget.innerHTML = monthFilters.map((id) => {
-      const label = id === "all" ? "All Months" : `Month ${id}`;
+      const label = id === "all" ? learningUiText("allMonths") : formatLearningPeriod("month", id);
       return `
         <button class="scenario-month-filter ${state.learning.scenarioMonthFilter === id ? "active" : ""}" type="button" data-scenario-month-filter="${id}">
           ${label}
@@ -2372,7 +2518,9 @@ function renderScenarioFilters() {
     }).join("");
   }
 
-  const topicFilters = content.scenarioTopicFilters || [["all", "All Topics"]];
+  const topicFilters = learningLanguage() === "cn"
+    ? (window.D1_LEARNING_CONTENT_ZH?.scenarioTopicFilters || content.scenarioTopicFilters || [["all", learningUiText("allTopics")]])
+    : (content.scenarioTopicFilters || [["all", learningUiText("allTopics")]]);
   const topicIds = new Set(topicFilters.map(([id]) => id));
   if (!topicIds.has(state.learning.scenarioTopicFilter)) {
     state.learning.scenarioTopicFilter = "all";
@@ -2412,25 +2560,25 @@ function renderLearningScenarios() {
     return `
       <article class="scenario-card" data-scenario-card="${escapeHtml(scenario.id)}">
         <div class="scenario-meta">
-          <span>Month ${escapeHtml(scenario.month || 1)}</span>
+          <span>${escapeHtml(formatLearningPeriod("month", scenario.month || 1))}</span>
           <span>${escapeHtml(scenario.category)}</span>
           <span>${escapeHtml(scenario.level)}</span>
           <span>${tags.map(escapeHtml).join(" · ")}</span>
         </div>
-        <h4 class="learning-title">${escapeHtml(scenario.title)}</h4>
-        <p class="learning-copy">${escapeHtml(scenario.prompt)}</p>
+        <h4 class="learning-title">${escapeHtml(localizedLearning("scenarios", scenario, "title"))}</h4>
+        <p class="learning-copy">${escapeHtml(localizedLearning("scenarios", scenario, "prompt"))}</p>
         <div class="learning-action-row">
-          <button class="learning-action" type="button" data-reveal-scenario="${escapeHtml(scenario.id)}">Reveal answer</button>
-          <button class="learning-action ${completed ? "active" : ""}" type="button" data-complete-scenario="${escapeHtml(scenario.id)}">${completed ? "已理解" : "标记理解"}</button>
-          <button class="learning-action ${reviewLater ? "active" : ""}" type="button" data-review-scenario="${escapeHtml(scenario.id)}">${reviewLater ? "已加入复习" : "Review later"}</button>
+          <button class="learning-action" type="button" data-reveal-scenario="${escapeHtml(scenario.id)}">${escapeHtml(learningUiText("revealAnswer"))}</button>
+          <button class="learning-action ${completed ? "active" : ""}" type="button" data-complete-scenario="${escapeHtml(scenario.id)}">${completed ? learningUiText("understood") : learningUiText("markUnderstood")}</button>
+          <button class="learning-action ${reviewLater ? "active" : ""}" type="button" data-review-scenario="${escapeHtml(scenario.id)}">${reviewLater ? learningUiText("reviewAdded") : learningUiText("reviewLater")}</button>
         </div>
         <div class="scenario-answer" id="scenario-answer-${escapeHtml(scenario.id)}" hidden>
-          <span class="learning-label">Expected answer</span>
-          <p class="learning-copy">${escapeHtml(scenario.expectedAnswer)}</p>
-          <span class="learning-label">Follow-up</span>
-          <p class="learning-copy">${escapeHtml(scenario.followUp)}</p>
-          <span class="learning-label">Common mistake</span>
-          <p class="learning-copy">${escapeHtml(scenario.commonMistake)}</p>
+          <span class="learning-label">${escapeHtml(learningUiText("expectedAnswer"))}</span>
+          <p class="learning-copy">${escapeHtml(localizedLearning("scenarios", scenario, "expectedAnswer"))}</p>
+          <span class="learning-label">${escapeHtml(learningUiText("followUp"))}</span>
+          <p class="learning-copy">${escapeHtml(localizedLearning("scenarios", scenario, "followUp"))}</p>
+          <span class="learning-label">${escapeHtml(learningUiText("commonMistake"))}</span>
+          <p class="learning-copy">${escapeHtml(localizedLearning("scenarios", scenario, "commonMistake"))}</p>
         </div>
       </article>
     `;
@@ -2439,6 +2587,7 @@ function renderLearningScenarios() {
 }
 
 function renderLearningHub() {
+  renderLanguageToggle();
   renderLearningProgressSummary();
   renderLearningTabs();
   renderLearningRoadmap();
@@ -2684,6 +2833,12 @@ function handleChange(event) {
 }
 
 function handleClick(event) {
+  if (event.target.matches("[data-learning-language]")) {
+    state.learning.language = event.target.dataset.learningLanguage === "en" ? "en" : "cn";
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
   if (event.target.matches(".learning-tab")) {
     state.learning.activeLearningTab = event.target.dataset.learningTab;
     saveD1LearningProgress();

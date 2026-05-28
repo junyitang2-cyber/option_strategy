@@ -315,13 +315,18 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 }
 
 /* Professional Mode Styles */
-.mode-toggle {
+.mode-toggle,
+.language-toggle {
   display: flex;
   gap: 4px;
   margin-right: 12px;
   background: var(--panel-3);
   border-radius: 6px;
   padding: 3px;
+}
+
+.language-toggle {
+  margin-right: 0;
 }
 
 .mode-btn {
