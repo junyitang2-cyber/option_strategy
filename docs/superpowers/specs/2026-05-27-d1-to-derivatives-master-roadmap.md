@@ -1,8 +1,10 @@
 # D1 to Derivatives Master Roadmap
 
 **Date**: 2026-05-27
-**Status**: Active roadmap after Phase 2A
+**Status**: Active roadmap after Phase 4A/4B
 **Owner Goal**: Help a Commodities D1 Trader prepare for Equity Derivatives, Vol Trading, Market Making, Structuring, and Derivatives Risk interviews.
+
+**Latest Acceptance**: Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B passed full local validation on 2026-05-28; next implementation target is Phase 5.
 
 ---
 
@@ -18,7 +20,7 @@ The guiding principle is:
 
 ## Current Baseline
 
-Phase 1 and Phase 2A are implemented:
+Phase 1, Phase 2A, Phase 2B, Phase 3A, Phase 3B, and Phase 4A/4B are implemented:
 
 - Learning Hub panel.
 - Six-month roadmap display.
@@ -26,10 +28,15 @@ Phase 1 and Phase 2A are implemented:
 - Commodities Bridge.
 - Month 2 Strategy Construction modules.
 - Strategy Construction comparison cards.
-- 70 scenario bank records.
+- 155 scenario bank records.
+- 20 client recommendation drills.
+- Vol Framework panel with RV/IV mini calculator and 9-card Vol trade playbook.
+- Dealer Desk panel with 6 dealer workflow cards and 6 P&L attribution cards.
+- Enhanced Gamma P&L with rehedge threshold, transaction cost, static vs dynamic P&L, and hedge count.
 - Scenario filters by category, month, and topic.
 - LocalStorage progress via `os_d1_learning`.
 - Playwright coverage in `tests/learning-hub.spec.js`.
+- Latest validation: static checks, data integrity checks, desktop/mobile Playwright spot checks, and `npm test` all passed on 2026-05-28.
 
 Existing platform foundation:
 
@@ -149,6 +156,8 @@ Client objective -> constraints -> candidate structures -> trade-offs -> recomme
 
 **Goal**: Teach volatility as a tradable risk factor, not just a pricing input.
 
+**Status**: Phase 3A and Phase 3B implemented on 2026-05-28. Month 3 now includes modules, a Vol Framework panel, RV/IV mini calculator, vol/skew/term/event/surface/short-vol/gamma/liquidity topic filters, a 9-card Vol trade playbook, and 45 volatility scenarios.
+
 **Learning modules**
 
 1. Realized volatility vs implied volatility.
@@ -167,6 +176,7 @@ Client objective -> constraints -> candidate structures -> trade-offs -> recomme
   - expected move,
   - breakeven realized vol explanation.
 - Add skew/term-structure cards with scenario examples.
+- Add Vol trade playbook cards that map view, structure fit, P&L source, entry checklist, management rules, risk warning, and strategy links.
 
 **Content accuracy rules**
 
@@ -188,6 +198,7 @@ Client objective -> constraints -> candidate structures -> trade-offs -> recomme
 
 - Vol Framework explains at least RV/IV, skew, term structure, and event vol.
 - Scenario Bank can filter by `vol`, `skew`, `term-structure`, and `event`.
+- Vol trade playbook maps vol views into concrete structures and risk management rules.
 - Existing Vol Surface remains educationally labeled.
 - Tests cover new filters and a representative RV/IV calculation.
 
@@ -196,6 +207,8 @@ Client objective -> constraints -> candidate structures -> trade-offs -> recomme
 ### Phase 4: Month 4 Dealer Hedging And Market Making
 
 **Goal**: Build a dealer book management view: client flow, inventory, quote skew, hedge decisions, and P&L attribution.
+
+**Status**: Phase 4A/4B implemented on 2026-05-28. Month 4 now includes 6 modules, Dealer Desk, enhanced Gamma P&L controls, 6 workflow cards, 6 P&L attribution cards, dealer/hedging/quote/attribution/inventory topic filters, and 40 dealer scenarios.
 
 **Learning modules**
 
@@ -405,24 +418,24 @@ Each phase must update:
 
 ## Recommended Next Implementation
 
-The next implementation should be **Phase 3: Month 3 Volatility Trading Framework**.
+The next implementation should be **Phase 5: Month 5 Exotics And Structuring Bridge**.
 
 Reason:
 
-- Phase 2B has now bridged strategy comparison into client recommendation language, suitability, risk disclosure, and follow-up questioning.
-- The next capability gap is volatility as a tradable risk factor, not just a pricing input.
-- RV/IV, event vol, skew, and term structure are the natural next layer after strategy construction and client structure selection.
+- Phase 4A/4B has now bridged dealer-side book management, client flow, inventory, hedge decisions, quote adjustment, and P&L attribution.
+- The next capability gap is exotics and structuring: path dependency, averaging, barrier risk, quanto risk, autocallable payoff decomposition, and client suitability.
+- This is the natural layer after vanilla strategy construction, volatility trade construction, and dealer risk management.
 
 Suggested next plan file:
 
 ```text
-docs/superpowers/plans/2026-05-28-d1-phase3-volatility-trading-framework.md
+docs/superpowers/plans/2026-05-28-d1-phase5-exotics-structuring-bridge.md
 ```
 
 Suggested first acceptance target:
 
-- RV vs IV module and checklist.
-- Event volatility and IV crush scenarios.
-- Skew and term-structure reading drills.
-- Strategy links into straddles, strangles, calendars, diagonals, collars, and verticals.
-- Playwright coverage for new modules, scenarios, filters, progress persistence, and strategy links.
+- Asian option averaging and path-dependency bridge.
+- Barrier option knock-in/knock-out risk framing.
+- Quanto risk decomposition: equity/commodity + FX + correlation.
+- Autocallable payoff decomposition and issuer/dealer risk.
+- Playwright coverage for exotics module rendering, scenario filters, and at least one structuring case.

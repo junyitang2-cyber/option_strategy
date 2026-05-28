@@ -95,6 +95,8 @@ test("tiered learning modes and professional practice panels stay interactive", 
   await page.locator("#runGammaPnl").click();
   await expect(page.locator("#gammaPnlChart svg")).toBeVisible();
   await expect(page.locator("#gammaPnlResults")).toContainText("Realized Vol");
+  await expect(page.locator("#gammaPnlResults")).toContainText("Static P&L");
+  await expect(page.locator("#gammaPnlResults")).toContainText("Rehedge rule");
 
   // Test switching to Poor Man's Covered Call
   await page.locator("#searchInput").fill("Poor Man");
@@ -121,4 +123,3 @@ test("tiered learning modes and professional practice panels stay interactive", 
 
   expect(errors).toEqual([]);
 });
-

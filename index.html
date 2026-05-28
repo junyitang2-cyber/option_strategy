@@ -74,6 +74,10 @@
                     role="tab" aria-selected="false" aria-controls="learning-construction-panel" id="learning-construction-tab"></button>
             <button class="learning-tab" data-learning-tab="client-drills" type="button"
                     role="tab" aria-selected="false" aria-controls="learning-client-drills-panel" id="learning-client-drills-tab"></button>
+            <button class="learning-tab" data-learning-tab="vol-framework" type="button"
+                    role="tab" aria-selected="false" aria-controls="learning-vol-framework-panel" id="learning-vol-framework-tab"></button>
+            <button class="learning-tab" data-learning-tab="dealer-desk" type="button"
+                    role="tab" aria-selected="false" aria-controls="learning-dealer-desk-panel" id="learning-dealer-desk-tab"></button>
             <button class="learning-tab" data-learning-tab="scenarios" type="button"
                     role="tab" aria-selected="false" aria-controls="learning-scenarios-panel" id="learning-scenarios-tab"></button>
           </div>
@@ -98,6 +102,14 @@
             <div class="learning-panel" data-learning-panel="client-drills"
                  role="tabpanel" aria-labelledby="learning-client-drills-tab" id="learning-client-drills-panel">
               <div id="learningClientDrills"></div>
+            </div>
+            <div class="learning-panel" data-learning-panel="vol-framework"
+                 role="tabpanel" aria-labelledby="learning-vol-framework-tab" id="learning-vol-framework-panel">
+              <div id="learningVolFramework"></div>
+            </div>
+            <div class="learning-panel" data-learning-panel="dealer-desk"
+                 role="tabpanel" aria-labelledby="learning-dealer-desk-tab" id="learning-dealer-desk-panel">
+              <div id="learningDealerDesk"></div>
             </div>
             <div class="learning-panel" data-learning-panel="scenarios"
                  role="tabpanel" aria-labelledby="learning-scenarios-tab" id="learning-scenarios-panel">
@@ -329,6 +341,16 @@
                   <span>对冲步数:</span>
                   <input type="range" id="gammaPnlSteps" min="10" max="50" step="5" value="20" />
                   <output id="gammaPnlStepsOutput">20</output>
+                </label>
+                <label>
+                  <span>Rehedge 阈值:</span>
+                  <input type="range" id="gammaPnlThreshold" min="0" max="50" step="1" value="5" />
+                  <output id="gammaPnlThresholdOutput">5</output>
+                </label>
+                <label>
+                  <span>交易成本(bps):</span>
+                  <input type="range" id="gammaPnlCost" min="0" max="25" step="1" value="2" />
+                  <output id="gammaPnlCostOutput">2</output>
                 </label>
               </div>
               <div id="gammaPnlChart" class="gamma-pnl-chart"></div>

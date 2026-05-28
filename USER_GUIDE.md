@@ -53,17 +53,19 @@ npm test
 
 ## D1-to-Derivatives Learning Hub
 
-Phase 2B is now available here: open 客户推荐 for step-by-step client structure drills, use Strategy Construction for comparison cards, and use Scenario Bank category/month/topic filters to isolate Month 2 strategy-construction drills.
+Phase 4A/4B is now available here: open Dealer Desk to train client flow -> dealer exposure -> hedge action -> quote adjustment -> residual risk, and use the enhanced Gamma P&L tool to compare static P&L, dynamic hedge P&L, rehedge thresholds, and transaction costs.
 
 
 页面顶部的“交易员学习中枢”用于把 commodities D1 经验转成 equity derivatives 专业表达。
 
-- `Roadmap`：查看六个月学习路径。Phase 1 开放 Month 1，Phase 2A 开放 Month 2 Strategy Construction。
-- `Month 1 Greeks`：按 Delta、Gamma、Vega、Theta/Rho 学习，每张卡片包含 D1 anchor、options upgrade、dealer lens 和核心表达。
+- `Roadmap`：查看六个月学习路径。当前开放 Month 1 Greeks、Month 2 Strategy Construction、Month 3 Volatility Framework 和 Month 4 Dealer Hedging / Market Making。
+- `学习模块`：按 Delta、Gamma、Vega、Theta/Rho、strategy construction、RV/IV、event vol、skew、term structure、vol surface、dealer inventory、delta hedging、gamma scalping、vega buckets、quote skewing 和 P&L attribution 学习。
 - `Strategy Construction`：查看 Month 2 的策略选择对比，包括 straddle/strangle、iron condor/short strangle、collar/protective put 等。
 - `客户推荐`：做 20 个 client recommendation drills，按客户目标、约束条件、候选结构、推荐结构、风险披露、Dealer 视角和专业表达逐步展开。
+- `Vol 框架`：学习 RV/IV、event vol、skew、term structure 和 surface shifts；用小计算器理解 implied move 与 breakeven RV；用 Vol trade playbook 比较 long vol、short vol、event、skew、term structure 和 surface-bucket 交易。
+- `Dealer Desk`：训练 dealer workflow，明确客户 payoff 与 dealer Greeks/inventory 的区别，并学习 delta hedge、quote adjustment、residual risk 和 P&L attribution。
 - `Commodities Bridge`：对比 commodities D1 与 equity derivatives 的相同点和需要修正的直觉。
-- `Scenario Bank`：按 category、month、topic 练习场景题，可 reveal answer、标记理解、加入复习。
+- `Scenario Bank`：按 category、month、topic 练习场景题，可过滤 vol、skew、term-structure、event、surface、short-vol、gamma、liquidity、dealer、hedging、quote、attribution、inventory，可 reveal answer、标记理解、加入复习。
 
 模块、场景题和客户推荐演练进度保存在本机浏览器 localStorage，不会上传到服务器。
 
@@ -96,7 +98,7 @@ Phase 2B is now available here: open 客户推荐 for step-by-step client struct
 - Portfolio Greeks：把多个策略加入组合，查看总 Delta/Gamma/Theta/Vega/Rho、P&L 和风险提示。
 - 保证金教育估算：区分 Long Option、Defined Risk Spread、Naked Short 等结构。
 - 压力测试矩阵：Spot 与 IV 双维度场景 P&L。
-- Gamma P&L：对比静态持有和动态 Delta hedge 的路径效果。
+- Gamma P&L：对比静态持有和动态 Delta hedge 的路径效果，并可调整 rehedge threshold 与 transaction cost。
 - Vol Surface：教育性 smile/skew 可视化。
 - Greeks Decay：组合级 Gamma/Theta/Vega 随 DTE 变化曲线，支持 ATM/ITM/OTM 和自定义中心行权价。
 - Put-Call Parity：检查 `C - P = S - K·e^(-rT)`。

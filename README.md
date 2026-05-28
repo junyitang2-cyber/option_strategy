@@ -1,6 +1,6 @@
 # Option Strategy Interactive Lab
 
-2026-05-28 update: D1-to-Derivatives Learning Hub Phase 2B is implemented with 8 modules, 70 scenarios, 5 strategy comparison cards, and 20 client recommendation drills.
+2026-05-28 update: D1-to-Derivatives Learning Hub Phase 4A/4B is implemented with 19 modules, 155 scenarios, 5 strategy comparison cards, 20 client recommendation drills, Vol Framework, Dealer Desk, enhanced Gamma P&L controls, and P&L attribution drills.
 
 期权策略交互学习与专业交易员能力训练工具。项目最初用于学习并复刻 `https://options-viewer.netlify.app/` 的核心体验，现在已经扩展为本地可运行的策略分析、教学和专业训练平台。
 
@@ -23,7 +23,7 @@
 - 情景参数、风险指标、腿组合编辑、学习路径追踪。
 - 进阶模式：Portfolio Greeks、保证金教育估算、压力测试、Gamma P&L、波动率曲面、Greeks Decay、Put-Call Parity、交易员核心概念。
 - 专业模式：进阶内容 + 专业问答与情景演练。
-- D1-to-Derivatives Learning Hub Phase 1 + Phase 2A + Phase 2B：六个月 roadmap、Month 1 Greeks、Month 2 Strategy Construction、Commodities Bridge、5 个策略对比卡、20 个客户推荐演练、70 个实战/专业场景和本地进度追踪。
+- D1-to-Derivatives Learning Hub Phase 1 + Phase 2A + Phase 2B + Phase 3B + Phase 4A/4B：六个月 roadmap、Month 1 Greeks、Month 2 Strategy Construction、Month 3 Volatility Framework、Month 4 Dealer Hedging/Market Making、Commodities Bridge、5 个策略对比卡、20 个客户推荐演练、Vol trade playbook、Dealer Desk、155 个实战/专业场景和本地进度追踪。
 - Playwright 真实浏览器回归测试。
 
 ## 本地使用
@@ -90,12 +90,14 @@ option_strategy/
 ├── app.js
 ├── data/
 │   ├── strategies.js
-│   └── professional-content.js
+│   ├── professional-content.js
+│   └── learning-content.js
 ├── tests/
 │   ├── smoke.spec.js
 │   ├── phase2.spec.js
 │   ├── phase3.spec.js
-│   └── professional.spec.js
+│   ├── professional.spec.js
+│   └── learning-hub.spec.js
 ├── docs/
 │   ├── PROJECT_STATUS.md
 │   ├── IMPLEMENTATION_HISTORY.md
@@ -107,14 +109,26 @@ option_strategy/
 
 ## 验证状态
 
+最近一次完整验收：2026-05-28，Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B 均通过。
+
+结果摘要：
+
+- Learning Hub 数据完整性：19 modules、155 scenarios、20 client drills、5 strategy comparisons、5 vol framework cards、9 vol playbook cards、6 dealer workflow cards、6 P&L attribution cards。
+- Scenario Bank：Month 1 = 30、Month 2 = 40、Month 3 = 45、Month 4 = 40。
+- 中文本地化、scenario-module links、strategy links 均无缺失或坏引用。
+- 桌面浏览器抽检通过：Learning Hub、Vol Framework、Dealer Desk、Gamma P&L、Scenario filters、Professional tools 无控制台错误。
+- 移动端 390x844 抽检通过：模块、Vol Framework、Dealer Desk、Month 4 场景均可见且无控制台错误。
+- Playwright：`13 passed (14.4s)`。
+
 最近一次验收覆盖：
 
 - `node --check app.js`
 - `node --check data/professional-content.js`
 - `node --check data/learning-content.js`
+- `git diff --check`
 - `npm test`
 
-Playwright 回归测试覆盖基础渲染、学习路径、概率锥 sigma 标注、hover 预览、重置确认、专业概念面板、组合级 Greeks Decay、Portfolio/Stress/Gamma P&L/专业训练面板和客户推荐演练。
+Playwright 回归测试覆盖基础渲染、学习路径、概率锥 sigma 标注、hover 预览、重置确认、专业概念面板、组合级 Greeks Decay、Portfolio/Stress/Gamma P&L/专业训练面板、客户推荐演练、Vol Framework/RV-IV calculator、Vol trade playbook、Dealer Desk 和 P&L attribution。
 
 ## 重要限制
 

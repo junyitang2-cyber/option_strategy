@@ -1,5 +1,64 @@
 # Implementation History
 
+## D1-to-Derivatives Learning Hub Phase 4A/4B (2026-05-28)
+
+Scope:
+
+- Implemented Month 4 Dealer Hedging / Market Making as Phase 4A and Phase 4B.
+- Added 6 Month 4 modules: client flow/inventory, delta hedging triggers, gamma scalping with transaction costs, vega bucket hedging, quote skewing, and P&L attribution.
+- Added a Learning Hub `Dealer Desk` tab with 6 dealer workflow cards.
+- Added 6 P&L attribution cards covering delta, gamma/rehedging, vega/surface, theta/carry, execution, and residual/model buckets.
+- Enhanced the professional Gamma P&L tool with rehedge threshold, transaction cost, Static P&L, Dynamic P&L, hedge count, and transaction-cost attribution.
+- Added 40 Month 4 dealer/market-making scenarios across market-making, risk, P&L, and strategy categories.
+- Added scenario topic filters for dealer, hedging, quote, attribution, and inventory.
+- Maintained complete Chinese localization across all 155 Scenario Bank records.
+- Updated roadmap and status docs so Phase 5 exotics and structuring is the next D1-to-Derivatives implementation target.
+
+Verification focus:
+
+- `tests/learning-hub.spec.js` covers 19 modules, 155 scenarios, 40 Month 4 scenarios, Dealer Desk rendering, Gamma P&L tool jump, dealer topic filters, and localization completeness.
+- `tests/professional.spec.js` covers the enhanced Gamma P&L outputs.
+
+Acceptance result:
+
+- 2026-05-28 full regression passed.
+- Static checks passed: `node --check app.js`, `node --check data/professional-content.js`, `node --check data/learning-content.js`, and `git diff --check`.
+- Data integrity passed: 19 modules, 155 scenarios, 20 client drills, 5 strategy comparisons, 5 vol framework cards, 9 vol playbook cards, 6 dealer workflow cards, and 6 P&L attribution cards.
+- Desktop and mobile Playwright spot checks passed with no page errors or console errors.
+- Full Playwright suite passed: `13 passed (14.4s)`.
+
+## D1-to-Derivatives Learning Hub Phase 3B (2026-05-28)
+
+Scope:
+
+- Implemented the second Month 3 volatility slice: trade construction and risk management.
+- Added a 9-card Vol trade playbook inside `Vol 框架`, covering long vol, defined-risk short vol, event movement, event direction, skew protection, risk reversal, calendar, diagonal, and surface-bucket setups.
+- Added playbook filters for long-vol, short-vol, event, skew, term-structure, and surface.
+- Expanded Month 3 volatility scenarios from 17 to 45, bringing the total Scenario Bank from 87 to 115 records.
+- Added topic filters for surface, short-vol, gamma, and liquidity.
+- Backfilled Chinese localization for all Month 1 and Month 2 scenario records, so all 115 Scenario Bank records now have explicit CN overrides.
+- Updated roadmap and status docs so Phase 4 is now the next D1-to-Derivatives implementation target.
+
+Verification focus:
+
+- `tests/learning-hub.spec.js` now covers 13 modules, 115 scenarios, 45 Month 3 scenarios, Vol Framework cards, Vol trade playbook filters, RV/IV calculator updates, vol topic filters, Chinese localization completeness, and the Vol Surface tool jump.
+
+## D1-to-Derivatives Learning Hub Phase 3A (2026-05-28)
+
+Scope:
+
+- Implemented the first Month 3 Volatility Trading Framework slice.
+- Added 5 Month 3 modules: RV vs IV, event vol/IV crush, equity skew, term structure, and vol surface reading.
+- Added a Learning Hub `Vol 框架` tab with 5 framework cards.
+- Added an RV/IV mini calculator using a static realized-vol sample, implied-vol input, DTE input, expected move, and breakeven-RV explanation.
+- Added 17 Month 3 scenarios across vol, skew, term-structure, event vol, P&L, risk, client, and market-making topics.
+- Extended scenario topic filters with vol/skew/term-structure/event.
+- Added a Learning Hub action that opens the existing Vol Surface professional tool from the Vol Framework panel.
+
+Verification focus:
+
+- `tests/learning-hub.spec.js` now covers 13 modules, 87 scenarios, the Vol Framework cards, RV/IV calculator updates, Month 3 filters, vol topic filters, and the Vol Surface tool jump.
+
 ## D1-to-Derivatives Learning Hub Phase 2B (2026-05-28)
 
 Scope:

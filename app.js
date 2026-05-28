@@ -246,6 +246,7 @@ function defaultD1LearningProgress() {
     reviewLaterScenarios: [],
     clientDrillStepCounts: {},
     activeLearningTab: "roadmap",
+    activeVolPlaybookFilter: "all",
     scenarioFilter: "all",
     scenarioMonthFilter: "all",
     scenarioTopicFilter: "all",
@@ -2211,17 +2212,19 @@ function renderCoverage() {
 }
 
 function learningContent() {
-  return window.D1_LEARNING_CONTENT || { roadmap: [], modules: [], bridgeComparisons: [], strategyComparisons: [], clientDrills: [], scenarios: [] };
+  return window.D1_LEARNING_CONTENT || { roadmap: [], modules: [], bridgeComparisons: [], strategyComparisons: [], clientDrills: [], volFramework: [], volPlaybook: [], dealerWorkflow: [], dealerPnlAttribution: [], scenarios: [] };
 }
 
 const LEARNING_UI_TEXT = {
   cn: {
     tabs: {
       roadmap: "路线图",
-      modules: "第 1 月 Greeks",
+      modules: "学习模块",
       bridge: "Commodities 桥接",
       construction: "策略构建",
       "client-drills": "客户推荐",
+      "vol-framework": "Vol 框架",
+      "dealer-desk": "Dealer Desk",
       scenarios: "场景题库",
     },
     progressModules: "模块",
@@ -2253,6 +2256,38 @@ const LEARNING_UI_TEXT = {
     useB: "适用 B",
     keyTradeoff: "关键权衡",
     clientDrill: "客户推荐演练",
+    volFramework: "Volatility framework",
+    volPlaybook: "Vol 交易 Playbook",
+    allVolSetups: "全部 Vol 结构",
+    volView: "交易观点",
+    structureFit: "结构匹配",
+    pnlSource: "主要赚钱来源",
+    setupChecklist: "入场检查",
+    managementRules: "管理规则",
+    volConcept: "核心概念",
+    volChecklist: "交易检查清单",
+    whenItMatters: "适用场景",
+    riskWarning: "风险提醒",
+    sampleRvIvCalculator: "RV / IV 小计算器",
+    impliedVol: "Implied Vol",
+    horizonDte: "Horizon DTE",
+    sampleRealizedVol: "样本 Realized Vol",
+    expectedMove: "IV 隐含区间",
+    breakevenRv: "盈亏平衡 RV",
+    openVolSurface: "打开 Vol Surface",
+    openGammaPnl: "打开 Gamma P&L",
+    dealerWorkflow: "Dealer Workflow",
+    dealerPnlAttribution: "P&L Attribution",
+    clientOrder: "客户订单",
+    dealerExposure: "Dealer exposure",
+    hedgeAction: "Hedge action",
+    quoteAdjustment: "Quote adjustment",
+    residualRisk: "Residual risk",
+    pnlComponents: "P&L 组件",
+    attributionFormula: "归因公式",
+    attributionExample: "示例",
+    attributionUse: "使用场景",
+    assumptions: "关键假设",
     clientObjective: "客户目标",
     clientProfile: "客户背景",
     constraints: "约束条件",
@@ -2286,10 +2321,12 @@ const LEARNING_UI_TEXT = {
   en: {
     tabs: {
       roadmap: "Roadmap",
-      modules: "Month 1 Greeks",
+      modules: "Modules",
       bridge: "Commodities Bridge",
       construction: "Strategy Construction",
       "client-drills": "Client Drill",
+      "vol-framework": "Vol Framework",
+      "dealer-desk": "Dealer Desk",
       scenarios: "Scenario Bank",
     },
     progressModules: "Modules",
@@ -2321,6 +2358,38 @@ const LEARNING_UI_TEXT = {
     useB: "Use B",
     keyTradeoff: "Key tradeoff",
     clientDrill: "Client recommendation drill",
+    volFramework: "Volatility framework",
+    volPlaybook: "Vol trade playbook",
+    allVolSetups: "All Vol Setups",
+    volView: "Trading view",
+    structureFit: "Structure fit",
+    pnlSource: "Primary P&L source",
+    setupChecklist: "Entry checklist",
+    managementRules: "Management rules",
+    volConcept: "Core concept",
+    volChecklist: "Trade checklist",
+    whenItMatters: "When it matters",
+    riskWarning: "Risk warning",
+    sampleRvIvCalculator: "RV / IV mini calculator",
+    impliedVol: "Implied Vol",
+    horizonDte: "Horizon DTE",
+    sampleRealizedVol: "Sample Realized Vol",
+    expectedMove: "IV expected move",
+    breakevenRv: "Breakeven RV",
+    openVolSurface: "Open Vol Surface",
+    openGammaPnl: "Open Gamma P&L",
+    dealerWorkflow: "Dealer workflow",
+    dealerPnlAttribution: "P&L attribution",
+    clientOrder: "Client order",
+    dealerExposure: "Dealer exposure",
+    hedgeAction: "Hedge action",
+    quoteAdjustment: "Quote adjustment",
+    residualRisk: "Residual risk",
+    pnlComponents: "P&L components",
+    attributionFormula: "Attribution formula",
+    attributionExample: "Example",
+    attributionUse: "Use case",
+    assumptions: "Key assumptions",
     clientObjective: "Client objective",
     clientProfile: "Client profile",
     constraints: "Constraints",
@@ -2396,7 +2465,7 @@ function renderLearningProgressSummary() {
 }
 
 function renderLearningTabs() {
-  const validTabs = new Set(["roadmap", "modules", "bridge", "construction", "client-drills", "scenarios"]);
+  const validTabs = new Set(["roadmap", "modules", "bridge", "construction", "client-drills", "vol-framework", "dealer-desk", "scenarios"]);
   const active = validTabs.has(state.learning.activeLearningTab) ? state.learning.activeLearningTab : "roadmap";
   state.learning.activeLearningTab = active;
   const labels = LEARNING_UI_TEXT[learningLanguage()].tabs;
@@ -2596,6 +2665,221 @@ function renderLearningClientDrills() {
   target.innerHTML = `<div class="client-drill-grid">${cards}</div>`;
 }
 
+function sampleRealizedVol() {
+  const dailyReturns = [0.012, -0.006, 0.009, -0.014, 0.004, 0.018, -0.011, 0.007, -0.003, 0.015, -0.009, 0.006, -0.016, 0.010, 0.002, -0.008, 0.013, -0.005, 0.011, -0.012];
+  const mean = dailyReturns.reduce((sum, value) => sum + value, 0) / dailyReturns.length;
+  const variance = dailyReturns.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / (dailyReturns.length - 1);
+  return Math.sqrt(variance) * Math.sqrt(252);
+}
+
+function renderVolFrameworkCalculatorResult() {
+  const result = document.getElementById("volCalcResult");
+  if (!result) return;
+  const ivInput = document.getElementById("volCalcIv");
+  const dteInput = document.getElementById("volCalcDte");
+  const iv = Math.max(1, Number(ivInput?.value || 24)) / 100;
+  const dte = Math.max(1, Number(dteInput?.value || 30));
+  const rv = sampleRealizedVol();
+  const ivMove = iv * Math.sqrt(dte / 365);
+  const rvMove = rv * Math.sqrt(dte / 365);
+  const edge = rv > iv
+    ? "样本 RV 高于输入 IV：买方结构更容易被 realized move 支撑，但仍要扣除 theta、bid-ask 和 event crush。"
+    : "样本 RV 低于输入 IV：卖方结构看似有 vol premium，但不能忽略 jump risk、liquidity 和 tail loss。";
+  result.innerHTML = `
+    <div class="vol-calc-result-grid">
+      <span><strong>${escapeHtml(learningUiText("sampleRealizedVol"))}:</strong> ${(rv * 100).toFixed(1)}%</span>
+      <span><strong>${escapeHtml(learningUiText("expectedMove"))}:</strong> ±${(ivMove * 100).toFixed(1)}%</span>
+      <span><strong>Sample RV move:</strong> ±${(rvMove * 100).toFixed(1)}%</span>
+      <span><strong>${escapeHtml(learningUiText("breakevenRv"))}:</strong> ${(iv * 100).toFixed(1)}% before costs</span>
+    </div>
+    <p class="learning-copy">${escapeHtml(edge)}</p>
+  `;
+}
+
+function volPlaybookFilters() {
+  const content = learningContent();
+  const filters = learningLanguage() === "cn"
+    ? (window.D1_LEARNING_CONTENT_ZH?.volPlaybookFilters || content.volPlaybookFilters)
+    : content.volPlaybookFilters;
+  return filters || [["all", learningUiText("allVolSetups")]];
+}
+
+function validVolPlaybookFilterIds() {
+  return new Set(volPlaybookFilters().map(([id]) => id));
+}
+
+function renderLearningVolPlaybook(strategiesById) {
+  const content = learningContent();
+  const playbook = content.volPlaybook || [];
+  if (!playbook.length) return "";
+  const validFilters = validVolPlaybookFilterIds();
+  if (!validFilters.has(state.learning.activeVolPlaybookFilter)) {
+    state.learning.activeVolPlaybookFilter = "all";
+  }
+  const activeFilter = state.learning.activeVolPlaybookFilter;
+  const filtered = playbook.filter((item) => activeFilter === "all" || item.group === activeFilter);
+  const filterRow = volPlaybookFilters().map(([id, label]) => `
+    <button class="vol-playbook-filter ${activeFilter === id ? "active" : ""}" type="button" data-vol-playbook-filter="${escapeHtml(id)}">
+      ${escapeHtml(label)}
+    </button>
+  `).join("");
+  const cards = filtered.map((item) => {
+    const links = (item.strategyLinks || []).map((id) => {
+      const strategy = strategiesById.get(id);
+      if (!strategy) return "";
+      return `<button class="strategy-link-chip" type="button" data-select-strategy="${escapeHtml(id)}">${escapeHtml(strategy.name)}</button>`;
+    }).join("");
+    const checklist = localizedLearningList("volPlaybook", item, "checklist");
+    const management = localizedLearningList("volPlaybook", item, "management");
+    return `
+      <article class="vol-playbook-card">
+        <p class="learning-kicker">${escapeHtml(learningUiText("volPlaybook"))}</p>
+        <h4 class="learning-title">${escapeHtml(localizedLearning("volPlaybook", item, "title"))}</h4>
+        <span class="learning-label">${escapeHtml(learningUiText("volView"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("volPlaybook", item, "view"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("structureFit"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("volPlaybook", item, "structureFit"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("pnlSource"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("volPlaybook", item, "pnlSource"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("setupChecklist"))}</span>
+        <ul class="client-drill-list">${checklist.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
+        <span class="learning-label">${escapeHtml(learningUiText("managementRules"))}</span>
+        <ul class="client-drill-list">${management.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
+        <span class="learning-label">${escapeHtml(learningUiText("riskWarning"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("volPlaybook", item, "riskWarning"))}</p>
+        <div class="strategy-link-list">${links}</div>
+      </article>
+    `;
+  }).join("");
+  return `
+    <section class="vol-playbook-section">
+      <div class="vol-playbook-heading">
+        <div>
+          <p class="learning-kicker">${escapeHtml(learningUiText("volPlaybook"))}</p>
+          <h4 class="learning-title">View -> Structure -> Risk management</h4>
+        </div>
+        <div class="vol-playbook-filters">${filterRow}</div>
+      </div>
+      <div class="vol-playbook-grid">${cards}</div>
+    </section>
+  `;
+}
+
+function renderLearningVolFramework() {
+  const target = document.getElementById("learningVolFramework");
+  if (!target) return;
+  const strategiesById = new Map(STRATEGIES.map((strategy) => [strategy.id, strategy]));
+  const cards = (learningContent().volFramework || []).map((item) => {
+    const links = (item.strategyLinks || []).map((id) => {
+      const strategy = strategiesById.get(id);
+      if (!strategy) return "";
+      return `<button class="strategy-link-chip" type="button" data-select-strategy="${escapeHtml(id)}">${escapeHtml(strategy.name)}</button>`;
+    }).join("");
+    const checklist = localizedLearningList("volFramework", item, "checklist");
+    return `
+      <article class="vol-framework-card">
+        <p class="learning-kicker">${escapeHtml(learningUiText("volFramework"))}</p>
+        <h4 class="learning-title">${escapeHtml(localizedLearning("volFramework", item, "title"))}</h4>
+        <span class="learning-label">${escapeHtml(learningUiText("volConcept"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("volFramework", item, "concept"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("volChecklist"))}</span>
+        <ul class="client-drill-list">${checklist.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
+        <span class="learning-label">${escapeHtml(learningUiText("whenItMatters"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("volFramework", item, "whenItMatters"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("dealerLens"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("volFramework", item, "dealerLens"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("riskWarning"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("volFramework", item, "riskWarning"))}</p>
+        <div class="strategy-link-list">${links}</div>
+      </article>
+    `;
+  }).join("");
+
+  target.innerHTML = `
+    <section class="vol-framework-calculator">
+      <div>
+        <p class="learning-kicker">${escapeHtml(learningUiText("sampleRvIvCalculator"))}</p>
+        <h4 class="learning-title">RV / IV breakeven intuition</h4>
+        <p class="learning-copy">用一组静态日收益样本估算 realized vol，再和输入 IV 比较。它是教学口径，不是交易信号。</p>
+      </div>
+      <div class="vol-calc-controls">
+        <label><span>${escapeHtml(learningUiText("impliedVol"))} (%)</span><input id="volCalcIv" data-vol-calc type="number" min="1" max="200" step="0.5" value="24" /></label>
+        <label><span>${escapeHtml(learningUiText("horizonDte"))}</span><input id="volCalcDte" data-vol-calc type="number" min="1" max="365" step="1" value="30" /></label>
+        <button class="learning-action" type="button" data-open-tool="vol">${escapeHtml(learningUiText("openVolSurface"))}</button>
+      </div>
+      <div id="volCalcResult" class="vol-calc-result"></div>
+    </section>
+    ${renderLearningVolPlaybook(strategiesById)}
+    <div class="vol-framework-grid">${cards}</div>
+  `;
+  renderVolFrameworkCalculatorResult();
+}
+
+function renderLearningDealerDesk() {
+  const target = document.getElementById("learningDealerDesk");
+  if (!target) return;
+  const content = learningContent();
+  const workflowCards = (content.dealerWorkflow || []).map((item) => {
+    const assumptions = localizedLearningList("dealerWorkflow", item, "assumptions");
+    return `
+      <article class="dealer-workflow-card">
+        <p class="learning-kicker">${escapeHtml(learningUiText("dealerWorkflow"))}</p>
+        <h4 class="learning-title">${escapeHtml(localizedLearning("dealerWorkflow", item, "title"))}</h4>
+        <span class="learning-label">${escapeHtml(learningUiText("clientOrder"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("dealerWorkflow", item, "clientOrder"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("dealerExposure"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("dealerWorkflow", item, "dealerExposure"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("hedgeAction"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("dealerWorkflow", item, "hedgeAction"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("quoteAdjustment"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("dealerWorkflow", item, "quoteAdjustment"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("residualRisk"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("dealerWorkflow", item, "residualRisk"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("assumptions"))}</span>
+        <ul class="client-drill-list">${assumptions.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
+      </article>
+    `;
+  }).join("");
+  const attributionCards = (content.dealerPnlAttribution || []).map((item) => {
+    const components = localizedLearningList("dealerPnlAttribution", item, "components");
+    return `
+      <article class="dealer-attribution-card">
+        <p class="learning-kicker">${escapeHtml(learningUiText("dealerPnlAttribution"))}</p>
+        <h4 class="learning-title">${escapeHtml(localizedLearning("dealerPnlAttribution", item, "title"))}</h4>
+        <span class="learning-label">${escapeHtml(learningUiText("attributionUse"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("dealerPnlAttribution", item, "useCase"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("pnlComponents"))}</span>
+        <ul class="client-drill-list">${components.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
+        <span class="learning-label">${escapeHtml(learningUiText("attributionFormula"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("dealerPnlAttribution", item, "formula"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("attributionExample"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("dealerPnlAttribution", item, "example"))}</p>
+        <span class="learning-label">${escapeHtml(learningUiText("riskWarning"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedLearning("dealerPnlAttribution", item, "riskWarning"))}</p>
+      </article>
+    `;
+  }).join("");
+
+  target.innerHTML = `
+    <section class="dealer-desk-hero">
+      <div>
+        <p class="learning-kicker">${escapeHtml(learningUiText("dealerWorkflow"))}</p>
+        <h4 class="learning-title">Client flow -> Dealer exposure -> Hedge -> Quote -> P&L attribution</h4>
+        <p class="learning-copy">把客户视角和 dealer 视角分开：客户买的是 payoff，dealer 接到的是 Greeks、inventory、hedge cost 和 residual risk。</p>
+      </div>
+      <button class="learning-action" type="button" data-open-tool="gamma">${escapeHtml(learningUiText("openGammaPnl"))}</button>
+    </section>
+    <div class="dealer-workflow-grid">${workflowCards}</div>
+    <section class="dealer-attribution-section">
+      <div class="dealer-playbook-heading">
+        <p class="learning-kicker">${escapeHtml(learningUiText("dealerPnlAttribution"))}</p>
+        <h4 class="learning-title">Explain why the book made or lost money</h4>
+      </div>
+      <div class="dealer-attribution-grid">${attributionCards}</div>
+    </section>
+  `;
+}
+
 function renderScenarioFilters() {
   const target = document.getElementById("scenarioFilterRow");
   const monthTarget = document.getElementById("scenarioMonthFilterRow");
@@ -2713,6 +2997,8 @@ function renderLearningHub() {
   renderLearningBridge();
   renderLearningComparisons();
   renderLearningClientDrills();
+  renderLearningVolFramework();
+  renderLearningDealerDesk();
   renderScenarioFilters();
   renderLearningScenarios();
 }
@@ -2925,6 +3211,10 @@ function handleInput(event) {
     refreshAnalysis({ controls: false, legs: false });
     return;
   }
+  if (target.matches("[data-vol-calc]")) {
+    renderVolFrameworkCalculatorResult();
+    return;
+  }
   if (target.matches("[data-scenario]")) {
     updateScenario(target.dataset.scenario, target.value);
     refreshAnalysis({ controls: false, legs: false });
@@ -2960,6 +3250,12 @@ function handleClick(event) {
   }
   if (event.target.matches(".learning-tab")) {
     state.learning.activeLearningTab = event.target.dataset.learningTab;
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches(".vol-playbook-filter")) {
+    state.learning.activeVolPlaybookFilter = event.target.dataset.volPlaybookFilter;
     saveD1LearningProgress();
     renderLearningHub();
     return;
@@ -3030,6 +3326,12 @@ function handleClick(event) {
   }
   if (event.target.matches("[data-select-strategy]")) {
     selectStrategy(event.target.dataset.selectStrategy);
+    return;
+  }
+  if (event.target.matches("[data-open-tool]")) {
+    handleModeToggle("professional");
+    switchTool(event.target.dataset.openTool);
+    document.getElementById("professionalToolsPanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
     return;
   }
   // Tab click handler
@@ -3180,12 +3482,14 @@ boot();
 // ============================================================================
 
 // Simulate Gamma P&L with dynamic hedging
-function simulateGammaPnL(finalSpot, steps = 20) {
+function simulateGammaPnL(finalSpot, steps = 20, rehedgeThreshold = 0, transactionCostBps = 0) {
   const initialSpot = state.scenario.spot;
   const path = [];
   let spot = initialSpot;
   let hedgeShares = 0;
   let cashBalance = 0;  // Cash balance from trading
+  let transactionCosts = 0;
+  let hedgeTradeCount = 0;
   let prevSpot = initialSpot;
   const stepSize = (finalSpot - initialSpot) / steps;
 
@@ -3198,10 +3502,16 @@ function simulateGammaPnL(finalSpot, steps = 20) {
     const result = portfolioResult(spot, state.scenario.daysElapsed);
     const targetDelta = -result.greeks.delta;  // Hedge is opposite direction of delta
     const rehedge = targetDelta - hedgeShares;
+    const shouldRehedge = i === 0 || Math.abs(rehedge) >= rehedgeThreshold;
 
-    // Rehedging cost: buying stock costs cash, selling stock generates cash
-    cashBalance -= rehedge * spot;
-    hedgeShares = targetDelta;
+    if (shouldRehedge) {
+      const tradeCost = Math.abs(rehedge) * spot * (transactionCostBps / 10000);
+      transactionCosts += tradeCost;
+      hedgeTradeCount += Math.abs(rehedge) > 0 ? 1 : 0;
+      // Rehedging cost: buying stock costs cash, selling stock generates cash.
+      cashBalance -= rehedge * spot + tradeCost;
+      hedgeShares = targetDelta;
+    }
 
     // Calculate total hedge P&L: cash balance + stock position value
     const stockPositionValue = hedgeShares * spot;
@@ -3221,7 +3531,9 @@ function simulateGammaPnL(finalSpot, steps = 20) {
       gamma: result.greeks.gamma,
       hedgeShares: hedgeShares,
       cashBalance: cashBalance,
-      stockValue: stockPositionValue
+      stockValue: stockPositionValue,
+      transactionCosts: transactionCosts,
+      rehedged: shouldRehedge,
     });
 
     prevSpot = spot;
@@ -3250,8 +3562,13 @@ function simulateGammaPnL(finalSpot, steps = 20) {
     spotMove: spotMove,
     spotMovePercent: spotMovePercent,
     optionPnL: finalResult.optionPnL,
+    staticPnL: finalResult.optionPnL,
     hedgePnL: finalResult.cashPnL,
     totalPnL: finalResult.totalPnL,
+    transactionCosts: transactionCosts,
+    hedgeTradeCount: hedgeTradeCount,
+    rehedgeThreshold: rehedgeThreshold,
+    transactionCostBps: transactionCostBps,
     realizedVol: realizedVol,
     impliedVol: avgIV,
     volDiff: realizedVol - avgIV,
@@ -3263,8 +3580,10 @@ function simulateGammaPnL(finalSpot, steps = 20) {
 function renderGammaPnL() {
   const finalSpot = parseFloat(document.getElementById("gammaPnlSpot").value);
   const steps = parseInt(document.getElementById("gammaPnlSteps").value);
+  const rehedgeThreshold = parseFloat(document.getElementById("gammaPnlThreshold")?.value || "0");
+  const transactionCostBps = parseFloat(document.getElementById("gammaPnlCost")?.value || "0");
 
-  const simulation = simulateGammaPnL(finalSpot, steps);
+  const simulation = simulateGammaPnL(finalSpot, steps, rehedgeThreshold, transactionCostBps);
 
   // Render chart
   const chartDiv = document.getElementById("gammaPnlChart");
@@ -3328,6 +3647,18 @@ function renderGammaPnL() {
         <span class="result-value ${pnlClass}">${formatMoney(simulation.totalPnL)}</span>
       </div>
       <div class="gamma-result-item">
+        <span class="result-label">Static P&L:</span>
+        <span class="result-value ${simulation.staticPnL >= 0 ? 'positive' : 'negative'}">${formatMoney(simulation.staticPnL)}</span>
+      </div>
+      <div class="gamma-result-item">
+        <span class="result-label">交易成本:</span>
+        <span class="result-value negative">${formatMoney(simulation.transactionCosts)}</span>
+      </div>
+      <div class="gamma-result-item">
+        <span class="result-label">Hedge 次数:</span>
+        <span class="result-value">${simulation.hedgeTradeCount}</span>
+      </div>
+      <div class="gamma-result-item">
         <span class="result-label">Realized Vol:</span>
         <span class="result-value">${(simulation.realizedVol * 100).toFixed(1)}%</span>
       </div>
@@ -3343,18 +3674,20 @@ function renderGammaPnL() {
 
     <div class="gamma-interpretation">
       <h4>解读</h4>
+      <p><strong>Static vs Dynamic:</strong> Static P&L 是不做 stock hedge 的期权 mark-to-market；总 P&L 是按阈值 rehedge 后的 option + hedge + transaction cost。</p>
+      <p><strong>Rehedge rule:</strong> 当目标 hedge 与当前 hedge 差异达到 ${simulation.rehedgeThreshold.toFixed(0)} delta units 时才调整；单边交易成本假设为 ${simulation.transactionCostBps.toFixed(0)} bps。</p>
       ${simulation.isLongGamma ? `
         <p><strong>Long Gamma 策略</strong>：你持有正 Gamma，受益于价格波动。</p>
         <ul>
           <li>期权 P&L: ${simulation.optionPnL >= 0 ? '盈利' : '亏损'} ${formatMoney(Math.abs(simulation.optionPnL))}</li>
-          <li>对冲 P&L: ${simulation.hedgePnL >= 0 ? '盈利' : '亏损'} ${formatMoney(Math.abs(simulation.hedgePnL))} (动态对冲成本)</li>
+          <li>对冲 P&L: ${simulation.hedgePnL >= 0 ? '盈利' : '亏损'} ${formatMoney(Math.abs(simulation.hedgePnL))} (含交易成本后的 hedge book)</li>
           <li>Realized Vol ${simulation.realizedVol > simulation.impliedVol ? '高于' : '低于'} Implied Vol</li>
         </ul>
       ` : `
         <p><strong>Short Gamma 策略</strong>：你持有负 Gamma，害怕价格大幅波动。</p>
         <ul>
           <li>期权 P&L: ${simulation.optionPnL >= 0 ? '盈利' : '亏损'} ${formatMoney(Math.abs(simulation.optionPnL))} (Theta 收益)</li>
-          <li>对冲 P&L: ${simulation.hedgePnL >= 0 ? '盈利' : '亏损'} ${formatMoney(Math.abs(simulation.hedgePnL))} (追涨杀跌成本)</li>
+          <li>对冲 P&L: ${simulation.hedgePnL >= 0 ? '盈利' : '亏损'} ${formatMoney(Math.abs(simulation.hedgePnL))} (含交易成本后的 hedge book)</li>
           <li>Realized Vol ${simulation.realizedVol > simulation.impliedVol ? '高于' : '低于'} Implied Vol</li>
         </ul>
       `}
@@ -3371,6 +3704,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const gammaPnlSpotOutput = document.getElementById("gammaPnlSpotOutput");
   const gammaPnlSteps = document.getElementById("gammaPnlSteps");
   const gammaPnlStepsOutput = document.getElementById("gammaPnlStepsOutput");
+  const gammaPnlThreshold = document.getElementById("gammaPnlThreshold");
+  const gammaPnlThresholdOutput = document.getElementById("gammaPnlThresholdOutput");
+  const gammaPnlCost = document.getElementById("gammaPnlCost");
+  const gammaPnlCostOutput = document.getElementById("gammaPnlCostOutput");
 
   if (gammaPnlSpot && gammaPnlSpotOutput) {
     gammaPnlSpot.addEventListener("input", (e) => {
@@ -3381,6 +3718,16 @@ document.addEventListener("DOMContentLoaded", () => {
   if (gammaPnlSteps && gammaPnlStepsOutput) {
     gammaPnlSteps.addEventListener("input", (e) => {
       gammaPnlStepsOutput.textContent = e.target.value;
+    });
+  }
+  if (gammaPnlThreshold && gammaPnlThresholdOutput) {
+    gammaPnlThreshold.addEventListener("input", (e) => {
+      gammaPnlThresholdOutput.textContent = e.target.value;
+    });
+  }
+  if (gammaPnlCost && gammaPnlCostOutput) {
+    gammaPnlCost.addEventListener("input", (e) => {
+      gammaPnlCostOutput.textContent = e.target.value;
     });
   }
 });

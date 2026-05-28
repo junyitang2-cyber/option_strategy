@@ -1191,6 +1191,7 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .scenario-month-filter:focus-visible,
 .scenario-topic-filter:focus-visible,
 .learning-action:focus-visible,
+.vol-playbook-filter:focus-visible,
 .strategy-link-chip:focus-visible {
   outline: 2px solid var(--cyan);
   outline-offset: 2px;
@@ -1209,6 +1210,10 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .bridge-grid,
 .comparison-grid,
 .client-drill-grid,
+.vol-playbook-grid,
+.vol-framework-grid,
+.dealer-workflow-grid,
+.dealer-attribution-grid,
 .scenario-grid {
   display: grid;
   gap: 12px;
@@ -1225,6 +1230,10 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .bridge-grid,
 .comparison-grid,
 .client-drill-grid,
+.vol-playbook-grid,
+.vol-framework-grid,
+.dealer-workflow-grid,
+.dealer-attribution-grid,
 .scenario-grid {
   grid-template-columns: 1fr;
 }
@@ -1234,6 +1243,10 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .bridge-card,
 .comparison-card,
 .client-drill-card,
+.vol-playbook-card,
+.vol-framework-card,
+.dealer-workflow-card,
+.dealer-attribution-card,
 .scenario-card {
   background: var(--panel-2);
   border: 1px solid var(--line);
@@ -1327,6 +1340,111 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 
 .client-drill-list li + li {
   margin-top: 4px;
+}
+
+.vol-framework-calculator {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 14px;
+}
+
+.vol-calc-controls {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.vol-calc-controls label {
+  color: var(--muted);
+  display: grid;
+  font-size: 12px;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.vol-calc-controls input {
+  background: var(--panel-3);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 7px 9px;
+}
+
+.vol-calc-result {
+  background: var(--panel-3);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.vol-calc-result-grid {
+  color: var(--text);
+  display: grid;
+  font-size: 13px;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin-bottom: 8px;
+}
+
+.vol-playbook-section {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.dealer-desk-hero {
+  align-items: end;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 14px;
+}
+
+.dealer-attribution-section {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.vol-playbook-heading,
+.dealer-playbook-heading {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.vol-playbook-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.vol-playbook-filter {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 6px 10px;
+}
+
+.vol-playbook-filter:hover,
+.vol-playbook-filter.active {
+  border-color: var(--cyan);
+  color: var(--cyan);
 }
 
 .strategy-link-list {
