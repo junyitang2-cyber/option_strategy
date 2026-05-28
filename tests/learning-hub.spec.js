@@ -49,3 +49,23 @@ test("strategy chips in learning modules select existing strategies", async ({ p
   await expect(page.locator("#strategyTitle")).toContainText("Long Call");
   await expect(page.locator("#mainChart svg")).toBeVisible();
 });
+
+test("D1 learning hub recovers from invalid saved scenario filter", async ({ page }) => {
+  await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
+
+  await page.evaluate(() => {
+    localStorage.setItem("os_d1_learning", JSON.stringify({
+      completedModules: [],
+      completedScenarios: [],
+      reviewLaterScenarios: [],
+      activeLearningTab: "scenarios",
+      scenarioFilter: "bad-filter",
+    }));
+  });
+
+  await page.reload();
+
+  await expect(page.locator("#learning-scenarios-tab")).toHaveClass(/active/);
+  await expect(page.locator('[data-scenario-filter="all"]')).toHaveClass(/active/);
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(30);
+});

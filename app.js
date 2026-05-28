@@ -2302,6 +2302,10 @@ function renderLearningBridge() {
 function renderScenarioFilters() {
   const target = document.getElementById("scenarioFilterRow");
   if (!target) return;
+  const validFilterIds = new Set(["all", "client", "risk", "pnl", "market-making"]);
+  if (!validFilterIds.has(state.learning.scenarioFilter)) {
+    state.learning.scenarioFilter = "all";
+  }
   const filters = [
     ["all", "All"],
     ["client", "Client"],
