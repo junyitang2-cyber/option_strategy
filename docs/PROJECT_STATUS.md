@@ -1,10 +1,20 @@
 # Project Status And Roadmap
 
-最后更新：2026-05-27
+## 2026-05-28 Update: D1 Learning Hub Phase 2A
+
+Phase 2A (Month 2 Strategy Construction) is now implemented.
+
+- Learning Hub now contains 8 modules: Month 1 Greeks plus 4 Month 2 strategy-construction modules.
+- Scenario Bank now contains 70 scenarios: 30 Month 1 foundation records plus 40 Month 2 construction records.
+- New Strategy Construction tab renders 5 comparison cards: Straddle vs Strangle, Iron Condor vs Short Strangle, Collar vs Protective Put, Bull Call Spread vs Long Call, and Calendar Spread vs Vertical Spread.
+- Scenario filters now support category, month, and topic.
+- Next D1 roadmap implementation should be Phase 2B: Client Recommendation Drill.
+
+最后更新：2026-05-28
 
 ## 当前结论
 
-项目当前是一个本地静态期权策略教学与面试准备工具，核心功能已经可以验收。当前完成度按学习/面试用途评估为 95%+；D1-to-Derivatives Learning Hub Phase 1 已实现，用于把用户的 commodities D1 经验系统转换成 equity derivatives 面试优势。
+项目当前是一个本地静态期权策略教学与面试准备工具，核心功能已经可以验收。当前完成度按学习/面试用途评估为 95%+；D1-to-Derivatives Learning Hub Phase 1 和 Phase 2A 已实现，用于把用户的 commodities D1 经验系统转换成 equity derivatives 面试优势。
 
 ## 已完成范围
 
@@ -40,10 +50,12 @@
 
 ### D1-to-Derivatives Learning Hub
 
-- 六个月 roadmap，Phase 1 开放 Month 1。
+- 六个月 roadmap，Phase 1 开放 Month 1，Phase 2A 开放 Month 2 Strategy Construction。
 - Month 1 Greeks：Delta、Gamma、Vega、Theta/Rho。
+- Month 2 Strategy Construction：vertical spreads、straddles/strangles、condors/butterflies、protection structures。
 - Commodities Bridge：D1 commodities 经验到 equity derivatives 的迁移框架。
-- Scenario Bank：30 个 client/risk/P&L/market-making 场景。
+- Strategy Construction：5 个策略对比卡。
+- Scenario Bank：70 个 client/risk/P&L/market-making/strategy 场景，支持 category/month/topic 过滤。
 - 本地进度追踪：模块完成、场景完成、复习标记和当前学习 tab。
 - 已批准 Phase 1 MVP 规格：`docs/superpowers/specs/2026-05-27-d1-to-derivatives-learning-system-design.md`。
 - 已新增长期 Master Roadmap：`docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
@@ -103,16 +115,15 @@ npm test
 
 ### P1：D1-to-Derivatives 后续扩展
 
-目标：基于 Phase 1 使用反馈，继续扩展 Month 2-3 的策略构建和 vol trading 内容。
+目标：基于 Phase 1 + Phase 2A 使用反馈，继续扩展客户推荐 drill 和 Month 3 vol trading 内容。
 
 建议顺序：
 
-1. Phase 2A：Month 2 strategy construction modules。
-2. Phase 2B：Client Recommendation Drill。
-3. Phase 3：RV/IV、skew、term structure、event vol framework。
-4. Phase 4：Dealer hedging、market making、P&L attribution。
-5. Phase 5：Asian、Barrier、Quanto、Structured Products bridge。
-6. Phase 6：Mock interview、wrong-answer notebook、readiness dashboard。
+1. Phase 2B：Client Recommendation Drill。
+2. Phase 3：RV/IV、skew、term structure、event vol framework。
+3. Phase 4：Dealer hedging、market making、P&L attribution。
+4. Phase 5：Asian、Barrier、Quanto、Structured Products bridge。
+5. Phase 6：Mock interview、wrong-answer notebook、readiness dashboard。
 
 详细蓝图见 `docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
 

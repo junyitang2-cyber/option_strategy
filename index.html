@@ -66,6 +66,8 @@
                     role="tab" aria-selected="false" aria-controls="learning-modules-panel" id="learning-modules-tab">Month 1 Greeks</button>
             <button class="learning-tab" data-learning-tab="bridge" type="button"
                     role="tab" aria-selected="false" aria-controls="learning-bridge-panel" id="learning-bridge-tab">Commodities Bridge</button>
+            <button class="learning-tab" data-learning-tab="construction" type="button"
+                    role="tab" aria-selected="false" aria-controls="learning-construction-panel" id="learning-construction-tab">Strategy Construction</button>
             <button class="learning-tab" data-learning-tab="scenarios" type="button"
                     role="tab" aria-selected="false" aria-controls="learning-scenarios-panel" id="learning-scenarios-tab">Scenario Bank</button>
           </div>
@@ -83,9 +85,15 @@
                  role="tabpanel" aria-labelledby="learning-bridge-tab" id="learning-bridge-panel">
               <div id="learningBridge"></div>
             </div>
+            <div class="learning-panel" data-learning-panel="construction"
+                 role="tabpanel" aria-labelledby="learning-construction-tab" id="learning-construction-panel">
+              <div id="learningComparisons"></div>
+            </div>
             <div class="learning-panel" data-learning-panel="scenarios"
                  role="tabpanel" aria-labelledby="learning-scenarios-tab" id="learning-scenarios-panel">
               <div class="scenario-filter-row" id="scenarioFilterRow"></div>
+              <div class="scenario-filter-row" id="scenarioMonthFilterRow"></div>
+              <div class="scenario-filter-row" id="scenarioTopicFilterRow"></div>
               <div id="learningScenarios"></div>
             </div>
           </div>

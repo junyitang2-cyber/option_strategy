@@ -245,6 +245,8 @@ function defaultD1LearningProgress() {
     reviewLaterScenarios: [],
     activeLearningTab: "roadmap",
     scenarioFilter: "all",
+    scenarioMonthFilter: "all",
+    scenarioTopicFilter: "all",
   };
 }
 
@@ -2199,7 +2201,7 @@ function renderCoverage() {
 }
 
 function learningContent() {
-  return window.D1_LEARNING_CONTENT || { roadmap: [], modules: [], bridgeComparisons: [], scenarios: [] };
+  return window.D1_LEARNING_CONTENT || { roadmap: [], modules: [], bridgeComparisons: [], strategyComparisons: [], scenarios: [] };
 }
 
 function renderLearningProgressSummary() {
@@ -2210,7 +2212,7 @@ function renderLearningProgressSummary() {
 }
 
 function renderLearningTabs() {
-  const validTabs = new Set(["roadmap", "modules", "bridge", "scenarios"]);
+  const validTabs = new Set(["roadmap", "modules", "bridge", "construction", "scenarios"]);
   const active = validTabs.has(state.learning.activeLearningTab) ? state.learning.activeLearningTab : "roadmap";
   state.learning.activeLearningTab = active;
   document.querySelectorAll(".learning-tab").forEach((tab) => {
@@ -2227,7 +2229,7 @@ function renderLearningRoadmap() {
   const target = document.getElementById("learningRoadmap");
   if (!target) return;
   target.innerHTML = `
-    <p class="learning-copy">Daily rhythm: 1 hour concept study, 1 hour scenarios. Phase 1 opens Month 1 while later months stay as the long-term map.</p>
+    <p class="learning-copy">Daily rhythm: 1 hour concept study, 1 hour scenarios. Phase 1 covers Greeks foundations; Phase 2A adds strategy construction drills.</p>
     <div class="roadmap-grid">
       ${learningContent().roadmap.map((item) => `
         <article class="roadmap-card ${item.status === "locked" ? "locked" : "active"}">
@@ -2255,7 +2257,7 @@ function renderLearningModules() {
     }).join("");
     return `
       <article class="module-card">
-        <p class="learning-kicker">Week ${module.week}</p>
+        <p class="learning-kicker">Month ${module.month || 1} 路 Week ${module.week}</p>
         <h4 class="learning-title">${escapeHtml(module.title)}</h4>
         <p class="learning-copy"><strong>Core question:</strong> ${escapeHtml(module.coreQuestion)}</p>
         <span class="learning-label">D1 anchor</span>
@@ -2299,10 +2301,44 @@ function renderLearningBridge() {
   target.innerHTML = `<div class="bridge-grid">${cards}</div>`;
 }
 
+function renderLearningComparisons() {
+  const target = document.getElementById("learningComparisons");
+  if (!target) return;
+  const strategiesById = new Map(STRATEGIES.map((strategy) => [strategy.id, strategy]));
+  const cards = learningContent().strategyComparisons.map((item) => {
+    const links = (item.strategyLinks || []).map((id) => {
+      const strategy = strategiesById.get(id);
+      if (!strategy) return "";
+      return `<button class="strategy-link-chip" type="button" data-select-strategy="${escapeHtml(id)}">${escapeHtml(strategy.name)}</button>`;
+    }).join("");
+    return `
+      <article class="comparison-card">
+        <p class="learning-kicker">Strategy construction</p>
+        <h4 class="learning-title">${escapeHtml(item.title)}</h4>
+        <span class="learning-label">Client question</span>
+        <p class="learning-copy">${escapeHtml(item.clientQuestion)}</p>
+        <span class="learning-label">Use A</span>
+        <p class="learning-copy">${escapeHtml(item.useA)}</p>
+        <span class="learning-label">Use B</span>
+        <p class="learning-copy">${escapeHtml(item.useB)}</p>
+        <span class="learning-label">Key tradeoff</span>
+        <p class="learning-copy">${escapeHtml(item.keyTradeoff)}</p>
+        <span class="learning-label">Dealer lens</span>
+        <p class="learning-copy">${escapeHtml(item.dealerLens)}</p>
+        <div class="strategy-link-list">${links}</div>
+      </article>
+    `;
+  }).join("");
+  target.innerHTML = `<div class="comparison-grid">${cards}</div>`;
+}
+
 function renderScenarioFilters() {
   const target = document.getElementById("scenarioFilterRow");
+  const monthTarget = document.getElementById("scenarioMonthFilterRow");
+  const topicTarget = document.getElementById("scenarioTopicFilterRow");
   if (!target) return;
-  const validFilterIds = new Set(["all", "client", "risk", "pnl", "market-making"]);
+  const content = learningContent();
+  const validFilterIds = new Set(["all", "client", "risk", "pnl", "market-making", "strategy"]);
   if (!validFilterIds.has(state.learning.scenarioFilter)) {
     state.learning.scenarioFilter = "all";
   }
@@ -2312,30 +2348,74 @@ function renderScenarioFilters() {
     ["risk", "Risk"],
     ["pnl", "P&L"],
     ["market-making", "Market-making"],
+    ["strategy", "Strategy"],
   ];
   target.innerHTML = filters.map(([id, label]) => `
     <button class="scenario-filter ${state.learning.scenarioFilter === id ? "active" : ""}" type="button" data-scenario-filter="${id}">
       ${label}
     </button>
   `).join("");
+
+  const monthIds = new Set(["all", ...content.scenarios.map((scenario) => String(scenario.month || 1))]);
+  if (!monthIds.has(state.learning.scenarioMonthFilter)) {
+    state.learning.scenarioMonthFilter = "all";
+  }
+  if (monthTarget) {
+    const monthFilters = ["all", ...[...monthIds].filter((id) => id !== "all").sort((a, b) => Number(a) - Number(b))];
+    monthTarget.innerHTML = monthFilters.map((id) => {
+      const label = id === "all" ? "All Months" : `Month ${id}`;
+      return `
+        <button class="scenario-month-filter ${state.learning.scenarioMonthFilter === id ? "active" : ""}" type="button" data-scenario-month-filter="${id}">
+          ${label}
+        </button>
+      `;
+    }).join("");
+  }
+
+  const topicFilters = content.scenarioTopicFilters || [["all", "All Topics"]];
+  const topicIds = new Set(topicFilters.map(([id]) => id));
+  if (!topicIds.has(state.learning.scenarioTopicFilter)) {
+    state.learning.scenarioTopicFilter = "all";
+  }
+  if (topicTarget) {
+    topicTarget.innerHTML = topicFilters.map(([id, label]) => `
+      <button class="scenario-topic-filter ${state.learning.scenarioTopicFilter === id ? "active" : ""}" type="button" data-scenario-topic-filter="${id}">
+        ${escapeHtml(label)}
+      </button>
+    `).join("");
+  }
 }
 
 function renderLearningScenarios() {
   const target = document.getElementById("learningScenarios");
   if (!target) return;
-  const validFilters = new Set(["all", "client", "risk", "pnl", "market-making"]);
+  const content = learningContent();
+  const validFilters = new Set(["all", "client", "risk", "pnl", "market-making", "strategy"]);
   const filter = validFilters.has(state.learning.scenarioFilter) ? state.learning.scenarioFilter : "all";
   state.learning.scenarioFilter = filter;
-  const scenarios = learningContent().scenarios.filter((scenario) => filter === "all" || scenario.category === filter);
+  const validMonths = new Set(["all", ...content.scenarios.map((scenario) => String(scenario.month || 1))]);
+  const monthFilter = validMonths.has(state.learning.scenarioMonthFilter) ? state.learning.scenarioMonthFilter : "all";
+  state.learning.scenarioMonthFilter = monthFilter;
+  const validTopics = new Set((content.scenarioTopicFilters || [["all"]]).map(([id]) => id));
+  const topicFilter = validTopics.has(state.learning.scenarioTopicFilter) ? state.learning.scenarioTopicFilter : "all";
+  state.learning.scenarioTopicFilter = topicFilter;
+  const scenarios = content.scenarios.filter((scenario) => {
+    const scenarioTopics = scenario.topics || scenario.tags || [];
+    return (filter === "all" || scenario.category === filter)
+      && (monthFilter === "all" || String(scenario.month || 1) === monthFilter)
+      && (topicFilter === "all" || scenarioTopics.includes(topicFilter));
+  });
   const cards = scenarios.map((scenario) => {
     const completed = state.learning.completedScenarios.includes(scenario.id);
     const reviewLater = state.learning.reviewLaterScenarios.includes(scenario.id);
+    const tags = scenario.tags || [];
     return `
       <article class="scenario-card" data-scenario-card="${escapeHtml(scenario.id)}">
         <div class="scenario-meta">
+          <span>Month ${escapeHtml(scenario.month || 1)}</span>
           <span>${escapeHtml(scenario.category)}</span>
           <span>${escapeHtml(scenario.level)}</span>
-          <span>${scenario.tags.map(escapeHtml).join(" · ")}</span>
+          <span>${tags.map(escapeHtml).join(" · ")}</span>
         </div>
         <h4 class="learning-title">${escapeHtml(scenario.title)}</h4>
         <p class="learning-copy">${escapeHtml(scenario.prompt)}</p>
@@ -2364,6 +2444,7 @@ function renderLearningHub() {
   renderLearningRoadmap();
   renderLearningModules();
   renderLearningBridge();
+  renderLearningComparisons();
   renderScenarioFilters();
   renderLearningScenarios();
 }
@@ -2611,6 +2692,18 @@ function handleClick(event) {
   }
   if (event.target.matches(".scenario-filter")) {
     state.learning.scenarioFilter = event.target.dataset.scenarioFilter;
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches(".scenario-month-filter")) {
+    state.learning.scenarioMonthFilter = event.target.dataset.scenarioMonthFilter;
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches(".scenario-topic-filter")) {
+    state.learning.scenarioTopicFilter = event.target.dataset.scenarioTopicFilter;
     saveD1LearningProgress();
     renderLearningHub();
     return;

@@ -1,5 +1,7 @@
 # Option Strategy Interactive Lab
 
+2026-05-28 update: D1-to-Derivatives Learning Hub Phase 2A is implemented with 8 modules, 70 scenarios, a Strategy Construction tab, 5 comparison cards, and scenario filters by category, month, and topic.
+
 期权策略交互学习与专业交易员面试准备工具。项目最初用于学习并复刻 `https://options-viewer.netlify.app/` 的核心体验，现在已经扩展为本地可运行的策略分析、教学和面试准备平台。
 
 当前状态以这几个文档为准：
@@ -20,7 +22,7 @@
 - 情景参数、风险指标、腿组合编辑、学习路径追踪。
 - 专业模式：Portfolio Greeks、保证金教育估算、压力测试、Gamma P&L、波动率曲面、Greeks Decay、Put-Call Parity、交易员核心概念。
 - 面试模式：专业内容 + Q&A。
-- D1-to-Derivatives Learning Hub Phase 1：六个月 roadmap、Month 1 Greeks、Commodities Bridge、30 个实战/面试场景和本地进度追踪。
+- D1-to-Derivatives Learning Hub Phase 1 + Phase 2A：六个月 roadmap、Month 1 Greeks、Month 2 Strategy Construction、Commodities Bridge、5 个策略对比卡、70 个实战/面试场景和本地进度追踪。
 - Playwright 真实浏览器回归测试。
 
 ## 本地使用

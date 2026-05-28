@@ -1,5 +1,21 @@
 # Implementation History
 
+## D1-to-Derivatives Learning Hub Phase 2A (2026-05-28)
+
+Scope:
+
+- Implemented Month 2 Strategy Construction as the next step after Phase 1.
+- Added 4 Month 2 modules: vertical spreads, straddles/strangles, condors/butterflies, and protection structures.
+- Added a Strategy Construction tab with 5 comparison cards.
+- Expanded the scenario bank from 30 to 70 records.
+- Added scenario filters by category, month, and topic.
+- Preserved existing Learning Hub progress persistence and strategy-chip navigation.
+- Updated the Master Roadmap so the next recommended implementation is Phase 2B Client Recommendation Drill.
+
+Verification focus:
+
+- `tests/learning-hub.spec.js` now covers 8 modules, 70 scenarios, 5 comparison cards, Month 2 filtering, topic filtering, strategy chip navigation, progress persistence, and invalid saved-filter recovery.
+
 本文档合并了原根目录中的 Phase、bugfix、acceptance 和 documentation correction 文档。旧文档中的关键结论保留在这里，过期口径不再作为当前状态依据。
 
 ## 起点：复刻目标站

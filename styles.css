@@ -1152,7 +1152,9 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 }
 
 .learning-tab,
-.scenario-filter {
+.scenario-filter,
+.scenario-month-filter,
+.scenario-topic-filter {
   background: transparent;
   border: 0;
   border-bottom: 2px solid transparent;
@@ -1164,19 +1166,25 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 }
 
 .learning-tab:hover,
-.scenario-filter:hover {
+.scenario-filter:hover,
+.scenario-month-filter:hover,
+.scenario-topic-filter:hover {
   background: var(--panel-2);
   color: var(--text);
 }
 
 .learning-tab.active,
-.scenario-filter.active {
+.scenario-filter.active,
+.scenario-month-filter.active,
+.scenario-topic-filter.active {
   border-bottom-color: var(--cyan);
   color: var(--cyan);
 }
 
 .learning-tab:focus-visible,
 .scenario-filter:focus-visible,
+.scenario-month-filter:focus-visible,
+.scenario-topic-filter:focus-visible,
 .learning-action:focus-visible,
 .strategy-link-chip:focus-visible {
   outline: 2px solid var(--cyan);
@@ -1194,6 +1202,7 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .roadmap-grid,
 .module-grid,
 .bridge-grid,
+.comparison-grid,
 .scenario-grid {
   display: grid;
   gap: 12px;
@@ -1208,6 +1217,7 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 }
 
 .bridge-grid,
+.comparison-grid,
 .scenario-grid {
   grid-template-columns: 1fr;
 }
@@ -1215,6 +1225,7 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .roadmap-card,
 .module-card,
 .bridge-card,
+.comparison-card,
 .scenario-card {
   background: var(--panel-2);
   border: 1px solid var(--line);

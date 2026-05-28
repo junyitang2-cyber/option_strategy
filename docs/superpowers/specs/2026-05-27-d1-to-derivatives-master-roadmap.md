@@ -1,7 +1,7 @@
 # D1 to Derivatives Master Roadmap
 
 **Date**: 2026-05-27
-**Status**: Active roadmap after Phase 1
+**Status**: Active roadmap after Phase 2A
 **Owner Goal**: Help a Commodities D1 Trader prepare for Equity Derivatives, Vol Trading, Market Making, Structuring, and Derivatives Risk interviews.
 
 ---
@@ -18,13 +18,16 @@ The guiding principle is:
 
 ## Current Baseline
 
-Phase 1 is implemented:
+Phase 1 and Phase 2A are implemented:
 
 - Learning Hub panel.
 - Six-month roadmap display.
 - Month 1 Greeks modules.
 - Commodities Bridge.
-- 30 scenario bank records.
+- Month 2 Strategy Construction modules.
+- Strategy Construction comparison cards.
+- 70 scenario bank records.
+- Scenario filters by category, month, and topic.
 - LocalStorage progress via `os_d1_learning`.
 - Playwright coverage in `tests/learning-hub.spec.js`.
 
@@ -59,6 +62,8 @@ Existing platform foundation:
 ### Phase 2A: Month 2 Strategy Construction
 
 **Goal**: Teach how to select and construct option strategies from client objectives, risk budget, and market views.
+
+**Status**: Implemented on 2026-05-28.
 
 **Learning modules**
 
@@ -400,25 +405,25 @@ Each phase must update:
 
 ## Recommended Next Implementation
 
-The next implementation should be **Phase 2A: Month 2 Strategy Construction**.
+The next implementation should be **Phase 2B: Client Recommendation Drill**.
 
 Reason:
 
-- It builds directly on Month 1 Greeks.
-- It uses the existing 71-strategy library.
-- It improves interview preparation faster than jumping to exotics or market data.
-- It creates the foundation for client recommendation drills and vol trading.
+- Phase 2A already created the Month 2 strategy-construction foundation.
+- The user now needs interview-ready advisory workflow, not only strategy definitions.
+- Client drills bridge strategy comparison into recommendation language, suitability, risk disclosure, and follow-up questioning.
+- It creates a stronger base before moving into RV/IV, skew, and term-structure work in Phase 3.
 
 Suggested next plan file:
 
 ```text
-docs/superpowers/plans/2026-05-27-d1-phase2a-strategy-construction.md
+docs/superpowers/plans/2026-05-28-d1-phase2b-client-recommendation-drill.md
 ```
 
 Suggested first acceptance target:
 
-- 4 Month 2 modules.
-- 5 strategy comparison cards.
-- 40 new scenarios.
-- scenario filters by category, month, and topic.
-- Playwright coverage for module rendering, comparison rendering, filtering, answer reveal, and progress persistence.
+- 20 client recommendation drills.
+- Guided reveal from objective to constraints, alternatives, recommendation, risks, and dealer note.
+- Progress persistence per drill.
+- Strategy links from drill recommendations.
+- Playwright coverage for drill rendering, step reveal, progress persistence, and strategy links.
