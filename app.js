@@ -1840,7 +1840,7 @@ function renderInterviewQuestions() {
   const interviewQuestions = document.getElementById("interviewQuestions");
 
   if (!professionalData || !professionalData.interviewQuestions) {
-    interviewQuestions.innerHTML = `<p class="muted" style="text-align: center; padding: 2rem;">该策略暂无面试问答内容。当前已覆盖 40 个策略的专业内容，包含 141 个面试问答。</p>`;
+    interviewQuestions.innerHTML = `<p class="muted" style="text-align: center; padding: 2rem;">该策略暂无专业问答内容。当前已覆盖 40 个策略的专业内容，包含 141 个专业问答。</p>`;
     return;
   }
 
@@ -2230,10 +2230,10 @@ const LEARNING_UI_TEXT = {
     equityWorld: "Equity derivatives 世界",
     transferableInstinct: "可迁移直觉",
     refineOrUnlearn: "需要修正",
-    interviewLine: "面试表达",
+    interviewLine: "专业表述",
     optionsUpgrade: "Options 升级",
     dealerLens: "Dealer 视角",
-    interviewTakeaway: "面试表达",
+    interviewTakeaway: "核心表达",
     completed: "已完成",
     markComplete: "标记完成",
     strategyConstruction: "策略构建",
@@ -2282,10 +2282,10 @@ const LEARNING_UI_TEXT = {
     equityWorld: "Equity derivatives world",
     transferableInstinct: "Transferable instinct",
     refineOrUnlearn: "Refine or unlearn",
-    interviewLine: "Interview line",
+    interviewLine: "Professional phrasing",
     optionsUpgrade: "Options upgrade",
     dealerLens: "Dealer lens",
-    interviewTakeaway: "Interview takeaway",
+    interviewTakeaway: "Key framing",
     completed: "已完成",
     markComplete: "标记完成",
     strategyConstruction: "Strategy construction",

@@ -18,12 +18,18 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await expect(page.locator("#learningModules")).toContainText("Vertical spreads：有定义风险的方向表达");
   await expect(page.locator("#learningModules")).toContainText("Dealer 视角");
 
+  await expect(page.locator("#learningModules")).toContainText("核心表达");
+  await expect(page.locator("#learningModules")).not.toContainText(/面试|Interview/i);
+
   await page.locator('[data-complete-module="delta-d1"]').first().click();
   await expect(page.locator("#learningProgressSummary")).toContainText("模块 1/8");
 
   await page.locator("#learning-bridge-tab").click();
   await expect(page.locator("#learningBridge .bridge-card")).toHaveCount(6);
   await expect(page.locator("#learningBridge")).toContainText("不要把一种 skew 方向套到所有市场");
+
+  await expect(page.locator("#learningBridge")).toContainText("专业表述");
+  await expect(page.locator("#learningBridge")).not.toContainText(/面试|Interview/i);
 
   await page.locator("#learning-scenarios-tab").click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(70);
@@ -41,6 +47,7 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await expect(page.locator("#learningProgressSummary")).toContainText("模块 1/8");
   await expect(page.locator("#learningProgressSummary")).toContainText("场景 1/70");
   await expect(page.locator("#learning-scenarios-tab")).toHaveClass(/active/);
+  await expect(page.locator("#learningScenarios")).not.toContainText(/面试|Interview|interview-traps/i);
 });
 
 test("Learning Hub language toggle switches CN and EN", async ({ page }) => {
@@ -72,6 +79,7 @@ test("D1 phase 2A strategy construction content renders and filters", async ({ p
   await expect(page.locator("#learningComparisons .comparison-card")).toHaveCount(5);
   await expect(page.locator("#learningComparisons")).toContainText("Iron Condor vs Short Strangle");
   await expect(page.locator("#learningComparisons")).toContainText("客户问题");
+  await expect(page.locator("#learningComparisons")).not.toContainText(/面试|Interview/i);
 
   await page.locator("#learning-scenarios-tab").click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(70);

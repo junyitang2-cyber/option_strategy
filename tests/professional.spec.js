@@ -1,7 +1,7 @@
 const { test, expect } = require("@playwright/test");
 const path = require("path");
 
-test("professional and interview mode panels stay interactive", async ({ page }) => {
+test("tiered learning modes and professional practice panels stay interactive", async ({ page }) => {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => {
@@ -16,7 +16,12 @@ test("professional and interview mode panels stay interactive", async ({ page })
   await page.evaluate(() => localStorage.clear());
   await page.reload();
 
-  // Test Professional Mode
+  await expect(page.locator("#modeBasic")).toHaveText("初级");
+  await expect(page.locator("#modePro")).toHaveText("进阶");
+  await expect(page.locator("#modeInterview")).toHaveText("专业");
+  await expect(page.locator("body")).not.toContainText(/面试|Interview|Q&A/i);
+
+  // Test Intermediate Mode
   await page.locator("#modePro").click();
   await expect(page.locator("#modePro")).toHaveClass(/active/);
   await expect(page.locator("#professionalPanel")).toBeVisible();
@@ -100,12 +105,16 @@ test("professional and interview mode panels stay interactive", async ({ page })
   await expect(page.locator("#strategyTitle")).toHaveText("Poor Man's Covered Call");
   await expect(page.locator("#exposureBreakdown")).toContainText("远月ITM call");
 
-  // Test Interview Mode
+  // Test Professional Mode
   await page.locator("#modeInterview").click();
+  await expect(page.locator("#modeInterview")).toHaveClass(/active/);
   await expect(page.locator("#interviewPanel")).toBeVisible();
+  await expect(page.locator("#interviewPanel")).toContainText("专业问答");
+  await expect(page.locator("#interviewPanel")).toContainText("情景演练");
+  await expect(page.locator("body")).not.toContainText(/面试|Interview|Q&A/i);
   await expect(page.locator(".interview-qa")).not.toHaveCount(0);
 
-  // Test Basic Mode
+  // Test Beginner Mode
   await page.locator("#modeBasic").click();
   await expect(page.locator("#professionalPanel")).toBeHidden();
   await expect(page.locator("#interviewPanel")).toBeHidden();

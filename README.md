@@ -2,7 +2,7 @@
 
 2026-05-28 update: D1-to-Derivatives Learning Hub Phase 2A is implemented with 8 modules, 70 scenarios, a Strategy Construction tab, 5 comparison cards, and scenario filters by category, month, and topic.
 
-期权策略交互学习与专业交易员面试准备工具。项目最初用于学习并复刻 `https://options-viewer.netlify.app/` 的核心体验，现在已经扩展为本地可运行的策略分析、教学和面试准备平台。
+期权策略交互学习与专业交易员能力训练工具。项目最初用于学习并复刻 `https://options-viewer.netlify.app/` 的核心体验，现在已经扩展为本地可运行的策略分析、教学和专业训练平台。
 
 当前状态以这几个文档为准：
 
@@ -17,12 +17,12 @@
 
 - 71 个基础策略，其中 60 个来自原站结构，11 个为补充策略。
 - 40 个策略的专业 Trader Memo。
-- 141 个面试问答。
+- 141 个专业问答。
 - 主损益图、概率锥、逐腿分解、Greeks 六联图。
 - 情景参数、风险指标、腿组合编辑、学习路径追踪。
-- 专业模式：Portfolio Greeks、保证金教育估算、压力测试、Gamma P&L、波动率曲面、Greeks Decay、Put-Call Parity、交易员核心概念。
-- 面试模式：专业内容 + Q&A。
-- D1-to-Derivatives Learning Hub Phase 1 + Phase 2A：六个月 roadmap、Month 1 Greeks、Month 2 Strategy Construction、Commodities Bridge、5 个策略对比卡、70 个实战/面试场景和本地进度追踪。
+- 进阶模式：Portfolio Greeks、保证金教育估算、压力测试、Gamma P&L、波动率曲面、Greeks Decay、Put-Call Parity、交易员核心概念。
+- 专业模式：进阶内容 + 专业问答与情景演练。
+- D1-to-Derivatives Learning Hub Phase 1 + Phase 2A：六个月 roadmap、Month 1 Greeks、Month 2 Strategy Construction、Commodities Bridge、5 个策略对比卡、70 个实战/专业场景和本地进度追踪。
 - Playwright 真实浏览器回归测试。
 
 ## 本地使用
@@ -113,11 +113,11 @@ option_strategy/
 - `node --check data/learning-content.js`
 - `npm test`
 
-Playwright 回归测试覆盖基础渲染、学习路径、概率锥 sigma 标注、hover 预览、重置确认、专业概念面板、组合级 Greeks Decay、Portfolio/Stress/Gamma P&L/Interview 面板。
+Playwright 回归测试覆盖基础渲染、学习路径、概率锥 sigma 标注、hover 预览、重置确认、专业概念面板、组合级 Greeks Decay、Portfolio/Stress/Gamma P&L/专业训练面板。
 
 ## 重要限制
 
-这是学习和面试准备工具，不是交易系统。
+这是学习和专业训练工具，不是交易系统。
 
 - 使用教育性 Black-Scholes 与情景模拟，不接入实时行情或真实期权链。
 - Portfolio Margin 是教育性估算，不等同于真实 broker、FINRA 或 Cboe 规则。

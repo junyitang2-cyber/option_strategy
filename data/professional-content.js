@@ -1982,7 +1982,7 @@ const PROFESSIONAL_CONTENT = {
         concept: "Gamma和Theta是同一枚硬币的两面",
         explanation: "高Gamma(凸性收益)必然伴随高Theta(时间成本)。Long gamma = 付Theta买convexity。Short gamma = 收Theta承担rehedging risk。",
         formula: "Gamma P&L ≈ 0.5 × Gamma × (ΔS)²。如果realized vol > implied vol，long gamma盈利。",
-        interview: "面试中常问：'为什么不能既有high gamma又有low theta？' 答案：违反无套利原则。"
+        interview: "专业讨论常问：'为什么不能既有high gamma又有low theta？' 答案：违反无套利原则。"
       },
       vegaGammaCorrelation: {
         concept: "Vega和Gamma都在ATM附近最高",

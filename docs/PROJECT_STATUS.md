@@ -14,7 +14,7 @@ Phase 2A (Month 2 Strategy Construction) is now implemented.
 
 ## 当前结论
 
-项目当前是一个本地静态期权策略教学与面试准备工具，核心功能已经可以验收。当前完成度按学习/面试用途评估为 95%+；D1-to-Derivatives Learning Hub Phase 1 和 Phase 2A 已实现，用于把用户的 commodities D1 经验系统转换成 equity derivatives 面试优势。
+项目当前是一个本地静态期权策略教学与专业训练工具，核心功能已经可以验收。当前完成度按学习/专业训练用途评估为 95%+；D1-to-Derivatives Learning Hub Phase 1 和 Phase 2A 已实现，用于把用户的 commodities D1 经验系统转换成 equity derivatives 专业优势。
 
 ## 已完成范围
 
@@ -31,7 +31,7 @@ Phase 2A (Month 2 Strategy Construction) is now implemented.
 - 学习路径与完成标记。
 - 重置确认弹窗。
 
-### 专业模式
+### 进阶模式
 
 - 40 个策略的 Trader Memo。
 - Professional Concepts 独立面板。
@@ -43,10 +43,10 @@ Phase 2A (Month 2 Strategy Construction) is now implemented.
   - Vol Surface 教育性 smile/skew
   - 组合级 Greeks Decay
 
-### 面试模式
+### 专业模式
 
-- 141 个面试问答。
-- Q&A 覆盖 Greeks、策略构建、风险管理、客户视角、Dealer 对冲、参数选择和常见比较题。
+- 141 个专业问答。
+- 专业问答覆盖 Greeks、策略构建、风险管理、客户视角、Dealer 对冲、参数选择和常见比较题。
 
 ### D1-to-Derivatives Learning Hub
 
@@ -60,7 +60,7 @@ Phase 2A (Month 2 Strategy Construction) is now implemented.
 - 已批准 Phase 1 MVP 规格：`docs/superpowers/specs/2026-05-27-d1-to-derivatives-learning-system-design.md`。
 - 已新增长期 Master Roadmap：`docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
 - 已新增 Phase 1 实施计划：`docs/superpowers/plans/2026-05-27-d1-learning-hub-phase1.md`。
-- 暂不实施：完整 250+ 题库、exotics 定价器、mock interview 高级 dashboard、真实行情或后端。
+- 暂不实施：完整 250+ 专业题库、exotics 定价器、高级情景演练 dashboard、真实行情或后端。
 
 ### 测试
 
@@ -69,7 +69,7 @@ Phase 2A (Month 2 Strategy Construction) is now implemented.
 - `tests/smoke.spec.js`：基础渲染、策略切换、hover 预览、reset confirm。
 - `tests/phase2.spec.js`：学习路径、难度提示、逐腿分解。
 - `tests/phase3.spec.js`：概率锥、sigma 标注、增强 Notes。
-- `tests/professional.spec.js`：专业/面试模式、Professional Concepts、组合级 Greeks Decay、压力测试、Parity、Portfolio、Gamma P&L。
+- `tests/professional.spec.js`：进阶/专业模式、Professional Concepts、组合级 Greeks Decay、压力测试、Parity、Portfolio、Gamma P&L。
 - `tests/learning-hub.spec.js`：D1 Learning Hub、tab、filter、answer reveal、progress persistence、策略跳转。
 
 最近验收命令：
@@ -100,8 +100,8 @@ npm test
 ### 内容限制
 
 - 71 个策略都有基础说明，但只有 40 个策略有专业 Trader Memo。
-- 141 个 Q&A 覆盖核心内容，但新增策略未必每个都有固定 5 问。
-- 仍可继续补充真实案例、面试追问、错误答案示例和策略对比表。
+- 141 个专业问答覆盖核心内容，但新增策略未必每个都有固定 5 问。
+- 仍可继续补充真实案例、专业追问、错误答案示例和策略对比表。
 
 ## 近期优先级
 
@@ -123,27 +123,27 @@ npm test
 2. Phase 3：RV/IV、skew、term structure、event vol framework。
 3. Phase 4：Dealer hedging、market making、P&L attribution。
 4. Phase 5：Asian、Barrier、Quanto、Structured Products bridge。
-5. Phase 6：Mock interview、wrong-answer notebook、readiness dashboard。
+5. Phase 6：Scenario drills、wrong-answer notebook、skill dashboard。
 
 详细蓝图见 `docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
 
 ### P1：内容覆盖扩展
 
-目标：把专业内容从 40 个策略扩展到更多策略，优先补常见面试与实战策略。
+目标：把专业内容从 40 个策略扩展到更多策略，优先补常见专业与实战策略。
 
 建议顺序：
 
 1. Long Put Butterfly、Bull Put Spread、Call/Put Broken Wing、Double Diagonal。
 2. Covered Put、Stock Repair、Double Bull/Bear Spread。
 3. Short Calendar、Short Diagonal、更多 ratio/ladder 类策略。
-4. 每个新增策略至少补 exposure、赚钱逻辑、风险、客户适当性、Dealer hedge、3-5 个 Q&A。
+4. 每个新增策略至少补 exposure、赚钱逻辑、风险、客户适当性、Dealer hedge、3-5 个专业问答。
 
 ### P1：教学体验细化
 
 目标：让学习链路更顺。
 
 - hover 预览从文字升级为小型 payoff sparkline。
-- Notes 中加入“常见误解”和“面试易错回答”。
+- Notes 中加入“常见误解”和“专业表达易错回答”。
 - 策略对比视图：例如 Iron Condor vs Short Strangle、Straddle vs Strangle。
 - 学习进度导出/导入。
 
@@ -169,7 +169,7 @@ npm test
 
 - 策略配置导入/导出。
 - 图表导出图片或 PDF。
-- 面试题随机抽查和错题本。
+- 专业题随机抽查和错题本。
 - 移动端布局优化。
 - 中英文切换。
 
