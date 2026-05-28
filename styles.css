@@ -1192,6 +1192,7 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .scenario-topic-filter:focus-visible,
 .learning-action:focus-visible,
 .vol-playbook-filter:focus-visible,
+.exotics-filter:focus-visible,
 .strategy-link-chip:focus-visible {
   outline: 2px solid var(--cyan);
   outline-offset: 2px;
@@ -1214,6 +1215,8 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .vol-framework-grid,
 .dealer-workflow-grid,
 .dealer-attribution-grid,
+.exotics-bridge-grid,
+.structuring-case-grid,
 .scenario-grid {
   display: grid;
   gap: 12px;
@@ -1234,6 +1237,8 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .vol-framework-grid,
 .dealer-workflow-grid,
 .dealer-attribution-grid,
+.exotics-bridge-grid,
+.structuring-case-grid,
 .scenario-grid {
   grid-template-columns: 1fr;
 }
@@ -1247,6 +1252,8 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .vol-framework-card,
 .dealer-workflow-card,
 .dealer-attribution-card,
+.exotics-bridge-card,
+.structuring-case-card,
 .scenario-card {
   background: var(--panel-2);
   border: 1px solid var(--line);
@@ -1397,7 +1404,8 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
   margin-bottom: 12px;
 }
 
-.dealer-desk-hero {
+.dealer-desk-hero,
+.exotics-bridge-hero {
   align-items: end;
   background: var(--panel-2);
   border: 1px solid var(--line);
@@ -1411,6 +1419,12 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 }
 
 .dealer-attribution-section {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.structuring-case-section {
   display: grid;
   gap: 12px;
   margin-top: 12px;
@@ -1431,7 +1445,15 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
   gap: 8px;
 }
 
-.vol-playbook-filter {
+.exotics-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.vol-playbook-filter,
+.exotics-filter {
   background: var(--panel-2);
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -1442,9 +1464,44 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 }
 
 .vol-playbook-filter:hover,
-.vol-playbook-filter.active {
+.vol-playbook-filter.active,
+.exotics-filter:hover,
+.exotics-filter.active {
   border-color: var(--cyan);
   color: var(--cyan);
+}
+
+.exotics-payoff {
+  background: var(--panel-3);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  margin: 8px 0 12px;
+  padding: 8px;
+}
+
+.exotics-payoff-svg {
+  display: block;
+  height: 132px;
+  width: 100%;
+}
+
+.exotics-axis {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.exotics-payoff-line {
+  fill: none;
+  stroke: var(--green);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.exotics-payoff figcaption {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
 }
 
 .strategy-link-list {

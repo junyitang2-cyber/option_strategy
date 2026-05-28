@@ -1,10 +1,10 @@
 # D1 to Derivatives Master Roadmap
 
 **Date**: 2026-05-27
-**Status**: Active roadmap after Phase 4A/4B
+**Status**: Active roadmap after Phase 5
 **Owner Goal**: Help a Commodities D1 Trader prepare for Equity Derivatives, Vol Trading, Market Making, Structuring, and Derivatives Risk interviews.
 
-**Latest Acceptance**: Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B passed full local validation on 2026-05-28; next implementation target is Phase 5.
+**Latest Acceptance**: Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 passed full local validation on 2026-05-28; next main implementation target is Phase 6.
 
 ---
 
@@ -20,7 +20,7 @@ The guiding principle is:
 
 ## Current Baseline
 
-Phase 1, Phase 2A, Phase 2B, Phase 3A, Phase 3B, and Phase 4A/4B are implemented:
+Phase 1, Phase 2A, Phase 2B, Phase 3A, Phase 3B, Phase 4A/4B, and Phase 5 are implemented:
 
 - Learning Hub panel.
 - Six-month roadmap display.
@@ -28,10 +28,11 @@ Phase 1, Phase 2A, Phase 2B, Phase 3A, Phase 3B, and Phase 4A/4B are implemented
 - Commodities Bridge.
 - Month 2 Strategy Construction modules.
 - Strategy Construction comparison cards.
-- 155 scenario bank records.
+- 191 scenario bank records.
 - 20 client recommendation drills.
 - Vol Framework panel with RV/IV mini calculator and 9-card Vol trade playbook.
 - Dealer Desk panel with 6 dealer workflow cards and 6 P&L attribution cards.
+- Exotics Bridge panel with 6 payoff cards and 6 structuring workflow cases.
 - Enhanced Gamma P&L with rehedge threshold, transaction cost, static vs dynamic P&L, and hedge count.
 - Scenario filters by category, month, and topic.
 - LocalStorage progress via `os_d1_learning`.
@@ -252,6 +253,8 @@ Client objective -> constraints -> candidate structures -> trade-offs -> recomme
 
 **Goal**: Use the user's commodities background as an edge for exotics and structured product interviews.
 
+**Status**: Implemented on 2026-05-28. Month 5 now includes 6 modules, an Exotics Bridge panel, simplified payoff diagrams, 6 structuring workflow cases, exotics/path/suitability/cross-asset topic filters, and 36 exotics/structuring scenarios.
+
 **Learning modules**
 
 1. Asian options: averaging, path dependency, hedging challenge.
@@ -290,6 +293,14 @@ Phase 5 is educational. Do not build a production exotics pricer.
 - Every exotic page labels model limits.
 - Asian and quanto modules explicitly connect to user experience.
 - Tests cover tab rendering, payoff visibility, and scenario answer reveal.
+
+**Implemented deliverables**
+
+- Exotics Bridge tab with 6 simplified payoff cards.
+- Structuring cases that map client objective -> payoff design -> embedded option legs -> dealer risk -> disclosure language.
+- Month 5 scenario bank records for Asian, Barrier, Quanto, Digital, Autocallable, and Structured Products.
+- Complete Chinese localization for all new modules, cards, and scenarios.
+- Playwright coverage for payoff visibility, exotics filtering, Month 5 scenarios, and Put-Call Parity tool jump.
 
 ---
 
@@ -351,7 +362,8 @@ Keep learning content separate from app behavior:
   - `clientDrills`
   - `volModules`
   - `dealerDrills`
-  - `exoticsModules`
+  - `exoticsBridge`
+  - `structuringCases`
   - `mockInterviewQuestions`
 
 Do not move large content bodies into `app.js`.
@@ -418,24 +430,24 @@ Each phase must update:
 
 ## Recommended Next Implementation
 
-The next implementation should be **Phase 5: Month 5 Exotics And Structuring Bridge**.
+The next main implementation should be **Phase 6: Month 6 Interview Sprint And Readiness Dashboard**.
 
 Reason:
 
-- Phase 4A/4B has now bridged dealer-side book management, client flow, inventory, hedge decisions, quote adjustment, and P&L attribution.
-- The next capability gap is exotics and structuring: path dependency, averaging, barrier risk, quanto risk, autocallable payoff decomposition, and client suitability.
-- This is the natural layer after vanilla strategy construction, volatility trade construction, and dealer risk management.
+- Phase 5 has now bridged exotics and structuring: path dependency, averaging, barrier risk, quanto risk, digital discontinuity, autocallable payoff decomposition, issuer/dealer risk, and client suitability.
+- The next capability gap is performance training: timed sessions, answer rubrics, weak-topic tracking, wrong-answer review, and transparent readiness dashboard.
+- This is the natural layer after vanilla strategy construction, volatility trade construction, dealer risk management, and exotics payoff decomposition.
 
 Suggested next plan file:
 
 ```text
-docs/superpowers/plans/2026-05-28-d1-phase5-exotics-structuring-bridge.md
+docs/superpowers/plans/2026-05-28-d1-phase6-interview-sprint-readiness-dashboard.md
 ```
 
 Suggested first acceptance target:
 
-- Asian option averaging and path-dependency bridge.
-- Barrier option knock-in/knock-out risk framing.
-- Quanto risk decomposition: equity/commodity + FX + correlation.
-- Autocallable payoff decomposition and issuer/dealer risk.
-- Playwright coverage for exotics module rendering, scenario filters, and at least one structuring case.
+- Mock Interview mode with timed or topic-filtered sessions.
+- Answer rubric that separates must-mention, strong answer, red-flag answer, and follow-up.
+- Wrong-answer notebook and weak-topic tagging.
+- Readiness dashboard based only on local progress.
+- Playwright coverage for session creation, answer reveal, weak-topic marking, notebook updates, and dashboard counts.

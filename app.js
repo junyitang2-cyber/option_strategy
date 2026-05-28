@@ -247,6 +247,7 @@ function defaultD1LearningProgress() {
     clientDrillStepCounts: {},
     activeLearningTab: "roadmap",
     activeVolPlaybookFilter: "all",
+    activeExoticsFilter: "all",
     scenarioFilter: "all",
     scenarioMonthFilter: "all",
     scenarioTopicFilter: "all",
@@ -2212,7 +2213,7 @@ function renderCoverage() {
 }
 
 function learningContent() {
-  return window.D1_LEARNING_CONTENT || { roadmap: [], modules: [], bridgeComparisons: [], strategyComparisons: [], clientDrills: [], volFramework: [], volPlaybook: [], dealerWorkflow: [], dealerPnlAttribution: [], scenarios: [] };
+  return window.D1_LEARNING_CONTENT || { roadmap: [], modules: [], bridgeComparisons: [], strategyComparisons: [], clientDrills: [], volFramework: [], volPlaybook: [], dealerWorkflow: [], dealerPnlAttribution: [], exoticsBridge: [], structuringCases: [], scenarios: [] };
 }
 
 const LEARNING_UI_TEXT = {
@@ -2225,6 +2226,7 @@ const LEARNING_UI_TEXT = {
       "client-drills": "客户推荐",
       "vol-framework": "Vol 框架",
       "dealer-desk": "Dealer Desk",
+      "exotics-bridge": "Exotics Bridge",
       scenarios: "场景题库",
     },
     progressModules: "模块",
@@ -2278,6 +2280,16 @@ const LEARNING_UI_TEXT = {
     openGammaPnl: "打开 Gamma P&L",
     dealerWorkflow: "Dealer Workflow",
     dealerPnlAttribution: "P&L Attribution",
+    exoticsBridge: "Exotics Bridge",
+    structuringCase: "Structuring Case",
+    allExotics: "全部 Exotics",
+    exoticProduct: "产品结构",
+    payoffDesign: "Payoff 设计",
+    embeddedOptionLegs: "嵌入期权腿",
+    keyRisks: "核心风险",
+    modelLimit: "模型限制",
+    disclosureLanguage: "披露语言",
+    openParity: "打开 Put-Call Parity",
     clientOrder: "客户订单",
     dealerExposure: "Dealer exposure",
     hedgeAction: "Hedge action",
@@ -2327,6 +2339,7 @@ const LEARNING_UI_TEXT = {
       "client-drills": "Client Drill",
       "vol-framework": "Vol Framework",
       "dealer-desk": "Dealer Desk",
+      "exotics-bridge": "Exotics Bridge",
       scenarios: "Scenario Bank",
     },
     progressModules: "Modules",
@@ -2380,6 +2393,16 @@ const LEARNING_UI_TEXT = {
     openGammaPnl: "Open Gamma P&L",
     dealerWorkflow: "Dealer workflow",
     dealerPnlAttribution: "P&L attribution",
+    exoticsBridge: "Exotics Bridge",
+    structuringCase: "Structuring Case",
+    allExotics: "All Exotics",
+    exoticProduct: "Product structure",
+    payoffDesign: "Payoff design",
+    embeddedOptionLegs: "Embedded option legs",
+    keyRisks: "Key risks",
+    modelLimit: "Model limit",
+    disclosureLanguage: "Disclosure language",
+    openParity: "Open Put-Call Parity",
     clientOrder: "Client order",
     dealerExposure: "Dealer exposure",
     hedgeAction: "Hedge action",
@@ -2465,7 +2488,7 @@ function renderLearningProgressSummary() {
 }
 
 function renderLearningTabs() {
-  const validTabs = new Set(["roadmap", "modules", "bridge", "construction", "client-drills", "vol-framework", "dealer-desk", "scenarios"]);
+  const validTabs = new Set(["roadmap", "modules", "bridge", "construction", "client-drills", "vol-framework", "dealer-desk", "exotics-bridge", "scenarios"]);
   const active = validTabs.has(state.learning.activeLearningTab) ? state.learning.activeLearningTab : "roadmap";
   state.learning.activeLearningTab = active;
   const labels = LEARNING_UI_TEXT[learningLanguage()].tabs;
@@ -2880,6 +2903,148 @@ function renderLearningDealerDesk() {
   `;
 }
 
+function exoticsBridgeFilters() {
+  const content = learningContent();
+  const filters = learningLanguage() === "cn"
+    ? (window.D1_LEARNING_CONTENT_ZH?.exoticsBridgeFilters || content.exoticsBridgeFilters)
+    : content.exoticsBridgeFilters;
+  return filters || [["all", learningUiText("allExotics")]];
+}
+
+function validExoticsFilterIds() {
+  return new Set(exoticsBridgeFilters().map(([id]) => id));
+}
+
+function renderExoticPayoffSvg(points, label) {
+  if (!Array.isArray(points) || points.length < 2) return "";
+  const numeric = points
+    .map(([x, y]) => [Number(x), Number(y)])
+    .filter(([x, y]) => Number.isFinite(x) && Number.isFinite(y));
+  if (numeric.length < 2) return "";
+  const width = 320;
+  const height = 132;
+  const pad = 18;
+  const xs = numeric.map(([x]) => x);
+  const ys = numeric.map(([, y]) => y);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minY = Math.min(0, ...ys);
+  const maxY = Math.max(0, ...ys);
+  const spanX = Math.max(1, maxX - minX);
+  const spanY = Math.max(1, maxY - minY);
+  const plotW = width - pad * 2;
+  const plotH = height - pad * 2;
+  const xScale = (x) => pad + ((x - minX) / spanX) * plotW;
+  const yScale = (y) => height - pad - ((y - minY) / spanY) * plotH;
+  const path = numeric.map(([x, y]) => `${xScale(x).toFixed(1)},${yScale(y).toFixed(1)}`).join(" ");
+  const zeroY = yScale(0).toFixed(1);
+  return `
+    <figure class="exotics-payoff">
+      <svg class="exotics-payoff-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(label)}">
+        <line class="exotics-axis" x1="${pad}" y1="${zeroY}" x2="${width - pad}" y2="${zeroY}"></line>
+        <line class="exotics-axis" x1="${pad}" y1="${pad}" x2="${pad}" y2="${height - pad}"></line>
+        <polyline class="exotics-payoff-line" points="${path}"></polyline>
+      </svg>
+      <figcaption>${escapeHtml(label)}</figcaption>
+    </figure>
+  `;
+}
+
+function renderLearningExoticsBridge() {
+  const target = document.getElementById("learningExoticsBridge");
+  if (!target) return;
+  const content = learningContent();
+  const strategiesById = new Map(STRATEGIES.map((strategy) => [strategy.id, strategy]));
+  const validFilters = validExoticsFilterIds();
+  if (!validFilters.has(state.learning.activeExoticsFilter)) {
+    state.learning.activeExoticsFilter = "all";
+  }
+  const activeFilter = state.learning.activeExoticsFilter;
+  const filterRow = exoticsBridgeFilters().map(([id, label]) => `
+    <button class="exotics-filter ${activeFilter === id ? "active" : ""}" type="button" data-exotics-filter="${escapeHtml(id)}">
+      ${escapeHtml(label)}
+    </button>
+  `).join("");
+  const exoticsCards = (content.exoticsBridge || [])
+    .filter((item) => activeFilter === "all" || item.group === activeFilter)
+    .map((item) => {
+      const links = (item.strategyLinks || []).map((id) => {
+        const strategy = strategiesById.get(id);
+        if (!strategy) return "";
+        return `<button class="strategy-link-chip" type="button" data-select-strategy="${escapeHtml(id)}">${escapeHtml(strategy.name)}</button>`;
+      }).join("");
+      const embeddedLegs = localizedLearningList("exoticsBridge", item, "embeddedLegs");
+      const keyRisks = localizedLearningList("exoticsBridge", item, "keyRisks");
+      return `
+        <article class="exotics-bridge-card">
+          <p class="learning-kicker">${escapeHtml(learningUiText("exoticsBridge"))}</p>
+          <h4 class="learning-title">${escapeHtml(localizedLearning("exoticsBridge", item, "title"))}</h4>
+          ${renderExoticPayoffSvg(item.payoffPoints, localizedLearning("exoticsBridge", item, "payoffLabel"))}
+          <span class="learning-label">${escapeHtml(learningUiText("exoticProduct"))}</span>
+          <p class="learning-copy">${escapeHtml(localizedLearning("exoticsBridge", item, "product"))}</p>
+          <span class="learning-label">${escapeHtml(learningUiText("d1Anchor"))}</span>
+          <p class="learning-copy">${escapeHtml(localizedLearning("exoticsBridge", item, "d1Anchor"))}</p>
+          <span class="learning-label">${escapeHtml(learningUiText("payoffDesign"))}</span>
+          <p class="learning-copy">${escapeHtml(localizedLearning("exoticsBridge", item, "payoffDesign"))}</p>
+          <span class="learning-label">${escapeHtml(learningUiText("embeddedOptionLegs"))}</span>
+          <ul class="client-drill-list">${embeddedLegs.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
+          <span class="learning-label">${escapeHtml(learningUiText("keyRisks"))}</span>
+          <ul class="client-drill-list">${keyRisks.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
+          <span class="learning-label">${escapeHtml(learningUiText("modelLimit"))}</span>
+          <p class="learning-copy">${escapeHtml(localizedLearning("exoticsBridge", item, "modelLimit"))}</p>
+          <span class="learning-label">${escapeHtml(learningUiText("interviewLine"))}</span>
+          <p class="learning-copy">${escapeHtml(localizedLearning("exoticsBridge", item, "interviewLine"))}</p>
+          <div class="strategy-link-list">${links}</div>
+        </article>
+      `;
+    }).join("");
+  const structuringCards = (content.structuringCases || [])
+    .filter((item) => activeFilter === "all" || item.group === activeFilter)
+    .map((item) => {
+      const keyRisks = localizedLearningList("structuringCases", item, "keyRisks");
+      return `
+        <article class="structuring-case-card">
+          <p class="learning-kicker">${escapeHtml(learningUiText("structuringCase"))}</p>
+          <h4 class="learning-title">${escapeHtml(localizedLearning("structuringCases", item, "title"))}</h4>
+          <span class="learning-label">${escapeHtml(learningUiText("clientObjective"))}</span>
+          <p class="learning-copy">${escapeHtml(localizedLearning("structuringCases", item, "clientObjective"))}</p>
+          <span class="learning-label">${escapeHtml(learningUiText("payoffDesign"))}</span>
+          <p class="learning-copy">${escapeHtml(localizedLearning("structuringCases", item, "payoffDesign"))}</p>
+          <span class="learning-label">${escapeHtml(learningUiText("embeddedOptionLegs"))}</span>
+          <p class="learning-copy">${escapeHtml(localizedLearning("structuringCases", item, "embeddedOptions"))}</p>
+          <span class="learning-label">${escapeHtml(learningUiText("dealerLens"))}</span>
+          <p class="learning-copy">${escapeHtml(localizedLearning("structuringCases", item, "dealerRisk"))}</p>
+          <span class="learning-label">${escapeHtml(learningUiText("keyRisks"))}</span>
+          <ul class="client-drill-list">${keyRisks.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
+          <span class="learning-label">${escapeHtml(learningUiText("disclosureLanguage"))}</span>
+          <p class="learning-copy">${escapeHtml(localizedLearning("structuringCases", item, "disclosure"))}</p>
+          <span class="learning-label">${escapeHtml(learningUiText("modelLimit"))}</span>
+          <p class="learning-copy">${escapeHtml(localizedLearning("structuringCases", item, "modelLimit"))}</p>
+        </article>
+      `;
+    }).join("");
+
+  target.innerHTML = `
+    <section class="exotics-bridge-hero">
+      <div>
+        <p class="learning-kicker">${escapeHtml(learningUiText("exoticsBridge"))}</p>
+        <h4 class="learning-title">Commodities path risk -> Equity derivatives structuring language</h4>
+        <p class="learning-copy">Phase 5 只做教育性 payoff 拆解：重点是 path dependency、barrier monitoring、quanto correlation、issuer/dealer risk 和 suitability，不是生产级 exotics pricer。</p>
+      </div>
+      <button class="learning-action" type="button" data-open-tool="parity">${escapeHtml(learningUiText("openParity"))}</button>
+    </section>
+    <div class="exotics-filter-row">${filterRow}</div>
+    <div class="exotics-bridge-grid">${exoticsCards}</div>
+    <section class="structuring-case-section">
+      <div class="dealer-playbook-heading">
+        <p class="learning-kicker">${escapeHtml(learningUiText("structuringCase"))}</p>
+        <h4 class="learning-title">Client objective -> payoff design -> embedded risk -> disclosure</h4>
+      </div>
+      <div class="structuring-case-grid">${structuringCards}</div>
+    </section>
+  `;
+}
+
 function renderScenarioFilters() {
   const target = document.getElementById("scenarioFilterRow");
   const monthTarget = document.getElementById("scenarioMonthFilterRow");
@@ -2999,6 +3164,7 @@ function renderLearningHub() {
   renderLearningClientDrills();
   renderLearningVolFramework();
   renderLearningDealerDesk();
+  renderLearningExoticsBridge();
   renderScenarioFilters();
   renderLearningScenarios();
 }
@@ -3256,6 +3422,12 @@ function handleClick(event) {
   }
   if (event.target.matches(".vol-playbook-filter")) {
     state.learning.activeVolPlaybookFilter = event.target.dataset.volPlaybookFilter;
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches(".exotics-filter")) {
+    state.learning.activeExoticsFilter = event.target.dataset.exoticsFilter;
     saveD1LearningProgress();
     renderLearningHub();
     return;

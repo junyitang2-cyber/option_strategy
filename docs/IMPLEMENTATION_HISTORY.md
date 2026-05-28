@@ -1,5 +1,30 @@
 # Implementation History
 
+## D1-to-Derivatives Learning Hub Phase 5 (2026-05-28)
+
+Scope:
+
+- Implemented Month 5 Exotics And Structuring Bridge.
+- Added 6 Month 5 modules: Asian averaging, barrier monitoring, quanto cross-asset risk, digital discontinuity, autocallable decomposition, and structured-product workflow.
+- Added a Learning Hub `Exotics Bridge` tab.
+- Added 6 simplified exotic payoff cards with model-limit labels, embedded option legs, key risks, and professional phrasing.
+- Added 6 structuring workflow cases covering client objective, payoff design, embedded legs, dealer risk, key risks, disclosure language, and model limits.
+- Added 36 Month 5 scenarios across client, risk, P&L, market-making, and strategy categories.
+- Added scenario topic filters for exotics, asian, barrier, quanto, digital, autocallable, structured-product, path, suitability, and cross-asset.
+- Maintained complete Chinese localization across all 191 Scenario Bank records and all new Phase 5 cards.
+- Updated roadmap and status docs so Phase 6 interview sprint and readiness dashboard is the next main D1-to-Derivatives implementation target.
+
+Verification focus:
+
+- `tests/learning-hub.spec.js` covers 25 modules, 191 scenarios, 36 Month 5 scenarios, Exotics Bridge rendering, payoff SVG visibility, structuring cases, exotics filters, Month 5 scenario filters, and localization completeness.
+
+Acceptance result:
+
+- 2026-05-28 full regression passed.
+- Static checks passed: `node --check app.js`, `node --check data/professional-content.js`, `node --check data/learning-content.js`, and `git diff --check`.
+- Data integrity passed: 25 modules, 191 scenarios, 20 client drills, 5 strategy comparisons, 5 vol framework cards, 9 vol playbook cards, 6 dealer workflow cards, 6 P&L attribution cards, 6 exotics bridge cards, and 6 structuring cases.
+- Full Playwright suite passed: `14 passed (19.2s)`.
+
 ## D1-to-Derivatives Learning Hub Phase 4A/4B (2026-05-28)
 
 Scope:

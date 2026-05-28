@@ -53,19 +53,20 @@ npm test
 
 ## D1-to-Derivatives Learning Hub
 
-Phase 4A/4B is now available here: open Dealer Desk to train client flow -> dealer exposure -> hedge action -> quote adjustment -> residual risk, and use the enhanced Gamma P&L tool to compare static P&L, dynamic hedge P&L, rehedge thresholds, and transaction costs.
+Phase 5 is now available here: open Exotics Bridge to train Asian, Barrier, Quanto, Digital, Autocallable, and Structured Product payoff decomposition, then use Scenario Bank Month 5 to practice suitability, path dependency, issuer/dealer risk, and disclosure language.
 
 
 页面顶部的“交易员学习中枢”用于把 commodities D1 经验转成 equity derivatives 专业表达。
 
-- `Roadmap`：查看六个月学习路径。当前开放 Month 1 Greeks、Month 2 Strategy Construction、Month 3 Volatility Framework 和 Month 4 Dealer Hedging / Market Making。
-- `学习模块`：按 Delta、Gamma、Vega、Theta/Rho、strategy construction、RV/IV、event vol、skew、term structure、vol surface、dealer inventory、delta hedging、gamma scalping、vega buckets、quote skewing 和 P&L attribution 学习。
+- `Roadmap`：查看六个月学习路径。当前开放 Month 1 Greeks、Month 2 Strategy Construction、Month 3 Volatility Framework、Month 4 Dealer Hedging / Market Making 和 Month 5 Exotics / Structuring。
+- `学习模块`：按 Delta、Gamma、Vega、Theta/Rho、strategy construction、RV/IV、event vol、skew、term structure、vol surface、dealer inventory、delta hedging、gamma scalping、vega buckets、quote skewing、P&L attribution、Asian averaging、barrier monitoring、quanto、digital、autocallable 和 structured products 学习。
 - `Strategy Construction`：查看 Month 2 的策略选择对比，包括 straddle/strangle、iron condor/short strangle、collar/protective put 等。
 - `客户推荐`：做 20 个 client recommendation drills，按客户目标、约束条件、候选结构、推荐结构、风险披露、Dealer 视角和专业表达逐步展开。
 - `Vol 框架`：学习 RV/IV、event vol、skew、term structure 和 surface shifts；用小计算器理解 implied move 与 breakeven RV；用 Vol trade playbook 比较 long vol、short vol、event、skew、term structure 和 surface-bucket 交易。
 - `Dealer Desk`：训练 dealer workflow，明确客户 payoff 与 dealer Greeks/inventory 的区别，并学习 delta hedge、quote adjustment、residual risk 和 P&L attribution。
+- `Exotics Bridge`：用简化 payoff 图学习 Asian、Barrier、Quanto、Digital、Autocallable 和 Capital-protected note；每张卡都标注 embedded legs、核心风险、model limit 和专业表达；下方 structuring cases 按客户目标、payoff 设计、dealer risk 和 disclosure language 拆解。
 - `Commodities Bridge`：对比 commodities D1 与 equity derivatives 的相同点和需要修正的直觉。
-- `Scenario Bank`：按 category、month、topic 练习场景题，可过滤 vol、skew、term-structure、event、surface、short-vol、gamma、liquidity、dealer、hedging、quote、attribution、inventory，可 reveal answer、标记理解、加入复习。
+- `Scenario Bank`：按 category、month、topic 练习场景题，可过滤 vol、skew、term-structure、event、surface、short-vol、gamma、liquidity、dealer、hedging、quote、attribution、inventory、exotics、asian、barrier、quanto、digital、autocallable、structured-product、path、suitability 和 cross-asset，可 reveal answer、标记理解、加入复习。
 
 模块、场景题和客户推荐演练进度保存在本机浏览器 localStorage，不会上传到服务器。
 

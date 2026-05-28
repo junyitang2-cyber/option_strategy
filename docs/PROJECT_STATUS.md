@@ -1,42 +1,42 @@
 # Project Status And Roadmap
 
-## 2026-05-28 Update: D1 Learning Hub Phase 4A/4B
+## 2026-05-28 Update: D1 Learning Hub Phase 5
 
-Phase 4A/4B (Dealer Hedging, Market Making, Dynamic Hedging, and P&L Attribution) is now implemented as Month 4.
+Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
 
-- Learning Hub now contains 19 modules: Month 1 Greeks, Month 2 strategy construction, Month 3 volatility framework, and Month 4 dealer/market-making modules.
-- Scenario Bank now contains 155 scenarios: 30 Month 1 foundation records, 40 Month 2 construction records, 45 Month 3 volatility records, and 40 Month 4 dealer records.
+- Learning Hub now contains 25 modules: Month 1 Greeks, Month 2 strategy construction, Month 3 volatility framework, Month 4 dealer/market-making, and Month 5 exotics/structuring modules.
+- Scenario Bank now contains 191 scenarios: 30 Month 1 foundation records, 40 Month 2 construction records, 45 Month 3 volatility records, 40 Month 4 dealer records, and 36 Month 5 exotics/structuring records.
 - New Strategy Construction tab renders 5 comparison cards: Straddle vs Strangle, Iron Condor vs Short Strangle, Collar vs Protective Put, Bull Call Spread vs Long Call, and Calendar Spread vs Vertical Spread.
 - New Client Recommendation tab renders 20 guided client structure drills.
 - Vol Framework tab renders 5 volatility framework cards, an RV/IV breakeven mini calculator, and a 9-card Vol trade playbook covering long vol, short vol, event, skew, term-structure, and surface-bucket setups.
 - Dealer Desk tab renders 6 dealer workflow cards and 6 P&L attribution cards.
+- Exotics Bridge tab renders 6 simplified exotic payoff cards and 6 structuring workflow cases.
 - Gamma P&L tool now includes rehedge threshold, transaction cost, Static P&L, Dynamic P&L, hedge count, and transaction-cost attribution.
 - Client drills reveal objective, profile, constraints, candidates, recommendation, risks, Dealer note, professional expression, and follow-ups step by step.
 - Client drill completion and revealed step progress persist in localStorage.
-- Scenario filters now support category, month, and topic, including vol/skew/term-structure/event/surface/short-vol/gamma/liquidity/dealer/hedging/quote/attribution/inventory filters.
-- All 155 Learning Hub scenarios now have explicit Chinese localization records.
-- Next D1 roadmap implementation should move to Phase 5: exotics and structuring bridge.
+- Scenario filters now support category, month, and topic, including vol/skew/term-structure/event/surface/short-vol/gamma/liquidity/dealer/hedging/quote/attribution/inventory/exotics/asian/barrier/quanto/digital/autocallable/structured-product/path/suitability/cross-asset filters.
+- All 191 Learning Hub scenarios now have explicit Chinese localization records.
+- Next D1 roadmap implementation should move to Phase 6: interview sprint and readiness dashboard. Optional Phase 5B can deepen exotics risk and suitability cases before Phase 6.
 
 最后更新：2026-05-28
 
 ## 当前结论
 
-项目当前是一个本地静态期权策略教学与专业训练工具，核心功能已经可以验收。当前完成度按学习/专业训练用途评估为 95%+；D1-to-Derivatives Learning Hub Phase 1、Phase 2A、Phase 2B、Phase 3A、Phase 3B 和 Phase 4A/4B 已实现，用于把用户的 commodities D1 经验系统转换成 equity derivatives 专业优势。
+项目当前是一个本地静态期权策略教学与专业训练工具，核心功能已经可以验收。当前完成度按学习/专业训练用途评估为 95%+；D1-to-Derivatives Learning Hub Phase 1、Phase 2A、Phase 2B、Phase 3A、Phase 3B、Phase 4A/4B 和 Phase 5 已实现，用于把用户的 commodities D1 经验系统转换成 equity derivatives 专业优势。
 
 ## 2026-05-28 完整验收记录
 
-结论：Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B 可验收。
+结论：Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 可验收。
 
 已通过检查：
 
 - 静态语法：`node --check app.js`、`node --check data/professional-content.js`、`node --check data/learning-content.js`。
 - 空白/补丁检查：`git diff --check`。
-- 数据完整性：19 modules、155 scenarios、20 client drills、5 strategy comparisons、5 vol framework cards、9 vol playbook cards、6 dealer workflow cards、6 P&L attribution cards。
-- 场景分布：Month 1 = 30、Month 2 = 40、Month 3 = 45、Month 4 = 40。
-- 本地化与引用：155 个 Scenario Bank 场景中文 localization 完整；scenario-module links 与 strategy links 无坏引用。
-- 桌面 Playwright spot check：Learning Hub、Strategy Construction、Client Drills、Vol Framework、Dealer Desk、Gamma P&L、Scenario filters、Professional tools 均正常，无 page error / console error。
-- 移动端 390x844 Playwright spot check：Learning modules、Vol Framework、Dealer Desk、Month 4 scenario filter 均正常，无 page error / console error。
-- 自动化回归：`npm test` 结果为 `13 passed (14.4s)`。
+- 数据完整性：25 modules、191 scenarios、20 client drills、5 strategy comparisons、5 vol framework cards、9 vol playbook cards、6 dealer workflow cards、6 P&L attribution cards、6 exotics bridge cards、6 structuring cases。
+- 场景分布：Month 1 = 30、Month 2 = 40、Month 3 = 45、Month 4 = 40、Month 5 = 36。
+- 本地化与引用：191 个 Scenario Bank 场景中文 localization 完整；scenario-module links 与 strategy links 无坏引用。
+- Playwright browser regression：Learning Hub、Strategy Construction、Client Drills、Vol Framework、Dealer Desk、Exotics Bridge、Gamma P&L、Scenario filters、Professional tools 均正常。
+- 自动化回归：`npm test` 结果为 `14 passed (19.2s)`。
 
 保留限制：当前仍是静态教学与训练平台，不接入实时行情、真实期权链、真实 broker margin 或真实做市执行系统。
 
@@ -74,18 +74,20 @@ Phase 4A/4B (Dealer Hedging, Market Making, Dynamic Hedging, and P&L Attribution
 
 ### D1-to-Derivatives Learning Hub
 
-- 六个月 roadmap，已开放 Month 1 Greeks、Month 2 Strategy Construction、Month 3 Volatility Framework 和 Month 4 Dealer Hedging / Market Making。
+- 六个月 roadmap，已开放 Month 1 Greeks、Month 2 Strategy Construction、Month 3 Volatility Framework、Month 4 Dealer Hedging / Market Making 和 Month 5 Exotics / Structuring。
 - Month 1 Greeks：Delta、Gamma、Vega、Theta/Rho。
 - Month 2 Strategy Construction：vertical spreads、straddles/strangles、condors/butterflies、protection structures。
 - Month 3 Volatility Framework：RV/IV、event vol、equity skew、term structure、vol surface reading。
 - Month 4 Dealer Hedging / Market Making：client flow、inventory、delta hedging、gamma scalping、vega buckets、quote skewing、P&L attribution。
+- Month 5 Exotics / Structuring：Asian averaging、barrier monitoring、quanto cross-asset risk、digital discontinuity、autocallable decomposition、structured product workflow。
 - Commodities Bridge：D1 commodities 经验到 equity derivatives 的迁移框架。
 - Strategy Construction：5 个策略对比卡。
 - Client Recommendation：20 个客户结构推荐演练，支持逐步展开和策略链接跳转。
 - Vol Framework：5 个 volatility 框架卡 + RV/IV breakeven 小计算器 + 9 个 Vol trade playbook 卡，并可跳转到 Vol Surface 工具。
 - Dealer Desk：6 个 dealer workflow 卡 + 6 个 P&L attribution 卡，并可跳转到 Gamma P&L 工具。
-- Scenario Bank：155 个 client/risk/P&L/market-making/strategy 场景，支持 category/month/topic 过滤。
-- 中文本地化：155 个 Scenario Bank 场景、9 个 Vol trade playbook、6 个 dealer workflow 和 6 个 P&L attribution 均有中文 override，不再依赖英文 fallback。
+- Exotics Bridge：6 个简化 exotic payoff cards + 6 个 structuring workflow cases，并可跳转到 Put-Call Parity 工具。
+- Scenario Bank：191 个 client/risk/P&L/market-making/strategy 场景，支持 category/month/topic 过滤。
+- 中文本地化：191 个 Scenario Bank 场景、9 个 Vol trade playbook、6 个 dealer workflow、6 个 P&L attribution、6 个 exotics bridge cards 和 6 个 structuring cases 均有中文 override，不再依赖英文 fallback。
 - 本地进度追踪：模块完成、场景完成、客户推荐演练完成、逐步展开状态、复习标记和当前学习 tab。
 - 已批准 Phase 1 MVP 规格：`docs/superpowers/specs/2026-05-27-d1-to-derivatives-learning-system-design.md`。
 - 已新增长期 Master Roadmap：`docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
@@ -100,8 +102,8 @@ Phase 4A/4B (Dealer Hedging, Market Making, Dynamic Hedging, and P&L Attribution
 - `tests/phase2.spec.js`：学习路径、难度提示、逐腿分解。
 - `tests/phase3.spec.js`：概率锥、sigma 标注、增强 Notes。
 - `tests/professional.spec.js`：进阶/专业模式、Professional Concepts、组合级 Greeks Decay、压力测试、Parity、Portfolio、增强 Gamma P&L。
-- `tests/learning-hub.spec.js`：D1 Learning Hub、tab、filter、answer reveal、client drill step reveal、Vol Framework/RV-IV calculator、Vol trade playbook、Dealer Desk、P&L attribution、progress persistence、策略跳转。
-- `tests/learning-hub.spec.js` 同时检查 Scenario Bank 与 Vol trade playbook 的中文本地化完整性。
+- `tests/learning-hub.spec.js`：D1 Learning Hub、tab、filter、answer reveal、client drill step reveal、Vol Framework/RV-IV calculator、Vol trade playbook、Dealer Desk、P&L attribution、Exotics Bridge、structuring cases、progress persistence、策略跳转。
+- `tests/learning-hub.spec.js` 同时检查 Scenario Bank、Vol trade playbook、Exotics Bridge 与 structuring cases 的中文本地化完整性。
 
 最近验收命令：
 
@@ -133,6 +135,7 @@ npm test
 - 71 个策略都有基础说明，但只有 40 个策略有专业 Trader Memo。
 - 141 个专业问答覆盖核心内容，但新增策略未必每个都有固定 5 问。
 - 20 个客户推荐演练、45 个 Month 3 vol 场景和 40 个 Month 4 dealer 场景覆盖常见结构推荐、vol 判断、dealer flow、hedging 与 P&L attribution 场景，但仍是教育性框架，不是实际 suitability advice、交易信号或真实做市系统。
+- 36 个 Month 5 exotics/structuring 场景覆盖 Asian、Barrier、Quanto、Digital、Autocallable 和 structured product，但不构成生产级 exotic pricer、发行条款建议或真实 suitability advice。
 - 仍可继续补充真实案例、专业追问、错误答案示例和策略对比表。
 
 ## 近期优先级
@@ -147,13 +150,13 @@ npm test
 
 ### P1：D1-to-Derivatives 后续扩展
 
-目标：基于 Phase 1 + Phase 2A + Phase 2B + Phase 3A + Phase 3B + Phase 4A/4B 使用反馈，进入 exotics 与 structuring bridge。
+目标：基于 Phase 1 + Phase 2A + Phase 2B + Phase 3A + Phase 3B + Phase 4A/4B + Phase 5 使用反馈，进入 mock interview 和 readiness tracking。
 
 建议顺序：
 
-1. Phase 5：Asian、Barrier、Quanto、Structured Products bridge。
-2. Phase 5B：Exotics risk decomposition、issuer/dealer risk、client suitability cases。
-3. Phase 6：Scenario drills、wrong-answer notebook、skill dashboard。
+1. Phase 5B：Exotics risk decomposition、issuer/dealer risk、client suitability cases 的深化版。
+2. Phase 6：Scenario drills、wrong-answer notebook、skill dashboard。
+3. Phase 6B：更完整的 mock interview rubrics、weak-topic recommendation 和 progress export。
 
 详细蓝图见 `docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
 

@@ -4,8 +4,8 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
   await expect(page.locator("#learningHubPanel")).toBeVisible();
-  await expect(page.locator("#learningProgressSummary")).toContainText("模块 0/19");
-  await expect(page.locator("#learningProgressSummary")).toContainText("场景 0/155");
+  await expect(page.locator("#learningProgressSummary")).toContainText("模块 0/25");
+  await expect(page.locator("#learningProgressSummary")).toContainText("场景 0/191");
   await expect(page.locator("#learning-roadmap-tab")).toContainText("路线图");
 
   await expect(page.locator("#learningRoadmap .roadmap-card")).toHaveCount(6);
@@ -13,20 +13,22 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await expect(page.locator("#learningRoadmap")).toContainText("策略构建");
   await expect(page.locator("#learningRoadmap")).toContainText("Volatility trading 框架");
   await expect(page.locator("#learningRoadmap")).toContainText("动态对冲与做市");
+  await expect(page.locator("#learningRoadmap")).toContainText("Exotics 与 structuring");
 
   await page.locator("#learning-modules-tab").click();
-  await expect(page.locator("#learningModules .module-card")).toHaveCount(19);
+  await expect(page.locator("#learningModules .module-card")).toHaveCount(25);
   await expect(page.locator("#learningModules")).toContainText("Delta：D1 方向敞口变成动态敞口");
   await expect(page.locator("#learningModules")).toContainText("Vertical spreads：有定义风险的方向表达");
   await expect(page.locator("#learningModules")).toContainText("RV vs IV：把波动率当成可交易风险因子");
   await expect(page.locator("#learningModules")).toContainText("Client flow 与 dealer inventory");
+  await expect(page.locator("#learningModules")).toContainText("Asian options：averaging 把 timing risk 变成 path risk");
   await expect(page.locator("#learningModules")).toContainText("Dealer 视角");
 
   await expect(page.locator("#learningModules")).toContainText("核心表达");
   await expect(page.locator("#learningModules")).not.toContainText(/面试|Interview/i);
 
   await page.locator('[data-complete-module="delta-d1"]').first().click();
-  await expect(page.locator("#learningProgressSummary")).toContainText("模块 1/19");
+  await expect(page.locator("#learningProgressSummary")).toContainText("模块 1/25");
 
   await page.locator("#learning-bridge-tab").click();
   await expect(page.locator("#learningBridge .bridge-card")).toHaveCount(6);
@@ -36,20 +38,20 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await expect(page.locator("#learningBridge")).not.toContainText(/面试|Interview/i);
 
   await page.locator("#learning-scenarios-tab").click();
-  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(155);
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(191);
   await page.locator('[data-scenario-filter="client"]').click();
-  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(31);
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(43);
 
   await page.locator('[data-reveal-scenario="client-collar-downside"]').click();
   await expect(page.locator("#scenario-answer-client-collar-downside")).toBeVisible();
   await expect(page.locator("#scenario-answer-client-collar-downside")).toContainText("protective put 或 collar");
 
   await page.locator('[data-complete-scenario="client-collar-downside"]').click();
-  await expect(page.locator("#learningProgressSummary")).toContainText("场景 1/155");
+  await expect(page.locator("#learningProgressSummary")).toContainText("场景 1/191");
 
   await page.reload();
-  await expect(page.locator("#learningProgressSummary")).toContainText("模块 1/19");
-  await expect(page.locator("#learningProgressSummary")).toContainText("场景 1/155");
+  await expect(page.locator("#learningProgressSummary")).toContainText("模块 1/25");
+  await expect(page.locator("#learningProgressSummary")).toContainText("场景 1/191");
   await expect(page.locator("#learning-scenarios-tab")).toHaveClass(/active/);
   await expect(page.locator("#learningScenarios")).not.toContainText(/面试|Interview|interview-traps/i);
 });
@@ -84,16 +86,24 @@ test("D1 learning content has complete CN scenario localization", async ({ page 
     const zhScenarios = window.D1_LEARNING_CONTENT_ZH.scenarios || {};
     const playbook = window.D1_LEARNING_CONTENT.volPlaybook || [];
     const zhPlaybook = window.D1_LEARNING_CONTENT_ZH.volPlaybook || {};
+    const exoticsBridge = window.D1_LEARNING_CONTENT.exoticsBridge || [];
+    const zhExoticsBridge = window.D1_LEARNING_CONTENT_ZH.exoticsBridge || {};
+    const structuringCases = window.D1_LEARNING_CONTENT.structuringCases || [];
+    const zhStructuringCases = window.D1_LEARNING_CONTENT_ZH.structuringCases || {};
     return {
       scenarioCount: scenarios.length,
       missingScenarioIds: scenarios.filter((scenario) => !zhScenarios[scenario.id]).map((scenario) => scenario.id),
       missingPlaybookIds: playbook.filter((item) => !zhPlaybook[item.id]).map((item) => item.id),
+      missingExoticsIds: exoticsBridge.filter((item) => !zhExoticsBridge[item.id]).map((item) => item.id),
+      missingStructuringIds: structuringCases.filter((item) => !zhStructuringCases[item.id]).map((item) => item.id),
     };
   });
 
-  expect(localization.scenarioCount).toBe(155);
+  expect(localization.scenarioCount).toBe(191);
   expect(localization.missingScenarioIds).toEqual([]);
   expect(localization.missingPlaybookIds).toEqual([]);
+  expect(localization.missingExoticsIds).toEqual([]);
+  expect(localization.missingStructuringIds).toEqual([]);
 });
 
 test("D1 phase 2A strategy construction content renders and filters", async ({ page }) => {
@@ -106,7 +116,7 @@ test("D1 phase 2A strategy construction content renders and filters", async ({ p
   await expect(page.locator("#learningComparisons")).not.toContainText(/面试|Interview/i);
 
   await page.locator("#learning-scenarios-tab").click();
-  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(155);
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(191);
 
   await page.locator('[data-scenario-month-filter="2"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(40);
@@ -178,6 +188,37 @@ test("D1 phase 4 dealer desk renders workflow, attribution, and gamma controls",
   await expect(page.locator("#learningScenarios")).toContainText("客户买 calls 时 dealer 的 exposure");
 });
 
+test("D1 phase 5 exotics bridge renders payoff sketches, structuring cases, and filters", async ({ page }) => {
+  await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
+
+  await page.locator("#learning-exotics-bridge-tab").click();
+  await expect(page.locator("#learningExoticsBridge .exotics-bridge-card")).toHaveCount(6);
+  await expect(page.locator("#learningExoticsBridge .structuring-case-card")).toHaveCount(6);
+  await expect(page.locator("#learningExoticsBridge .exotics-payoff-svg")).toHaveCount(6);
+  await expect(page.locator("#learningExoticsBridge")).toContainText("Asian option");
+  await expect(page.locator("#learningExoticsBridge")).toContainText("模型限制");
+  await expect(page.locator("#learningExoticsBridge")).toContainText("客户目标");
+
+  await page.locator('[data-exotics-filter="barrier"]').click();
+  await expect(page.locator("#learningExoticsBridge .exotics-bridge-card")).toHaveCount(1);
+  await expect(page.locator("#learningExoticsBridge .structuring-case-card")).toHaveCount(1);
+  await expect(page.locator("#learningExoticsBridge")).toContainText("保护可能消失");
+
+  await page.locator('[data-open-tool="parity"]').click();
+  await expect(page.locator("#modePro")).toHaveClass(/active/);
+  await expect(page.locator("#parity-tab")).toHaveClass(/active/);
+
+  await page.locator("#learning-scenarios-tab").click();
+  await page.locator('[data-scenario-month-filter="5"]').click();
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(36);
+  await page.locator('[data-scenario-topic-filter="exotics"]').click();
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(36);
+  await expect(page.locator("#learningScenarios")).toContainText("客户需要 average-price hedge");
+  await page.locator('[data-scenario-topic-filter="barrier"]').click();
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(6);
+  await expect(page.locator("#learningScenarios")).toContainText("Barrier feature 让 protection 更便宜");
+});
+
 test("D1 phase 2B client recommendation drills reveal steps and persist", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
@@ -245,5 +286,5 @@ test("D1 learning hub recovers from invalid saved scenario filter", async ({ pag
 
   await expect(page.locator("#learning-scenarios-tab")).toHaveClass(/active/);
   await expect(page.locator('[data-scenario-filter="all"]')).toHaveClass(/active/);
-  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(155);
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(191);
 });
