@@ -105,16 +105,20 @@ test("D1 phase 2B client recommendation drills reveal steps and persist", async 
   await expect(firstDrill).toContainText("集中持股客户需要下行保护");
   await expect(firstDrill).toContainText("客户目标");
   await expect(firstDrill).not.toContainText("推荐结构");
+  await expect(firstDrill.locator("[data-select-strategy]")).toHaveCount(0);
 
   await firstDrill.locator('[data-reveal-client-drill="protect-concentrated-stock"]').click();
   await expect(firstDrill).toContainText("客户背景");
   await expect(firstDrill).not.toContainText("推荐结构");
+  await expect(firstDrill.locator("[data-select-strategy]")).toHaveCount(0);
 
   await firstDrill.locator('[data-reveal-client-drill="protect-concentrated-stock"]').click();
   await firstDrill.locator('[data-reveal-client-drill="protect-concentrated-stock"]').click();
+  await expect(firstDrill.locator("[data-select-strategy]")).toHaveCount(0);
   await firstDrill.locator('[data-reveal-client-drill="protect-concentrated-stock"]').click();
   await expect(firstDrill).toContainText("推荐结构");
   await expect(firstDrill).toContainText("Collar");
+  await expect(firstDrill.locator("[data-select-strategy]")).toHaveCount(3);
 
   await firstDrill.locator('[data-complete-client-drill="protect-concentrated-stock"]').click();
   await expect(page.locator("#learningProgressSummary")).toContainText("演练 1/20");

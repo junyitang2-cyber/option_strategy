@@ -2557,11 +2557,13 @@ function renderLearningClientDrills() {
     const completed = state.learning.completedClientDrills.includes(drill.id);
     const visibleStepCount = clientDrillStepCount(drill);
     const allStepsVisible = visibleStepCount >= steps.length;
-    const links = (drill.strategyLinks || []).map((id) => {
+    const recommendationStepIndex = steps.findIndex((step) => step.field === "recommendation");
+    const showStrategyLinks = recommendationStepIndex >= 0 && visibleStepCount > recommendationStepIndex;
+    const links = showStrategyLinks ? (drill.strategyLinks || []).map((id) => {
       const strategy = strategiesById.get(id);
       if (!strategy) return "";
       return `<button class="strategy-link-chip" type="button" data-select-strategy="${escapeHtml(id)}">${escapeHtml(strategy.name)}</button>`;
-    }).join("");
+    }).join("") : "";
     const stepCards = steps.slice(0, visibleStepCount).map((step) => `
       <div class="client-drill-step">
         ${renderClientDrillStep(drill, step)}
@@ -2578,7 +2580,7 @@ function renderLearningClientDrills() {
         <span class="learning-label">${escapeHtml(learningUiText("clientObjective"))}</span>
         <p class="learning-copy">${escapeHtml(localizedLearning("clientDrills", drill, "objective"))}</p>
         <div class="client-drill-steps">${stepCards}</div>
-        <div class="strategy-link-list">${links}</div>
+        ${links ? `<div class="strategy-link-list">${links}</div>` : ""}
         <div class="learning-action-row">
           <button class="learning-action" type="button" data-reveal-client-drill="${escapeHtml(drill.id)}" ${allStepsVisible ? "disabled" : ""}>
             ${escapeHtml(allStepsVisible ? learningUiText("allStepsRevealed") : learningUiText("revealNextStep"))}
