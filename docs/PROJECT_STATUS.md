@@ -1,5 +1,15 @@
 # Project Status And Roadmap
 
+## 2026-05-29 Update: D1 Learning Hub Phase 7A Content Coverage
+
+Phase 7A is now implemented.
+
+- Professional Trader Memo coverage increased from 40 to 53 strategies.
+- Professional Q&A coverage increased from 141 to 180 items.
+- Added professional coverage for 13 high-value structures including bull put spreads, broken-wing butterflies, covered short-vol structures, short condors, reverse jade lizard, and ratio spreads.
+- Added common wrong-expression guidance to newly covered strategies.
+- Playwright coverage now verifies Phase 7A data shape and browser rendering.
+
 ## 2026-05-29 Update: D1 Learning Hub Phase 6B
 
 Phase 6B is now implemented.
@@ -79,7 +89,7 @@ Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
 
 ### 进阶模式
 
-- 40 个策略的 Trader Memo。
+- 53 个策略的 Trader Memo。
 - Professional Concepts 独立面板。
 - 专业工具面板（Tabbed Interface）：
   - 压力测试矩阵
@@ -91,7 +101,7 @@ Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
 
 ### 专业模式
 
-- 141 个专业问答。
+- 180 个专业问答。
 - 专业问答覆盖 Greeks、策略构建、风险管理、客户视角、Dealer 对冲、参数选择和常见比较题。
 
 ### D1-to-Derivatives Learning Hub
@@ -154,8 +164,8 @@ npm test
 
 ### 内容限制
 
-- 71 个策略都有基础说明，但只有 40 个策略有专业 Trader Memo。
-- 141 个专业问答覆盖核心内容，但新增策略未必每个都有固定 5 问。
+- 71 个策略都有基础说明，其中 53 个策略有专业 Trader Memo。
+- 180 个专业问答覆盖核心内容；Phase 7A 新增策略均至少有 3 个专业问答。
 - 20 个客户推荐演练、45 个 Month 3 vol 场景和 40 个 Month 4 dealer 场景覆盖常见结构推荐、vol 判断、dealer flow、hedging 与 P&L attribution 场景，但仍是教育性框架，不是实际 suitability advice、交易信号或真实做市系统。
 - 36 个 Month 5 exotics/structuring 场景覆盖 Asian、Barrier、Quanto、Digital、Autocallable 和 structured product，但不构成生产级 exotic pricer、发行条款建议或真实 suitability advice。
 - 60 个 Professional Sprint questions、6 个 Exotics Risk drills 和 6 个 model-limit cards 用于训练专业表达、自我评分和风险拆解，但不代表任何外部认证、正式考试结果或真实交易权限。
@@ -185,7 +195,7 @@ npm test
 
 ### P1：内容覆盖扩展
 
-目标：把专业内容从 40 个策略扩展到更多策略，优先补常见专业与实战策略。
+目标：把专业内容从 53 个策略继续扩展到剩余策略，优先补常见专业与实战策略。
 
 建议顺序：
 

@@ -1,5 +1,19 @@
 # Implementation History
 
+## D1-to-Derivatives Phase 7A Content Coverage (2026-05-29)
+
+Scope:
+
+- Added Trader Memo, professional Q&A, and common wrong-expression guidance for 13 high-value previously uncovered strategies.
+- Added optional common-mistakes rendering to the Professional panel.
+- Increased professional Trader Memo coverage from 40 to 53 strategies and professional Q&A coverage from 141 to 180 items.
+- Added data-integrity and browser regression coverage for Phase 7A.
+
+Verification focus:
+
+- `tests/professional-content.spec.js` verifies target IDs, content shape, coverage count, and remaining fallback gaps.
+- `tests/professional.spec.js` verifies a newly covered strategy renders and an uncovered strategy still uses fallback copy.
+
 ## D1-to-Derivatives Learning Hub Phase 5/6 Acceptance Polish (2026-05-29)
 
 Scope:

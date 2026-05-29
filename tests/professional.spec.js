@@ -123,3 +123,33 @@ test("tiered learning modes and professional practice panels stay interactive", 
 
   expect(errors).toEqual([]);
 });
+
+test("phase 7A professional content renders for new target strategies and keeps fallback", async ({ page }) => {
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+
+  await page.goto(`file://${path.resolve(__dirname, "../index.html")}`);
+  await page.locator("#modeInterview").click();
+
+  await page.locator("#searchInput").fill("Bull Put Spread");
+  await page.locator('#strategyList [data-strategy="bull-put-spread"]').click();
+  await expect(page.locator("#strategyTitle")).toHaveText("Bull Put Spread");
+  await expect(page.locator("#professionalPanel")).toContainText("short put");
+  await expect(page.locator("#commonMistakesContent")).toContainText("错误表达");
+  await expect(page.locator(".interview-qa")).toHaveCount(3);
+  await expect(page.locator("#interviewQuestions")).toContainText("Bull Put Spread");
+
+  await page.locator("#searchInput").fill("Short Synthetic Future");
+  await page.locator('#strategyList [data-strategy="short-synthetic-future"]').click();
+  if (await page.locator("#diffWarnModal").isVisible()) {
+    await page.locator("#skipDiffWarn").click();
+  }
+  await expect(page.locator("#strategyTitle")).toHaveText("Short Synthetic Future");
+  await expect(page.locator("#commonMistakesSection")).toBeHidden();
+  await expect(page.locator("#interviewQuestions")).toContainText("暂无专业问答内容");
+
+  expect(errors).toEqual([]);
+});

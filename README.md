@@ -1,6 +1,6 @@
 # Option Strategy Interactive Lab
 
-2026-05-29 更新：D1-to-Derivatives Learning Hub 已完成 Phase 5B / Phase 6 / Phase 6B，新增 Exotics Risk、Professional Sprint 自评分、weak-topic recommendations 和本地 progress report export。当前包含 30 个 modules、191 个 Scenario Bank records、60 个 Professional Sprint questions、6 个 exotics risk-decomposition drills 和 6 个 model-limit comparison cards。
+2026-05-29 更新：D1-to-Derivatives Learning Hub 已完成 Phase 5B / Phase 6 / Phase 6B；Phase 7A 新增 13 个高价值策略的 Trader Memo、专业问答和常见错误表达。当前包含 30 个 modules、191 个 Scenario Bank records、60 个 Professional Sprint questions、6 个 exotics risk-decomposition drills 和 6 个 model-limit comparison cards。
 
 期权策略交互学习与专业交易员能力训练工具。项目最初用于学习并复刻 `https://options-viewer.netlify.app/` 的核心体验，现在已经扩展为本地可运行的策略分析、教学和专业训练平台。
 
@@ -16,8 +16,8 @@
 项目当前包含：
 
 - 71 个基础策略，其中 60 个来自原站结构，11 个为补充策略。
-- 40 个策略的专业 Trader Memo。
-- 141 个专业问答。
+- 53 个策略的专业 Trader Memo。
+- 180 个专业问答。
 - 20 个客户结构推荐演练。
 - 主损益图、概率锥、逐腿分解、Greeks 六联图。
 - 情景参数、风险指标、腿组合编辑、学习路径追踪。
@@ -117,7 +117,7 @@ option_strategy/
 - Scenario Bank：Month 1 = 30、Month 2 = 40、Month 3 = 45、Month 4 = 40、Month 5 = 36。
 - 中文本地化、scenario-module links、strategy links 均无缺失或坏引用。
 - 浏览器回归通过：Learning Hub、Vol Framework、Dealer Desk、Exotics Bridge、Exotics Risk、Professional Sprint、Skill Dashboard、progress report export、Gamma P&L、Scenario filters、Professional tools 无控制台错误。
-- Playwright：当前以本地 `npm test` 输出为准。
+- Playwright：当前以本地 `npm test` 输出为准，包含 `tests/professional-content.spec.js` 的 Phase 7A 内容覆盖检查。
 
 最近一次验收覆盖：
 
@@ -128,7 +128,7 @@ option_strategy/
 - `git diff --check`
 - `npm test`
 
-Playwright 回归测试覆盖基础渲染、学习路径、概率锥 sigma 标注、hover 预览、重置确认、专业概念面板、组合级 Greeks Decay、Portfolio/Stress/Gamma P&L/专业训练面板、客户推荐演练、Vol Framework/RV-IV calculator、Vol trade playbook、Dealer Desk、P&L attribution、Exotics Bridge、Exotics Risk、Professional Sprint、Phase 6B scoring/recommendations/report export、简化 payoff 图、structuring cases、Month 5 场景过滤和 reload persistence。
+Playwright 回归测试覆盖基础渲染、学习路径、概率锥 sigma 标注、hover 预览、重置确认、专业概念面板、Phase 7A 专业内容覆盖、组合级 Greeks Decay、Portfolio/Stress/Gamma P&L/专业训练面板、客户推荐演练、Vol Framework/RV-IV calculator、Vol trade playbook、Dealer Desk、P&L attribution、Exotics Bridge、Exotics Risk、Professional Sprint、Phase 6B scoring/recommendations/report export、简化 payoff 图、structuring cases、Month 5 场景过滤和 reload persistence。
 
 ## 重要限制
 

@@ -1799,12 +1799,29 @@ function renderEducation() {
     .join("");
 }
 
+function professionalStrategyCoverageCount() {
+  return Object.keys(PROFESSIONAL_CONTENT || {}).filter((id) => id !== "professionalConcepts").length;
+}
+
+function renderCommonMistakes(professionalData) {
+  const section = document.getElementById("commonMistakesSection");
+  const content = document.getElementById("commonMistakesContent");
+  if (!section || !content) return;
+
+  const mistakes = Array.isArray(professionalData?.commonMistakes) ? professionalData.commonMistakes : [];
+  section.style.display = mistakes.length ? "" : "none";
+  content.innerHTML = mistakes.length
+    ? `<ul>${mistakes.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`
+    : "";
+}
+
 // Render Professional Content (Trader Memo)
 function renderProfessionalContent() {
   const strategy = selectedStrategy();
   const professionalData = PROFESSIONAL_CONTENT[strategy.id];
 
   if (!professionalData) {
+    renderCommonMistakes(null);
     // Show message in each section, preserving the container structure
     document.getElementById("exposureBreakdown").innerHTML = `<p class="muted" style="text-align: center; padding: 1rem;">该策略暂无专业内容</p>`;
     document.getElementById("profitLogic").innerHTML = `<p class="muted" style="text-align: center; padding: 1rem;">该策略暂无专业内容</p>`;
@@ -1857,6 +1874,7 @@ function renderProfessionalContent() {
     </div>
   `;
   document.getElementById("dealerPerspective").innerHTML = dealerHtml;
+  renderCommonMistakes(professionalData);
 }
 
 // Render Interview Questions
@@ -1867,7 +1885,7 @@ function renderInterviewQuestions() {
   const interviewQuestions = document.getElementById("interviewQuestions");
 
   if (!professionalData || !professionalData.interviewQuestions) {
-    interviewQuestions.innerHTML = `<p class="muted" style="text-align: center; padding: 2rem;">该策略暂无专业问答内容。当前已覆盖 40 个策略的专业内容，包含 141 个专业问答。</p>`;
+    interviewQuestions.innerHTML = `<p class="muted" style="text-align: center; padding: 2rem;">该策略暂无专业问答内容。当前已覆盖 ${professionalStrategyCoverageCount()} 个策略的专业内容。</p>`;
     return;
   }
 
