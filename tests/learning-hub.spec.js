@@ -4,8 +4,9 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
   await expect(page.locator("#learningHubPanel")).toBeVisible();
-  await expect(page.locator("#learningProgressSummary")).toContainText("模块 0/25");
+  await expect(page.locator("#learningProgressSummary")).toContainText("模块 0/30");
   await expect(page.locator("#learningProgressSummary")).toContainText("场景 0/191");
+  await expect(page.locator("#learningProgressSummary")).toContainText("专业冲刺 0/60");
   await expect(page.locator("#learning-roadmap-tab")).toContainText("路线图");
 
   await expect(page.locator("#learningRoadmap .roadmap-card")).toHaveCount(6);
@@ -16,19 +17,20 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await expect(page.locator("#learningRoadmap")).toContainText("Exotics 与 structuring");
 
   await page.locator("#learning-modules-tab").click();
-  await expect(page.locator("#learningModules .module-card")).toHaveCount(25);
+  await expect(page.locator("#learningModules .module-card")).toHaveCount(30);
   await expect(page.locator("#learningModules")).toContainText("Delta：D1 方向敞口变成动态敞口");
   await expect(page.locator("#learningModules")).toContainText("Vertical spreads：有定义风险的方向表达");
   await expect(page.locator("#learningModules")).toContainText("RV vs IV：把波动率当成可交易风险因子");
   await expect(page.locator("#learningModules")).toContainText("Client flow 与 dealer inventory");
   await expect(page.locator("#learningModules")).toContainText("Asian options：averaging 把 timing risk 变成 path risk");
+  await expect(page.locator("#learningModules")).toContainText("高频技术问题冲刺");
   await expect(page.locator("#learningModules")).toContainText("Dealer 视角");
 
   await expect(page.locator("#learningModules")).toContainText("核心表达");
   await expect(page.locator("#learningModules")).not.toContainText(/面试|Interview/i);
 
   await page.locator('[data-complete-module="delta-d1"]').first().click();
-  await expect(page.locator("#learningProgressSummary")).toContainText("模块 1/25");
+  await expect(page.locator("#learningProgressSummary")).toContainText("模块 1/30");
 
   await page.locator("#learning-bridge-tab").click();
   await expect(page.locator("#learningBridge .bridge-card")).toHaveCount(6);
@@ -50,7 +52,7 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await expect(page.locator("#learningProgressSummary")).toContainText("场景 1/191");
 
   await page.reload();
-  await expect(page.locator("#learningProgressSummary")).toContainText("模块 1/25");
+  await expect(page.locator("#learningProgressSummary")).toContainText("模块 1/30");
   await expect(page.locator("#learningProgressSummary")).toContainText("场景 1/191");
   await expect(page.locator("#learning-scenarios-tab")).toHaveClass(/active/);
   await expect(page.locator("#learningScenarios")).not.toContainText(/面试|Interview|interview-traps/i);
@@ -217,6 +219,54 @@ test("D1 phase 5 exotics bridge renders payoff sketches, structuring cases, and 
   await page.locator('[data-scenario-topic-filter="barrier"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(6);
   await expect(page.locator("#learningScenarios")).toContainText("Barrier feature 让 protection 更便宜");
+});
+
+test("D1 phase 5B exotics risk lab renders decomposition drills and model-limit cards", async ({ page }) => {
+  await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
+
+  await page.locator("#learning-exotics-risk-tab").click();
+  await expect(page.locator("#learningExoticsRisk .exotics-risk-drill-card")).toHaveCount(6);
+  await expect(page.locator("#learningExoticsRisk .model-limit-card")).toHaveCount(6);
+  await expect(page.locator("#learningExoticsRisk")).toContainText("Exotics risk decomposition");
+  await expect(page.locator("#learningExoticsRisk")).toContainText("Issuer / dealer risk");
+  await expect(page.locator("#learningExoticsRisk")).toContainText("错误表达");
+  await expect(page.locator("#learningExoticsRisk")).not.toContainText(/面试|Interview/i);
+
+  await page.locator('[data-exotics-risk-filter="autocallable"]').click();
+  await expect(page.locator("#learningExoticsRisk .exotics-risk-drill-card")).toHaveCount(1);
+  await expect(page.locator("#learningExoticsRisk .model-limit-card")).toHaveCount(1);
+  await expect(page.locator("#learningExoticsRisk")).toContainText("Autocallable");
+});
+
+test("D1 phase 6 professional sprint creates sessions, reveals rubrics, and updates dashboard", async ({ page }) => {
+  await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
+
+  await page.locator("#learning-professional-sprint-tab").click();
+  await expect(page.locator("#learningProfessionalSprint")).toContainText("Professional Sprint");
+  await expect(page.locator("#sprintQuestionBankSummary")).toContainText("60");
+  await expect(page.locator("#skillDashboard")).toContainText("本地能力分");
+
+  await page.locator('[data-sprint-topic-filter="exotics"]').click();
+  await page.locator("#sprintSessionSize").selectOption("5");
+  await page.locator("[data-start-sprint-session]").click();
+  await expect(page.locator("#learningProfessionalSprint .sprint-question-card")).toHaveCount(5);
+  await expect(page.locator("#learningProfessionalSprint .sprint-question-card").first()).toContainText("Exotics");
+
+  const firstCard = page.locator("#learningProfessionalSprint .sprint-question-card").first();
+  await firstCard.locator("[data-reveal-sprint-rubric]").click();
+  await expect(firstCard).toContainText("必须覆盖");
+  await expect(firstCard).toContainText("红旗回答");
+
+  await firstCard.locator("[data-mark-weak-sprint]").click();
+  await firstCard.locator("[data-complete-sprint-question]").click();
+  await expect(page.locator("#learningProgressSummary")).toContainText("专业冲刺 1/60");
+  await expect(page.locator("#skillDashboard")).toContainText("弱项");
+  await expect(page.locator("#wrongAnswerNotebook")).not.toContainText("暂无弱项");
+
+  await page.reload();
+  await expect(page.locator("#learning-professional-sprint-tab")).toHaveClass(/active/);
+  await expect(page.locator("#learningProfessionalSprint .sprint-question-card")).toHaveCount(5);
+  await expect(page.locator("#learningProgressSummary")).toContainText("专业冲刺 1/60");
 });
 
 test("D1 phase 2B client recommendation drills reveal steps and persist", async ({ page }) => {

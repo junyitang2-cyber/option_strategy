@@ -4,7 +4,7 @@
 **Status**: Active roadmap after Phase 5
 **Owner Goal**: Help a Commodities D1 Trader prepare for Equity Derivatives, Vol Trading, Market Making, Structuring, and Derivatives Risk professional tracks.
 
-**Latest Acceptance**: Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 passed full local validation on 2026-05-28; next main implementation target is Phase 6.
+**Latest Acceptance**: Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 / 5B / 6 passed local validation on 2026-05-29; optional next target is Phase 6B.
 
 ---
 
@@ -308,6 +308,8 @@ Phase 5 is educational. Do not build a production exotics pricer.
 
 **Goal**: Turn accumulated learning into professional performance.
 
+**Status**: Implemented on 2026-05-29 together with optional Phase 5B. The Learning Hub now includes an Exotics Risk tab, a Professional Sprint tab, 5 Month 6 modules, 60 sprint questions, local weak-topic tracking, a Skill Dashboard, and a weak-topic review notebook.
+
 **Learning modules**
 
 1. High-frequency technical questions.
@@ -430,7 +432,7 @@ Each phase must update:
 
 ## Recommended Next Implementation
 
-The next main implementation should be **Phase 6: Month 6 Professional Sprint And Skill Dashboard**.
+The next optional implementation should be **Phase 6B: Professional Sprint Export And Recommendation Enhancements**.
 
 Reason:
 

@@ -64,9 +64,9 @@ Status: accepted on 2026-05-28.
 
 ## Next Phase
 
-The next main roadmap phase is Phase 6: Professional Sprint And Skill Dashboard.
+Current status update: Phase 5B and Phase 6 have since been implemented. The next optional roadmap target is Phase 6B: richer sprint rubrics, weak-topic recommendations, and progress export.
 
-Optional Phase 5B can deepen exotics before Phase 6:
+Phase 5B has since deepened exotics with:
 
 - more exotic risk decomposition drills,
 - issuer/dealer hedge scenarios,

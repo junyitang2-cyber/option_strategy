@@ -248,6 +248,14 @@ function defaultD1LearningProgress() {
     activeLearningTab: "roadmap",
     activeVolPlaybookFilter: "all",
     activeExoticsFilter: "all",
+    activeExoticsRiskFilter: "all",
+    completedSprintQuestions: [],
+    weakSprintQuestionIds: [],
+    revealedSprintRubrics: [],
+    currentSprintQuestionIds: [],
+    sprintTopicFilter: "all",
+    sprintSessionSize: 5,
+    sprintStartedAt: null,
     scenarioFilter: "all",
     scenarioMonthFilter: "all",
     scenarioTopicFilter: "all",
@@ -259,7 +267,7 @@ function loadD1LearningProgress() {
   try {
     const saved = JSON.parse(localStorage.getItem("os_d1_learning") || "null");
     const progress = { ...defaultD1LearningProgress(), ...(saved || {}) };
-    ["completedModules", "completedScenarios", "completedClientDrills", "reviewLaterScenarios"].forEach((key) => {
+    ["completedModules", "completedScenarios", "completedClientDrills", "reviewLaterScenarios", "completedSprintQuestions", "weakSprintQuestionIds", "revealedSprintRubrics", "currentSprintQuestionIds"].forEach((key) => {
       if (!Array.isArray(progress[key])) progress[key] = [];
     });
     if (!progress.clientDrillStepCounts || typeof progress.clientDrillStepCounts !== "object" || Array.isArray(progress.clientDrillStepCounts)) {
@@ -2213,7 +2221,7 @@ function renderCoverage() {
 }
 
 function learningContent() {
-  return window.D1_LEARNING_CONTENT || { roadmap: [], modules: [], bridgeComparisons: [], strategyComparisons: [], clientDrills: [], volFramework: [], volPlaybook: [], dealerWorkflow: [], dealerPnlAttribution: [], exoticsBridge: [], structuringCases: [], scenarios: [] };
+  return window.D1_LEARNING_CONTENT || { roadmap: [], modules: [], bridgeComparisons: [], strategyComparisons: [], clientDrills: [], volFramework: [], volPlaybook: [], dealerWorkflow: [], dealerPnlAttribution: [], exoticsBridge: [], structuringCases: [], exoticsRiskDrills: [], exoticsModelLimitCards: [], professionalSprintQuestions: [], scenarios: [] };
 }
 
 const LEARNING_UI_TEXT = {
@@ -2227,6 +2235,8 @@ const LEARNING_UI_TEXT = {
       "vol-framework": "Vol 框架",
       "dealer-desk": "Dealer Desk",
       "exotics-bridge": "Exotics Bridge",
+      "exotics-risk": "Exotics Risk",
+      "professional-sprint": "专业冲刺",
       scenarios: "场景题库",
     },
     progressModules: "模块",
@@ -2340,11 +2350,14 @@ const LEARNING_UI_TEXT = {
       "vol-framework": "Vol Framework",
       "dealer-desk": "Dealer Desk",
       "exotics-bridge": "Exotics Bridge",
+      "exotics-risk": "Exotics Risk",
+      "professional-sprint": "Professional Sprint",
       scenarios: "Scenario Bank",
     },
     progressModules: "Modules",
     progressScenarios: "Scenarios",
     progressClientDrills: "Drills",
+    progressSprint: "Sprint",
     roadmapIntro: "Daily rhythm: 1 hour concept study, 1 hour scenarios. Phase 1 covers Greeks foundations; Phase 2A adds strategy construction drills.",
     active: "Active",
     locked: "Locked",
@@ -2445,6 +2458,104 @@ const LEARNING_UI_TEXT = {
   },
 };
 
+const PHASE6_UI_TEXT = {
+  cn: {
+    progressSprint: "专业冲刺",
+    exoticsRiskDecomposition: "Exotics risk decomposition",
+    riskFactorMap: "风险因子",
+    issuerDealerRisk: "Issuer / dealer risk",
+    suitabilityChecks: "Suitability 检查",
+    wrongAnswerExample: "错误表达",
+    correctedFraming: "修正表达",
+    stressScenario: "Stress scenario",
+    modelLimitComparison: "Model limit comparison",
+    modelSimplification: "教学简化",
+    productionReality: "Production reality",
+    clientImpact: "客户影响",
+    controlQuestion: "Control question",
+    professionalSprint: "Professional Sprint",
+    sprintBank: "题库",
+    startSession: "开始 session",
+    sessionSize: "Session size",
+    skillDashboard: "能力面板",
+    localSkillScore: "本地能力分",
+    scoreFormula: "计算公式",
+    topicCoverage: "主题覆盖",
+    weakAreas: "弱项",
+    suggestedNextSession: "建议下一组",
+    wrongAnswerNotebook: "弱项复习本",
+    noWeakAreas: "暂无弱项",
+    revealRubric: "展开 rubric",
+    hideRubric: "收起 rubric",
+    markWeak: "标记弱项",
+    weakMarked: "已标弱项",
+    completeQuestion: "完成题目",
+    completedQuestion: "已完成",
+    mustMention: "必须覆盖",
+    strongAnswer: "强回答",
+    redFlagAnswer: "红旗回答",
+    followUpQuestions: "追问",
+    allTopics: "全部主题",
+    exoticsRiskIntro: "Phase 5B 深化 Month 5：重点训练 model limit、path risk、issuer/dealer risk、suitability 和 disclosure 表达。本页仍是教学型 risk lab，不是 production pricer。",
+    modelLimitSubtitle: "教学 payoff -> production question -> client impact",
+    sprintIntro: "用 topic-filtered drills 把 roadmap 转成可重复的专业表达训练。Dashboard 只基于本地进度和弱项标记，不代表任何认证。",
+    scoreFormulaNote: "modules 25% + scenarios 25% + client drills 20% + sprint 30%。这是本地训练进度，不是专业认证。",
+    sessionStarted: "Session 开始时间",
+    startSessionEmpty: "开始一个 session 后会加载题目",
+    chooseStartSession: "选择主题并开始 session。",
+  },
+  en: {
+    progressSprint: "Sprint",
+    exoticsRiskDecomposition: "Exotics risk decomposition",
+    riskFactorMap: "Risk factor map",
+    issuerDealerRisk: "Issuer / dealer risk",
+    suitabilityChecks: "Suitability checks",
+    wrongAnswerExample: "Wrong-answer example",
+    correctedFraming: "Corrected framing",
+    stressScenario: "Stress scenario",
+    modelLimitComparison: "Model limit comparison",
+    modelSimplification: "Teaching simplification",
+    productionReality: "Production reality",
+    clientImpact: "Client impact",
+    controlQuestion: "Control question",
+    professionalSprint: "Professional Sprint",
+    sprintBank: "Question bank",
+    startSession: "Start session",
+    sessionSize: "Session size",
+    skillDashboard: "Skill Dashboard",
+    localSkillScore: "Local skill score",
+    scoreFormula: "Score formula",
+    topicCoverage: "Topic coverage",
+    weakAreas: "Weak areas",
+    suggestedNextSession: "Suggested next session",
+    wrongAnswerNotebook: "Wrong-answer notebook",
+    noWeakAreas: "No weak areas yet",
+    revealRubric: "Reveal rubric",
+    hideRubric: "Hide rubric",
+    markWeak: "Mark weak",
+    weakMarked: "Weak marked",
+    completeQuestion: "Complete question",
+    completedQuestion: "Completed",
+    mustMention: "Must mention",
+    strongAnswer: "Strong answer",
+    redFlagAnswer: "Red-flag answer",
+    followUpQuestions: "Follow-up",
+    allTopics: "All Topics",
+    exoticsRiskIntro: "Phase 5B deepens Month 5: model limit, path risk, issuer/dealer risk, suitability, and disclosure phrasing. It remains an educational risk lab, not a production pricer.",
+    modelLimitSubtitle: "Teaching payoff -> production question -> client impact",
+    sprintIntro: "Use timed, topic-filtered drills to turn the roadmap into repeatable professional performance. The dashboard is based only on local progress and weak-topic marks.",
+    scoreFormulaNote: "modules 25% + scenarios 25% + client drills 20% + sprint 30%. This is local training progress, not a professional certification.",
+    sessionStarted: "Session started",
+    startSessionEmpty: "Start a session to load drills",
+    chooseStartSession: "Choose a topic and start a session.",
+  },
+};
+
+function phase6UiText(key) {
+  const language = learningLanguage();
+  return PHASE6_UI_TEXT[language]?.[key] || PHASE6_UI_TEXT.cn[key] || key;
+}
+
 function learningLanguage() {
   return state.learning.language === "en" ? "en" : "cn";
 }
@@ -2463,6 +2574,20 @@ function localizedLearning(kind, item, field) {
 function localizedLearningList(kind, item, field) {
   const value = localizedLearning(kind, item, field);
   return Array.isArray(value) ? value : item[field] || [];
+}
+
+function localizedDirect(item, field) {
+  if (!item) return "";
+  if (learningLanguage() === "cn") {
+    const cnField = `${field}Cn`;
+    if (item[cnField] !== undefined) return item[cnField];
+  }
+  return item[field];
+}
+
+function localizedDirectList(item, field) {
+  const value = localizedDirect(item, field);
+  return Array.isArray(value) ? value : [];
 }
 
 function formatLearningPeriod(type, value) {
@@ -2484,11 +2609,13 @@ function renderLearningProgressSummary() {
   const target = document.getElementById("learningProgressSummary");
   if (!target) return;
   const content = learningContent();
-  target.textContent = `${learningUiText("progressModules")} ${state.learning.completedModules.length}/${content.modules.length} · ${learningUiText("progressScenarios")} ${state.learning.completedScenarios.length}/${content.scenarios.length} · ${learningUiText("progressClientDrills")} ${state.learning.completedClientDrills.length}/${(content.clientDrills || []).length}`;
+  const sprintTotal = (content.professionalSprintQuestions || []).length;
+  const sprintProgress = sprintTotal ? ` · ${phase6UiText("progressSprint")} ${state.learning.completedSprintQuestions.length}/${sprintTotal}` : "";
+  target.textContent = `${learningUiText("progressModules")} ${state.learning.completedModules.length}/${content.modules.length} · ${learningUiText("progressScenarios")} ${state.learning.completedScenarios.length}/${content.scenarios.length} · ${learningUiText("progressClientDrills")} ${state.learning.completedClientDrills.length}/${(content.clientDrills || []).length}${sprintProgress}`;
 }
 
 function renderLearningTabs() {
-  const validTabs = new Set(["roadmap", "modules", "bridge", "construction", "client-drills", "vol-framework", "dealer-desk", "exotics-bridge", "scenarios"]);
+  const validTabs = new Set(["roadmap", "modules", "bridge", "construction", "client-drills", "vol-framework", "dealer-desk", "exotics-bridge", "exotics-risk", "professional-sprint", "scenarios"]);
   const active = validTabs.has(state.learning.activeLearningTab) ? state.learning.activeLearningTab : "roadmap";
   state.learning.activeLearningTab = active;
   const labels = LEARNING_UI_TEXT[learningLanguage()].tabs;
@@ -3045,6 +3172,283 @@ function renderLearningExoticsBridge() {
   `;
 }
 
+function exoticsRiskFilters() {
+  const content = learningContent();
+  const source = content.exoticsRiskFilters || content.exoticsBridgeFilters || [["all", phase6UiText("allTopics")]];
+  return source.map(([id, enLabel, cnLabel]) => [id, learningLanguage() === "cn" ? (cnLabel || enLabel) : enLabel]);
+}
+
+function validExoticsRiskFilterIds() {
+  return new Set(exoticsRiskFilters().map(([id]) => id));
+}
+
+function renderLearningExoticsRisk() {
+  const target = document.getElementById("learningExoticsRisk");
+  if (!target) return;
+  const content = learningContent();
+  const validFilters = validExoticsRiskFilterIds();
+  if (!validFilters.has(state.learning.activeExoticsRiskFilter)) {
+    state.learning.activeExoticsRiskFilter = "all";
+  }
+  const activeFilter = state.learning.activeExoticsRiskFilter;
+  const filterRow = exoticsRiskFilters().map(([id, label]) => `
+    <button class="exotics-risk-filter ${activeFilter === id ? "active" : ""}" type="button" data-exotics-risk-filter="${escapeHtml(id)}">
+      ${escapeHtml(label)}
+    </button>
+  `).join("");
+  const riskCards = (content.exoticsRiskDrills || [])
+    .filter((item) => activeFilter === "all" || item.group === activeFilter)
+    .map((item) => `
+      <article class="exotics-risk-drill-card">
+        <p class="learning-kicker">${escapeHtml(phase6UiText("exoticsRiskDecomposition"))}</p>
+        <h4 class="learning-title">${escapeHtml(localizedDirect(item, "title"))}</h4>
+        <span class="learning-label">${escapeHtml(learningUiText("exoticProduct"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedDirect(item, "product"))}</p>
+        <span class="learning-label">${escapeHtml(phase6UiText("riskFactorMap"))}</span>
+        <ul class="client-drill-list">${localizedDirectList(item, "riskMap").map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
+        <span class="learning-label">${escapeHtml(phase6UiText("issuerDealerRisk"))}</span>
+        <ul class="client-drill-list">${localizedDirectList(item, "issuerDealerRisk").map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
+        <span class="learning-label">${escapeHtml(phase6UiText("suitabilityChecks"))}</span>
+        <ul class="client-drill-list">${localizedDirectList(item, "suitabilityChecks").map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
+        <span class="learning-label">${escapeHtml(phase6UiText("wrongAnswerExample"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedDirect(item, "wrongAnswer"))}</p>
+        <span class="learning-label">${escapeHtml(phase6UiText("correctedFraming"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedDirect(item, "correction"))}</p>
+        <span class="learning-label">${escapeHtml(phase6UiText("stressScenario"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedDirect(item, "stressScenario"))}</p>
+      </article>
+    `).join("");
+  const limitCards = (content.exoticsModelLimitCards || [])
+    .filter((item) => activeFilter === "all" || item.group === activeFilter)
+    .map((item) => `
+      <article class="model-limit-card">
+        <p class="learning-kicker">${escapeHtml(phase6UiText("modelLimitComparison"))}</p>
+        <h4 class="learning-title">${escapeHtml(localizedDirect(item, "title"))}</h4>
+        <span class="learning-label">${escapeHtml(phase6UiText("modelSimplification"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedDirect(item, "modelSimplification"))}</p>
+        <span class="learning-label">${escapeHtml(phase6UiText("productionReality"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedDirect(item, "productionReality"))}</p>
+        <span class="learning-label">${escapeHtml(phase6UiText("clientImpact"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedDirect(item, "clientImpact"))}</p>
+        <span class="learning-label">${escapeHtml(phase6UiText("controlQuestion"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedDirect(item, "controlQuestion"))}</p>
+      </article>
+    `).join("");
+
+  target.innerHTML = `
+    <section class="exotics-risk-hero">
+      <div>
+        <p class="learning-kicker">Phase 5B</p>
+        <h4 class="learning-title">${escapeHtml(phase6UiText("exoticsRiskDecomposition"))}</h4>
+        <p class="learning-copy">${escapeHtml(phase6UiText("exoticsRiskIntro"))}</p>
+      </div>
+    </section>
+    <div class="exotics-filter-row">${filterRow}</div>
+    <div class="exotics-risk-grid">${riskCards}</div>
+    <section class="model-limit-section">
+      <div class="dealer-playbook-heading">
+        <p class="learning-kicker">${escapeHtml(phase6UiText("modelLimitComparison"))}</p>
+        <h4 class="learning-title">${escapeHtml(phase6UiText("modelLimitSubtitle"))}</h4>
+      </div>
+      <div class="model-limit-grid">${limitCards}</div>
+    </section>
+  `;
+}
+
+function sprintFilters() {
+  const content = learningContent();
+  const source = content.professionalSprintFilters || [["all", "All Topics", "全部主题"]];
+  return source.map(([id, enLabel, cnLabel]) => [id, learningLanguage() === "cn" ? (cnLabel || enLabel) : enLabel]);
+}
+
+function validSprintTopicIds() {
+  return new Set(sprintFilters().map(([id]) => id));
+}
+
+function sprintQuestionsForFilter(filter = state.learning.sprintTopicFilter) {
+  const questions = learningContent().professionalSprintQuestions || [];
+  return questions.filter((question) => filter === "all" || question.topic === filter);
+}
+
+function sprintQuestionById(id) {
+  return (learningContent().professionalSprintQuestions || []).find((question) => question.id === id);
+}
+
+function startSprintSession() {
+  const validTopics = validSprintTopicIds();
+  if (!validTopics.has(state.learning.sprintTopicFilter)) state.learning.sprintTopicFilter = "all";
+  const size = clamp(Number(state.learning.sprintSessionSize) || 5, 3, 10);
+  state.learning.sprintSessionSize = size;
+  const pool = sprintQuestionsForFilter(state.learning.sprintTopicFilter);
+  state.learning.currentSprintQuestionIds = pool.slice(0, size).map((question) => question.id);
+  state.learning.sprintStartedAt = new Date().toISOString();
+  saveD1LearningProgress();
+}
+
+function sprintTopicLabel(topic) {
+  const found = sprintFilters().find(([id]) => id === topic);
+  return found ? found[1] : topic;
+}
+
+function sprintDashboardStats() {
+  const content = learningContent();
+  const questions = content.professionalSprintQuestions || [];
+  const ratios = {
+    modules: content.modules.length ? state.learning.completedModules.length / content.modules.length : 0,
+    scenarios: content.scenarios.length ? state.learning.completedScenarios.length / content.scenarios.length : 0,
+    clientDrills: (content.clientDrills || []).length ? state.learning.completedClientDrills.length / (content.clientDrills || []).length : 0,
+    sprint: questions.length ? state.learning.completedSprintQuestions.length / questions.length : 0,
+  };
+  const score = Math.round((ratios.modules * 25) + (ratios.scenarios * 25) + (ratios.clientDrills * 20) + (ratios.sprint * 30));
+  const weakByTopic = {};
+  state.learning.weakSprintQuestionIds.forEach((id) => {
+    const question = sprintQuestionById(id);
+    if (!question) return;
+    weakByTopic[question.topic] = (weakByTopic[question.topic] || 0) + 1;
+  });
+  const coverage = sprintFilters()
+    .filter(([id]) => id !== "all")
+    .map(([id, label]) => {
+      const topicQuestions = questions.filter((question) => question.topic === id);
+      const completed = topicQuestions.filter((question) => state.learning.completedSprintQuestions.includes(question.id)).length;
+      return { id, label, completed, total: topicQuestions.length, weak: weakByTopic[id] || 0 };
+    });
+  const suggested = [...coverage].sort((a, b) => {
+    if (b.weak !== a.weak) return b.weak - a.weak;
+    return (a.completed / Math.max(1, a.total)) - (b.completed / Math.max(1, b.total));
+  })[0];
+  return { score, coverage, weakByTopic, suggested };
+}
+
+function renderSkillDashboard() {
+  const content = learningContent();
+  const sprintTotal = (content.professionalSprintQuestions || []).length;
+  const stats = sprintDashboardStats();
+  const weakTopics = Object.entries(stats.weakByTopic)
+    .map(([topic, count]) => `${sprintTopicLabel(topic)} ${count}`)
+    .join(" · ");
+  const coverageRows = stats.coverage.map((item) => `
+    <div class="dashboard-row">
+      <span>${escapeHtml(item.label)}</span>
+      <strong>${item.completed}/${item.total}${item.weak ? ` · ${phase6UiText("weakAreas")} ${item.weak}` : ""}</strong>
+    </div>
+  `).join("");
+  const notebookItems = state.learning.weakSprintQuestionIds
+    .map(sprintQuestionById)
+    .filter(Boolean)
+    .map((question) => `
+      <article class="notebook-item">
+        <p class="learning-kicker">${escapeHtml(localizedDirect(question, "topicLabel"))}</p>
+        <h5>${escapeHtml(localizedDirect(question, "title"))}</h5>
+        <p>${escapeHtml(localizedDirect(question, "prompt"))}</p>
+        <span>${escapeHtml(phase6UiText("redFlagAnswer"))}: ${localizedDirectList(question, "redFlags").map(escapeHtml).join(" · ")}</span>
+      </article>
+    `).join("");
+  return `
+    <section class="skill-dashboard" id="skillDashboard">
+      <div class="dashboard-card score-card">
+        <p class="learning-kicker">${escapeHtml(phase6UiText("skillDashboard"))}</p>
+        <h4>${escapeHtml(phase6UiText("localSkillScore"))}: ${stats.score}/100</h4>
+        <p class="learning-copy">${escapeHtml(phase6UiText("scoreFormula"))}: ${escapeHtml(phase6UiText("scoreFormulaNote"))}</p>
+      </div>
+      <div class="dashboard-card">
+        <span class="learning-label">${escapeHtml(phase6UiText("topicCoverage"))}</span>
+        ${coverageRows}
+      </div>
+      <div class="dashboard-card">
+        <span class="learning-label">${escapeHtml(phase6UiText("weakAreas"))}</span>
+        <p class="learning-copy">${weakTopics || phase6UiText("noWeakAreas")}</p>
+        <span class="learning-label">${escapeHtml(phase6UiText("suggestedNextSession"))}</span>
+        <p class="learning-copy">${stats.suggested ? escapeHtml(stats.suggested.label) : phase6UiText("allTopics")}</p>
+        <span class="learning-label">${escapeHtml(phase6UiText("sprintBank"))}</span>
+        <p class="learning-copy" id="sprintQuestionBankSummary">${sprintTotal} questions · ${state.learning.completedSprintQuestions.length}/${sprintTotal} completed · ${state.learning.reviewLaterScenarios.length} scenario review items</p>
+      </div>
+      <div class="dashboard-card wrong-answer-notebook" id="wrongAnswerNotebook">
+        <span class="learning-label">${escapeHtml(phase6UiText("wrongAnswerNotebook"))}</span>
+        ${notebookItems || `<p class="learning-copy">${escapeHtml(phase6UiText("noWeakAreas"))}</p>`}
+      </div>
+    </section>
+  `;
+}
+
+function renderSprintQuestionCard(question) {
+  const completed = state.learning.completedSprintQuestions.includes(question.id);
+  const weak = state.learning.weakSprintQuestionIds.includes(question.id);
+  const revealed = state.learning.revealedSprintRubrics.includes(question.id);
+  return `
+    <article class="sprint-question-card" data-sprint-question-card="${escapeHtml(question.id)}">
+      <div class="scenario-meta">
+        <span>${escapeHtml(localizedDirect(question, "topicLabel"))}</span>
+        <span>${escapeHtml(question.level)}</span>
+      </div>
+      <h4 class="learning-title">${escapeHtml(localizedDirect(question, "title"))}</h4>
+      <p class="learning-copy">${escapeHtml(localizedDirect(question, "prompt"))}</p>
+      <div class="learning-action-row">
+        <button class="learning-action" type="button" data-reveal-sprint-rubric="${escapeHtml(question.id)}">${escapeHtml(revealed ? phase6UiText("hideRubric") : phase6UiText("revealRubric"))}</button>
+        <button class="learning-action ${weak ? "active" : ""}" type="button" data-mark-weak-sprint="${escapeHtml(question.id)}">${escapeHtml(weak ? phase6UiText("weakMarked") : phase6UiText("markWeak"))}</button>
+        <button class="learning-action ${completed ? "active" : ""}" type="button" data-complete-sprint-question="${escapeHtml(question.id)}">${escapeHtml(completed ? phase6UiText("completedQuestion") : phase6UiText("completeQuestion"))}</button>
+      </div>
+      <div class="sprint-rubric" ${revealed ? "" : "hidden"}>
+        <span class="learning-label">${escapeHtml(phase6UiText("mustMention"))}</span>
+        <ul class="client-drill-list">${localizedDirectList(question, "mustMention").map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
+        <span class="learning-label">${escapeHtml(phase6UiText("strongAnswer"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedDirect(question, "strongAnswer"))}</p>
+        <span class="learning-label">${escapeHtml(phase6UiText("redFlagAnswer"))}</span>
+        <ul class="client-drill-list">${localizedDirectList(question, "redFlags").map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
+        <span class="learning-label">${escapeHtml(phase6UiText("followUpQuestions"))}</span>
+        <p class="learning-copy">${escapeHtml(localizedDirect(question, "followUp"))}</p>
+      </div>
+    </article>
+  `;
+}
+
+function renderLearningProfessionalSprint() {
+  const target = document.getElementById("learningProfessionalSprint");
+  if (!target) return;
+  const validTopics = validSprintTopicIds();
+  if (!validTopics.has(state.learning.sprintTopicFilter)) state.learning.sprintTopicFilter = "all";
+  state.learning.sprintSessionSize = clamp(Number(state.learning.sprintSessionSize) || 5, 3, 10);
+  const activeTopic = state.learning.sprintTopicFilter;
+  const filterRow = sprintFilters().map(([id, label]) => `
+    <button class="sprint-topic-filter ${activeTopic === id ? "active" : ""}" type="button" data-sprint-topic-filter="${escapeHtml(id)}">
+      ${escapeHtml(label)}
+    </button>
+  `).join("");
+  const sessionQuestions = state.learning.currentSprintQuestionIds
+    .map(sprintQuestionById)
+    .filter((question) => question && (activeTopic === "all" || question.topic === activeTopic));
+  const cards = sessionQuestions.map(renderSprintQuestionCard).join("");
+  const sizeOptions = [3, 5, 8, 10].map((size) => `
+    <option value="${size}" ${Number(state.learning.sprintSessionSize) === size ? "selected" : ""}>${size}</option>
+  `).join("");
+
+  target.innerHTML = `
+    <section class="professional-sprint-hero">
+      <div>
+        <p class="learning-kicker">Phase 6</p>
+        <h4 class="learning-title">${escapeHtml(phase6UiText("professionalSprint"))}</h4>
+        <p class="learning-copy">${escapeHtml(phase6UiText("sprintIntro"))}</p>
+      </div>
+      <div class="sprint-controls">
+        <label>
+          <span>${escapeHtml(phase6UiText("sessionSize"))}</span>
+          <select id="sprintSessionSize">${sizeOptions}</select>
+        </label>
+        <button class="learning-action" type="button" data-start-sprint-session>${escapeHtml(phase6UiText("startSession"))}</button>
+      </div>
+    </section>
+    <div class="sprint-topic-row">${filterRow}</div>
+    ${renderSkillDashboard()}
+    <section class="sprint-session-section">
+      <div class="dealer-playbook-heading">
+        <p class="learning-kicker">${escapeHtml(phase6UiText("professionalSprint"))}</p>
+        <h4 class="learning-title">${state.learning.sprintStartedAt ? `${escapeHtml(phase6UiText("sessionStarted"))} ${escapeHtml(new Date(state.learning.sprintStartedAt).toLocaleString())}` : escapeHtml(phase6UiText("startSessionEmpty"))}</h4>
+      </div>
+      <div class="sprint-question-grid">${cards || `<p class="learning-copy">${escapeHtml(phase6UiText("chooseStartSession"))}</p>`}</div>
+    </section>
+  `;
+}
+
 function renderScenarioFilters() {
   const target = document.getElementById("scenarioFilterRow");
   const monthTarget = document.getElementById("scenarioMonthFilterRow");
@@ -3165,6 +3569,8 @@ function renderLearningHub() {
   renderLearningVolFramework();
   renderLearningDealerDesk();
   renderLearningExoticsBridge();
+  renderLearningExoticsRisk();
+  renderLearningProfessionalSprint();
   renderScenarioFilters();
   renderLearningScenarios();
 }
@@ -3401,6 +3807,12 @@ function handleInput(event) {
 
 function handleChange(event) {
   const target = event.target;
+  if (target.id === "sprintSessionSize") {
+    state.learning.sprintSessionSize = clamp(Number(target.value) || 5, 3, 10);
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
   if (target.matches("[data-leg]")) {
     updateLeg(target);
     refreshAnalysis({ controls: false });
@@ -3428,6 +3840,42 @@ function handleClick(event) {
   }
   if (event.target.matches(".exotics-filter")) {
     state.learning.activeExoticsFilter = event.target.dataset.exoticsFilter;
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches(".exotics-risk-filter")) {
+    state.learning.activeExoticsRiskFilter = event.target.dataset.exoticsRiskFilter;
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches(".sprint-topic-filter")) {
+    state.learning.sprintTopicFilter = event.target.dataset.sprintTopicFilter;
+    state.learning.currentSprintQuestionIds = [];
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches("[data-start-sprint-session]")) {
+    startSprintSession();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches("[data-reveal-sprint-rubric]")) {
+    state.learning.revealedSprintRubrics = toggleArrayValue(state.learning.revealedSprintRubrics, event.target.dataset.revealSprintRubric);
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches("[data-mark-weak-sprint]")) {
+    state.learning.weakSprintQuestionIds = toggleArrayValue(state.learning.weakSprintQuestionIds, event.target.dataset.markWeakSprint);
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+  if (event.target.matches("[data-complete-sprint-question]")) {
+    state.learning.completedSprintQuestions = toggleArrayValue(state.learning.completedSprintQuestions, event.target.dataset.completeSprintQuestion);
     saveD1LearningProgress();
     renderLearningHub();
     return;

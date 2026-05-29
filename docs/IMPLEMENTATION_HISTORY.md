@@ -1,5 +1,20 @@
 # Implementation History
 
+## D1-to-Derivatives Learning Hub Phase 5B/6 (2026-05-29)
+
+Scope:
+
+- Implemented Phase 5B Exotics Risk with 6 risk-decomposition drills and 6 model-limit comparison cards.
+- Implemented Phase 6 Professional Sprint with 60 topic-filtered questions, rubric reveal, weak-topic marking, completion tracking, and local persistence.
+- Added 5 Month 6 modules, bringing the Learning Hub to 30 modules.
+- Added a local Skill Dashboard with transparent score formula, topic coverage, suggested next session, and weak-topic review notebook.
+- Added `data/phase6-content.js` so Phase 5B/6 content extends the learning hub without further bloating `data/learning-content.js`.
+- Updated `README.md`, `USER_GUIDE.md`, and project status docs for the new phase baseline.
+
+Verification focus:
+
+- `tests/learning-hub.spec.js` now covers Exotics Risk rendering/filtering and Professional Sprint session creation, rubric reveal, weak-topic marking, dashboard updates, and persistence.
+
 ## D1-to-Derivatives Learning Hub Phase 5 (2026-05-28)
 
 Scope:
@@ -12,7 +27,7 @@ Scope:
 - Added 36 Month 5 scenarios across client, risk, P&L, market-making, and strategy categories.
 - Added scenario topic filters for exotics, asian, barrier, quanto, digital, autocallable, structured-product, path, suitability, and cross-asset.
 - Maintained complete Chinese localization across all 191 Scenario Bank records and all new Phase 5 cards.
-- Updated roadmap and status docs so Phase 6 Professional Sprint and Skill Dashboard is the next main D1-to-Derivatives implementation target.
+- At the time, updated roadmap and status docs so Phase 6 Professional Sprint and Skill Dashboard became the next main D1-to-Derivatives implementation target.
 
 Verification focus:
 

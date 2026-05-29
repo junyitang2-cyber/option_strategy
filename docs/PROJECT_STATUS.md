@@ -1,5 +1,16 @@
 # Project Status And Roadmap
 
+## 2026-05-29 Update: D1 Learning Hub Phase 5B And Phase 6
+
+Phase 5B and Phase 6 are now implemented.
+
+- Learning Hub now contains 30 modules: existing Month 1-5 content plus 5 Month 6 Professional Sprint modules.
+- Scenario Bank remains at 191 records; Phase 6 adds 60 Professional Sprint questions, bringing total learning prompts to 251.
+- New Exotics Risk tab renders 6 exotics risk-decomposition drills and 6 model-limit comparison cards across Asian, Barrier, Quanto, Digital, Autocallable, and Structured Product topics.
+- New Professional Sprint tab supports topic-filtered sessions, session size controls, rubric reveal, weak-topic marking, question completion, local Skill Dashboard, topic coverage, suggested next session, and weak-topic review notebook.
+- Progress continues to persist in localStorage under `os_d1_learning`.
+- Phase 6B remains optional for export, richer rubrics, and deeper weak-topic recommendation logic.
+
 ## 2026-05-28 Update: D1 Learning Hub Phase 5
 
 Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
@@ -16,7 +27,7 @@ Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
 - Client drill completion and revealed step progress persist in localStorage.
 - Scenario filters now support category, month, and topic, including vol/skew/term-structure/event/surface/short-vol/gamma/liquidity/dealer/hedging/quote/attribution/inventory/exotics/asian/barrier/quanto/digital/autocallable/structured-product/path/suitability/cross-asset filters.
 - All 191 Learning Hub scenarios now have explicit Chinese localization records.
-- Next D1 roadmap implementation should move to Phase 6: Professional Sprint and Skill Dashboard. Optional Phase 5B can deepen exotics risk and suitability cases before Phase 6.
+- Next D1 roadmap implementation can move to optional Phase 6B: richer sprint rubrics, weak-topic recommendations, progress export, and deeper reporting.
 
 最后更新：2026-05-28
 
@@ -32,11 +43,11 @@ Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
 
 - 静态语法：`node --check app.js`、`node --check data/professional-content.js`、`node --check data/learning-content.js`。
 - 空白/补丁检查：`git diff --check`。
-- 数据完整性：25 modules、191 scenarios、20 client drills、5 strategy comparisons、5 vol framework cards、9 vol playbook cards、6 dealer workflow cards、6 P&L attribution cards、6 exotics bridge cards、6 structuring cases。
+- 数据完整性：30 modules、191 scenarios、60 Professional Sprint questions、20 client drills、5 strategy comparisons、5 vol framework cards、9 vol playbook cards、6 dealer workflow cards、6 P&L attribution cards、6 exotics bridge cards、6 structuring cases、6 exotics risk drills、6 model-limit cards。
 - 场景分布：Month 1 = 30、Month 2 = 40、Month 3 = 45、Month 4 = 40、Month 5 = 36。
 - 本地化与引用：191 个 Scenario Bank 场景中文 localization 完整；scenario-module links 与 strategy links 无坏引用。
 - Playwright browser regression：Learning Hub、Strategy Construction、Client Drills、Vol Framework、Dealer Desk、Exotics Bridge、Gamma P&L、Scenario filters、Professional tools 均正常。
-- 自动化回归：`npm test` 结果为 `14 passed (19.2s)`。
+- 自动化回归：当前以本地 `npm test` 输出为准。
 
 保留限制：当前仍是静态教学与训练平台，不接入实时行情、真实期权链、真实 broker margin 或真实做市执行系统。
 
@@ -154,9 +165,9 @@ npm test
 
 建议顺序：
 
-1. Phase 5B：Exotics risk decomposition、issuer/dealer risk、client suitability cases 的深化版。
-2. Phase 6：Professional scenario drills、wrong-answer notebook、skill dashboard。
-3. Phase 6B：更完整的 professional sprint rubrics、weak-topic recommendation 和 progress export。
+1. Phase 6B：更完整的 professional sprint rubrics、weak-topic recommendation、progress export 和学习报告。
+2. Content coverage：把更多专业内容扩展到剩余策略，尤其是 broken-wing、double diagonal、stock repair 等结构。
+3. Market realism：CSV option chain、bid/ask、IV Rank、expected move 和 early exercise/assignment 教学提示。
 
 详细蓝图见 `docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
 

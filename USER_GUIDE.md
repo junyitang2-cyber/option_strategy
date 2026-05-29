@@ -53,7 +53,7 @@ npm test
 
 ## D1-to-Derivatives Learning Hub
 
-Phase 5 is now available here: open Exotics Bridge to train Asian, Barrier, Quanto, Digital, Autocallable, and Structured Product payoff decomposition, then use Scenario Bank Month 5 to practice suitability, path dependency, issuer/dealer risk, and disclosure language.
+Phase 5B and Phase 6 are now available here: open Exotics Risk to train model limits, issuer/dealer risk, suitability, and disclosure correction; open Professional Sprint to run topic-filtered sessions, reveal rubrics, mark weak topics, and review the local Skill Dashboard.
 
 
 页面顶部的“交易员学习中枢”用于把 commodities D1 经验转成 equity derivatives 专业表达。
@@ -65,6 +65,8 @@ Phase 5 is now available here: open Exotics Bridge to train Asian, Barrier, Quan
 - `Vol 框架`：学习 RV/IV、event vol、skew、term structure 和 surface shifts；用小计算器理解 implied move 与 breakeven RV；用 Vol trade playbook 比较 long vol、short vol、event、skew、term structure 和 surface-bucket 交易。
 - `Dealer Desk`：训练 dealer workflow，明确客户 payoff 与 dealer Greeks/inventory 的区别，并学习 delta hedge、quote adjustment、residual risk 和 P&L attribution。
 - `Exotics Bridge`：用简化 payoff 图学习 Asian、Barrier、Quanto、Digital、Autocallable 和 Capital-protected note；每张卡都标注 embedded legs、核心风险、model limit 和专业表达；下方 structuring cases 按客户目标、payoff 设计、dealer risk 和 disclosure language 拆解。
+- `Exotics Risk`：训练 Phase 5B 的 risk decomposition、issuer/dealer risk、suitability checks、错误表达纠偏和 model-limit comparison。
+- `Professional Sprint`：启动 Phase 6 topic-filtered session，展开 rubric，标记弱项，完成题目，并用 Skill Dashboard 查看本地能力分、topic coverage 和弱项复习本。
 - `Commodities Bridge`：对比 commodities D1 与 equity derivatives 的相同点和需要修正的直觉。
 - `Scenario Bank`：按 category、month、topic 练习场景题，可过滤 vol、skew、term-structure、event、surface、short-vol、gamma、liquidity、dealer、hedging、quote、attribution、inventory、exotics、asian、barrier、quanto、digital、autocallable、structured-product、path、suitability 和 cross-asset，可 reveal answer、标记理解、加入复习。
 

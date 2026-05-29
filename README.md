@@ -1,6 +1,6 @@
 # Option Strategy Interactive Lab
 
-2026-05-28 update: D1-to-Derivatives Learning Hub Phase 5 is implemented with 25 modules, 191 scenarios, 5 strategy comparison cards, 20 client recommendation drills, Vol Framework, Dealer Desk, enhanced Gamma P&L controls, Exotics Bridge, simplified exotic payoff diagrams, and structuring workflow cases.
+2026-05-29 update: D1-to-Derivatives Learning Hub Phase 5B and Phase 6 are implemented with 30 modules, 191 Scenario Bank records, 60 Professional Sprint questions, 6 exotics risk-decomposition drills, 6 model-limit comparison cards, a local Skill Dashboard, and a weak-topic review notebook.
 
 期权策略交互学习与专业交易员能力训练工具。项目最初用于学习并复刻 `https://options-viewer.netlify.app/` 的核心体验，现在已经扩展为本地可运行的策略分析、教学和专业训练平台。
 
@@ -113,11 +113,11 @@ option_strategy/
 
 结果摘要：
 
-- Learning Hub 数据完整性：25 modules、191 scenarios、20 client drills、5 strategy comparisons、5 vol framework cards、9 vol playbook cards、6 dealer workflow cards、6 P&L attribution cards、6 exotics bridge cards、6 structuring cases。
+- Learning Hub 数据完整性：30 modules、191 scenarios、60 Professional Sprint questions、20 client drills、5 strategy comparisons、5 vol framework cards、9 vol playbook cards、6 dealer workflow cards、6 P&L attribution cards、6 exotics bridge cards、6 structuring cases、6 exotics risk drills、6 model-limit cards。
 - Scenario Bank：Month 1 = 30、Month 2 = 40、Month 3 = 45、Month 4 = 40、Month 5 = 36。
 - 中文本地化、scenario-module links、strategy links 均无缺失或坏引用。
 - 浏览器回归通过：Learning Hub、Vol Framework、Dealer Desk、Exotics Bridge、Gamma P&L、Scenario filters、Professional tools 无控制台错误。
-- Playwright：`14 passed (19.2s)`。
+- Playwright：当前以本地 `npm test` 输出为准。
 
 最近一次验收覆盖：
 

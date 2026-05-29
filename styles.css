@@ -1193,6 +1193,8 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .learning-action:focus-visible,
 .vol-playbook-filter:focus-visible,
 .exotics-filter:focus-visible,
+.exotics-risk-filter:focus-visible,
+.sprint-topic-filter:focus-visible,
 .strategy-link-chip:focus-visible {
   outline: 2px solid var(--cyan);
   outline-offset: 2px;
@@ -1217,6 +1219,9 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .dealer-attribution-grid,
 .exotics-bridge-grid,
 .structuring-case-grid,
+.exotics-risk-grid,
+.model-limit-grid,
+.sprint-question-grid,
 .scenario-grid {
   display: grid;
   gap: 12px;
@@ -1239,6 +1244,9 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .dealer-attribution-grid,
 .exotics-bridge-grid,
 .structuring-case-grid,
+.exotics-risk-grid,
+.model-limit-grid,
+.sprint-question-grid,
 .scenario-grid {
   grid-template-columns: 1fr;
 }
@@ -1254,6 +1262,11 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .dealer-attribution-card,
 .exotics-bridge-card,
 .structuring-case-card,
+.exotics-risk-drill-card,
+.model-limit-card,
+.sprint-question-card,
+.dashboard-card,
+.notebook-item,
 .scenario-card {
   background: var(--panel-2);
   border: 1px solid var(--line);
@@ -1405,7 +1418,9 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 }
 
 .dealer-desk-hero,
-.exotics-bridge-hero {
+.exotics-bridge-hero,
+.exotics-risk-hero,
+.professional-sprint-hero {
   align-items: end;
   background: var(--panel-2);
   border: 1px solid var(--line);
@@ -1425,6 +1440,13 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 }
 
 .structuring-case-section {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.model-limit-section,
+.sprint-session-section {
   display: grid;
   gap: 12px;
   margin-top: 12px;
@@ -1452,8 +1474,17 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
   margin: 0 0 12px;
 }
 
+.sprint-topic-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
 .vol-playbook-filter,
-.exotics-filter {
+.exotics-filter,
+.exotics-risk-filter,
+.sprint-topic-filter {
   background: var(--panel-2);
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -1466,9 +1497,106 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .vol-playbook-filter:hover,
 .vol-playbook-filter.active,
 .exotics-filter:hover,
-.exotics-filter.active {
+.exotics-filter.active,
+.exotics-risk-filter:hover,
+.exotics-risk-filter.active,
+.sprint-topic-filter:hover,
+.sprint-topic-filter.active {
   border-color: var(--cyan);
   color: var(--cyan);
+}
+
+.sprint-controls {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sprint-controls label {
+  color: var(--muted);
+  display: grid;
+  font-size: 12px;
+  gap: 4px;
+  min-width: 120px;
+}
+
+.sprint-controls select {
+  background: var(--panel-3);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 7px 9px;
+}
+
+.skill-dashboard {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin: 12px 0;
+}
+
+.score-card h4 {
+  color: var(--cyan);
+  font-size: 20px;
+  margin: 4px 0 8px;
+}
+
+.dashboard-row {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  display: flex;
+  font-size: 13px;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+.dashboard-row:last-child {
+  border-bottom: 0;
+}
+
+.dashboard-row strong {
+  color: var(--text);
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.wrong-answer-notebook {
+  max-height: 320px;
+  overflow: auto;
+}
+
+.notebook-item {
+  background: var(--panel-3);
+  margin-top: 8px;
+}
+
+.notebook-item h5 {
+  color: var(--text);
+  font-size: 13px;
+  margin: 0 0 6px;
+}
+
+.notebook-item p,
+.notebook-item span {
+  color: var(--muted);
+  display: block;
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.sprint-rubric {
+  border-top: 1px solid var(--line);
+  margin-top: 10px;
+  padding-top: 10px;
+}
+
+.sprint-rubric[hidden] {
+  display: none;
 }
 
 .exotics-payoff {
