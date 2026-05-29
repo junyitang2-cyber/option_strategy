@@ -4,6 +4,8 @@
 
 **Goal:** Complete professional Trader Memo, professional Q&A, and common wrong-expression coverage for all remaining strategies.
 
+**Status:** Implemented on 2026-05-29. Professional Trader Memo coverage is now 71/71 and strategy-level professional Q&A count is 234.
+
 **Architecture:** Extend `data/professional-content.js` using the existing Phase 7A `phase7aMemo` helper. Expand content tests to assert 71/71 coverage and add browser coverage for newly filled synthetic/framework strategies.
 
 **Tech Stack:** Plain JavaScript, static HTML/CSS, Playwright, Node syntax checks.
@@ -39,37 +41,36 @@ const PHASE7B_TARGET_IDS = [
 
 ### Task 1: Expand Content Coverage Tests
 
-- [ ] Add `PHASE7B_TARGET_IDS` to `tests/professional-content.spec.js`.
-- [ ] Add a test requiring every Phase 7B target to have professional content, at least 3 Q&A items, and at least 3 common mistakes.
-- [ ] Change the coverage count expectation from 53 to 71 and assert no current strategies are missing.
-- [ ] Run `npx playwright test tests/professional-content.spec.js` and confirm RED before adding content.
+- [x] Add `PHASE7B_TARGET_IDS` to `tests/professional-content.spec.js`.
+- [x] Add a test requiring every Phase 7B target to have professional content, at least 3 Q&A items, and at least 3 common mistakes.
+- [x] Change the coverage count expectation from 53 to 71 and assert no current strategies are missing.
+- [x] Run `npx playwright test tests/professional-content.spec.js` and confirm RED before adding content.
 
 ### Task 2: Expand Browser Tests
 
-- [ ] Update the Phase 7A browser test fallback strategy from `Short Synthetic Future` to a Phase 7B-covered expectation.
-- [ ] Add browser assertions for `Short Synthetic Future` and `Vega 套利`.
-- [ ] Run `npx playwright test tests/professional.spec.js --grep "phase 7"` and confirm RED before adding content.
+- [x] Update the Phase 7A browser test fallback strategy from `Short Synthetic Future` to a Phase 7B-covered expectation.
+- [x] Add browser assertions for `Short Synthetic Future` and `Vega 套利`.
+- [x] Run `npx playwright test tests/professional.spec.js --grep "phase 7"` and confirm RED before adding content.
 
 ### Task 3: Add Phase 7B Professional Content
 
-- [ ] Add 18 `phase7aMemo({...})` entries to `data/professional-content.js`.
-- [ ] Ensure every entry has strategy-specific exposure, P&L logic, client suitability, dealer risk, `commonMistakes`, and 3 Q&A items.
-- [ ] Run `node --check data\professional-content.js`.
-- [ ] Run the Phase 7B targeted tests until GREEN.
+- [x] Add 18 `phase7aMemo({...})` entries to `data/professional-content.js`.
+- [x] Ensure every entry has strategy-specific exposure, P&L logic, client suitability, dealer risk, `commonMistakes`, and 3 Q&A items.
+- [x] Run `node --check data\professional-content.js`.
+- [x] Run the Phase 7B targeted tests until GREEN.
 
 ### Task 4: Update Documentation
 
-- [ ] Update README professional coverage from 53 to 71 and Q&A count from 180 to 234.
-- [ ] Add Phase 7B status to `docs/PROJECT_STATUS.md`.
-- [ ] Add Phase 7B implementation entry to `docs/IMPLEMENTATION_HISTORY.md`.
+- [x] Update README professional coverage from 53 to 71 and Q&A count from 180 to 234.
+- [x] Add Phase 7B status to `docs/PROJECT_STATUS.md`.
+- [x] Add Phase 7B implementation entry to `docs/IMPLEMENTATION_HISTORY.md`.
 
 ### Task 5: Full Verification and Commit
 
-- [ ] Run `node --check app.js`.
-- [ ] Run `node --check data\professional-content.js`.
-- [ ] Run `node --check data\learning-content.js`.
-- [ ] Run `node --check data\phase6-content.js`.
-- [ ] Run `git diff --check`.
-- [ ] Run `npm test`.
-- [ ] Commit with `feat: add D1 phase 7B full professional coverage`.
-
+- [x] Run `node --check app.js`.
+- [x] Run `node --check data\professional-content.js`.
+- [x] Run `node --check data\learning-content.js`.
+- [x] Run `node --check data\phase6-content.js`.
+- [x] Run `git diff --check`.
+- [x] Run `npm test`.
+- [x] Commit with `feat: add D1 phase 7B full professional coverage`.

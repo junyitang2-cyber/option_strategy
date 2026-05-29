@@ -19,6 +19,27 @@ const PHASE7A_TARGET_IDS = [
   "put-ratio-spread",
 ];
 
+const PHASE7B_TARGET_IDS = [
+  "bull-call-ladder",
+  "bear-call-ladder",
+  "bull-put-ladder",
+  "bear-put-ladder",
+  "short-synthetic-future",
+  "synthetic-put",
+  "long-combo",
+  "short-combo",
+  "short-guts",
+  "double-diagonal",
+  "vega-套利",
+  "delta-neutraldelta-中性",
+  "covered-put",
+  "stock-repair-covered-ratio-spread",
+  "double-bull-spread",
+  "double-bear-spread",
+  "short-call-calendar-spread",
+  "short-put-calendar-spread",
+];
+
 function loadStrategies() {
   const strategyPath = path.resolve(__dirname, "../data/strategies.js");
   const code = fs.readFileSync(strategyPath, "utf8") + "\n;globalThis.__STRATEGIES = STRATEGIES;";
@@ -56,14 +77,27 @@ test("phase 7A target strategies have professional content coverage", () => {
   }
 });
 
-test("phase 7A increases professional strategy coverage while leaving later gaps", () => {
+test("phase 7B target strategies have professional content coverage", () => {
+  const strategies = loadStrategies();
+  const { PROFESSIONAL_CONTENT } = require("../data/professional-content.js");
+  const strategyIds = new Set(strategies.map((strategy) => strategy.id));
+
+  for (const id of PHASE7B_TARGET_IDS) {
+    expect(strategyIds.has(id), `${id} should exist in strategies.js`).toBe(true);
+    const content = PROFESSIONAL_CONTENT[id];
+    expect(content, `${id} should have professional content`).toBeTruthy();
+    expect(content.interviewQuestions.length).toBeGreaterThanOrEqual(3);
+    expect(content.commonMistakes.length).toBeGreaterThanOrEqual(3);
+  }
+});
+
+test("phase 7B completes professional strategy coverage", () => {
   const strategies = loadStrategies();
   const { PROFESSIONAL_CONTENT } = require("../data/professional-content.js");
   const professionalIds = Object.keys(PROFESSIONAL_CONTENT).filter((id) => id !== "professionalConcepts");
   const coveredIds = new Set(professionalIds);
   const missing = strategies.filter((strategy) => !coveredIds.has(strategy.id));
 
-  expect(professionalIds.length).toBe(53);
-  expect(missing.map((strategy) => strategy.id)).toContain("short-synthetic-future");
-  expect(missing.map((strategy) => strategy.id)).not.toContain("bull-put-spread");
+  expect(professionalIds.length).toBe(71);
+  expect(missing).toEqual([]);
 });

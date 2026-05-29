@@ -1,10 +1,10 @@
 # D1 to Derivatives Master Roadmap
 
 **Date**: 2026-05-27
-**Status**: Active roadmap after Phase 6B
+**Status**: Active roadmap after Phase 7B
 **Owner Goal**: Help a Commodities D1 Trader prepare for Equity Derivatives, Vol Trading, Market Making, Structuring, and Derivatives Risk professional tracks.
 
-**Latest Acceptance**: Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 / 5B / 6 / 6B passed local validation on 2026-05-29; next targets are content coverage, market realism, risk management, workflow export, and advanced derivatives.
+**Latest Acceptance**: Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 / 5B / 6 / 6B / 7A / 7B passed local validation on 2026-05-29; next targets are content quality normalization, market realism, risk management, workflow export, and advanced derivatives.
 
 ---
 
@@ -20,7 +20,7 @@ The guiding principle is:
 
 ## Current Baseline
 
-Phase 1, Phase 2A, Phase 2B, Phase 3A, Phase 3B, Phase 4A/4B, Phase 5, Phase 5B, Phase 6, and Phase 6B are implemented:
+Phase 1, Phase 2A, Phase 2B, Phase 3A, Phase 3B, Phase 4A/4B, Phase 5, Phase 5B, Phase 6, Phase 6B, Phase 7A, and Phase 7B are implemented:
 
 - Learning Hub panel.
 - Six-month roadmap display.
@@ -35,17 +35,18 @@ Phase 1, Phase 2A, Phase 2B, Phase 3A, Phase 3B, Phase 4A/4B, Phase 5, Phase 5B,
 - Exotics Bridge panel with 6 payoff cards and 6 structuring workflow cases.
 - Exotics Risk panel with 6 risk-decomposition drills and 6 model-limit comparison cards.
 - Professional Sprint panel with 60 topic-filtered questions, self-scoring, weak-topic recommendations, Skill Dashboard, and progress report export.
+- Strategy-level professional content coverage for all 71 strategies, with 234 professional Q&A items.
 - Enhanced Gamma P&L with rehedge threshold, transaction cost, static vs dynamic P&L, and hedge count.
 - Scenario filters by category, month, and topic.
 - LocalStorage progress via `os_d1_learning`.
 - Playwright coverage in `tests/learning-hub.spec.js`.
-- Latest validation: static checks, data integrity checks, desktop/mobile Playwright spot checks, and `npm test` all passed on 2026-05-29.
+- Latest validation: static checks, data integrity checks, targeted Phase 7B coverage checks, browser regression checks, and `npm test` all passed on 2026-05-29.
 
 Existing platform foundation:
 
 - 71 strategies.
-- 40 professional Trader Memos.
-- 141 strategy-level professional Q&A.
+- 71 professional Trader Memos.
+- 234 strategy-level professional Q&A.
 - Professional tools: stress test, parity, portfolio Greeks, Gamma P&L, vol surface, Greeks Decay.
 - Static frontend only: `index.html`, `styles.css`, `app.js`, `data/*.js`.
 
@@ -353,6 +354,25 @@ Phase 5 is educational. Do not build a production exotics pricer.
 - Skill score is transparent and based on local progress only.
 - Professional sprint progress persists locally.
 - Tests cover session creation, answer reveal, marking weak topics, and dashboard count updates.
+
+---
+
+### Phase 7: Strategy-Level Professional Content Coverage
+
+**Goal**: Make every strategy useful in professional mode, not only the original core structures.
+
+**Status**: Phase 7A and Phase 7B implemented on 2026-05-29. Phase 7B completed 71/71 professional Trader Memo coverage and raised strategy-level professional Q&A to 234 items.
+
+**Delivered**
+
+- Phase 7A added 13 high-value structures such as bull put spreads, broken-wing butterflies, covered short-vol structures, short condors, reverse jade lizard, and ratio spreads.
+- Phase 7B added the remaining 18 uncovered structures: ladders, synthetics/combos, short guts, double diagonal, framework guides, covered put, stock repair, double bull/bear spreads, and short calendars.
+- Newly covered strategies include common wrong-expression guidance.
+- Data-integrity tests now assert 71/71 coverage and browser tests verify newly covered synthetic/framework rendering.
+
+**Next quality pass**
+
+Phase 7C should normalize earlier sparse records so every professional strategy has at least 3 Q&A items, common wrong-expression guidance, and consistent Trader Memo depth.
 
 ---
 

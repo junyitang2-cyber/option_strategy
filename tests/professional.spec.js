@@ -124,7 +124,7 @@ test("tiered learning modes and professional practice panels stay interactive", 
   expect(errors).toEqual([]);
 });
 
-test("phase 7A professional content renders for new target strategies and keeps fallback", async ({ page }) => {
+test("phase 7 professional content renders for new target strategies", async ({ page }) => {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => {
@@ -148,8 +148,19 @@ test("phase 7A professional content renders for new target strategies and keeps 
     await page.locator("#skipDiffWarn").click();
   }
   await expect(page.locator("#strategyTitle")).toHaveText("Short Synthetic Future");
-  await expect(page.locator("#commonMistakesSection")).toBeHidden();
-  await expect(page.locator("#interviewQuestions")).toContainText("暂无专业问答内容");
+  await expect(page.locator("#professionalPanel")).toContainText("synthetic short");
+  await expect(page.locator("#commonMistakesContent")).toContainText("错误表达");
+  await expect(page.locator(".interview-qa")).toHaveCount(3);
+
+  await page.locator("#searchInput").fill("Vega");
+  await page.locator('#strategyList [data-strategy="vega-套利"]').click();
+  if (await page.locator("#diffWarnModal").isVisible()) {
+    await page.locator("#skipDiffWarn").click();
+  }
+  await expect(page.locator("#strategyTitle")).toHaveText("Vega 套利");
+  await expect(page.locator("#professionalPanel")).toContainText("term structure");
+  await expect(page.locator("#commonMistakesContent")).toContainText("错误表达");
+  await expect(page.locator(".interview-qa")).toHaveCount(3);
 
   expect(errors).toEqual([]);
 });

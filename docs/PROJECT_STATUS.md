@@ -1,5 +1,15 @@
 # Project Status And Roadmap
 
+## 2026-05-29 Update: D1 Learning Hub Phase 7B Full Professional Coverage
+
+Phase 7B is now implemented.
+
+- Professional Trader Memo coverage is now complete at 71 of 71 strategies.
+- Professional Q&A coverage increased from 180 to 234 items.
+- Added professional coverage for the remaining 18 strategies: ladders, synthetics/combos, short guts, double diagonal, Vega/Delta-neutral framework guides, covered put, stock repair, double bull/bear spreads, and short calendars.
+- Every Phase 7B target includes common wrong-expression guidance.
+- Playwright coverage now verifies Phase 7B data shape, no missing strategy-level professional coverage, and browser rendering for synthetic/framework strategies.
+
 ## 2026-05-29 Update: D1 Learning Hub Phase 7A Content Coverage
 
 Phase 7A is now implemented.
@@ -54,11 +64,11 @@ Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
 
 ## 当前结论
 
-项目当前是一个本地静态期权策略教学与专业训练工具，核心功能已经可以验收。当前完成度按学习/专业训练用途评估为 95%+；D1-to-Derivatives Learning Hub Phase 1、Phase 2A、Phase 2B、Phase 3A、Phase 3B、Phase 4A/4B、Phase 5、Phase 5B、Phase 6 和 Phase 6B 已实现，用于把用户的 commodities D1 经验系统转换成 equity derivatives 专业优势。
+项目当前是一个本地静态期权策略教学与专业训练工具，核心功能已经可以验收。当前完成度按学习/专业训练用途评估为 95%+；D1-to-Derivatives Learning Hub Phase 1、Phase 2A、Phase 2B、Phase 3A、Phase 3B、Phase 4A/4B、Phase 5、Phase 5B、Phase 6、Phase 6B、Phase 7A 和 Phase 7B 已实现，用于把用户的 commodities D1 经验系统转换成 equity derivatives 专业优势。
 
 ## 2026-05-29 完整验收记录
 
-结论：Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 / 5B / 6 / 6B 可验收。
+结论：Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 / 5B / 6 / 6B / 7A / 7B 可验收。
 
 已通过检查：
 
@@ -89,7 +99,7 @@ Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
 
 ### 进阶模式
 
-- 53 个策略的 Trader Memo。
+- 71 个策略的 Trader Memo。
 - Professional Concepts 独立面板。
 - 专业工具面板（Tabbed Interface）：
   - 压力测试矩阵
@@ -101,7 +111,7 @@ Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
 
 ### 专业模式
 
-- 180 个专业问答。
+- 234 个专业问答。
 - 专业问答覆盖 Greeks、策略构建、风险管理、客户视角、Dealer 对冲、参数选择和常见比较题。
 
 ### D1-to-Derivatives Learning Hub
@@ -164,8 +174,8 @@ npm test
 
 ### 内容限制
 
-- 71 个策略都有基础说明，其中 53 个策略有专业 Trader Memo。
-- 180 个专业问答覆盖核心内容；Phase 7A 新增策略均至少有 3 个专业问答。
+- 71 个策略都有基础说明和专业 Trader Memo。
+- 234 个专业问答覆盖核心内容；Phase 7A/7B 新增策略均至少有 3 个专业问答。
 - 20 个客户推荐演练、45 个 Month 3 vol 场景和 40 个 Month 4 dealer 场景覆盖常见结构推荐、vol 判断、dealer flow、hedging 与 P&L attribution 场景，但仍是教育性框架，不是实际 suitability advice、交易信号或真实做市系统。
 - 36 个 Month 5 exotics/structuring 场景覆盖 Asian、Barrier、Quanto、Digital、Autocallable 和 structured product，但不构成生产级 exotic pricer、发行条款建议或真实 suitability advice。
 - 60 个 Professional Sprint questions、6 个 Exotics Risk drills 和 6 个 model-limit cards 用于训练专业表达、自我评分和风险拆解，但不代表任何外部认证、正式考试结果或真实交易权限。
@@ -183,26 +193,28 @@ npm test
 
 ### P1：D1-to-Derivatives 后续扩展
 
-目标：基于 Phase 1 + Phase 2A + Phase 2B + Phase 3A + Phase 3B + Phase 4A/4B + Phase 5 + Phase 5B + Phase 6 + Phase 6B 使用反馈，继续进入内容覆盖、市场真实感、风险管理、输出工作流或高级衍生品扩展。
+目标：基于 Phase 1 + Phase 2A + Phase 2B + Phase 3A + Phase 3B + Phase 4A/4B + Phase 5 + Phase 5B + Phase 6 + Phase 6B + Phase 7A + Phase 7B 使用反馈，继续进入内容质量归一、市场真实感、风险管理、输出工作流或高级衍生品扩展。
 
 建议顺序：
 
-1. Content coverage：把更多专业内容扩展到剩余策略，尤其是 broken-wing、double diagonal、stock repair 等结构。
+1. Content quality normalization：Phase 7B 已完成 71/71 覆盖；下一步可做 Phase 7C，把较早策略的问答数量、常见错误表达和 Trader Memo 深度统一。
 2. Market realism：CSV option chain、bid/ask、IV Rank、expected move 和 early exercise/assignment 教学提示。
 3. Risk management / Output workflow：组合保存回放、学习报告导出增强、图表导出和移动端体验。
 
 详细蓝图见 `docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
 
-### P1：内容覆盖扩展
+### P1：内容覆盖质量归一
 
-目标：把专业内容从 53 个策略继续扩展到剩余策略，优先补常见专业与实战策略。
+状态：Phase 7B 已把专业内容补齐到 71/71 个策略。
+
+目标：进入 Phase 7C，把较早覆盖但内容较稀疏的策略统一到新的质量标准。
 
 建议顺序：
 
-1. Long Put Butterfly、Bull Put Spread、Call/Put Broken Wing、Double Diagonal。
-2. Covered Put、Stock Repair、Double Bull/Bear Spread。
-3. Short Calendar、Short Diagonal、更多 ratio/ladder 类策略。
-4. 每个新增策略至少补 exposure、赚钱逻辑、风险、客户适当性、Dealer hedge、3-5 个专业问答。
+1. 先审计少于 3 个专业问答或缺少常见错误表达的旧策略。
+2. 对 diagonal、condor、inverse iron、short butterfly、ratio backspread、strip/strap、seagull/fence 等较稀疏策略补齐问答与错误表达。
+3. 统一 Trader Memo 口径：exposure、盈利逻辑、客户适当性、Dealer hedge、主要风险和管理触发条件。
+4. 保持纯静态数据实现，并继续用 `tests/professional-content.spec.js` 锁定覆盖与质量门槛。
 
 ### P1：教学体验细化
 

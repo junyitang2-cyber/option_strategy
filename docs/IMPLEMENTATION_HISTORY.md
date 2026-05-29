@@ -1,5 +1,19 @@
 # Implementation History
 
+## D1-to-Derivatives Phase 7B Full Professional Coverage (2026-05-29)
+
+Scope:
+
+- Added Trader Memo, professional Q&A, and common wrong-expression guidance for the remaining 18 previously uncovered strategies.
+- Covered ladders, synthetics/combos, short guts, double diagonal, Vega/Delta-neutral framework guides, covered put, stock repair, double bull/bear spreads, and short calendars.
+- Increased professional Trader Memo coverage from 53 to 71 strategies, completing 71/71 strategy-level coverage.
+- Increased professional Q&A coverage from 180 to 234 items.
+
+Verification focus:
+
+- `tests/professional-content.spec.js` verifies Phase 7B target IDs, content shape, 71/71 coverage, and no missing professional strategy records.
+- `tests/professional.spec.js` verifies newly covered synthetic/framework strategies render Trader Memo, common mistakes, and professional Q&A in the browser.
+
 ## D1-to-Derivatives Phase 7A Content Coverage (2026-05-29)
 
 Scope:
