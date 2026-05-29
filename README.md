@@ -1,6 +1,6 @@
 # Option Strategy Interactive Lab
 
-2026-05-29 更新：D1-to-Derivatives Learning Hub 已完成 Phase 5B / Phase 6 / Phase 6B / Phase 7A / Phase 7B；Phase 7B 已把专业 Trader Memo 覆盖补齐到 71/71 个策略，并把专业问答扩展到 234 个。当前包含 30 个 modules、191 个 Scenario Bank records、60 个 Professional Sprint questions、6 个 exotics risk-decomposition drills 和 6 个 model-limit comparison cards。
+2026-05-29 更新：D1-to-Derivatives Learning Hub 已完成 Phase 5B / Phase 6 / Phase 6B / Phase 7A / Phase 7B / Phase 7C；Phase 7C 已把全部 71 个专业策略统一到至少 3 个专业问答和 3 条常见错误表达，专业问答扩展到 257 个。当前包含 30 个 modules、191 个 Scenario Bank records、60 个 Professional Sprint questions、6 个 exotics risk-decomposition drills 和 6 个 model-limit comparison cards。
 
 期权策略交互学习与专业交易员能力训练工具。项目最初用于学习并复刻 `https://options-viewer.netlify.app/` 的核心体验，现在已经扩展为本地可运行的策略分析、教学和专业训练平台。
 
@@ -17,13 +17,13 @@
 
 - 71 个基础策略，其中 60 个来自原站结构，11 个为补充策略。
 - 71 个策略的专业 Trader Memo。
-- 234 个专业问答。
+- 257 个专业问答。
 - 20 个客户结构推荐演练。
 - 主损益图、概率锥、逐腿分解、Greeks 六联图。
 - 情景参数、风险指标、腿组合编辑、学习路径追踪。
 - 进阶模式：Portfolio Greeks、保证金教育估算、压力测试、Gamma P&L、波动率曲面、Greeks Decay、Put-Call Parity、交易员核心概念。
 - 专业模式：进阶内容 + 专业问答与情景演练。
-- D1-to-Derivatives Learning Hub Phase 1 + Phase 2A + Phase 2B + Phase 3A/3B + Phase 4A/4B + Phase 5 + Phase 5B + Phase 6 + Phase 6B + Phase 7A + Phase 7B：六个月 roadmap、Month 1 Greeks、Month 2 Strategy Construction、Month 3 Volatility Framework、Month 4 Dealer Hedging/Market Making、Month 5 Exotics/Structuring、Month 6 Professional Sprint、Commodities Bridge、5 个策略对比卡、20 个客户推荐演练、Vol trade playbook、Dealer Desk、Exotics Bridge、Exotics Risk、Skill Dashboard、60 个 Professional Sprint questions、191 个实战/专业场景、71 个策略级 Trader Memo、234 个专业问答和本地进度追踪/报告导出。
+- D1-to-Derivatives Learning Hub Phase 1 + Phase 2A + Phase 2B + Phase 3A/3B + Phase 4A/4B + Phase 5 + Phase 5B + Phase 6 + Phase 6B + Phase 7A + Phase 7B + Phase 7C：六个月 roadmap、Month 1 Greeks、Month 2 Strategy Construction、Month 3 Volatility Framework、Month 4 Dealer Hedging/Market Making、Month 5 Exotics/Structuring、Month 6 Professional Sprint、Commodities Bridge、5 个策略对比卡、20 个客户推荐演练、Vol trade playbook、Dealer Desk、Exotics Bridge、Exotics Risk、Skill Dashboard、60 个 Professional Sprint questions、191 个实战/专业场景、71 个策略级 Trader Memo、257 个专业问答和本地进度追踪/报告导出。
 - Playwright 真实浏览器回归测试。
 
 ## 本地使用
@@ -111,7 +111,7 @@ option_strategy/
 
 ## 验证状态
 
-最近一次完整验收：2026-05-29，Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 / 5B / 6 / 6B / 7A / 7B 均通过；Phase 7 验收复核确认 71/71 策略专业内容覆盖、234 个策略级专业问答。
+最近一次完整验收：2026-05-29，Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 / 5B / 6 / 6B / 7A / 7B / 7C 均通过；Phase 7 复核确认 71/71 策略专业内容覆盖、257 个策略级专业问答，且所有专业策略都有常见错误表达。
 
 结果摘要：
 

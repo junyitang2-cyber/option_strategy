@@ -1,5 +1,19 @@
 # Implementation History
 
+## D1-to-Derivatives Phase 7C Content Quality Normalization (2026-05-29)
+
+Scope:
+
+- Backfilled common wrong-expression guidance for legacy professional strategy records that predated Phase 7A/7B.
+- Topped up the 15 older sparse professional records so each has at least 3 professional Q&A items.
+- Increased strategy-level professional Q&A coverage from 234 to 257 items.
+- Added a regression test requiring every professional strategy record to have at least 3 professional Q&A items and at least 3 common wrong-expression records.
+
+Verification focus:
+
+- `tests/professional-content.spec.js` now enforces the quality bar across all 71 professional strategy records.
+- Phase 7C specifically closes the older quality-normalization residual noted during the Phase 7 acceptance review.
+
 ## D1-to-Derivatives Phase 7 Acceptance Review (2026-05-29)
 
 Scope:
@@ -18,7 +32,7 @@ Verification focus:
 
 Residual follow-up:
 
-- 15 older pre-Phase-7 professional records remain below the newer 3-question/common-mistake quality bar. This is documented as Phase 7C quality normalization rather than a Phase 7A/7B acceptance blocker.
+- This was resolved by Phase 7C on 2026-05-29.
 
 ## D1-to-Derivatives Phase 7B Full Professional Coverage (2026-05-29)
 

@@ -2821,6 +2821,202 @@ const PROFESSIONAL_CONTENT = {
   }
 };
 
+const PROFESSIONAL_QUALITY_NORMALIZATION = {
+  "long-call": {
+    commonMistakes: ["错误表达: Long Call 风险低因为最大亏损只是权利金。正确说法是亏损有限但 probability of loss 和 theta bleed 可能很高。", "错误表达: 看涨就直接买 call。正确说法是还要比较 IV、DTE、delta 和 breakeven move。", "错误表达: IV 上升一定赚钱。正确说法是 Delta、Theta 和 IV change 要一起看。"],
+  },
+  "long-put": {
+    commonMistakes: ["错误表达: Long Put 是便宜保险。正确说法是保险成本来自 premium 和 theta，长期滚动可能很贵。", "错误表达: 标的跌就一定赚钱。正确说法是跌幅要覆盖 premium、theta 和 IV 变化。", "错误表达: Put protection 没有 trade-off。正确说法是它牺牲 carry 和 upside compounding。"],
+  },
+  "iron-condor": {
+    commonMistakes: ["错误表达: Iron Condor 是稳定收租。正确说法是 short Gamma/short Vega strategy，尾部和 gap risk 是核心。", "错误表达: defined risk 所以可以放大仓位。正确说法是 sizing 仍应按 max loss、exit cost 和 stress loss。", "错误表达: 到期在区间内就不用管。正确说法是 short strikes 附近的 mark-to-market 和 liquidity 会提前触发管理。"],
+  },
+  "covered-call": {
+    commonMistakes: ["错误表达: Covered Call 是无风险增强收益。正确说法是 downside 仍来自 stock，upside 被 short call 限制。", "错误表达: 被 call away 是唯一风险。正确说法是大跌时股票亏损远大于 call premium。", "错误表达: premium 越高越好。正确说法是高 premium 往往对应高 IV、event 或更高 assignment probability。"],
+  },
+  "cash-secured-put": {
+    commonMistakes: ["错误表达: Cash-Secured Put 比直接买股票安全。正确说法是 downside 接近买股，只是 entry price 被 premium 调整。", "错误表达: 有现金准备就没有风险。正确说法是 crash 时会以高于市价的有效成本接货。", "错误表达: 只看 annualized yield。正确说法是也要看 assignment、concentration 和 gap risk。"],
+  },
+  "bull-call-spread": {
+    commonMistakes: ["错误表达: Bull Call Spread 总是比 Long Call 好。正确说法是它降低成本但放弃上方 convexity。", "错误表达: max loss 小就可以重仓。正确说法是要按概率、liquidity 和 max loss sizing。", "错误表达: 到期价高于 short call 就完美。正确说法是提前退出、bid-ask 和 assignment/carry 仍会影响结果。"],
+  },
+  "bear-put-spread": {
+    commonMistakes: ["错误表达: Bear Put Spread 是便宜 protective put。正确说法是低成本来自卖出 lower put 并放弃极端下跌收益。", "错误表达: 跌越多越好。正确说法是跌破 short put 后 payoff 被封顶。", "错误表达: long put leg 已经解决全部风险。正确说法是 spread 仍有 theta、skew 和 execution risk。"],
+  },
+  "straddle": {
+    commonMistakes: ["错误表达: Straddle 只要大波动就赚钱。正确说法是 realized move 必须超过 implied breakeven 和交易成本。", "错误表达: 方向不重要所以风险低。正确说法是方向未知但 premium、theta 和 IV crush 风险很高。", "错误表达: 财报前买 straddle 是标准答案。正确说法是要判断 event move 是否被 IV 充分定价。"],
+  },
+  "strangle": {
+    commonMistakes: ["错误表达: Strangle 比 Straddle 便宜所以更好。正确说法是便宜来自需要更大的 move 才能盈利。", "错误表达: OTM 两边亏损慢。正确说法是 event/gap 会让 OTM option 快速变成核心风险。", "错误表达: Short Strangle 只要宽就安全。正确说法是宽 strikes 换来低 premium，但 tail risk 仍开放。"],
+  },
+  "long-call-butterfly": {
+    commonMistakes: ["错误表达: Butterfly 便宜所以 risk-reward 好。正确说法是便宜来自盈利区间很窄。", "错误表达: 它是纯方向看涨。正确说法是更像 target/range structure。", "错误表达: 到期看 payoff 即可。正确说法是 body 附近 Gamma、pin risk 和 liquidity 会提前影响管理。"],
+  },
+  "calendar-call-spread": {
+    commonMistakes: ["错误表达: Calendar 一定是 long Vega。正确说法是主要 long back-month vega，但 front gamma 和 term structure 也关键。", "错误表达: 只赚 theta。正确说法是 theta 收益需要标的停留在 front strike 附近。", "错误表达: front option 到期后自然安全。正确说法是 expiry 后会留下 back-month option 的方向和 vega exposure。"],
+  },
+  "long-synthetic-future": {
+    commonMistakes: ["错误表达: Synthetic Future 比股票风险小。正确说法是经济暴露近似 long forward/stock。", "错误表达: Call 和 put 的 Greeks 完全抵消。正确说法是实际 skew、rates、dividends 和 strikes 会留下 residual risk。", "错误表达: parity 差异就是无风险套利。正确说法是还要扣除 bid-ask、borrow、dividend、margin 和 assignment。"],
+  },
+  "risk-reversal": {
+    commonMistakes: ["错误表达: Risk Reversal 是免费 directional bet。正确说法是用卖出一侧 tail 来融资另一侧 exposure。", "错误表达: zero-cost 就没有成本。正确说法是成本转移到 downside/upside obligation。", "错误表达: 只看方向。正确说法是 skew、strike selection 和 assignment 都会改变 suitability。"],
+  },
+  "box-spread": {
+    commonMistakes: ["错误表达: Box Spread 永远是无风险套利。正确说法是理论上接近 financing trade，现实中有 execution、margin 和 early exercise risk。", "错误表达: 收益率高就能做。正确说法是要比较 funding rate、bid-ask、fees 和 capital treatment。", "错误表达: 四条腿完全锁死风险。正确说法是美式期权和 assignment timing 会破坏静态假设。"],
+  },
+  "bear-call-spread": {
+    commonMistakes: ["错误表达: Bear Call Spread 是安全收 credit。正确说法是 defined-risk short call spread，仍有 upside gap risk。", "错误表达: OTM short call 不需要管理。正确说法是 spot 接近 short strike 时 Gamma 和 assignment 会加速。", "错误表达: credit 越高越好。正确说法是高 credit 往往意味着更近 strike 或更高风险。"],
+  },
+  "short-strangle": {
+    commonMistakes: ["错误表达: Short Strangle 是高胜率策略。正确说法是高小赚概率换低频大亏风险。", "错误表达: 两边都很远所以安全。正确说法是 gap、IV spike 和 margin expansion 会同时发生。", "错误表达: Delta neutral 就不用管方向。正确说法是 move 后 Delta 会快速偏离，需要管理规则。"],
+  },
+  "short-straddle": {
+    commonMistakes: ["错误表达: Short Straddle 赚 theta 很稳定。正确说法是 theta 收益来自承担最大的 ATM Gamma。", "错误表达: 不看方向就是中性。正确说法是价格一动就会产生方向暴露。", "错误表达: IV 高就卖。正确说法是要判断 realized vol、event jump 和 hedging cost。"],
+  },
+  "collar": {
+    commonMistakes: ["错误表达: Collar 是免费保护。正确说法是用卖出 upside 来补贴 downside protection。", "错误表达: 只要保护股票就适合。正确说法是要看 tax、liquidity、upside concession 和 hedge ratio。", "错误表达: zero-cost collar 没有代价。正确说法是代价体现在 capped upside 和 strike selection。"],
+  },
+  "iron-butterfly": {
+    commonMistakes: ["错误表达: Iron Butterfly 是更紧的 Iron Condor。正确说法是 ATM short strike 让 Gamma 和 pin risk 更集中。", "错误表达: credit 高说明 cushion 大。正确说法是 credit 高也说明 short ATM vol risk 高。", "错误表达: defined risk 就不用调整。正确说法是接近 body 时 P&L 对 spot 和 IV 非常敏感。"],
+  },
+  "protective-put": {
+    commonMistakes: ["错误表达: Protective Put 消除股票风险。正确说法是它定义 downside floor，但 premium 和 timing 仍是成本。", "错误表达: Put 越远越便宜越好。正确说法是更远 strike 保护更弱，gap 后可能仍有大回撤。", "错误表达: 到期前不用管理。正确说法是 IV、remaining DTE 和 stock thesis 变化会影响是否 roll。"],
+  },
+  "short-put": {
+    commonMistakes: ["错误表达: Short Put 是愿意接货所以没风险。正确说法是接货价格可能远高于崩盘后的市价。", "错误表达: Premium 是固定收入。正确说法是它是承担 downside convexity 的补偿。", "错误表达: 只看 cash-secured。正确说法是还要看 concentration、assignment 和 margin liquidity。"],
+  },
+  "short-call": {
+    commonMistakes: ["错误表达: Short Call 只是看跌收租。正确说法是 naked short call 有开放 upside risk。", "错误表达: OTM 很远所以不用管。正确说法是 squeeze/takeover gap 会让远 OTM call 瞬间变核心风险。", "错误表达: Delta 小代表风险小。正确说法是 Gamma 和 gap risk 会改变 Delta。"],
+  },
+  "calendar-put-spread": {
+    commonMistakes: ["错误表达: Put Calendar 只是 Call Calendar 的镜像。正确说法是 put skew、assignment 和 downside crash path 更重要。", "错误表达: Calendar 都只赚 theta。正确说法是 term Vega 和 front expiry Gamma 同样关键。", "错误表达: front put 保护整个交易。正确说法是 front expiry 后会留下 back-month put exposure。"],
+  },
+  "diagonal-call-spread": {
+    commonMistakes: ["错误表达: Diagonal Call Spread 是 vertical spread 加时间。正确说法是它同时有 strike mismatch 和 expiry mismatch。", "错误表达: short front call 完全融资 long call。正确说法是融资伴随 front Gamma 和 assignment risk。", "错误表达: 只看到期 payoff。正确说法是两个到期日让 roll 和 term Vega 变成核心。"],
+    additionalQuestions: [
+      { q: "为什么 Diagonal Call Spread 不能只按 vertical spread 管理？", a: "因为它同时有不同 strike 和不同 expiry。管理时要分开看 front short call 的 Gamma/assignment，以及 back long call 的 Vega 和 residual Delta。" },
+    ],
+  },
+  "diagonal-put-spread": {
+    commonMistakes: ["错误表达: Diagonal Put Spread 是普通 put spread。正确说法是 expiry mismatch 带来 term structure risk。", "错误表达: front put 到期前都提供保护。正确说法是 short front put 接近 ITM 时 assignment 和 roll risk 会出现。", "错误表达: 下跌一定有利。正确说法是过快下跌会压迫 short front put 并改变 Vega/Delta。"],
+    additionalQuestions: [
+      { q: "Diagonal Put Spread 的核心风险为什么是 term structure？", a: "因为前月 short put 和后月 long put 对 IV、Theta、Gamma 的反应不同。即使方向判断正确，term structure shift 也可能伤害 P&L。" },
+      { q: "客户用 Diagonal Put Spread 做保护时要提示什么？", a: "要提示这不是纯 protective put。front short put 降低成本，但也限制路径表现，并引入 assignment、roll 和 liquidity 风险。" },
+    ],
+  },
+  "wheel-strategy": {
+    commonMistakes: ["错误表达: Wheel Strategy 是稳定现金流机器。正确说法是它循环承担 short put downside 和 covered call capped upside。", "错误表达: 被指派也没关系。正确说法是 assignment 后会变成 stock concentration risk。", "错误表达: 每轮都能滚出收益。正确说法是趋势单边行情会让 roll 变得昂贵或锁定亏损。"],
+  },
+  "poor-man-s-covered-call": {
+    commonMistakes: ["错误表达: Poor Man's Covered Call 等于 covered call。正确说法是 long LEAPS 替代股票，存在 Vega、Delta drift 和 expiry mismatch。", "错误表达: 成本低所以风险更低。正确说法是杠杆更高，LEAPS 价格也会被 IV 和时间影响。", "错误表达: short call 被指派就像股票 covered。正确说法是没有现股，处理 assignment 需要平仓或行权 long call。"],
+    additionalQuestions: [
+      { q: "Poor Man's Covered Call 相比 covered call 多了什么专业风险？", a: "它用 LEAPS 替代股票，所以多了 long-dated Vega、Delta 不稳定、LEAPS liquidity 和 short call assignment 处理风险。" },
+    ],
+  },
+  "jade-lizard": {
+    commonMistakes: ["错误表达: Jade Lizard 没有 upside risk 就是安全。正确说法是 downside short put risk 仍可能很大。", "错误表达: credit 大于 call spread width 就没有风险。正确说法是这只消除上方风险，不消除下方风险。", "错误表达: 适合所有中性观点。正确说法是尤其要评估客户是否愿意承担下方接货。"],
+    additionalQuestions: [
+      { q: "Jade Lizard 的 suitability 关键是什么？", a: "关键是客户是否能承担 short put downside 和 assignment。上方风险可能被 credit 覆盖，但下方仍接近 cash-secured put 风险。" },
+    ],
+  },
+  "long-call-condor": {
+    commonMistakes: ["错误表达: Condor 便宜所以适合押方向。正确说法是 Long Call Condor 更像目标区间结构。", "错误表达: defined risk 就不用看 liquidity。正确说法是四腿结构的 exit cost 会吃掉理论 edge。", "错误表达: 只要到期在中间就行。正确说法是短 strikes 附近的 pin 和 Gamma 会提前影响管理。"],
+    additionalQuestions: [
+      { q: "Long Call Condor 和 Long Call Butterfly 的差别怎么讲？", a: "Condor 有两个 body strikes，盈利平台更宽但结构更复杂；Butterfly 更集中，成本和风险分布也更尖。" },
+    ],
+  },
+  "long-put-condor": {
+    commonMistakes: ["错误表达: Long Put Condor 是 bearish strategy。正确说法是它主要是 target/range payoff。", "错误表达: 用 puts 构建就一定偏空。正确说法是最终 exposure 取决于 strikes 和 spot。", "错误表达: max loss 有限所以不用管理。正确说法是 put skew、pin risk 和 multi-leg execution 仍重要。"],
+    additionalQuestions: [
+      { q: "Long Put Condor 为什么不是单纯 bearish？", a: "因为它的最大收益集中在中间区间，过度下跌或上涨都可能不理想；它表达的是到期目标区间，而不是越跌越好。" },
+      { q: "Dealer 报 Long Put Condor 时会看什么？", a: "Dealer 会看 put skew、四腿 liquidity、pin risk 和净 Vega/Gamma，而不是只看 max loss 有限。" },
+    ],
+  },
+  "inverse-iron-condor": {
+    commonMistakes: ["错误表达: Inverse Iron Condor 是 Long Strangle 的简单替代。正确说法是它用 wings 定义风险，也限制部分 payoff。", "错误表达: 大波动一定赚钱。正确说法是 move 需要超过 breakevens 且覆盖 IV crush。", "错误表达: defined risk 表示 event trade 容易 sizing。正确说法是仍要按 premium at risk 和 probability sizing。"],
+    additionalQuestions: [
+      { q: "Inverse Iron Condor 的核心 trade-off 是什么？", a: "它用定义风险表达 long movement/long Gamma view，但用额外 wings 限制 tail payoff，同时仍要承担 premium 和 IV crush。" },
+      { q: "它适合什么事件场景？", a: "适合预期有大 move、但希望控制 premium outlay 和 max loss 的场景；不适合只因 IV 高就盲目买波动。" },
+    ],
+  },
+  "inverse-iron-butterfly": {
+    commonMistakes: ["错误表达: Inverse Iron Butterfly 只是买 straddle。正确说法是它通过 wings 定义风险和收益区间。", "错误表达: ATM move 一点就赚钱。正确说法是要突破 breakevens 并覆盖 premium。", "错误表达: event 后方向无关。正确说法是方向无关但 magnitude、IV crush 和 exit liquidity 都关键。"],
+    additionalQuestions: [
+      { q: "Inverse Iron Butterfly 和 Long Straddle 怎么比较？", a: "Inverse Iron Butterfly 通常有 defined max gain/loss，成本可能更低但 tail payoff 被限制；Long Straddle 更直接但 premium 更高。" },
+      { q: "客户为什么可能选 Inverse Iron Butterfly？", a: "客户想做 long movement，但希望用 wings 控制 premium at risk，避免无限扩大 option cost。" },
+    ],
+  },
+  "short-call-butterfly": {
+    commonMistakes: ["错误表达: Short Call Butterfly 是普通 short-vol。正确说法是它在 body 附近最不利，两端反而可能较好。", "错误表达: 用 calls 构建就偏空。正确说法是 payoff 主要取决于到期位置。", "错误表达: defined risk 代表简单。正确说法是 body 附近 pin/Gamma 和四腿 liquidity 很复杂。"],
+    additionalQuestions: [
+      { q: "Short Call Butterfly 的最差区域在哪里？", a: "通常在中间 body strike 附近，因为 short middle calls 的价值最大，结构的 defined loss 会集中在那里。" },
+      { q: "它和 Iron Butterfly 的风险表达有什么不同？", a: "两者都可表达 short target-zone view，但 option types、assignment、skew 和 liquidity 可能不同，需要按 legs 拆解。" },
+    ],
+  },
+  "short-put-butterfly": {
+    commonMistakes: ["错误表达: Short Put Butterfly 是 bearish income。正确说法是它主要是 avoid-target-zone payoff。", "错误表达: 用 puts 就一定担心下跌。正确说法是风险集中在 body strike 附近。", "错误表达: defined risk 可以忽略 gap。正确说法是 gap 后 bid-ask 和 IV 会影响退出。"],
+    additionalQuestions: [
+      { q: "Short Put Butterfly 的核心 exposure 怎么说？", a: "它不是简单方向仓位，而是在某个目标区间附近 short convexity，标的停在 body 附近最不利。" },
+      { q: "Dealer 怎么管理 Short Put Butterfly？", a: "Dealer 会看 body 附近 Gamma、put skew、pin risk 和四腿 liquidity，尤其接近到期时。" },
+    ],
+  },
+  "call-ratio-backspread": {
+    commonMistakes: ["错误表达: Call Ratio Backspread 是免费看涨。正确说法是通常牺牲中间区间风险换上方 convexity。", "错误表达: 上涨就一定赚钱。正确说法是小涨到 short call 区域可能最差。", "错误表达: 多买 calls 就没有 short call 风险。正确说法是 strike spacing 和 net premium 决定中间风险。"],
+    additionalQuestions: [
+      { q: "Call Ratio Backspread 最怕什么路径？", a: "最怕标的只小幅上涨并停在 short call 附近，因为上方 long calls 尚未充分发挥 convexity，而 short call 已经受压。" },
+    ],
+  },
+  "put-ratio-backspread": {
+    commonMistakes: ["错误表达: Put Ratio Backspread 是免费 crash hedge。正确说法是常有中间区间风险或 premium/carry 成本。", "错误表达: 下跌一定赚钱。正确说法是小跌到 short put 区域可能不利。", "错误表达: 多买 puts 就完全保护。正确说法是 strike selection 决定何时进入 convex payoff。"],
+    additionalQuestions: [
+      { q: "Put Ratio Backspread 为什么适合 tail hedge 讨论？", a: "因为它用更多 lower-strike long puts 获取 crash convexity，但通常需要承担中间区间风险、成本或 execution complexity。" },
+      { q: "客户使用 Put Ratio Backspread 时要披露什么？", a: "要披露小跌不一定赚钱、breakeven 位置、IV skew 成本和多腿退出流动性。" },
+    ],
+  },
+  "strip": {
+    commonMistakes: ["错误表达: Strip 只是 straddle 的名字变体。正确说法是它多配 put，偏向 downside move。", "错误表达: 方向中性。正确说法是仍是 long vol，但 downside delta/convexity 更重。", "错误表达: 只适合看跌。正确说法是核心仍是 movement trade，只是对下跌更敏感。"],
+    additionalQuestions: [
+      { q: "Strip 相比 Straddle 多表达了什么观点？", a: "它表达 long movement 的同时更看重 downside tail，因此多买 put，让下跌路径的 convexity 更强。" },
+    ],
+  },
+  "strap": {
+    commonMistakes: ["错误表达: Strap 是看涨 call spread。正确说法是它是 long movement structure，只是 upside convexity 更重。", "错误表达: 只要上涨就赚。正确说法是 move 仍要覆盖 premium 和 theta。", "错误表达: 比 straddle 更安全。正确说法是 directional tilt 更强，premium 通常也更高。"],
+    additionalQuestions: [
+      { q: "Strap 相比 Straddle 的专业表达是什么？", a: "Strap 是 long vol/movement trade with upside tilt，通过多配 call 加大上行 convexity，但 premium 和 theta burden 也更高。" },
+      { q: "什么时候不适合用 Strap？", a: "如果客户只是温和看涨，或者 IV 已经很高且预期 move 不足以覆盖 premium，Strap 可能过度支付 convexity。" },
+    ],
+  },
+  "seagull-fence": {
+    commonMistakes: ["错误表达: Seagull/Fence 是免费 hedge。正确说法是用卖出一侧 option 或放弃一侧 payoff 来融资。", "错误表达: 三腿结构自动更稳。正确说法是每条 leg 都改变 tail 和 suitability。", "错误表达: 只看 zero-cost。正确说法是要看 protection level、cap/floor 和 residual obligation。"],
+    additionalQuestions: [
+      { q: "Seagull/Fence 的客户适当性怎么讲？", a: "它适合有明确 hedge objective、愿意用 capped upside 或 residual downside obligation 换成本控制的客户，不适合只想无条件保护的人。" },
+    ],
+  },
+  "guts": {
+    commonMistakes: ["错误表达: Guts 是 strangle 的高级名字。正确说法是通常使用 ITM options，intrinsic 和 assignment 更重要。", "错误表达: Long Guts 只是贵一点的 long vol。正确说法是 breakevens、intrinsic value 和 liquidity 都不同。", "错误表达: Short Guts premium 大所以安全。正确说法是 premium 大也代表 ITM risk 和 assignment risk 大。"],
+  },
+};
+
+function applyProfessionalQualityNormalization() {
+  Object.entries(PROFESSIONAL_QUALITY_NORMALIZATION).forEach(([id, patch]) => {
+    const content = PROFESSIONAL_CONTENT[id];
+    if (!content) return;
+
+    if ((!Array.isArray(content.commonMistakes) || content.commonMistakes.length < 3) && Array.isArray(patch.commonMistakes)) {
+      content.commonMistakes = patch.commonMistakes;
+    }
+
+    if (Array.isArray(patch.additionalQuestions)) {
+      const existingQuestions = Array.isArray(content.interviewQuestions) ? content.interviewQuestions : [];
+      content.interviewQuestions = existingQuestions
+        .concat(patch.additionalQuestions)
+        .slice(0, Math.max(3, existingQuestions.length));
+    }
+  });
+}
+
+applyProfessionalQualityNormalization();
+
 // Export for use in app.js
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { PROFESSIONAL_CONTENT };

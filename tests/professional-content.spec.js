@@ -101,3 +101,21 @@ test("phase 7B completes professional strategy coverage", () => {
   expect(professionalIds.length).toBe(71);
   expect(missing).toEqual([]);
 });
+
+test("all professional strategy records meet the current quality bar", () => {
+  const { PROFESSIONAL_CONTENT } = require("../data/professional-content.js");
+  const professionalEntries = Object.entries(PROFESSIONAL_CONTENT).filter(([id]) => id !== "professionalConcepts");
+  const qualityGaps = professionalEntries
+    .filter(([, content]) => {
+      const questionCount = Array.isArray(content.interviewQuestions) ? content.interviewQuestions.length : 0;
+      const mistakeCount = Array.isArray(content.commonMistakes) ? content.commonMistakes.length : 0;
+      return questionCount < 3 || mistakeCount < 3;
+    })
+    .map(([id, content]) => ({
+      id,
+      questions: Array.isArray(content.interviewQuestions) ? content.interviewQuestions.length : 0,
+      commonMistakes: Array.isArray(content.commonMistakes) ? content.commonMistakes.length : 0,
+    }));
+
+  expect(qualityGaps).toEqual([]);
+});

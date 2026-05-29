@@ -1,14 +1,24 @@
 # Project Status And Roadmap
 
+## 2026-05-29 Update: Phase 7C Content Quality Normalization
+
+Phase 7C is now implemented.
+
+- All 71 professional strategy records now meet the current quality bar: at least 3 professional Q&A items and at least 3 common wrong-expression records.
+- Strategy-level professional Q&A coverage increased from 234 to 257 items.
+- Legacy records with enough Q&A but no `commonMistakes` were backfilled with strategy-specific common wrong-expression guidance.
+- The 15 older sparse records were also topped up to at least 3 professional Q&A items.
+- `tests/professional-content.spec.js` now enforces this quality bar across every professional strategy, not only Phase 7A/7B targets.
+
 ## 2026-05-29 Update: Phase 7 Acceptance Review
 
-Phase 7A/7B has passed acceptance review.
+Phase 7A/7B passed acceptance review before Phase 7C normalization.
 
 - Coverage audit: 71 strategies, 71 professional strategy records, 234 strategy-level professional Q&A items.
 - Phase 7A/7B target audit: all 31 newly covered strategies have Trader Memo, at least 3 professional Q&A items, and at least 3 common wrong-expression records.
 - Stale/missing ID audit: no strategy is missing professional content, and no professional strategy record points to a removed strategy ID.
 - Visible wording audit: current UI tests still guard against external-facing Interview/面试/Q&A wording.
-- Residual non-blocker: 15 older pre-Phase-7 professional records still have fewer than 3 Q&A items and no `commonMistakes`; this remains the recommended Phase 7C quality-normalization scope, not a Phase 7A/7B coverage blocker.
+- The then-residual quality-normalization item has since been resolved by Phase 7C.
 
 ## 2026-05-29 Update: D1 Learning Hub Phase 7B Full Professional Coverage
 
@@ -121,7 +131,7 @@ Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
 
 ### 专业模式
 
-- 234 个专业问答。
+- 257 个专业问答。
 - 专业问答覆盖 Greeks、策略构建、风险管理、客户视角、Dealer 对冲、参数选择和常见比较题。
 
 ### D1-to-Derivatives Learning Hub
@@ -185,7 +195,7 @@ npm test
 ### 内容限制
 
 - 71 个策略都有基础说明和专业 Trader Memo。
-- 234 个专业问答覆盖核心内容；Phase 7A/7B 新增策略均至少有 3 个专业问答。
+- 257 个专业问答覆盖核心内容；所有 71 个专业策略均至少有 3 个专业问答和 3 条常见错误表达。
 - 20 个客户推荐演练、45 个 Month 3 vol 场景和 40 个 Month 4 dealer 场景覆盖常见结构推荐、vol 判断、dealer flow、hedging 与 P&L attribution 场景，但仍是教育性框架，不是实际 suitability advice、交易信号或真实做市系统。
 - 36 个 Month 5 exotics/structuring 场景覆盖 Asian、Barrier、Quanto、Digital、Autocallable 和 structured product，但不构成生产级 exotic pricer、发行条款建议或真实 suitability advice。
 - 60 个 Professional Sprint questions、6 个 Exotics Risk drills 和 6 个 model-limit cards 用于训练专业表达、自我评分和风险拆解，但不代表任何外部认证、正式考试结果或真实交易权限。
@@ -203,28 +213,26 @@ npm test
 
 ### P1：D1-to-Derivatives 后续扩展
 
-目标：基于 Phase 1 + Phase 2A + Phase 2B + Phase 3A + Phase 3B + Phase 4A/4B + Phase 5 + Phase 5B + Phase 6 + Phase 6B + Phase 7A + Phase 7B 使用反馈，继续进入内容质量归一、市场真实感、风险管理、输出工作流或高级衍生品扩展。
+目标：基于 Phase 1 + Phase 2A + Phase 2B + Phase 3A + Phase 3B + Phase 4A/4B + Phase 5 + Phase 5B + Phase 6 + Phase 6B + Phase 7A + Phase 7B + Phase 7C 使用反馈，继续进入市场真实感、风险管理、输出工作流或高级衍生品扩展。
 
 建议顺序：
 
-1. Content quality normalization：Phase 7B 已完成 71/71 覆盖；下一步可做 Phase 7C，把较早策略的问答数量、常见错误表达和 Trader Memo 深度统一。
-2. Market realism：CSV option chain、bid/ask、IV Rank、expected move 和 early exercise/assignment 教学提示。
-3. Risk management / Output workflow：组合保存回放、学习报告导出增强、图表导出和移动端体验。
+1. Market realism：CSV option chain、bid/ask、IV Rank、expected move 和 early exercise/assignment 教学提示。
+2. Risk management / Output workflow：组合保存回放、学习报告导出增强、图表导出和移动端体验。
+3. Advanced derivatives：更深入的 vol arbitrage、dispersion、correlation 和 exotic 案例。
 
 详细蓝图见 `docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
 
 ### P1：内容覆盖质量归一
 
-状态：Phase 7B 已把专业内容补齐到 71/71 个策略。
+状态：Phase 7C 已完成。
 
-目标：进入 Phase 7C，把较早覆盖但内容较稀疏的策略统一到新的质量标准。
+结果：71/71 个专业策略都已达到当前质量标准。
 
-建议顺序：
-
-1. 先审计少于 3 个专业问答或缺少常见错误表达的旧策略。
-2. 对 diagonal、condor、inverse iron、short butterfly、ratio backspread、strip/strap、seagull/fence 等较稀疏策略补齐问答与错误表达。
-3. 统一 Trader Memo 口径：exposure、盈利逻辑、客户适当性、Dealer hedge、主要风险和管理触发条件。
-4. 保持纯静态数据实现，并继续用 `tests/professional-content.spec.js` 锁定覆盖与质量门槛。
+- 71 个策略都有专业 Trader Memo。
+- 71 个策略都有至少 3 个专业问答。
+- 71 个策略都有至少 3 条常见错误表达。
+- `tests/professional-content.spec.js` 已把该质量线固化为回归测试。
 
 ### P1：教学体验细化
 
