@@ -1,5 +1,15 @@
 # Project Status And Roadmap
 
+## 2026-05-29 Update: Phase 7 Acceptance Review
+
+Phase 7A/7B has passed acceptance review.
+
+- Coverage audit: 71 strategies, 71 professional strategy records, 234 strategy-level professional Q&A items.
+- Phase 7A/7B target audit: all 31 newly covered strategies have Trader Memo, at least 3 professional Q&A items, and at least 3 common wrong-expression records.
+- Stale/missing ID audit: no strategy is missing professional content, and no professional strategy record points to a removed strategy ID.
+- Visible wording audit: current UI tests still guard against external-facing Interview/面试/Q&A wording.
+- Residual non-blocker: 15 older pre-Phase-7 professional records still have fewer than 3 Q&A items and no `commonMistakes`; this remains the recommended Phase 7C quality-normalization scope, not a Phase 7A/7B coverage blocker.
+
 ## 2026-05-29 Update: D1 Learning Hub Phase 7B Full Professional Coverage
 
 Phase 7B is now implemented.

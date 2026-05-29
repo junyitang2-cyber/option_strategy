@@ -1,5 +1,25 @@
 # Implementation History
 
+## D1-to-Derivatives Phase 7 Acceptance Review (2026-05-29)
+
+Scope:
+
+- Rechecked the combined Phase 7A/7B delivery after implementation.
+- Confirmed 71 of 71 strategies have professional strategy-level records and 234 total professional Q&A items.
+- Confirmed all 31 Phase 7A/7B target strategies have Trader Memo fields, at least 3 professional Q&A items, and at least 3 common wrong-expression records.
+- Confirmed there are no stale professional content IDs and no strategy IDs missing professional content.
+
+Verification focus:
+
+- Syntax checks for `app.js`, `data/professional-content.js`, `data/learning-content.js`, and `data/phase6-content.js`.
+- Professional content audit script for 71/71 coverage, 234 Q&A items, target content shape, and stale/missing IDs.
+- Targeted Playwright coverage for Phase 7 data integrity and professional-mode rendering.
+- Full Playwright regression via `npm test`.
+
+Residual follow-up:
+
+- 15 older pre-Phase-7 professional records remain below the newer 3-question/common-mistake quality bar. This is documented as Phase 7C quality normalization rather than a Phase 7A/7B acceptance blocker.
+
 ## D1-to-Derivatives Phase 7B Full Professional Coverage (2026-05-29)
 
 Scope:
