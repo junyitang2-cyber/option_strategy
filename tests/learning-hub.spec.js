@@ -269,6 +269,43 @@ test("D1 phase 6 professional sprint creates sessions, reveals rubrics, and upda
   await expect(page.locator("#learningProgressSummary")).toContainText("专业冲刺 1/60");
 });
 
+test("D1 phase 6B scores sprint answers, recommends weak-topic practice, and exports progress", async ({ page }) => {
+  await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
+
+  await page.locator("#learning-professional-sprint-tab").click();
+  await page.locator('[data-sprint-topic-filter="exotics"]').click();
+  await page.locator("#sprintSessionSize").selectOption("5");
+  await page.locator("[data-start-sprint-session]").click();
+
+  const firstCard = page.locator("#learningProfessionalSprint .sprint-question-card").first();
+  await firstCard.locator("[data-reveal-sprint-rubric]").click();
+  await firstCard.locator('[data-score-sprint-question][data-score-value="1"]').click();
+  await firstCard.locator("[data-mark-weak-sprint]").click();
+  await firstCard.locator("[data-complete-sprint-question]").click();
+
+  await expect(firstCard.locator(".sprint-score-row")).toContainText("自评分");
+  await expect(page.locator("#weakTopicRecommendations")).toContainText("Exotics");
+  await expect(page.locator("#weakTopicRecommendations")).toContainText("建议下一组");
+
+  await page.locator("[data-start-recommended-sprint]").click();
+  await expect(page.locator("#learningProfessionalSprint .sprint-question-card")).toHaveCount(5);
+  await expect(page.locator("#learningProfessionalSprint .sprint-question-card").first()).toContainText("Exotics");
+
+  await page.locator("[data-generate-progress-report]").click();
+  await expect(page.locator("#progressReportExport")).toBeVisible();
+  await expect(page.locator("#progressReportExport")).toContainText("Phase 6B Progress Report");
+  await expect(page.locator("#progressReportExport")).toContainText("professionalSprint");
+  await expect(page.locator("#progressReportExport")).toContainText("weakTopicRecommendations");
+
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("os_d1_learning")));
+  expect(Object.keys(saved.sprintQuestionScores || {})).toHaveLength(1);
+  expect(saved.generatedProgressReport).toContain("Phase 6B Progress Report");
+
+  await page.reload();
+  await expect(page.locator("#learning-professional-sprint-tab")).toHaveClass(/active/);
+  await expect(page.locator("#progressReportExport")).toContainText("Phase 6B Progress Report");
+});
+
 test("D1 phase 2B client recommendation drills reveal steps and persist", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 

@@ -253,9 +253,11 @@ function defaultD1LearningProgress() {
     weakSprintQuestionIds: [],
     revealedSprintRubrics: [],
     currentSprintQuestionIds: [],
+    sprintQuestionScores: {},
     sprintTopicFilter: "all",
     sprintSessionSize: 5,
     sprintStartedAt: null,
+    generatedProgressReport: "",
     scenarioFilter: "all",
     scenarioMonthFilter: "all",
     scenarioTopicFilter: "all",
@@ -272,6 +274,12 @@ function loadD1LearningProgress() {
     });
     if (!progress.clientDrillStepCounts || typeof progress.clientDrillStepCounts !== "object" || Array.isArray(progress.clientDrillStepCounts)) {
       progress.clientDrillStepCounts = {};
+    }
+    if (!progress.sprintQuestionScores || typeof progress.sprintQuestionScores !== "object" || Array.isArray(progress.sprintQuestionScores)) {
+      progress.sprintQuestionScores = {};
+    }
+    if (typeof progress.generatedProgressReport !== "string") {
+      progress.generatedProgressReport = "";
     }
     return progress;
   } catch {
@@ -2496,10 +2504,20 @@ const PHASE6_UI_TEXT = {
     redFlagAnswer: "红旗回答",
     followUpQuestions: "追问",
     allTopics: "全部主题",
+    selfScore: "自评分",
+    scoreNeedsWork: "需要补强",
+    scoreSolid: "合格",
+    scoreStrong: "强回答",
+    scoreNotSet: "未评分",
+    weakTopicRecommendations: "弱项推荐",
+    recommendedQuestion: "建议题目",
+    startRecommendedSession: "建议下一组",
+    generateProgressReport: "生成学习报告",
+    progressReport: "学习报告",
     exoticsRiskIntro: "Phase 5B 深化 Month 5：重点训练 model limit、path risk、issuer/dealer risk、suitability 和 disclosure 表达。本页仍是教学型 risk lab，不是 production pricer。",
     modelLimitSubtitle: "教学 payoff -> production question -> client impact",
     sprintIntro: "用 topic-filtered drills 把 roadmap 转成可重复的专业表达训练。Dashboard 只基于本地进度和弱项标记，不代表任何认证。",
-    scoreFormulaNote: "modules 25% + scenarios 25% + client drills 20% + sprint 30%。这是本地训练进度，不是专业认证。",
+    scoreFormulaNote: "modules 20% + scenarios 20% + client drills 15% + sprint completion 25% + sprint self-score 20%。这是本地训练进度，不是专业认证。",
     sessionStarted: "Session 开始时间",
     startSessionEmpty: "开始一个 session 后会加载题目",
     chooseStartSession: "选择主题并开始 session。",
@@ -2541,10 +2559,20 @@ const PHASE6_UI_TEXT = {
     redFlagAnswer: "Red-flag answer",
     followUpQuestions: "Follow-up",
     allTopics: "All Topics",
+    selfScore: "Self score",
+    scoreNeedsWork: "Needs work",
+    scoreSolid: "Solid",
+    scoreStrong: "Strong answer",
+    scoreNotSet: "Not scored",
+    weakTopicRecommendations: "Weak-topic recommendations",
+    recommendedQuestion: "Recommended question",
+    startRecommendedSession: "Suggested next session",
+    generateProgressReport: "Generate progress report",
+    progressReport: "Progress report",
     exoticsRiskIntro: "Phase 5B deepens Month 5: model limit, path risk, issuer/dealer risk, suitability, and disclosure phrasing. It remains an educational risk lab, not a production pricer.",
     modelLimitSubtitle: "Teaching payoff -> production question -> client impact",
     sprintIntro: "Use timed, topic-filtered drills to turn the roadmap into repeatable professional performance. The dashboard is based only on local progress and weak-topic marks.",
-    scoreFormulaNote: "modules 25% + scenarios 25% + client drills 20% + sprint 30%. This is local training progress, not a professional certification.",
+    scoreFormulaNote: "modules 20% + scenarios 20% + client drills 15% + sprint completion 25% + sprint self-score 20%. This is local training progress, not a professional certification.",
     sessionStarted: "Session started",
     startSessionEmpty: "Start a session to load drills",
     chooseStartSession: "Choose a topic and start a session.",
@@ -3293,13 +3321,17 @@ function sprintTopicLabel(topic) {
 function sprintDashboardStats() {
   const content = learningContent();
   const questions = content.professionalSprintQuestions || [];
+  const scores = Object.values(state.learning.sprintQuestionScores || {})
+    .map(Number)
+    .filter((value) => Number.isFinite(value));
+  const scoreRatio = scores.length ? (scores.reduce((sum, value) => sum + clamp(value, 0, 2), 0) / scores.length) / 2 : 0;
   const ratios = {
     modules: content.modules.length ? state.learning.completedModules.length / content.modules.length : 0,
     scenarios: content.scenarios.length ? state.learning.completedScenarios.length / content.scenarios.length : 0,
     clientDrills: (content.clientDrills || []).length ? state.learning.completedClientDrills.length / (content.clientDrills || []).length : 0,
     sprint: questions.length ? state.learning.completedSprintQuestions.length / questions.length : 0,
   };
-  const score = Math.round((ratios.modules * 25) + (ratios.scenarios * 25) + (ratios.clientDrills * 20) + (ratios.sprint * 30));
+  const score = Math.round((ratios.modules * 20) + (ratios.scenarios * 20) + (ratios.clientDrills * 15) + (ratios.sprint * 25) + (scoreRatio * 20));
   const weakByTopic = {};
   state.learning.weakSprintQuestionIds.forEach((id) => {
     const question = sprintQuestionById(id);
@@ -3317,7 +3349,59 @@ function sprintDashboardStats() {
     if (b.weak !== a.weak) return b.weak - a.weak;
     return (a.completed / Math.max(1, a.total)) - (b.completed / Math.max(1, b.total));
   })[0];
-  return { score, coverage, weakByTopic, suggested };
+  const recommendations = [...coverage]
+    .sort((a, b) => {
+      if (b.weak !== a.weak) return b.weak - a.weak;
+      return (a.completed / Math.max(1, a.total)) - (b.completed / Math.max(1, b.total));
+    })
+    .slice(0, 3)
+    .map((item) => {
+      const nextQuestion = questions.find((question) => question.topic === item.id && !state.learning.completedSprintQuestions.includes(question.id))
+        || questions.find((question) => question.topic === item.id);
+      return { ...item, nextQuestion };
+    });
+  return { score, scoreRatio, coverage, weakByTopic, suggested, recommendations };
+}
+
+function generateProgressReport() {
+  const content = learningContent();
+  const stats = sprintDashboardStats();
+  const report = {
+    title: "Phase 6B Progress Report",
+    generatedAt: new Date().toISOString(),
+    language: learningLanguage(),
+    modules: {
+      completed: state.learning.completedModules.length,
+      total: content.modules.length,
+    },
+    scenarios: {
+      completed: state.learning.completedScenarios.length,
+      reviewLater: state.learning.reviewLaterScenarios.length,
+      total: content.scenarios.length,
+    },
+    clientDrills: {
+      completed: state.learning.completedClientDrills.length,
+      total: (content.clientDrills || []).length,
+    },
+    professionalSprint: {
+      completed: state.learning.completedSprintQuestions.length,
+      total: (content.professionalSprintQuestions || []).length,
+      selfScores: state.learning.sprintQuestionScores,
+      weakQuestionIds: state.learning.weakSprintQuestionIds,
+      skillScore: stats.score,
+      topicCoverage: stats.coverage,
+    },
+    weakTopicRecommendations: stats.recommendations.map((item) => ({
+      topic: item.id,
+      label: item.label,
+      weakCount: item.weak,
+      completed: item.completed,
+      total: item.total,
+      nextQuestionId: item.nextQuestion?.id || null,
+      nextQuestionTitle: item.nextQuestion ? localizedDirect(item.nextQuestion, "title") : null,
+    })),
+  };
+  return `Phase 6B Progress Report\n\n${JSON.stringify(report, null, 2)}`;
 }
 
 function renderSkillDashboard() {
@@ -3344,6 +3428,16 @@ function renderSkillDashboard() {
         <span>${escapeHtml(phase6UiText("redFlagAnswer"))}: ${localizedDirectList(question, "redFlags").map(escapeHtml).join(" · ")}</span>
       </article>
     `).join("");
+  const recommendationItems = stats.recommendations.map((item) => `
+    <article class="recommendation-item">
+      <div>
+        <span class="learning-label">${escapeHtml(item.label)}</span>
+        <p class="learning-copy">${escapeHtml(phase6UiText("weakAreas"))} ${item.weak} · ${item.completed}/${item.total}</p>
+        ${item.nextQuestion ? `<p class="learning-copy">${escapeHtml(phase6UiText("recommendedQuestion"))}: ${escapeHtml(localizedDirect(item.nextQuestion, "title"))}</p>` : ""}
+      </div>
+    </article>
+  `).join("");
+  const reportText = state.learning.generatedProgressReport || "";
   return `
     <section class="skill-dashboard" id="skillDashboard">
       <div class="dashboard-card score-card">
@@ -3368,6 +3462,28 @@ function renderSkillDashboard() {
         ${notebookItems || `<p class="learning-copy">${escapeHtml(phase6UiText("noWeakAreas"))}</p>`}
       </div>
     </section>
+    <section class="phase6b-panel">
+      <div class="dashboard-card" id="weakTopicRecommendations">
+        <div class="phase6b-panel-heading">
+          <div>
+            <p class="learning-kicker">Phase 6B</p>
+            <h4 class="learning-title">${escapeHtml(phase6UiText("weakTopicRecommendations"))}</h4>
+          </div>
+          <button class="learning-action" type="button" data-start-recommended-sprint>${escapeHtml(phase6UiText("startRecommendedSession"))}</button>
+        </div>
+        <div class="recommendation-grid">${recommendationItems}</div>
+      </div>
+      <div class="dashboard-card">
+        <div class="phase6b-panel-heading">
+          <div>
+            <p class="learning-kicker">Phase 6B</p>
+            <h4 class="learning-title">${escapeHtml(phase6UiText("progressReport"))}</h4>
+          </div>
+          <button class="learning-action" type="button" data-generate-progress-report>${escapeHtml(phase6UiText("generateProgressReport"))}</button>
+        </div>
+        <pre class="progress-report-export" id="progressReportExport" ${reportText ? "" : "hidden"}>${escapeHtml(reportText)}</pre>
+      </div>
+    </section>
   `;
 }
 
@@ -3375,6 +3491,16 @@ function renderSprintQuestionCard(question) {
   const completed = state.learning.completedSprintQuestions.includes(question.id);
   const weak = state.learning.weakSprintQuestionIds.includes(question.id);
   const revealed = state.learning.revealedSprintRubrics.includes(question.id);
+  const currentScore = Number(state.learning.sprintQuestionScores?.[question.id]);
+  const scoreButtons = [
+    [0, phase6UiText("scoreNeedsWork")],
+    [1, phase6UiText("scoreSolid")],
+    [2, phase6UiText("scoreStrong")],
+  ].map(([value, label]) => `
+    <button class="learning-action ${currentScore === value ? "active" : ""}" type="button" data-score-sprint-question="${escapeHtml(question.id)}" data-score-value="${value}">
+      ${escapeHtml(label)}
+    </button>
+  `).join("");
   return `
     <article class="sprint-question-card" data-sprint-question-card="${escapeHtml(question.id)}">
       <div class="scenario-meta">
@@ -3387,6 +3513,10 @@ function renderSprintQuestionCard(question) {
         <button class="learning-action" type="button" data-reveal-sprint-rubric="${escapeHtml(question.id)}">${escapeHtml(revealed ? phase6UiText("hideRubric") : phase6UiText("revealRubric"))}</button>
         <button class="learning-action ${weak ? "active" : ""}" type="button" data-mark-weak-sprint="${escapeHtml(question.id)}">${escapeHtml(weak ? phase6UiText("weakMarked") : phase6UiText("markWeak"))}</button>
         <button class="learning-action ${completed ? "active" : ""}" type="button" data-complete-sprint-question="${escapeHtml(question.id)}">${escapeHtml(completed ? phase6UiText("completedQuestion") : phase6UiText("completeQuestion"))}</button>
+      </div>
+      <div class="sprint-score-row">
+        <span>${escapeHtml(phase6UiText("selfScore"))}: ${Number.isFinite(currentScore) ? `${currentScore}/2` : escapeHtml(phase6UiText("scoreNotSet"))}</span>
+        <div class="learning-action-row">${scoreButtons}</div>
       </div>
       <div class="sprint-rubric" ${revealed ? "" : "hidden"}>
         <span class="learning-label">${escapeHtml(phase6UiText("mustMention"))}</span>
@@ -3862,10 +3992,39 @@ function handleClick(event) {
     renderLearningHub();
     return;
   }
+  if (event.target.matches("[data-start-recommended-sprint]")) {
+    const stats = sprintDashboardStats();
+    const recommendation = stats.recommendations.find((item) => item.nextQuestion) || stats.suggested;
+    if (recommendation?.id) {
+      state.learning.sprintTopicFilter = recommendation.id;
+      startSprintSession();
+      renderLearningHub();
+    }
+    return;
+  }
+  if (event.target.matches("[data-generate-progress-report]")) {
+    state.learning.generatedProgressReport = generateProgressReport();
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
   if (event.target.matches("[data-reveal-sprint-rubric]")) {
     state.learning.revealedSprintRubrics = toggleArrayValue(state.learning.revealedSprintRubrics, event.target.dataset.revealSprintRubric);
     saveD1LearningProgress();
     renderLearningHub();
+    return;
+  }
+  if (event.target.matches("[data-score-sprint-question]")) {
+    const questionId = event.target.dataset.scoreSprintQuestion;
+    const score = clamp(Number(event.target.dataset.scoreValue), 0, 2);
+    if (questionId && Number.isFinite(score)) {
+      state.learning.sprintQuestionScores = {
+        ...(state.learning.sprintQuestionScores || {}),
+        [questionId]: score,
+      };
+      saveD1LearningProgress();
+      renderLearningHub();
+    }
     return;
   }
   if (event.target.matches("[data-mark-weak-sprint]")) {

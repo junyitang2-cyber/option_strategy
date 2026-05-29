@@ -1,5 +1,16 @@
 # Project Status And Roadmap
 
+## 2026-05-29 Update: D1 Learning Hub Phase 6B
+
+Phase 6B is now implemented.
+
+- Professional Sprint questions now support 0/1/2 self-scoring per question.
+- Skill Dashboard score now includes sprint self-score quality in addition to module, scenario, client drill, and sprint completion progress.
+- Weak-topic recommendations now rank topics by weak marks and coverage gaps, then suggest the next topic-filtered sprint.
+- A local progress report export is available from the Professional Sprint panel and persists in `os_d1_learning`.
+- Playwright coverage now includes scoring, recommendation-driven session creation, report generation, and persistence.
+- Next D1 roadmap work should move to Content Coverage, Market Realism, Risk Management, Output Workflow, or Advanced Derivatives depending on priority.
+
 ## 2026-05-29 Update: D1 Learning Hub Phase 5B And Phase 6
 
 Phase 5B and Phase 6 are now implemented.
@@ -9,7 +20,7 @@ Phase 5B and Phase 6 are now implemented.
 - New Exotics Risk tab renders 6 exotics risk-decomposition drills and 6 model-limit comparison cards across Asian, Barrier, Quanto, Digital, Autocallable, and Structured Product topics.
 - New Professional Sprint tab supports topic-filtered sessions, session size controls, rubric reveal, weak-topic marking, question completion, local Skill Dashboard, topic coverage, suggested next session, and weak-topic review notebook.
 - Progress continues to persist in localStorage under `os_d1_learning`.
-- Phase 6B remains optional for export, richer rubrics, and deeper weak-topic recommendation logic.
+- Phase 6B has since added export, self-scoring, and weak-topic recommendation logic.
 
 ## 2026-05-28 Update: D1 Learning Hub Phase 5
 
@@ -27,7 +38,7 @@ Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
 - Client drill completion and revealed step progress persist in localStorage.
 - Scenario filters now support category, month, and topic, including vol/skew/term-structure/event/surface/short-vol/gamma/liquidity/dealer/hedging/quote/attribution/inventory/exotics/asian/barrier/quanto/digital/autocallable/structured-product/path/suitability/cross-asset filters.
 - All 191 Learning Hub scenarios now have explicit Chinese localization records.
-- Next D1 roadmap implementation can move to optional Phase 6B: richer sprint rubrics, weak-topic recommendations, progress export, and deeper reporting.
+- Next D1 roadmap implementation can move to Content Coverage, Market Realism, Risk Management, Output Workflow, or Advanced Derivatives.
 
 最后更新：2026-05-28
 
@@ -165,9 +176,9 @@ npm test
 
 建议顺序：
 
-1. Phase 6B：更完整的 professional sprint rubrics、weak-topic recommendation、progress export 和学习报告。
-2. Content coverage：把更多专业内容扩展到剩余策略，尤其是 broken-wing、double diagonal、stock repair 等结构。
-3. Market realism：CSV option chain、bid/ask、IV Rank、expected move 和 early exercise/assignment 教学提示。
+1. Content coverage：把更多专业内容扩展到剩余策略，尤其是 broken-wing、double diagonal、stock repair 等结构。
+2. Market realism：CSV option chain、bid/ask、IV Rank、expected move 和 early exercise/assignment 教学提示。
+3. Risk management / Output workflow：组合保存回放、学习报告导出增强、图表导出和移动端体验。
 
 详细蓝图见 `docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
 

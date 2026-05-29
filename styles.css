@@ -1481,6 +1481,69 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
   margin: 0 0 12px;
 }
 
+.phase6b-panel {
+  display: grid;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.phase6b-panel-heading {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.recommendation-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-top: 10px;
+}
+
+.recommendation-item {
+  background: var(--panel-3);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.sprint-score-row {
+  background: var(--panel-3);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 10px 12px;
+}
+
+.sprint-score-row > span {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.progress-report-export {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--muted);
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  margin: 10px 0 0;
+  max-height: 360px;
+  overflow: auto;
+  padding: 12px;
+  white-space: pre-wrap;
+}
+
+.progress-report-export[hidden] {
+  display: none;
+}
+
 .vol-playbook-filter,
 .exotics-filter,
 .exotics-risk-filter,

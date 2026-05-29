@@ -1,5 +1,21 @@
 # Implementation History
 
+## D1-to-Derivatives Learning Hub Phase 6B (2026-05-29)
+
+Scope:
+
+- Added 0/1/2 self-scoring controls to each Professional Sprint question.
+- Extended local progress state with `sprintQuestionScores` and `generatedProgressReport`.
+- Updated Skill Dashboard score formula to include sprint self-score quality.
+- Added weak-topic recommendations based on weak marks and topic coverage gaps.
+- Added a recommended-session button that starts the next topic-filtered sprint from the recommendation panel.
+- Added a local Phase 6B progress report export with module, scenario, client drill, sprint, score, coverage, weak-topic, and recommendation data.
+- Added Playwright coverage for self-scoring, recommendation-driven sessions, report generation, and persistence.
+
+Verification focus:
+
+- `tests/learning-hub.spec.js` covers Phase 6B scoring, weak-topic recommendations, report export, localStorage persistence, and reload behavior.
+
 ## D1-to-Derivatives Learning Hub Phase 5B/6 (2026-05-29)
 
 Scope:

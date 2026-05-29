@@ -64,7 +64,7 @@ Status: accepted on 2026-05-28.
 
 ## Next Phase
 
-Current status update: Phase 5B and Phase 6 have since been implemented. The next optional roadmap target is Phase 6B: richer sprint rubrics, weak-topic recommendations, and progress export.
+Current status update: Phase 5B, Phase 6, and Phase 6B have since been implemented. The next roadmap targets are content coverage, market realism, risk management, output workflow, and advanced derivatives.
 
 Phase 5B has since deepened exotics with:
 

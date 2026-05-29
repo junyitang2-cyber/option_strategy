@@ -1,6 +1,6 @@
 # Option Strategy Interactive Lab
 
-2026-05-29 update: D1-to-Derivatives Learning Hub Phase 5B and Phase 6 are implemented with 30 modules, 191 Scenario Bank records, 60 Professional Sprint questions, 6 exotics risk-decomposition drills, 6 model-limit comparison cards, a local Skill Dashboard, and a weak-topic review notebook.
+2026-05-29 update: D1-to-Derivatives Learning Hub Phase 6B is implemented on top of Phase 5B/6, adding sprint self-scoring, weak-topic recommendations, and local progress report export. The hub now includes 30 modules, 191 Scenario Bank records, 60 Professional Sprint questions, 6 exotics risk-decomposition drills, and 6 model-limit comparison cards.
 
 期权策略交互学习与专业交易员能力训练工具。项目最初用于学习并复刻 `https://options-viewer.netlify.app/` 的核心体验，现在已经扩展为本地可运行的策略分析、教学和专业训练平台。
 
