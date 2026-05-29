@@ -40,24 +40,24 @@ Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
 - All 191 Learning Hub scenarios now have explicit Chinese localization records.
 - Next D1 roadmap implementation can move to Content Coverage, Market Realism, Risk Management, Output Workflow, or Advanced Derivatives.
 
-最后更新：2026-05-28
+最后更新：2026-05-29
 
 ## 当前结论
 
-项目当前是一个本地静态期权策略教学与专业训练工具，核心功能已经可以验收。当前完成度按学习/专业训练用途评估为 95%+；D1-to-Derivatives Learning Hub Phase 1、Phase 2A、Phase 2B、Phase 3A、Phase 3B、Phase 4A/4B 和 Phase 5 已实现，用于把用户的 commodities D1 经验系统转换成 equity derivatives 专业优势。
+项目当前是一个本地静态期权策略教学与专业训练工具，核心功能已经可以验收。当前完成度按学习/专业训练用途评估为 95%+；D1-to-Derivatives Learning Hub Phase 1、Phase 2A、Phase 2B、Phase 3A、Phase 3B、Phase 4A/4B、Phase 5、Phase 5B、Phase 6 和 Phase 6B 已实现，用于把用户的 commodities D1 经验系统转换成 equity derivatives 专业优势。
 
-## 2026-05-28 完整验收记录
+## 2026-05-29 完整验收记录
 
-结论：Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 可验收。
+结论：Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 / 5B / 6 / 6B 可验收。
 
 已通过检查：
 
-- 静态语法：`node --check app.js`、`node --check data/professional-content.js`、`node --check data/learning-content.js`。
+- 静态语法：`node --check app.js`、`node --check data/professional-content.js`、`node --check data/learning-content.js`、`node --check data/phase6-content.js`。
 - 空白/补丁检查：`git diff --check`。
 - 数据完整性：30 modules、191 scenarios、60 Professional Sprint questions、20 client drills、5 strategy comparisons、5 vol framework cards、9 vol playbook cards、6 dealer workflow cards、6 P&L attribution cards、6 exotics bridge cards、6 structuring cases、6 exotics risk drills、6 model-limit cards。
 - 场景分布：Month 1 = 30、Month 2 = 40、Month 3 = 45、Month 4 = 40、Month 5 = 36。
 - 本地化与引用：191 个 Scenario Bank 场景中文 localization 完整；scenario-module links 与 strategy links 无坏引用。
-- Playwright browser regression：Learning Hub、Strategy Construction、Client Drills、Vol Framework、Dealer Desk、Exotics Bridge、Gamma P&L、Scenario filters、Professional tools 均正常。
+- Playwright browser regression：Learning Hub、Strategy Construction、Client Drills、Vol Framework、Dealer Desk、Exotics Bridge、Exotics Risk、Professional Sprint、Skill Dashboard、progress report export、Gamma P&L、Scenario filters、Professional tools 均正常。
 - 自动化回归：当前以本地 `npm test` 输出为准。
 
 保留限制：当前仍是静态教学与训练平台，不接入实时行情、真实期权链、真实 broker margin 或真实做市执行系统。
@@ -158,6 +158,7 @@ npm test
 - 141 个专业问答覆盖核心内容，但新增策略未必每个都有固定 5 问。
 - 20 个客户推荐演练、45 个 Month 3 vol 场景和 40 个 Month 4 dealer 场景覆盖常见结构推荐、vol 判断、dealer flow、hedging 与 P&L attribution 场景，但仍是教育性框架，不是实际 suitability advice、交易信号或真实做市系统。
 - 36 个 Month 5 exotics/structuring 场景覆盖 Asian、Barrier、Quanto、Digital、Autocallable 和 structured product，但不构成生产级 exotic pricer、发行条款建议或真实 suitability advice。
+- 60 个 Professional Sprint questions、6 个 Exotics Risk drills 和 6 个 model-limit cards 用于训练专业表达、自我评分和风险拆解，但不代表任何外部认证、正式考试结果或真实交易权限。
 - 仍可继续补充真实案例、专业追问、错误答案示例和策略对比表。
 
 ## 近期优先级
@@ -172,7 +173,7 @@ npm test
 
 ### P1：D1-to-Derivatives 后续扩展
 
-目标：基于 Phase 1 + Phase 2A + Phase 2B + Phase 3A + Phase 3B + Phase 4A/4B + Phase 5 使用反馈，进入专业冲刺和能力追踪。
+目标：基于 Phase 1 + Phase 2A + Phase 2B + Phase 3A + Phase 3B + Phase 4A/4B + Phase 5 + Phase 5B + Phase 6 + Phase 6B 使用反馈，继续进入内容覆盖、市场真实感、风险管理、输出工作流或高级衍生品扩展。
 
 建议顺序：
 

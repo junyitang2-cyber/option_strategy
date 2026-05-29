@@ -1,5 +1,19 @@
 # Implementation History
 
+## D1-to-Derivatives Learning Hub Phase 5/6 Acceptance Polish (2026-05-29)
+
+Scope:
+
+- Fixed the Chinese Month 6 roadmap update so `D1_LEARNING_CONTENT_ZH.roadmap[6]` receives the Professional Sprint focus and deliverables.
+- Added a roadmap regression assertion for Month 5 Exotics Bridge and Month 6 Professional Sprint deliverables.
+- Updated `README.md`, `USER_GUIDE.md`, `docs/PROJECT_STATUS.md`, and the master roadmap so the visible documentation baseline reflects Phase 5B / Phase 6 / Phase 6B.
+- Removed a stale next-plan pointer from the master roadmap after Phase 6B completion.
+
+Verification focus:
+
+- Phase 5 / Phase 5B / Phase 6 / Phase 6B targeted Playwright coverage.
+- Full `npm test` regression and syntax checks.
+
 ## D1-to-Derivatives Learning Hub Phase 6B (2026-05-29)
 
 Scope:

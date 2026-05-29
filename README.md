@@ -1,6 +1,6 @@
 # Option Strategy Interactive Lab
 
-2026-05-29 update: D1-to-Derivatives Learning Hub Phase 6B is implemented on top of Phase 5B/6, adding sprint self-scoring, weak-topic recommendations, and local progress report export. The hub now includes 30 modules, 191 Scenario Bank records, 60 Professional Sprint questions, 6 exotics risk-decomposition drills, and 6 model-limit comparison cards.
+2026-05-29 更新：D1-to-Derivatives Learning Hub 已完成 Phase 5B / Phase 6 / Phase 6B，新增 Exotics Risk、Professional Sprint 自评分、weak-topic recommendations 和本地 progress report export。当前包含 30 个 modules、191 个 Scenario Bank records、60 个 Professional Sprint questions、6 个 exotics risk-decomposition drills 和 6 个 model-limit comparison cards。
 
 期权策略交互学习与专业交易员能力训练工具。项目最初用于学习并复刻 `https://options-viewer.netlify.app/` 的核心体验，现在已经扩展为本地可运行的策略分析、教学和专业训练平台。
 
@@ -23,7 +23,7 @@
 - 情景参数、风险指标、腿组合编辑、学习路径追踪。
 - 进阶模式：Portfolio Greeks、保证金教育估算、压力测试、Gamma P&L、波动率曲面、Greeks Decay、Put-Call Parity、交易员核心概念。
 - 专业模式：进阶内容 + 专业问答与情景演练。
-- D1-to-Derivatives Learning Hub Phase 1 + Phase 2A + Phase 2B + Phase 3B + Phase 4A/4B + Phase 5：六个月 roadmap、Month 1 Greeks、Month 2 Strategy Construction、Month 3 Volatility Framework、Month 4 Dealer Hedging/Market Making、Month 5 Exotics/Structuring、Commodities Bridge、5 个策略对比卡、20 个客户推荐演练、Vol trade playbook、Dealer Desk、Exotics Bridge、191 个实战/专业场景和本地进度追踪。
+- D1-to-Derivatives Learning Hub Phase 1 + Phase 2A + Phase 2B + Phase 3B + Phase 4A/4B + Phase 5 + Phase 5B + Phase 6 + Phase 6B：六个月 roadmap、Month 1 Greeks、Month 2 Strategy Construction、Month 3 Volatility Framework、Month 4 Dealer Hedging/Market Making、Month 5 Exotics/Structuring、Month 6 Professional Sprint、Commodities Bridge、5 个策略对比卡、20 个客户推荐演练、Vol trade playbook、Dealer Desk、Exotics Bridge、Exotics Risk、Skill Dashboard、60 个 Professional Sprint questions、191 个实战/专业场景和本地进度追踪/报告导出。
 - Playwright 真实浏览器回归测试。
 
 ## 本地使用
@@ -109,14 +109,14 @@ option_strategy/
 
 ## 验证状态
 
-最近一次完整验收：2026-05-28，Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 均通过。
+最近一次完整验收：2026-05-29，Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 / 5B / 6 / 6B 均通过。
 
 结果摘要：
 
 - Learning Hub 数据完整性：30 modules、191 scenarios、60 Professional Sprint questions、20 client drills、5 strategy comparisons、5 vol framework cards、9 vol playbook cards、6 dealer workflow cards、6 P&L attribution cards、6 exotics bridge cards、6 structuring cases、6 exotics risk drills、6 model-limit cards。
 - Scenario Bank：Month 1 = 30、Month 2 = 40、Month 3 = 45、Month 4 = 40、Month 5 = 36。
 - 中文本地化、scenario-module links、strategy links 均无缺失或坏引用。
-- 浏览器回归通过：Learning Hub、Vol Framework、Dealer Desk、Exotics Bridge、Gamma P&L、Scenario filters、Professional tools 无控制台错误。
+- 浏览器回归通过：Learning Hub、Vol Framework、Dealer Desk、Exotics Bridge、Exotics Risk、Professional Sprint、Skill Dashboard、progress report export、Gamma P&L、Scenario filters、Professional tools 无控制台错误。
 - Playwright：当前以本地 `npm test` 输出为准。
 
 最近一次验收覆盖：
@@ -124,10 +124,11 @@ option_strategy/
 - `node --check app.js`
 - `node --check data/professional-content.js`
 - `node --check data/learning-content.js`
+- `node --check data/phase6-content.js`
 - `git diff --check`
 - `npm test`
 
-Playwright 回归测试覆盖基础渲染、学习路径、概率锥 sigma 标注、hover 预览、重置确认、专业概念面板、组合级 Greeks Decay、Portfolio/Stress/Gamma P&L/专业训练面板、客户推荐演练、Vol Framework/RV-IV calculator、Vol trade playbook、Dealer Desk、P&L attribution、Exotics Bridge、简化 payoff 图、structuring cases 和 Month 5 场景过滤。
+Playwright 回归测试覆盖基础渲染、学习路径、概率锥 sigma 标注、hover 预览、重置确认、专业概念面板、组合级 Greeks Decay、Portfolio/Stress/Gamma P&L/专业训练面板、客户推荐演练、Vol Framework/RV-IV calculator、Vol trade playbook、Dealer Desk、P&L attribution、Exotics Bridge、Exotics Risk、Professional Sprint、Phase 6B scoring/recommendations/report export、简化 payoff 图、structuring cases、Month 5 场景过滤和 reload persistence。
 
 ## 重要限制
 

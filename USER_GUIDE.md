@@ -53,12 +53,12 @@ npm test
 
 ## D1-to-Derivatives Learning Hub
 
-Phase 5B, Phase 6, and Phase 6B are now available here: open Exotics Risk to train model limits, issuer/dealer risk, suitability, and disclosure correction; open Professional Sprint to run topic-filtered sessions, reveal rubrics, score your answers, mark weak topics, review recommendations, and export a local progress report.
+Phase 5B、Phase 6 和 Phase 6B 已开放：打开 `Exotics Risk` 训练 model limits、issuer/dealer risk、suitability 和 disclosure correction；打开 `Professional Sprint` 运行 topic-filtered sessions，展开 rubric，做自评分，标记弱项，查看 recommendations，并导出本地 progress report。
 
 
 页面顶部的“交易员学习中枢”用于把 commodities D1 经验转成 equity derivatives 专业表达。
 
-- `Roadmap`：查看六个月学习路径。当前开放 Month 1 Greeks、Month 2 Strategy Construction、Month 3 Volatility Framework、Month 4 Dealer Hedging / Market Making 和 Month 5 Exotics / Structuring。
+- `Roadmap`：查看六个月学习路径。当前开放 Month 1 Greeks、Month 2 Strategy Construction、Month 3 Volatility Framework、Month 4 Dealer Hedging / Market Making、Month 5 Exotics / Structuring 和 Month 6 Professional Sprint / Skill Dashboard。
 - `学习模块`：按 Delta、Gamma、Vega、Theta/Rho、strategy construction、RV/IV、event vol、skew、term structure、vol surface、dealer inventory、delta hedging、gamma scalping、vega buckets、quote skewing、P&L attribution、Asian averaging、barrier monitoring、quanto、digital、autocallable 和 structured products 学习。
 - `Strategy Construction`：查看 Month 2 的策略选择对比，包括 straddle/strangle、iron condor/short strangle、collar/protective put 等。
 - `客户推荐`：做 20 个 client recommendation drills，按客户目标、约束条件、候选结构、推荐结构、风险披露、Dealer 视角和专业表达逐步展开。

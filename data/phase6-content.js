@@ -121,10 +121,11 @@
     roadmapMonth6.focus = "Professional sprint sessions, transparent skill dashboard, weak-topic review, and trade idea articulation.";
     roadmapMonth6.deliverables = ["60-question sprint bank", "Skill dashboard", "Weak-topic notebook"];
   }
-  if (Array.isArray(zh.roadmap) && zh.roadmap[5]) {
-    zh.roadmap[5].status = "active";
-    zh.roadmap[5].focus = "专业冲刺 session、透明能力面板、弱项复习本和 trade idea 表达训练。";
-    zh.roadmap[5].deliverables = ["60 个专业冲刺题", "能力面板", "弱项复习本"];
+  const zhRoadmapMonth6 = zh.roadmap?.[6];
+  if (zhRoadmapMonth6) {
+    zhRoadmapMonth6.status = "active";
+    zhRoadmapMonth6.focus = "专业冲刺 session、透明能力面板、弱项复习本和 trade idea 表达训练。";
+    zhRoadmapMonth6.deliverables = ["60 个专业冲刺题", "能力面板", "弱项复习本"];
   }
 
   content.exoticsRiskFilters = [

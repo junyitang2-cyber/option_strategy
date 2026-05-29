@@ -1,7 +1,7 @@
 # D1 to Derivatives Master Roadmap
 
 **Date**: 2026-05-27
-**Status**: Active roadmap after Phase 5
+**Status**: Active roadmap after Phase 6B
 **Owner Goal**: Help a Commodities D1 Trader prepare for Equity Derivatives, Vol Trading, Market Making, Structuring, and Derivatives Risk professional tracks.
 
 **Latest Acceptance**: Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 / 5B / 6 / 6B passed local validation on 2026-05-29; next targets are content coverage, market realism, risk management, workflow export, and advanced derivatives.
@@ -20,7 +20,7 @@ The guiding principle is:
 
 ## Current Baseline
 
-Phase 1, Phase 2A, Phase 2B, Phase 3A, Phase 3B, Phase 4A/4B, and Phase 5 are implemented:
+Phase 1, Phase 2A, Phase 2B, Phase 3A, Phase 3B, Phase 4A/4B, Phase 5, Phase 5B, Phase 6, and Phase 6B are implemented:
 
 - Learning Hub panel.
 - Six-month roadmap display.
@@ -33,11 +33,13 @@ Phase 1, Phase 2A, Phase 2B, Phase 3A, Phase 3B, Phase 4A/4B, and Phase 5 are im
 - Vol Framework panel with RV/IV mini calculator and 9-card Vol trade playbook.
 - Dealer Desk panel with 6 dealer workflow cards and 6 P&L attribution cards.
 - Exotics Bridge panel with 6 payoff cards and 6 structuring workflow cases.
+- Exotics Risk panel with 6 risk-decomposition drills and 6 model-limit comparison cards.
+- Professional Sprint panel with 60 topic-filtered questions, self-scoring, weak-topic recommendations, Skill Dashboard, and progress report export.
 - Enhanced Gamma P&L with rehedge threshold, transaction cost, static vs dynamic P&L, and hedge count.
 - Scenario filters by category, month, and topic.
 - LocalStorage progress via `os_d1_learning`.
 - Playwright coverage in `tests/learning-hub.spec.js`.
-- Latest validation: static checks, data integrity checks, desktop/mobile Playwright spot checks, and `npm test` all passed on 2026-05-28.
+- Latest validation: static checks, data integrity checks, desktop/mobile Playwright spot checks, and `npm test` all passed on 2026-05-29.
 
 Existing platform foundation:
 
@@ -438,20 +440,16 @@ Phase 6B is now implemented. The next roadmap implementation should choose among
 
 Reason:
 
-- Phase 5 has now bridged exotics and structuring: path dependency, averaging, barrier risk, quanto risk, digital discontinuity, autocallable payoff decomposition, issuer/dealer risk, and client suitability.
-- The next capability gap is performance training: timed sessions, answer rubrics, weak-topic tracking, wrong-answer review, and transparent skill dashboard.
-- This is the natural layer after vanilla strategy construction, volatility trade construction, dealer risk management, and exotics payoff decomposition.
+- Phase 5 and Phase 5B have bridged exotics, structuring, path dependency, issuer/dealer risk, model limits, and suitability.
+- Phase 6 and Phase 6B have added Professional Sprint, scoring, weak-topic recommendations, local reporting, and Skill Dashboard tracking.
+- The next capability gap is no longer sprint mechanics; it is deeper content breadth, more realistic market inputs, richer portfolio/risk workflows, or advanced derivatives coverage.
 
-Suggested next plan file:
+Suggested next plan:
 
-```text
-docs/superpowers/plans/2026-05-28-d1-phase6-professional-sprint-skill-dashboard.md
-```
+- Write a fresh implementation plan under `docs/superpowers/plans/` for the selected next theme.
+- Keep `docs/IMPLEMENTATION_HISTORY.md` as the canonical record of already shipped Phase 5B / 6 / 6B work.
 
 Suggested first acceptance target:
 
-- Professional Sprint mode with timed or topic-filtered sessions.
-- Answer rubric that separates must-mention, strong answer, red-flag answer, and follow-up.
-- Wrong-answer notebook and weak-topic tagging.
-- Skill dashboard based only on local progress.
-- Playwright coverage for session creation, answer reveal, weak-topic marking, notebook updates, and dashboard counts.
+- A focused next-phase slice, for example CSV option-chain import, bid/ask and IV rank education, saved portfolio workflows, report export upgrades, or advanced derivatives modules.
+- Regression coverage for the selected workflow plus updated user-facing docs.

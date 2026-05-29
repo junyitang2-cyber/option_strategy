@@ -15,6 +15,8 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await expect(page.locator("#learningRoadmap")).toContainText("Volatility trading 框架");
   await expect(page.locator("#learningRoadmap")).toContainText("动态对冲与做市");
   await expect(page.locator("#learningRoadmap")).toContainText("Exotics 与 structuring");
+  await expect(page.locator("#learningRoadmap .roadmap-card").nth(4)).toContainText("Exotics Bridge 面板");
+  await expect(page.locator("#learningRoadmap .roadmap-card").nth(5)).toContainText("60 个专业冲刺题");
 
   await page.locator("#learning-modules-tab").click();
   await expect(page.locator("#learningModules .module-card")).toHaveCount(30);
