@@ -41,7 +41,7 @@
 - [ ] Add `window.D1_LEARNING_CONTENT.clientDrills` with 20 Month 2 drills.
 - [ ] Add matching `window.D1_LEARNING_CONTENT_ZH.clientDrills` entries.
 - [ ] Each drill includes objective, client profile, constraints, candidates, preferred recommendation, risk disclosure, dealer note, professional expression, follow-up questions, and strategy links.
-- [ ] Keep visible wording as professional training rather than public-facing interview preparation.
+- [ ] Keep visible wording as professional training rather than public-facing preparation language.
 
 ### Task 4: Update User Docs And Status
 

@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a Phase 1 D1-to-Derivatives Learning Hub that turns the user's commodities D1 experience into option Greeks intuition, client/dealer framing, and interview scenario practice.
+**Goal:** Build a Phase 1 D1-to-Derivatives Learning Hub that turns the user's commodities D1 experience into option Greeks intuition, client/dealer framing, and professional scenario practice.
 
 **Architecture:** Add one new learning data file, one compact Learning Hub panel, and focused rendering/state logic inside the existing static app. The hub reuses the current strategy lab and professional tools instead of replacing them.
 
@@ -67,7 +67,7 @@ Use these six records:
 | 3 | locked | Volatility trading framework | RV vs IV, skew, term structure, event vol, and vol risk premium. |
 | 4 | locked | Dynamic hedging and market making | Delta hedging, gamma scalping, inventory, bid-ask, and P&L attribution. |
 | 5 | locked | Exotics and structuring | Asian, barrier, quanto, autocallable, and client-driven payoff design. |
-| 6 | locked | Portfolio risk and interview sprint | Portfolio Greeks limits, stress testing, mock interview, and trade idea articulation. |
+| 6 | locked | Portfolio risk and professional sprint | Portfolio Greeks limits, stress testing, professional scenario drills, and trade idea articulation. |
 
 ### Month 1 module records
 
@@ -91,7 +91,7 @@ Each module must include these fields:
   d1Anchor: "A futures or forward hedge gives roughly constant directional exposure to the commodity price.",
   derivativesUpgrade: "Option delta is directional exposure that changes with spot, strike, DTE, IV, and moneyness.",
   dealerLens: "If a client buys calls, the dealer sells calls and is usually short delta and short gamma, then buys underlying or futures to reduce delta.",
-  interviewTakeaway: "Delta is familiar directionality, but options make the exposure state-dependent. I would discuss current delta, how gamma changes it, and how the hedge evolves.",
+  keyFraming: "Delta is familiar directionality, but options make the exposure state-dependent. I would discuss current delta, how gamma changes it, and how the hedge evolves.",
   strategyLinks: ["long-call", "short-put", "covered-call", "collar"],
   practiceIds: ["client-collar-downside", "risk-short-call-rally", "pnl-delta-vs-gamma", "mm-client-buys-calls"]
 }
@@ -108,7 +108,7 @@ Use these remaining three module records:
   d1Anchor: "A linear D1 position does not automatically become longer as the market rallies or shorter as it sells off.",
   derivativesUpgrade: "Gamma measures how delta changes as spot moves. Long gamma adapts favorably but pays theta; short gamma collects theta but needs risk control.",
   dealerLens: "A short-gamma dealer must rebalance into moves. Hedging frequency depends on gamma size, liquidity, jump risk, and transaction cost.",
-  interviewTakeaway: "Gamma is the key difference from D1 linear risk: it creates convexity and rehedging risk, not just a bigger or smaller directional position.",
+  keyFraming: "Gamma is the key difference from D1 linear risk: it creates convexity and rehedging risk, not just a bigger or smaller directional position.",
   strategyLinks: ["straddle", "short-straddle", "strangle", "iron-condor"],
   practiceIds: ["risk-short-straddle-gap", "risk-pin-near-strike", "pnl-long-gamma-lost", "mm-short-gamma-wide-market"]
 },
@@ -120,7 +120,7 @@ Use these remaining three module records:
   d1Anchor: "Linear outright futures exposure has no direct Vega, though client optionality can introduce volatility exposure.",
   derivativesUpgrade: "Vega is sensitivity to implied volatility. A position can be directionally hedged and still gain or lose from IV changes.",
   dealerLens: "Dealers manage net vega across strikes and expiries, not only one trade. They also charge for event risk, liquidity, and inventory.",
-  interviewTakeaway: "RV vs IV is a starting point, but a real vol trade must include jumps, costs, liquidity, and the vol risk premium.",
+  keyFraming: "RV vs IV is a starting point, but a real vol trade must include jumps, costs, liquidity, and the vol risk premium.",
   strategyLinks: ["straddle", "short-strangle", "calendar-call-spread", "risk-reversal"],
   practiceIds: ["client-earnings-vol", "risk-iv-spike-short-premium", "pnl-vega-offsets-delta", "mm-otm-put-demand"]
 },
@@ -132,7 +132,7 @@ Use these remaining three module records:
   d1Anchor: "Commodity forwards already require carry thinking: storage, financing, convenience yield, seasonality, and curve shape.",
   derivativesUpgrade: "Options add time decay, rates, dividends, borrow, early exercise, and moneyness-sensitive time value.",
   dealerLens: "Theta is not free income. The dealer earns theta for taking gamma, vega, gap, liquidity, and model risk.",
-  interviewTakeaway: "I would link theta to the cost of optionality and explain why collecting theta means warehousing tail and convexity risk.",
+  keyFraming: "I would link theta to the cost of optionality and explain why collecting theta means warehousing tail and convexity risk.",
   strategyLinks: ["covered-call", "short-put", "calendar-call-spread", "iron-butterfly"],
   practiceIds: ["client-income-defined-risk", "risk-theta-vs-tail", "pnl-theta-positive-losing", "mm-carry-and-dividend"]
 }
@@ -142,7 +142,7 @@ Use these remaining three module records:
 
 Use these six complete bridge records:
 
-| Id | Topic | D1 world | Equity derivatives world | Transferable instinct | Refine or unlearn | Interview line |
+| Id | Topic | D1 world | Equity derivatives world | Transferable instinct | Refine or unlearn | Professional line |
 | --- | --- | --- | --- | --- | --- | --- |
 | `linear-vs-delta` | Linear exposure vs option delta | Futures hedges create direct price exposure. | Options have delta that changes with spot, time, IV, and moneyness. | Direction, size, and hedge ratio thinking transfer. | Do not treat delta as static; gamma changes the hedge. | My D1 background helps with directional risk, but options require dynamic delta management. |
 | `curve-carry` | Forward curve and carry | Commodity forwards reflect storage, financing, convenience yield, and supply-demand constraints. | Equity option forwards reflect rates, dividends, borrow, and settlement mechanics. | Carry and curve-shape intuition transfer. | Equity dividends and borrow can dominate early exercise and parity relationships. | I translate commodity carry intuition into equity forwards through rates, dividends, and borrow. |
@@ -163,7 +163,7 @@ Use exactly these 30 ids and categories:
 | `client-hedge-physical-analogy` | client | foundation | Translate physical hedge experience |
 | `client-protective-put-vs-stop` | client | foundation | Protective put vs stop loss |
 | `client-risk-reversal-commodity` | client | intermediate | Risk reversal and skew intuition |
-| `client-asian-edge` | client | intermediate | Asian option interview edge |
+| `client-asian-edge` | client | intermediate | Asian option structuring edge |
 | `client-zero-cost-hedge` | client | foundation | Zero-cost hedge trade-off |
 | `risk-short-call-rally` | risk | foundation | Short call after spot rally |
 | `risk-short-straddle-gap` | risk | foundation | Short straddle gap move |
@@ -637,8 +637,8 @@ function renderLearningModules() {
         <p class="learning-copy">${escapeHtml(module.derivativesUpgrade)}</p>
         <span class="learning-label">Dealer lens</span>
         <p class="learning-copy">${escapeHtml(module.dealerLens)}</p>
-        <span class="learning-label">Interview takeaway</span>
-        <p class="learning-copy">${escapeHtml(module.interviewTakeaway)}</p>
+        <span class="learning-label">Key framing</span>
+        <p class="learning-copy">${escapeHtml(module.keyFraming)}</p>
         <div class="strategy-link-list">${links}</div>
         <div class="learning-action-row">
           <button class="learning-action ${done ? "active" : ""}" type="button" data-complete-module="${escapeHtml(module.id)}">
@@ -665,8 +665,8 @@ function renderLearningBridge() {
       <p class="learning-copy">${escapeHtml(item.transferableInstinct)}</p>
       <span class="learning-label">Refine or unlearn</span>
       <p class="learning-copy">${escapeHtml(item.unlearnOrRefine)}</p>
-      <span class="learning-label">Interview line</span>
-      <p class="learning-copy">${escapeHtml(item.interviewLine)}</p>
+      <span class="learning-label">Professional line</span>
+      <p class="learning-copy">${escapeHtml(item.professionalLine)}</p>
     </article>
   `).join("");
   target.innerHTML = `<div class="bridge-grid">${cards}</div>`;
@@ -973,7 +973,7 @@ git commit -m "test: cover D1 learning hub"
 Add under "当前能力":
 
 ```markdown
-- D1-to-Derivatives Learning Hub：六个月 roadmap、Month 1 Greeks、Commodities Bridge、30 个面试/实战场景和本地进度追踪。
+- D1-to-Derivatives Learning Hub：六个月 roadmap、Month 1 Greeks、Commodities Bridge、30 个专业/实战场景和本地进度追踪。
 ```
 
 - [ ] **Step 2: Update USER_GUIDE**
@@ -983,10 +983,10 @@ Add:
 ```markdown
 ## D1-to-Derivatives Learning Hub
 
-页面顶部的“交易员学习中枢”用于把 commodities D1 经验转成 equity derivatives 面试语言。
+页面顶部的“交易员学习中枢”用于把 commodities D1 经验转成 equity derivatives 专业表达。
 
 - `Roadmap`：查看六个月学习路径。Phase 1 先开放 Month 1。
-- `Month 1 Greeks`：按 Delta、Gamma、Vega、Theta/Rho 学习，每张卡片包含 D1 anchor、options upgrade、dealer lens 和 interview takeaway。
+- `Month 1 Greeks`：按 Delta、Gamma、Vega、Theta/Rho 学习，每张卡片包含 D1 anchor、options upgrade、dealer lens 和 key framing。
 - `Commodities Bridge`：对比 commodities D1 与 equity derivatives 的相同点和需要修正的直觉。
 - `Scenario Bank`：按 Client、Risk、P&L、Market-making 练习场景题，可 reveal answer、标记理解、加入复习。
 
@@ -1063,7 +1063,7 @@ Open `index.html` and verify:
 - Revealing an answer displays expected answer, follow-up, and common mistake.
 - Completion persists after refresh.
 - Professional mode still shows professional tools.
-- Interview mode still shows Q&A.
+- Professional mode still shows Q&A.
 
 ---
 
@@ -1102,11 +1102,11 @@ Use this content when creating the 30 `scenarios` records in `data/learning-cont
 
 **`client-hedge-physical-analogy`**
 
-- Prompt: How would you explain your commodity client hedging experience to an equity derivatives interviewer?
+- Prompt: How would you explain your commodity client hedging experience to a senior equity derivatives trader?
 - Expected answer: Frame it as understanding client objective, exposure uncertainty, hedge tenor, liquidity, basis/carry, and risk disclosure. Then bridge to equity options suitability.
 - Follow-up: What changes when the hedge uses options instead of futures?
 - Common mistake: Only listing products traded instead of explaining risk-management process.
-- Tags: `bridge`, `client`, `interview`
+- Tags: `bridge`, `client`, `professional`
 - Linked modules: `delta-d1`, `theta-carry`
 
 **`client-protective-put-vs-stop`**
@@ -1129,7 +1129,7 @@ Use this content when creating the 30 `scenarios` records in `data/learning-cont
 
 **`client-asian-edge`**
 
-- Prompt: How would you use Asian option experience as an advantage in an equity derivatives interview?
+- Prompt: How would you use Asian option experience as a structuring advantage in equity derivatives?
 - Expected answer: Explain path dependency, averaging, reduced timing risk, and hedging differences versus vanilla options. Connect it to structured products rather than pretending it is common vanilla equity flow.
 - Follow-up: Why can averaging reduce option value compared with a vanilla option?
 - Common mistake: Only saying Asian options are exotic without explaining the hedge implications.

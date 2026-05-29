@@ -2,7 +2,7 @@
 
 **Date**: 2026-05-27
 **Status**: Active roadmap after Phase 5
-**Owner Goal**: Help a Commodities D1 Trader prepare for Equity Derivatives, Vol Trading, Market Making, Structuring, and Derivatives Risk interviews.
+**Owner Goal**: Help a Commodities D1 Trader prepare for Equity Derivatives, Vol Trading, Market Making, Structuring, and Derivatives Risk professional tracks.
 
 **Latest Acceptance**: Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 passed full local validation on 2026-05-28; next main implementation target is Phase 6.
 
@@ -14,7 +14,7 @@ This roadmap preserves the larger six-month blueprint after the Phase 1 MVP. It 
 
 The guiding principle is:
 
-> Turn commodities D1 experience into derivatives interview advantage, then deepen into equity options, volatility, dealer risk, exotics, and mock interview readiness.
+> Turn commodities D1 experience into derivatives professional advantage, then deepen into equity options, volatility, dealer risk, exotics, and professional sprint preparation.
 
 ---
 
@@ -43,7 +43,7 @@ Existing platform foundation:
 
 - 71 strategies.
 - 40 professional Trader Memos.
-- 141 strategy-level interview Q&A.
+- 141 strategy-level professional Q&A.
 - Professional tools: stress test, parity, portfolio Greeks, Gamma P&L, vol surface, Greeks Decay.
 - Static frontend only: `index.html`, `styles.css`, `app.js`, `data/*.js`.
 
@@ -98,9 +98,9 @@ Existing platform foundation:
   - 15 client structure recommendation.
   - 10 strategy comparison.
   - 10 risk adjustment.
-  - 5 common interview traps.
+  - 5 common decision traps.
 
-**Interview outcomes**
+**Professional sprint outcomes**
 
 - User can translate a client objective into 2-3 candidate structures.
 - User can state max loss, max gain, Greeks, assignment/margin issues, and suitability.
@@ -142,7 +142,7 @@ Client objective -> constraints -> candidate structures -> trade-offs -> recomme
   - acceptable alternatives,
   - suitability warning,
   - dealer hedge note,
-  - interview answer outline.
+  - professional answer outline.
 
 **Acceptance criteria**
 
@@ -251,7 +251,7 @@ Client objective -> constraints -> candidate structures -> trade-offs -> recomme
 
 ### Phase 5: Month 5 Exotics And Structuring Bridge
 
-**Goal**: Use the user's commodities background as an edge for exotics and structured product interviews.
+**Goal**: Use the user's commodities background as an edge for exotics and structured product professional discussions.
 
 **Status**: Implemented on 2026-05-28. Month 5 now includes 6 modules, an Exotics Bridge panel, simplified payoff diagrams, 6 structuring workflow cases, exotics/path/suitability/cross-asset topic filters, and 36 exotics/structuring scenarios.
 
@@ -272,7 +272,7 @@ Phase 5 is educational. Do not build a production exotics pricer.
 
 - Exotics Bridge tab.
 - Payoff diagrams for simplified examples.
-- "How to explain in interview" cards.
+- Professional phrasing cards.
 - Structuring workflow:
   - client objective,
   - payoff design,
@@ -304,26 +304,26 @@ Phase 5 is educational. Do not build a production exotics pricer.
 
 ---
 
-### Phase 6: Month 6 Interview Sprint And Readiness Dashboard
+### Phase 6: Month 6 Professional Sprint And Skill Dashboard
 
-**Goal**: Turn accumulated learning into interview performance.
+**Goal**: Turn accumulated learning into professional performance.
 
 **Learning modules**
 
 1. High-frequency technical questions.
-2. Scenario interviews.
+2. Professional scenario drills.
 3. Trade idea articulation.
 4. Risk manager challenge questions.
 5. Behavioral framing: why derivatives, why desk, why your background matters.
 
 **UI deliverables**
 
-- Mock Interview mode:
+- Professional Sprint mode:
   - timed session,
   - random or topic-filtered questions,
   - reveal rubric,
   - mark weak topic.
-- Readiness Dashboard:
+- Skill Dashboard:
   - modules completed,
   - scenarios completed,
   - review-later count,
@@ -334,7 +334,7 @@ Phase 5 is educational. Do not build a production exotics pricer.
 
 **Data deliverables**
 
-- Expand interview bank toward 250+ total learning/interview prompts across strategy, vol, dealer, exotics, and behavioral categories.
+- Expand the professional drill bank toward 250+ total learning prompts across strategy, vol, dealer, exotics, and behavioral categories.
 - Add answer rubrics:
   - must mention,
   - strong answer,
@@ -343,9 +343,9 @@ Phase 5 is educational. Do not build a production exotics pricer.
 
 **Acceptance criteria**
 
-- Dashboard is educational and does not overstate readiness.
-- Readiness score is transparent and based on local progress only.
-- Mock interview progress persists locally.
+- Dashboard is educational and does not overstate skill level.
+- Skill score is transparent and based on local progress only.
+- Professional sprint progress persists locally.
 - Tests cover session creation, answer reveal, marking weak topics, and dashboard count updates.
 
 ---
@@ -364,7 +364,7 @@ Keep learning content separate from app behavior:
   - `dealerDrills`
   - `exoticsBridge`
   - `structuringCases`
-  - `mockInterviewQuestions`
+  - `professionalSprintQuestions`
 
 Do not move large content bodies into `app.js`.
 
@@ -381,8 +381,8 @@ Future fields can include:
 - `completedComparisons`
 - `completedClientDrills`
 - `weakTopics`
-- `mockInterviewSessions`
-- `readinessHistory`
+- `professionalSprintSessions`
+- `skillDashboardHistory`
 
 Progress data must stay backward-compatible. New fields should merge with defaults.
 
@@ -395,7 +395,7 @@ Each phase must add or update Playwright tests for:
 - answer reveal or drill step reveal,
 - progress persistence,
 - links to existing strategy/tool panels,
-- no regression in professional/interview modes.
+- no regression in progressive professional modes.
 
 Required commands before each completion:
 
@@ -430,24 +430,24 @@ Each phase must update:
 
 ## Recommended Next Implementation
 
-The next main implementation should be **Phase 6: Month 6 Interview Sprint And Readiness Dashboard**.
+The next main implementation should be **Phase 6: Month 6 Professional Sprint And Skill Dashboard**.
 
 Reason:
 
 - Phase 5 has now bridged exotics and structuring: path dependency, averaging, barrier risk, quanto risk, digital discontinuity, autocallable payoff decomposition, issuer/dealer risk, and client suitability.
-- The next capability gap is performance training: timed sessions, answer rubrics, weak-topic tracking, wrong-answer review, and transparent readiness dashboard.
+- The next capability gap is performance training: timed sessions, answer rubrics, weak-topic tracking, wrong-answer review, and transparent skill dashboard.
 - This is the natural layer after vanilla strategy construction, volatility trade construction, dealer risk management, and exotics payoff decomposition.
 
 Suggested next plan file:
 
 ```text
-docs/superpowers/plans/2026-05-28-d1-phase6-interview-sprint-readiness-dashboard.md
+docs/superpowers/plans/2026-05-28-d1-phase6-professional-sprint-skill-dashboard.md
 ```
 
 Suggested first acceptance target:
 
-- Mock Interview mode with timed or topic-filtered sessions.
+- Professional Sprint mode with timed or topic-filtered sessions.
 - Answer rubric that separates must-mention, strong answer, red-flag answer, and follow-up.
 - Wrong-answer notebook and weak-topic tagging.
-- Readiness dashboard based only on local progress.
+- Skill dashboard based only on local progress.
 - Playwright coverage for session creation, answer reveal, weak-topic marking, notebook updates, and dashboard counts.

@@ -185,7 +185,7 @@ if (event.target.matches('.tool-tab')) {
 In `handleModeToggle()` when switching to professional mode:
 
 ```javascript
-if (mode === 'professional' || mode === 'interview') {
+if (mode === 'professional' || mode === 'advanced-professional') {
   // ... existing code ...
   switchTool(state.activeTool); // Restore last active tool
 }
@@ -201,7 +201,7 @@ if (mode === 'professional' || mode === 'interview') {
 - `<section class="panel vol-surface-panel pro-content" id="volSurfacePanel">`
 - `<section class="panel greeks-decay-panel pro-content" id="greeksDecayPanel">`
 
-**Add new consolidated panel** (insert after Interview Q&A panel):
+**Add new consolidated panel** (insert after the professional practice panel):
 
 ```html
 <section class="panel professional-tools-panel pro-content" id="professionalToolsPanel" style="display:none">

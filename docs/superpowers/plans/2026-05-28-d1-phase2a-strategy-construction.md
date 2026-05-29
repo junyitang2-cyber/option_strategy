@@ -6,7 +6,7 @@
 
 ## Goal
 
-Extend the D1-to-Derivatives Learning Hub from Month 1 Greeks intuition into practical strategy construction: choosing option structures from client objectives, market views, risk budget, and interview trade-offs.
+Extend the D1-to-Derivatives Learning Hub from Month 1 Greeks intuition into practical strategy construction: choosing option structures from client objectives, market views, risk budget, and professional trade-offs.
 
 ## Delivered
 

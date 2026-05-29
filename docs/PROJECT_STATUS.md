@@ -16,7 +16,7 @@ Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
 - Client drill completion and revealed step progress persist in localStorage.
 - Scenario filters now support category, month, and topic, including vol/skew/term-structure/event/surface/short-vol/gamma/liquidity/dealer/hedging/quote/attribution/inventory/exotics/asian/barrier/quanto/digital/autocallable/structured-product/path/suitability/cross-asset filters.
 - All 191 Learning Hub scenarios now have explicit Chinese localization records.
-- Next D1 roadmap implementation should move to Phase 6: interview sprint and readiness dashboard. Optional Phase 5B can deepen exotics risk and suitability cases before Phase 6.
+- Next D1 roadmap implementation should move to Phase 6: Professional Sprint and Skill Dashboard. Optional Phase 5B can deepen exotics risk and suitability cases before Phase 6.
 
 最后更新：2026-05-28
 
@@ -150,13 +150,13 @@ npm test
 
 ### P1：D1-to-Derivatives 后续扩展
 
-目标：基于 Phase 1 + Phase 2A + Phase 2B + Phase 3A + Phase 3B + Phase 4A/4B + Phase 5 使用反馈，进入 mock interview 和 readiness tracking。
+目标：基于 Phase 1 + Phase 2A + Phase 2B + Phase 3A + Phase 3B + Phase 4A/4B + Phase 5 使用反馈，进入专业冲刺和能力追踪。
 
 建议顺序：
 
 1. Phase 5B：Exotics risk decomposition、issuer/dealer risk、client suitability cases 的深化版。
-2. Phase 6：Scenario drills、wrong-answer notebook、skill dashboard。
-3. Phase 6B：更完整的 mock interview rubrics、weak-topic recommendation 和 progress export。
+2. Phase 6：Professional scenario drills、wrong-answer notebook、skill dashboard。
+3. Phase 6B：更完整的 professional sprint rubrics、weak-topic recommendation 和 progress export。
 
 详细蓝图见 `docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
 

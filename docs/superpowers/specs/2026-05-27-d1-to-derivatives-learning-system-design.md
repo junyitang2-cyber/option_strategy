@@ -2,7 +2,7 @@
 
 **Date**: 2026-05-27
 **Status**: Approved for Phase 1 implementation
-**Topic**: Learning platform upgrade for a Commodities D1 Trader preparing for Equity Derivatives interviews
+**Topic**: Learning platform upgrade for a Commodities D1 Trader preparing for Equity Derivatives professional tracks
 
 ---
 
@@ -10,13 +10,13 @@
 
 The full six-month learning system remains the long-term vision, but implementation must start with a smaller Phase 1 MVP.
 
-Phase 1 should build a **D1-to-Derivatives Learning Hub** inside the existing static app. It should help the user translate current commodities D1 experience into options intuition, dealer language, and interview-ready answers.
+Phase 1 should build a **D1-to-Derivatives Learning Hub** inside the existing static app. It should help the user translate current commodities D1 experience into options intuition, dealer language, and professional-ready answers.
 
 The system must not become a second generic options course. The unique value is the bridge:
 
 - Linear D1 exposure -> option Greeks and convexity.
 - Physical/client hedging -> structured client suitability and risk disclosure.
-- LME/CME/Asian options/FX-linked hedges -> equity derivatives, vol surface, and exotics interview edge.
+- LME/CME/Asian options/FX-linked hedges -> equity derivatives, vol surface, and exotics professional edge.
 - Trading execution instincts -> dealer risk management, P&L attribution, and market-making framing.
 
 ---
@@ -33,7 +33,7 @@ The system must not become a second generic options course. The unique value is 
 
 **Target**
 
-- Primary target: Equity Derivatives Trader interviews.
+- Primary target: Equity Derivatives Trader professional preparation.
 - Secondary knowledge areas: commodities derivatives, market making, structuring, volatility trading, and risk management.
 - Preparation rhythm: about 2 hours per day over six months.
 
@@ -46,7 +46,7 @@ The app already has a strong base:
 - 71 strategies.
 - Interactive payoff, probability cone, per-leg decomposition, Greeks six-panel chart, scenario controls, and leg editor.
 - Professional mode with Trader Memo, stress test, parity, portfolio Greeks, Gamma P&L, vol surface, and Greeks Decay.
-- Interview mode with 141 Q&A records.
+- Professional mode with 141 Q&A records.
 - LocalStorage progress for strategy completion.
 - Playwright regression tests.
 
@@ -97,7 +97,7 @@ Later phases are intentionally deferred until Phase 1 is useful:
 - Month 2-3 strategies and volatility trading expansion.
 - Month 4 dynamic hedging and market-making simulations.
 - Month 5 exotics and structured products.
-- Month 6 mock interview sprint and readiness dashboard.
+- Month 6 professional sprint and skill dashboard.
 - Advanced spaced repetition, study-time analytics, and weakness heatmaps.
 
 The detailed post-Phase-1 roadmap is maintained in:
@@ -110,7 +110,7 @@ The detailed post-Phase-1 roadmap is maintained in:
 - No broker-grade margin engine.
 - No live option chain import.
 - No advanced exotics pricing implementation.
-- No full 250-question interview bank yet.
+- No full 250-question professional drill bank yet.
 - No backend, login, database, or cloud sync.
 
 ---
@@ -166,7 +166,7 @@ Each module should include:
 - `d1Anchor`: how the user already thinks about this in commodities D1.
 - `derivativesUpgrade`: what changes in options.
 - `dealerLens`: how a dealer or market maker thinks about it.
-- `interviewTakeaway`: answer framing for interviews.
+- `keyFraming`: professional answer framing.
 - `strategyLinks`: array of strategy ids that already exist in `data/strategies.js`.
 - `practiceIds`: scenario ids tied to this module.
 
@@ -180,7 +180,7 @@ Each comparison should include:
 - `equityDerivativesWorld`
 - `transferableInstinct`
 - `unlearnOrRefine`
-- `interviewLine`
+- `professionalLine`
 
 ### `scenarios`
 
@@ -256,7 +256,7 @@ Each card should have:
 - D1 anchor.
 - Options upgrade.
 - Dealer lens.
-- Interview takeaway.
+- Key framing.
 - Linked strategies.
 - Mark completed button.
 
@@ -294,7 +294,7 @@ Each scenario card should have:
 
 ## Content Accuracy Rules
 
-The content must use interview-ready but precise language.
+The content must use professional-ready but precise language.
 
 1. Do not say "Vega does not exist in D1" without qualification. Use: "linear outright D1 futures exposure has no direct Vega, but client optionality and embedded structures can introduce volatility exposure."
 
@@ -362,12 +362,12 @@ Phase 1 is done when:
 
 1. The Learning Hub appears on page load and does not break the existing strategy lab.
 2. The four Learning Hub tabs switch without console errors.
-3. Month 1 shows four complete module cards with D1 anchor, options upgrade, dealer lens, and interview takeaway.
+3. Month 1 shows four complete module cards with D1 anchor, options upgrade, dealer lens, and key framing.
 4. Commodities Bridge shows at least six comparison rows with precise caveats.
 5. Scenario Bank contains exactly 30 scenarios across the four categories.
 6. Scenario answers can be revealed.
 7. Module completion and scenario progress persist after page refresh.
-8. Existing Professional/Interview modes still work.
+8. Existing progressive professional modes still work.
 9. `node --check app.js`, `node --check data/professional-content.js`, `node --check data/learning-content.js`, and `npm test` pass.
 10. `README.md`, `USER_GUIDE.md`, `docs/PROJECT_STATUS.md`, and `docs/IMPLEMENTATION_HISTORY.md` are updated if the UI is implemented.
 
@@ -391,4 +391,4 @@ Recommended execution style:
 4. Add scenario interactions.
 5. Run browser verification and full Playwright regression.
 
-The plan should be executed as Phase 1 only. Do not start exotics, full mock interview, or advanced dashboard work until the user has used and reviewed the MVP.
+The plan should be executed as Phase 1 only. Do not start exotics, full professional sprint mode, or advanced dashboard work until the user has used and reviewed the MVP.

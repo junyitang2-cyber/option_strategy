@@ -64,7 +64,7 @@ Status: accepted on 2026-05-28.
 
 ## Next Phase
 
-The next main roadmap phase is Phase 6: Interview Sprint And Readiness Dashboard.
+The next main roadmap phase is Phase 6: Professional Sprint And Skill Dashboard.
 
 Optional Phase 5B can deepen exotics before Phase 6:
 

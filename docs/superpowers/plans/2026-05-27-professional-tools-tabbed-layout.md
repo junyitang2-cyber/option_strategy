@@ -155,14 +155,14 @@ if (event.target.matches('.tool-tab')) {
 
 - [ ] **Step 4: Initialize active tool in handleModeToggle**
 
-Find `function handleModeToggle(mode)` and add `switchTool(state.activeTool);` at the end of both professional and interview mode blocks:
+Find `function handleModeToggle(mode)` and add `switchTool(state.activeTool);` at the end of both progressive professional mode blocks:
 
 In the `if (mode === 'professional')` block, after `renderPortfolioPanel();`:
 ```javascript
 switchTool(state.activeTool);
 ```
 
-In the `else if (mode === 'interview')` block, after `renderPortfolioPanel();`:
+In the higher-tier professional mode block, after `renderPortfolioPanel();`:
 ```javascript
 switchTool(state.activeTool);
 ```
@@ -199,7 +199,7 @@ Find and delete these 6 complete `<section>` blocks (approximately lines 196-289
 
 - [ ] **Step 2: Add new tabbed panel**
 
-Insert this after the Interview Q&A panel (`</section>` that closes `id="interviewPanel"`):
+Insert this after the professional practice panel:
 
 ```html
 <section class="panel professional-tools-panel pro-content" id="professionalToolsPanel" style="display:none">
