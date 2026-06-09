@@ -69,7 +69,7 @@ All module, scenario, and client drill objects currently carry a `month` field w
 | `month: 3` | `sector: "C"` | Sector C (Vol half) |
 | `month: 4` | `sector: "C"` | Sector C (Dealer half) |
 | `month: 5` | `sector: "E"` | Sector E |
-| `month: 6` | no change — Professional Sprint objects do not carry a month field | — |
+| `month: 6` | `sector: "sprint"` | Professional Sprint module object — field renamed for consistency; sprint question objects in `professionalSprintQuestions[]` do not carry a sector field and are unchanged |
 
 The change is a mechanical global find-and-replace with value remapping. No content is added, removed, or reordered.
 
@@ -82,7 +82,7 @@ New file exporting two arrays: `researchCases` and `viewToTradeDrills`.
 ```js
 {
   id: String,           // e.g. "rc-earnings-nvda-001"
-  skill: String,        // "earnings" | "sector" | "comps" | "ic-memo" | "thesis"
+  skill: String,        // "earnings" | "sector-analysis" | "comps" | "ic-memo" | "thesis"
   sector: "D",
   ticker: String,       // e.g. "NVDA"
   title: String,        // English title
@@ -126,7 +126,7 @@ Reuses the existing client drill step-reveal pattern:
 | Skill | Research Cases | View-to-Trade Drills |
 |---|---|---|
 | `/earnings` | 4 | 4 |
-| `/sector` | 3 | 3 |
+| `/sector` (Sector Analysis) | 3 | 3 |
 | `/comps` | 3 | 2 |
 | `/ic-memo` | 3 | 3 |
 | `/thesis-tracker` | 3 | 3 |
@@ -236,7 +236,7 @@ Three sub-sections rendered sequentially inside `#learningResearchBridge`:
 
 **Sub-section 1: Research Desk**
 
-- Filter row: All / Earnings / Sector / Comps / IC Memo / Thesis
+- Filter row: All / Earnings / Sector Analysis / Comps / IC Memo / Thesis ("Sector Analysis" avoids confusion with the platform's Sector A-E terminology)
 - Grid of `researchCase` cards, each showing: ticker, skill badge, context, key view, implied move (if applicable), suggested structures
 - Cards are read-only reference material (no interactive state needed)
 
