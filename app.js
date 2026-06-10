@@ -3360,7 +3360,7 @@ function renderLearningResearchBridge() {
     var viewLabel = lang === "cn" ? "观点" : "View";
     return '<article class="research-case-card">' +
       '<div class="research-meta">' +
-        '<span class="research-skill-badge">' + escapeHtml(rc.skill) + "</span>" +
+        '<span class="research-skill-badge">' + escapeHtml(labels[rc.skill] || rc.skill) + "</span>" +
         '<span class="research-ticker">' + escapeHtml(rc.ticker || "") + "</span>" +
         moveBadge +
       "</div>" +
@@ -3405,7 +3405,7 @@ function renderLearningResearchBridge() {
   target.innerHTML = '<section class="research-desk-section">' +
     '<h3 class="learning-title">' + escapeHtml(desktitle) + "</h3>" +
     '<div class="research-filter-row">' + filterButtons + "</div>" +
-    '<div class="research-case-grid">' + (caseCards || '<p class="learning-copy">No cases match filter.</p>') + "</div>" +
+    '<div class="research-case-grid">' + (caseCards || '<p class="learning-copy">' + (lang === "cn" ? "没有符合筛选条件的案例。" : "No cases match filter.") + "</p>") + "</div>" +
     "</section>" +
     '<section class="vtt-drills-section">' +
     '<h3 class="learning-title">' + escapeHtml(drillstitle) + "</h3>" +
