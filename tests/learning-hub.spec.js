@@ -406,6 +406,46 @@ test("scenario bank uses sector filters A B C E not month numbers", async ({ pag
   await expect(page.locator('[data-scenario-month-filter="3"]')).toHaveCount(0);
 });
 
+test("Research Bridge tab renders cases, filters, and VTT drills", async ({ page }) => {
+  await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
+
+  // Switch to EN so English strings are predictable for assertions
+  await page.locator("#langEn").click();
+
+  await page.locator('[data-learning-tab="research-bridge"]').click();
+  await expect(page.locator("#learningResearchBridge")).toBeVisible();
+
+  await expect(page.locator("#learningResearchBridge .research-case-card")).toHaveCount(16);
+
+  await page.locator('[data-research-filter="earnings"]').click();
+  await expect(page.locator("#learningResearchBridge .research-case-card")).toHaveCount(4);
+
+  await page.locator('[data-research-filter="sector-analysis"]').click();
+  await expect(page.locator("#learningResearchBridge .research-case-card")).toHaveCount(3);
+
+  await page.locator('[data-research-filter="all"]').click();
+  await expect(page.locator("#learningResearchBridge .research-case-card")).toHaveCount(16);
+
+  await expect(page.locator("#learningResearchBridge .vtt-drill-card")).toHaveCount(15);
+
+  const firstDrill = page.locator("#learningResearchBridge .vtt-drill-card").first();
+  await firstDrill.locator('[data-reveal-vtt-step="view"]').click();
+  await expect(firstDrill.locator('[data-vtt-step="view"]')).toBeVisible();
+
+  // Mark complete (re-render will reset step visibility — do not assert step after this)
+  await firstDrill.locator('[data-complete-vtt]').click();
+  await expect(page.locator("#learningProgressSummary")).toContainText("Research Drills 1/15");
+});
+
+test("Sector D scenarios appear in scenario bank sector filter with NVDA content", async ({ page }) => {
+  await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
+
+  await page.locator("#learning-scenarios-tab").click();
+  await page.locator('[data-scenario-sector-filter="D"]').click();
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(20);
+  await expect(page.locator("#learningScenarios")).toContainText("NVDA");
+});
+
 test("roadmap shows Sector A-E cards with correct names", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 

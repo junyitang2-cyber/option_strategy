@@ -1195,6 +1195,7 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .exotics-filter:focus-visible,
 .exotics-risk-filter:focus-visible,
 .sprint-topic-filter:focus-visible,
+.research-filter:focus-visible,
 .strategy-link-chip:focus-visible {
   outline: 2px solid var(--cyan);
   outline-offset: 2px;
@@ -1222,7 +1223,9 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .exotics-risk-grid,
 .model-limit-grid,
 .sprint-question-grid,
-.scenario-grid {
+.scenario-grid,
+.research-case-grid,
+.vtt-drill-list {
   display: grid;
   gap: 12px;
 }
@@ -1247,8 +1250,13 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .exotics-risk-grid,
 .model-limit-grid,
 .sprint-question-grid,
-.scenario-grid {
+.scenario-grid,
+.vtt-drill-list {
   grid-template-columns: 1fr;
+}
+
+.research-case-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .roadmap-card,
@@ -1267,7 +1275,9 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .sprint-question-card,
 .dashboard-card,
 .notebook-item,
-.scenario-card {
+.scenario-card,
+.research-case-card,
+.vtt-drill-card {
   background: var(--panel-2);
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -1547,7 +1557,8 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .vol-playbook-filter,
 .exotics-filter,
 .exotics-risk-filter,
-.sprint-topic-filter {
+.sprint-topic-filter,
+.research-filter {
   background: var(--panel-2);
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -1564,7 +1575,9 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .exotics-risk-filter:hover,
 .exotics-risk-filter.active,
 .sprint-topic-filter:hover,
-.sprint-topic-filter.active {
+.sprint-topic-filter.active,
+.research-filter:hover,
+.research-filter.active {
   border-color: var(--cyan);
   color: var(--cyan);
 }
@@ -1734,4 +1747,106 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
   font-size: 12px;
   gap: 8px;
   margin-bottom: 8px;
+}
+
+/* ── Research Bridge ─────────────────────────────────── */
+
+.research-desk-section,
+.vtt-drills-section {
+  margin-bottom: 24px;
+}
+
+.research-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.research-meta {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.research-skill-badge {
+  background: rgba(57, 199, 229, 0.12);
+  border: 1px solid var(--cyan);
+  border-radius: 4px;
+  color: var(--cyan);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 6px;
+  text-transform: uppercase;
+}
+
+.research-ticker {
+  color: var(--muted);
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.research-badge {
+  background: rgba(230, 184, 74, 0.12);
+  border: 1px solid var(--amber);
+  border-radius: 4px;
+  color: var(--amber);
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+}
+
+.research-structure-list {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 4px 0 8px;
+  padding-left: 18px;
+}
+
+.research-structure-list li + li {
+  margin-top: 2px;
+}
+
+.research-rationale {
+  border-top: 1px solid var(--line);
+  margin-top: 8px;
+  padding-top: 8px;
+}
+
+.research-input {
+  border-left: 3px solid var(--cyan);
+  padding-left: 8px;
+}
+
+.vtt-steps {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.vtt-step {
+  background: var(--panel-3);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 10px 12px;
+}
+
+.vtt-step[hidden] {
+  display: none;
+}
+
+.vtt-reveal-step {
+  margin-top: 2px;
+}
+
+.vtt-reveal-step[hidden] {
+  display: none;
 }

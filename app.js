@@ -259,6 +259,8 @@ function defaultD1LearningProgress() {
     sprintStartedAt: null,
     generatedProgressReport: "",
     scenarioFilter: "all",
+    completedViewToTradeDrills: [],
+    activeResearchFilter: "all",
     scenarioSectorFilter: "all",
     scenarioTopicFilter: "all",
     language: "cn",
@@ -269,7 +271,7 @@ function loadD1LearningProgress() {
   try {
     const saved = JSON.parse(localStorage.getItem("os_d1_learning") || "null");
     const progress = { ...defaultD1LearningProgress(), ...(saved || {}) };
-    ["completedModules", "completedScenarios", "completedClientDrills", "reviewLaterScenarios", "completedSprintQuestions", "weakSprintQuestionIds", "revealedSprintRubrics", "currentSprintQuestionIds"].forEach((key) => {
+    ["completedModules", "completedScenarios", "completedClientDrills", "reviewLaterScenarios", "completedSprintQuestions", "weakSprintQuestionIds", "revealedSprintRubrics", "currentSprintQuestionIds", "completedViewToTradeDrills"].forEach((key) => {
       if (!Array.isArray(progress[key])) progress[key] = [];
     });
     if (!progress.clientDrillStepCounts || typeof progress.clientDrillStepCounts !== "object" || Array.isArray(progress.clientDrillStepCounts)) {
@@ -2247,7 +2249,9 @@ function renderCoverage() {
 }
 
 function learningContent() {
-  return window.D1_LEARNING_CONTENT || { roadmap: [], modules: [], bridgeComparisons: [], strategyComparisons: [], clientDrills: [], volFramework: [], volPlaybook: [], dealerWorkflow: [], dealerPnlAttribution: [], exoticsBridge: [], structuringCases: [], exoticsRiskDrills: [], exoticsModelLimitCards: [], professionalSprintQuestions: [], scenarios: [] };
+  var base = window.D1_LEARNING_CONTENT || { roadmap: [], modules: [], bridgeComparisons: [], strategyComparisons: [], clientDrills: [], volFramework: [], volPlaybook: [], dealerWorkflow: [], dealerPnlAttribution: [], exoticsBridge: [], structuringCases: [], exoticsRiskDrills: [], exoticsModelLimitCards: [], professionalSprintQuestions: [], scenarios: [] };
+  var bridge = window.D1_RESEARCH_BRIDGE_CONTENT || { researchCases: [], viewToTradeDrills: [] };
+  return Object.assign({}, base, { researchCases: bridge.researchCases, viewToTradeDrills: bridge.viewToTradeDrills });
 }
 
 const LEARNING_UI_TEXT = {
@@ -2660,7 +2664,9 @@ function renderLearningProgressSummary() {
   const content = learningContent();
   const sprintTotal = (content.professionalSprintQuestions || []).length;
   const sprintProgress = sprintTotal ? ` · ${phase6UiText("progressSprint")} ${state.learning.completedSprintQuestions.length}/${sprintTotal}` : "";
-  target.textContent = `${learningUiText("progressModules")} ${state.learning.completedModules.length}/${content.modules.length} · ${learningUiText("progressScenarios")} ${state.learning.completedScenarios.length}/${content.scenarios.length} · ${learningUiText("progressClientDrills")} ${state.learning.completedClientDrills.length}/${(content.clientDrills || []).length}${sprintProgress}`;
+  const vttTotal = (content.viewToTradeDrills || []).length;
+  const vttProgress = vttTotal ? ` · ${learningLanguage() === "cn" ? "研究演练" : "Research Drills"} ${state.learning.completedViewToTradeDrills.length}/${vttTotal}` : "";
+  target.textContent = `${learningUiText("progressModules")} ${state.learning.completedModules.length}/${content.modules.length} · ${learningUiText("progressScenarios")} ${state.learning.completedScenarios.length}/${content.scenarios.length} · ${learningUiText("progressClientDrills")} ${state.learning.completedClientDrills.length}/${(content.clientDrills || []).length}${sprintProgress}${vttProgress}`;
 }
 
 function renderLearningTabs() {
@@ -3315,6 +3321,98 @@ function renderLearningExoticsRisk() {
   `;
 }
 
+function renderLearningResearchBridge() {
+  var target = document.getElementById("learningResearchBridge");
+  if (!target) return;
+  var content = learningContent();
+  var cases = content.researchCases || [];
+  var drills = content.viewToTradeDrills || [];
+  var lang = learningLanguage();
+
+  var filterOrder = ["all", "earnings", "sector-analysis", "comps", "ic-memo", "thesis"];
+  var filterLabels = {
+    cn: { all: "全部", earnings: "业绩前瞻", "sector-analysis": "行业分析", comps: "可比公司", "ic-memo": "首次覆盖", thesis: "投资逻辑" },
+    en: { all: "All", earnings: "Earnings", "sector-analysis": "Sector Analysis", comps: "Comps", "ic-memo": "IC Memo", thesis: "Thesis" },
+  };
+  var labels = filterLabels[lang] || filterLabels.en;
+
+  var validFilters = { all: true, earnings: true, "sector-analysis": true, comps: true, "ic-memo": true, thesis: true };
+  if (!validFilters[state.learning.activeResearchFilter]) {
+    state.learning.activeResearchFilter = "all";
+  }
+  var activeFilter = state.learning.activeResearchFilter;
+
+  var filteredCases = activeFilter === "all" ? cases : cases.filter(function(c) { return c.skill === activeFilter; });
+
+  var filterButtons = filterOrder.filter(function(id) {
+    return id === "all" || cases.some(function(c) { return c.skill === id; });
+  }).map(function(id) {
+    return '<button class="research-filter ' + (activeFilter === id ? "active" : "") + '" type="button" data-research-filter="' + escapeHtml(id) + '">' + escapeHtml(labels[id] || id) + '</button>';
+  }).join("");
+
+  var caseCards = filteredCases.map(function(rc) {
+    var title = lang === "cn" ? (rc.titleCn || rc.title) : rc.title;
+    var context = lang === "cn" ? (rc.contextCn || rc.context) : rc.context;
+    var keyView = lang === "cn" ? (rc.keyViewCn || rc.keyView) : rc.keyView;
+    var rationale = lang === "cn" ? (rc.rationaleCn || rc.rationale) : rc.rationale;
+    var structureList = (rc.suggestedStructures || []).map(function(s) { return "<li>" + escapeHtml(s) + "</li>"; }).join("");
+    var moveBadge = rc.impliedMove ? '<span class="research-badge">' + escapeHtml(rc.impliedMove) + "</span>" : "";
+    var viewLabel = lang === "cn" ? "观点" : "View";
+    return '<article class="research-case-card">' +
+      '<div class="research-meta">' +
+        '<span class="research-skill-badge">' + escapeHtml(rc.skill) + "</span>" +
+        '<span class="research-ticker">' + escapeHtml(rc.ticker || "") + "</span>" +
+        moveBadge +
+      "</div>" +
+      '<h4 class="learning-title">' + escapeHtml(title) + "</h4>" +
+      '<p class="learning-copy">' + escapeHtml(context) + "</p>" +
+      '<p class="learning-copy"><strong>' + escapeHtml(viewLabel) + ":</strong> " + escapeHtml(keyView) + "</p>" +
+      '<ul class="research-structure-list">' + structureList + "</ul>" +
+      '<p class="learning-copy research-rationale">' + escapeHtml(rationale) + "</p>" +
+      "</article>";
+  }).join("");
+
+  var drillCards = drills.map(function(drill) {
+    var completed = state.learning.completedViewToTradeDrills.includes(drill.id);
+    var researchInput = lang === "cn" ? (drill.researchInputCn || drill.researchInput) : drill.researchInput;
+    var question = lang === "cn" ? (drill.questionCn || drill.question) : drill.question;
+    var stepHtml = (drill.steps || []).map(function(step) {
+      var stepLabel = lang === "cn" ? (step.labelCn || step.label) : step.label;
+      var stepContent = lang === "cn" ? (step.contentCn || step.content) : step.content;
+      return '<div class="vtt-step" data-vtt-step="' + escapeHtml(step.key) + '" data-vtt-drill="' + escapeHtml(drill.id) + '" hidden>' +
+          "<strong>" + escapeHtml(stepLabel) + ":</strong> " + escapeHtml(stepContent) +
+        "</div>" +
+        '<button class="learning-action vtt-reveal-step" type="button"' +
+          ' data-reveal-vtt-step="' + escapeHtml(step.key) + '"' +
+          ' data-vtt-drill="' + escapeHtml(drill.id) + '">' +
+          escapeHtml(stepLabel) + " ▶" +
+        "</button>";
+    }).join("");
+    return '<article class="vtt-drill-card" data-vtt-drill-card="' + escapeHtml(drill.id) + '">' +
+      '<p class="learning-copy research-input">' + escapeHtml(researchInput) + "</p>" +
+      "<p class=\"learning-copy\"><strong>" + escapeHtml(question) + "</strong></p>" +
+      '<div class="vtt-steps">' + stepHtml + "</div>" +
+      '<button class="learning-action ' + (completed ? "active" : "") + '" type="button"' +
+        ' data-complete-vtt="' + escapeHtml(drill.id) + '">' +
+        (completed ? (lang === "cn" ? "已完成" : "Completed") : (lang === "cn" ? "标记完成" : "Mark Complete")) +
+      "</button>" +
+      "</article>";
+  }).join("");
+
+  var desktitle = lang === "cn" ? "研究案例库" : "Research Desk";
+  var drillstitle = lang === "cn" ? "View-to-Trade 演练" : "View-to-Trade Drills";
+
+  target.innerHTML = '<section class="research-desk-section">' +
+    '<h3 class="learning-title">' + escapeHtml(desktitle) + "</h3>" +
+    '<div class="research-filter-row">' + filterButtons + "</div>" +
+    '<div class="research-case-grid">' + (caseCards || '<p class="learning-copy">No cases match filter.</p>') + "</div>" +
+    "</section>" +
+    '<section class="vtt-drills-section">' +
+    '<h3 class="learning-title">' + escapeHtml(drillstitle) + "</h3>" +
+    '<div class="vtt-drill-list">' + drillCards + "</div>" +
+    "</section>";
+}
+
 function sprintFilters() {
   const content = learningContent();
   const source = content.professionalSprintFilters || [["all", "All Topics", "全部主题"]];
@@ -3733,6 +3831,7 @@ function renderLearningHub() {
   renderLearningDealerDesk();
   renderLearningExoticsBridge();
   renderLearningExoticsRisk();
+  renderLearningResearchBridge();
   renderLearningProfessionalSprint();
   renderScenarioFilters();
   renderLearningScenarios();
@@ -4078,6 +4177,34 @@ function handleClick(event) {
     renderLearningHub();
     return;
   }
+  if (event.target.matches(".research-filter")) {
+    state.learning.activeResearchFilter = event.target.dataset.researchFilter;
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+
+  if (event.target.matches(".vtt-reveal-step")) {
+    var vttDrillId = event.target.dataset.vttDrill;
+    var vttStepKey = event.target.dataset.revealVttStep;
+    var stepEl = document.querySelector('.vtt-step[data-vtt-step="' + CSS.escape(vttStepKey) + '"][data-vtt-drill="' + CSS.escape(vttDrillId) + '"]');
+    if (stepEl) {
+      stepEl.hidden = false;
+      event.target.hidden = true;
+    }
+    return;
+  }
+
+  if (event.target.matches("[data-complete-vtt]")) {
+    state.learning.completedViewToTradeDrills = toggleArrayValue(
+      state.learning.completedViewToTradeDrills,
+      event.target.dataset.completeVtt
+    );
+    saveD1LearningProgress();
+    renderLearningHub();
+    return;
+  }
+
   if (event.target.matches(".scenario-sector-filter")) {
     state.learning.scenarioSectorFilter = event.target.dataset.scenarioSectorFilter;
     saveD1LearningProgress();
