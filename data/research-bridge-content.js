@@ -145,7 +145,7 @@ window.D1_RESEARCH_BRIDGE_CONTENT = {
       keyView: "META is the structurally stronger ad platform; the relative bet is long META quality versus short SNAP's optimistic monetisation assumption. SNAP's high beta makes its options a good short-vol leg.",
       keyViewCn: "META 是结构上更强的广告平台；相对押注是做多 META 的质量、做空 SNAP 乐观的货币化假设。SNAP 的高 beta 使其期权成为良好的卖波动腿。",
       impliedMove: null,
-      suggestedStructures: ["pair trade: long META call spread / short SNAP call spread", "long META call funded by short SNAP call"],
+      suggestedStructures: ["pair of call spreads: long META call spread / short SNAP call spread", "long META call spread (defined-risk, without the SNAP leg)"],
       rationale: "The mispricing is relative, not absolute, so a pair structure isolates the monetisation-gap thesis. Funding a long META call with a short SNAP call expresses long quality / short hype while keeping net premium low.",
       rationaleCn: "定价错误是相对的而非绝对的，因此配对结构可以隔离货币化差距逻辑。用做空 SNAP call 为做多 META call 融资，表达做多质量 / 做空炒作，同时保持净权利金较低。",
     },
