@@ -4082,6 +4082,10 @@ function handleChange(event) {
 }
 
 function handleClick(event) {
+  if (event.target.matches("[data-skin]")) {
+    applySkin(event.target.dataset.skin);
+    return;
+  }
   if (event.target.matches("[data-learning-language]")) {
     state.learning.language = event.target.dataset.learningLanguage === "en" ? "en" : "cn";
     saveD1LearningProgress();
@@ -4380,6 +4384,29 @@ function handleClick(event) {
   }
 }
 
+function uiSkin() {
+  return localStorage.getItem('os_d1_skin') || 'pro';
+}
+
+function applySkin(skin) {
+  var isPro = skin !== 'easy';
+  document.body.classList.toggle('skin-easy', !isPro);
+  document.body.classList.toggle('skin-pro', isPro);
+  localStorage.setItem('os_d1_skin', isPro ? 'pro' : 'easy');
+  renderSkinToggle();
+}
+
+function renderSkinToggle() {
+  var el = document.getElementById('skinToggle');
+  if (!el) return;
+  var skin = uiSkin();
+  el.innerHTML =
+    '<div style="background:#1c202b;border:1px solid #303646;border-radius:999px;padding:4px 5px;display:flex;gap:3px;box-shadow:0 4px 20px rgba(0,0,0,0.45);">' +
+      '<button data-skin="easy" type="button" style="border:0;cursor:pointer;font-size:11px;font-weight:700;padding:5px 14px;border-radius:999px;transition:all 0.15s;background:' + (skin === 'easy' ? '#2563EB' : 'transparent') + ';color:' + (skin === 'easy' ? '#fff' : '#778195') + ';">Easy</button>' +
+      '<button data-skin="pro" type="button" style="border:0;cursor:pointer;font-size:11px;font-weight:700;padding:5px 14px;border-radius:999px;transition:all 0.15s;background:' + (skin !== 'easy' ? '#39c7e5' : 'transparent') + ';color:' + (skin !== 'easy' ? '#000' : '#778195') + ';">Pro</button>' +
+    '</div>';
+}
+
 function boot() {
   loadStateFromURL();
 
@@ -4412,6 +4439,7 @@ function boot() {
   if (state.mode === "professional" || state.mode === "interview") {
     switchTool(state.activeTool);
   }
+  applySkin(uiSkin());
 }
 
 boot();
