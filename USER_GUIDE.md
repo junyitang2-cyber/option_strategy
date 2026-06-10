@@ -58,9 +58,9 @@ Phase 5B、Phase 6 和 Phase 6B 已开放：打开 `Exotics Risk` 训练 model l
 
 页面顶部的“交易员学习中枢”用于把 commodities D1 经验转成 equity derivatives 专业表达。
 
-- `Roadmap`：查看六个月学习路径。当前开放 Month 1 Greeks、Month 2 Strategy Construction、Month 3 Volatility Framework、Month 4 Dealer Hedging / Market Making、Month 5 Exotics / Structuring 和 Month 6 Professional Sprint / Skill Dashboard。
+- `Roadmap`：查看 Sector A-E 学习路径。Sector A（Risk Mechanics）、Sector B（Trade Construction）、Sector C（Market Dynamics，合并 Vol 框架与 Dealer Desk）、Sector D（Research Bridge）、Sector E（Complex Products）和 Professional Sprint。
 - `学习模块`：按 Delta、Gamma、Vega、Theta/Rho、strategy construction、RV/IV、event vol、skew、term structure、vol surface、dealer inventory、delta hedging、gamma scalping、vega buckets、quote skewing、P&L attribution、Asian averaging、barrier monitoring、quanto、digital、autocallable 和 structured products 学习。
-- `Strategy Construction`：查看 Month 2 的策略选择对比，包括 straddle/strangle、iron condor/short strangle、collar/protective put 等。
+- `Strategy Construction`：查看 Sector B 的策略选择对比，包括 straddle/strangle、iron condor/short strangle、collar/protective put 等。
 - `客户推荐`：做 20 个 client recommendation drills，按客户目标、约束条件、候选结构、推荐结构、风险披露、Dealer 视角和专业表达逐步展开。
 - `Vol 框架`：学习 RV/IV、event vol、skew、term structure 和 surface shifts；用小计算器理解 implied move 与 breakeven RV；用 Vol trade playbook 比较 long vol、short vol、event、skew、term structure 和 surface-bucket 交易。
 - `Dealer Desk`：训练 dealer workflow，明确客户 payoff 与 dealer Greeks/inventory 的区别，并学习 delta hedge、quote adjustment、residual risk 和 P&L attribution。
@@ -68,9 +68,45 @@ Phase 5B、Phase 6 和 Phase 6B 已开放：打开 `Exotics Risk` 训练 model l
 - `Exotics Risk`：训练 Phase 5B 的 risk decomposition、issuer/dealer risk、suitability checks、错误表达纠偏和 model-limit comparison。
 - `Professional Sprint`：启动 Phase 6 topic-filtered session，展开 rubric，做 0/1/2 自评分，标记弱项，完成题目；Phase 6B 会在 Skill Dashboard 中给出 weak-topic recommendations，并可生成本地 progress report。
 - `Commodities Bridge`：对比 commodities D1 与 equity derivatives 的相同点和需要修正的直觉。
-- `Scenario Bank`：按 category、month、topic 练习场景题，可过滤 vol、skew、term-structure、event、surface、short-vol、gamma、liquidity、dealer、hedging、quote、attribution、inventory、exotics、asian、barrier、quanto、digital、autocallable、structured-product、path、suitability 和 cross-asset，可 reveal answer、标记理解、加入复习。
+- `Scenario Bank`：按 category、sector（A/B/C/D/E，中文"第 X 区"）、topic 练习 211 个场景题，可过滤 vol、skew、term-structure、event、surface、short-vol、gamma、liquidity、dealer、hedging、quote、attribution、inventory、exotics、asian、barrier、quanto、digital、autocallable、structured-product、path、suitability、cross-asset 和 research-driven，可 reveal answer、标记理解、加入复习。
+- `Research Bridge`：见下方"Research Bridge 使用说明"。
 
-模块、场景题和客户推荐演练进度保存在本机浏览器 localStorage，不会上传到服务器。
+模块、场景题、客户推荐演练和 Research Bridge 演练进度保存在本机浏览器 localStorage，不会上传到服务器。
+
+## Research Bridge 使用说明（Sector D）
+
+Research Bridge 帮助你把股票研究产出（earnings preview、sector analysis、comps、IC memo、investment thesis）转化为具体的期权策略决策。
+
+### Research Desk（研究案例卡）
+
+打开 Learning Hub，点击"Research Bridge / 研究桥接"Tab，进入 Research Desk：
+
+- 页面展示 16 张双语研究案例卡，每张卡包含研究结论、期权策略建议和风险考量。
+- 顶部过滤栏按研究类型筛选：
+  - **Earnings / 业绩前瞻**：围绕财报预期和 IV crush 的策略决策。
+  - **Sector Analysis / 行业分析**：行业轮动和宏观主题驱动的期权结构。
+  - **Comps / 可比公司**：通过可比公司估值差异选择方向和结构。
+  - **IC Memo / 首次覆盖**：首次覆盖报告初始建仓逻辑的期权化。
+  - **Thesis / 投资逻辑**：长期投资逻辑转化为期权收益结构。
+- 点击卡片展开详情，查看完整的研究-策略映射逻辑和专业表达示例。
+
+### View-to-Trade 演练
+
+Research Desk 下方为 15 个 View-to-Trade 演练：
+
+1. 阅读研究观点摘要，先自行思考应选什么期权结构及原因。
+2. 点击"**Market View**"展开市场观点确认。
+3. 依次点击"**Constraints**"（交易约束）→"**Candidates**"（候选结构）→"**Recommendation**"（推荐方案）→"**Key Risks**"（关键风险）→"**Professional Expression**"（专业表达）逐步揭示。
+4. 完成演练后点击"Mark Complete / 标记完成"，进度记录在 localStorage 中并显示于进度摘要（"Research Drills n/15 / 研究演练 n/15"）。
+
+## Easy/Pro 皮肤切换
+
+页面右下角有一个浮动胶囊按钮，包含两个选项：
+
+- **Pro（默认）**：深色 terminal 风格，适合习惯深色界面的用户。
+- **Easy**：浅色模式（白色卡片、蓝色主色调），对浅色偏好用户更友好。
+
+切换方式：点击胶囊中的"Easy"或"Pro"按钮即可立即切换，选择持久化至 localStorage（`os_d1_skin`），下次打开页面自动恢复。皮肤切换与内容难度（初级/进阶/专业）完全独立，不影响任何学习进度或内容显示。
 
 ## 三种模式
 

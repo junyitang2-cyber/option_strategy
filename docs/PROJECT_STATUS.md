@@ -51,12 +51,53 @@ Phase 6B is now implemented.
 - Playwright coverage now includes scoring, recommendation-driven session creation, report generation, and persistence.
 - Next D1 roadmap work should move to Content Coverage, Market Realism, Risk Management, Output Workflow, or Advanced Derivatives depending on priority.
 
+## 2026-06-11 Update: Sector Topology Restructure + Research Bridge + Easy/Pro Skin Toggle
+
+三项新功能已上线。
+
+### Sector A-E 拓扑重构（commits b1c5b58 / c3bce72）
+
+Learning Hub Roadmap 从六个月 Month 1-5 结构全面迁移至 Sector A-E 拓扑：
+
+- **Sector A — Risk Mechanics**：Greeks 直觉，原 Month 1 内容。
+- **Sector B — Trade Construction**：策略构建，原 Month 2 内容。
+- **Sector C — Market Dynamics**：Vol 框架与 Dealer Desk，合并原 Month 3（波动率框架）与 Month 4（dealer/market-making），85 个 vol + dealer 场景。
+- **Sector D — Research Bridge**（NEW）：把股票研究产出转化为期权决策，见下。
+- **Sector E — Complex Products**：Exotics 与结构化产品，原 Month 5 内容。
+- **Professional Sprint**：专业冲刺，独立于 A-E 之外。
+
+Scenario Bank 过滤器从 month 编号（1/2/3/4/5）更新为 Sector 按钮（A/B/C/D/E），中文标注"第 X 区"。Scenario Bank 总场景数：**211 个**（Sector A≈30、B≈65、C≈85、D≈20、E≈36，含跨 sector 共享场景）。
+
+### Research Bridge — Sector D（commits f6c5e6e / 86ffbb5 / cb8cd95 / 3de0958）
+
+Learning Hub 新增"Research Bridge / 研究桥接"独立 Tab：
+
+- **Research Desk**：16 张双语研究案例卡，可按类型过滤（earnings / sector-analysis / comps / ic-memo / thesis；中文：业绩前瞻 / 行业分析 / 可比公司 / 首次覆盖 / 投资逻辑）。
+- **View-to-Trade 演练**：15 个演练，六步逐步展开（Market View → Constraints → Candidates → Recommendation → Key Risks → Professional Expression），完成标记持久化至 localStorage，进度摘要显示"Research Drills n/15 / 研究演练 n/15"。
+- 数据文件：`data/research-bridge-content.js`（16 个研究案例 + 15 个演练）。
+- Scenario Bank Sector D 含 20 个研究驱动场景。
+
+### Easy/Pro 皮肤切换（commits 8dc8f1a / aaef21c / 8f35567）
+
+页面右下角新增浮动胶囊按钮：
+
+- **Pro（默认）**：现有深色 terminal 风格。
+- **Easy**：浅色模式（#F8FAFC 背景、白色卡片、蓝色主色调）。
+- 皮肤选择持久化至 localStorage `os_d1_skin`，与内容模式（Basic/Advanced/Professional）独立。
+- `tests/skin.spec.js` 新增 5 个皮肤切换测试。
+
+### 测试状态
+
+当前 Playwright 测试套件：**32 个测试全部通过**（新增 `tests/skin.spec.js`，新增 learning-hub 中 Sector 过滤、Research Bridge 和 Roadmap Sector A-E 验证测试）。
+
+---
+
 ## 2026-05-29 Update: D1 Learning Hub Phase 5B And Phase 6
 
 Phase 5B and Phase 6 are now implemented.
 
-- Learning Hub now contains 30 modules: existing Month 1-5 content plus 5 Month 6 Professional Sprint modules.
-- Scenario Bank remains at 191 records; Phase 6 adds 60 Professional Sprint questions, bringing total learning prompts to 251.
+- Learning Hub now contains 30 modules: existing Month 1-5 content plus 5 Month 6 Professional Sprint modules.（已重构为 Sector 拓扑，见上 2026-06-11 Update）
+- Scenario Bank remains at 191 records; Phase 6 adds 60 Professional Sprint questions, bringing total learning prompts to 251.（Scenario Bank 当前已扩至 211 个场景，见上）
 - New Exotics Risk tab renders 6 exotics risk-decomposition drills and 6 model-limit comparison cards across Asian, Barrier, Quanto, Digital, Autocallable, and Structured Product topics.
 - New Professional Sprint tab supports topic-filtered sessions, session size controls, rubric reveal, weak-topic marking, question completion, local Skill Dashboard, topic coverage, suggested next session, and weak-topic review notebook.
 - Progress continues to persist in localStorage under `os_d1_learning`.
@@ -64,10 +105,10 @@ Phase 5B and Phase 6 are now implemented.
 
 ## 2026-05-28 Update: D1 Learning Hub Phase 5
 
-Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
+Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.（已重构为 Sector 拓扑，见上 2026-06-11 Update）
 
 - Learning Hub now contains 25 modules: Month 1 Greeks, Month 2 strategy construction, Month 3 volatility framework, Month 4 dealer/market-making, and Month 5 exotics/structuring modules.
-- Scenario Bank now contains 191 scenarios: 30 Month 1 foundation records, 40 Month 2 construction records, 45 Month 3 volatility records, 40 Month 4 dealer records, and 36 Month 5 exotics/structuring records.
+- Scenario Bank now contains 191 scenarios: 30 Month 1 foundation records, 40 Month 2 construction records, 45 Month 3 volatility records, 40 Month 4 dealer records, and 36 Month 5 exotics/structuring records.（已重构为 Sector A-E 拓扑，Scenario Bank 现为 211 个场景）
 - New Strategy Construction tab renders 5 comparison cards: Straddle vs Strangle, Iron Condor vs Short Strangle, Collar vs Protective Put, Bull Call Spread vs Long Call, and Calendar Spread vs Vertical Spread.
 - New Client Recommendation tab renders 20 guided client structure drills.
 - Vol Framework tab renders 5 volatility framework cards, an RV/IV breakeven mini calculator, and a 9-card Vol trade playbook covering long vol, short vol, event, skew, term-structure, and surface-bucket setups.
@@ -94,9 +135,9 @@ Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
 
 - 静态语法：`node --check app.js`、`node --check data/professional-content.js`、`node --check data/learning-content.js`、`node --check data/phase6-content.js`。
 - 空白/补丁检查：`git diff --check`。
-- 数据完整性：30 modules、191 scenarios、60 Professional Sprint questions、20 client drills、5 strategy comparisons、5 vol framework cards、9 vol playbook cards、6 dealer workflow cards、6 P&L attribution cards、6 exotics bridge cards、6 structuring cases、6 exotics risk drills、6 model-limit cards。
-- 场景分布：Month 1 = 30、Month 2 = 40、Month 3 = 45、Month 4 = 40、Month 5 = 36。
-- 本地化与引用：191 个 Scenario Bank 场景中文 localization 完整；scenario-module links 与 strategy links 无坏引用。
+- 数据完整性：30 modules、191 scenarios、60 Professional Sprint questions、20 client drills、5 strategy comparisons、5 vol framework cards、9 vol playbook cards、6 dealer workflow cards、6 P&L attribution cards、6 exotics bridge cards、6 structuring cases、6 exotics risk drills、6 model-limit cards。（Scenario Bank 现已重构为 Sector 拓扑，扩至 211 个场景，含 Sector D Research Bridge 内容，见 2026-06-11 Update）
+- 场景分布（Phase 5 时点）：Month 1 = 30、Month 2 = 40、Month 3 = 45、Month 4 = 40、Month 5 = 36。（已重构为 Sector A-E，见上）
+- 本地化与引用：全部 Scenario Bank 场景中文 localization 完整；scenario-module links 与 strategy links 无坏引用。
 - Playwright browser regression：Learning Hub、Strategy Construction、Client Drills、Vol Framework、Dealer Desk、Exotics Bridge、Exotics Risk、Professional Sprint、Skill Dashboard、progress report export、Gamma P&L、Scenario filters、Professional tools 均正常。
 - 自动化回归：当前以本地 `npm test` 输出为准。
 
@@ -136,21 +177,24 @@ Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.
 
 ### D1-to-Derivatives Learning Hub
 
-- 六个月 roadmap，已开放 Month 1 Greeks、Month 2 Strategy Construction、Month 3 Volatility Framework、Month 4 Dealer Hedging / Market Making 和 Month 5 Exotics / Structuring。
-- Month 1 Greeks：Delta、Gamma、Vega、Theta/Rho。
-- Month 2 Strategy Construction：vertical spreads、straddles/strangles、condors/butterflies、protection structures。
-- Month 3 Volatility Framework：RV/IV、event vol、equity skew、term structure、vol surface reading。
-- Month 4 Dealer Hedging / Market Making：client flow、inventory、delta hedging、gamma scalping、vega buckets、quote skewing、P&L attribution。
-- Month 5 Exotics / Structuring：Asian averaging、barrier monitoring、quanto cross-asset risk、digital discontinuity、autocallable decomposition、structured product workflow。
+- **Sector A-E + Professional Sprint roadmap**（原六个月 Month 1-5 已重构为 Sector 拓扑，见 2026-06-11 Update）：
+  - Sector A — Risk Mechanics：Delta、Gamma、Vega、Theta/Rho。
+  - Sector B — Trade Construction：vertical spreads、straddles/strangles、condors/butterflies、protection structures。
+  - Sector C — Market Dynamics：RV/IV、event vol、equity skew、term structure、vol surface reading；client flow、inventory、delta hedging、gamma scalping、vega buckets、quote skewing、P&L attribution（合并原 Month 3 + Month 4，85 个场景）。
+  - Sector D — Research Bridge：16 张研究案例卡、15 个 View-to-Trade 演练、20 个研究驱动场景。
+  - Sector E — Complex Products：Asian averaging、barrier monitoring、quanto cross-asset risk、digital discontinuity、autocallable decomposition、structured product workflow。
+  - Professional Sprint：专业冲刺，独立于 A-E 之外。
 - Commodities Bridge：D1 commodities 经验到 equity derivatives 的迁移框架。
 - Strategy Construction：5 个策略对比卡。
 - Client Recommendation：20 个客户结构推荐演练，支持逐步展开和策略链接跳转。
 - Vol Framework：5 个 volatility 框架卡 + RV/IV breakeven 小计算器 + 9 个 Vol trade playbook 卡，并可跳转到 Vol Surface 工具。
 - Dealer Desk：6 个 dealer workflow 卡 + 6 个 P&L attribution 卡，并可跳转到 Gamma P&L 工具。
 - Exotics Bridge：6 个简化 exotic payoff cards + 6 个 structuring workflow cases，并可跳转到 Put-Call Parity 工具。
-- Scenario Bank：191 个 client/risk/P&L/market-making/strategy 场景，支持 category/month/topic 过滤。
-- 中文本地化：191 个 Scenario Bank 场景、9 个 Vol trade playbook、6 个 dealer workflow、6 个 P&L attribution、6 个 exotics bridge cards 和 6 个 structuring cases 均有中文 override，不再依赖英文 fallback。
-- 本地进度追踪：模块完成、场景完成、客户推荐演练完成、逐步展开状态、复习标记和当前学习 tab。
+- Research Bridge：16 张研究案例卡（可按 earnings / sector-analysis / comps / ic-memo / thesis 过滤）+ 15 个 View-to-Trade 演练（六步展开），数据文件 `data/research-bridge-content.js`。
+- Scenario Bank：**211 个** client/risk/P&L/market-making/strategy/research-driven 场景，支持 category/sector（A/B/C/D/E）/topic 过滤。
+- Easy/Pro 皮肤切换：右下角浮动胶囊，Pro（深色 terminal）/ Easy（浅色），持久化至 `os_d1_skin`。
+- 中文本地化：全部 Scenario Bank 场景、9 个 Vol trade playbook、6 个 dealer workflow、6 个 P&L attribution、6 个 exotics bridge cards 和 6 个 structuring cases 均有中文 override，不再依赖英文 fallback。
+- 本地进度追踪：模块完成、场景完成、客户推荐演练完成、View-to-Trade 演练完成、逐步展开状态、复习标记和当前学习 tab。
 - 已批准 Phase 1 MVP 规格：`docs/superpowers/specs/2026-05-27-d1-to-derivatives-learning-system-design.md`。
 - 已新增长期 Master Roadmap：`docs/superpowers/specs/2026-05-27-d1-to-derivatives-master-roadmap.md`。
 - 已新增 Phase 1 实施计划：`docs/superpowers/plans/2026-05-27-d1-learning-hub-phase1.md`。
@@ -196,8 +240,9 @@ npm test
 
 - 71 个策略都有基础说明和专业 Trader Memo。
 - 257 个专业问答覆盖核心内容；所有 71 个专业策略均至少有 3 个专业问答和 3 条常见错误表达。
-- 20 个客户推荐演练、45 个 Month 3 vol 场景和 40 个 Month 4 dealer 场景覆盖常见结构推荐、vol 判断、dealer flow、hedging 与 P&L attribution 场景，但仍是教育性框架，不是实际 suitability advice、交易信号或真实做市系统。
-- 36 个 Month 5 exotics/structuring 场景覆盖 Asian、Barrier、Quanto、Digital、Autocallable 和 structured product，但不构成生产级 exotic pricer、发行条款建议或真实 suitability advice。
+- 20 个客户推荐演练、Sector C 合并约 85 个 vol + dealer 场景覆盖常见结构推荐、vol 判断、dealer flow、hedging 与 P&L attribution，但仍是教育性框架，不是实际 suitability advice、交易信号或真实做市系统。
+- Sector D Research Bridge 含 16 张研究案例卡、15 个 View-to-Trade 演练和约 20 个研究驱动场景，用于训练从研究输出到期权决策的转化，但不构成实际投资建议或研究发布。
+- Sector E 约 36 个 exotics/structuring 场景覆盖 Asian、Barrier、Quanto、Digital、Autocallable 和 structured product，但不构成生产级 exotic pricer、发行条款建议或真实 suitability advice。
 - 60 个 Professional Sprint questions、6 个 Exotics Risk drills 和 6 个 model-limit cards 用于训练专业表达、自我评分和风险拆解，但不代表任何外部认证、正式考试结果或真实交易权限。
 - 仍可继续补充真实案例、专业追问、错误答案示例和策略对比表。
 
