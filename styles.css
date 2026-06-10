@@ -2110,3 +2110,5 @@ body.skin-easy .greek-item     { background: #F1F5F9; }
 body.skin-easy .margin-item    { background: #F1F5F9; }
 body.skin-easy .warning-text   { background: rgba(217,119,6,0.08); }
 body.skin-easy .error-text     { background: rgba(220,38,38,0.08); }
+
+body.skin-easy .payoff-leg-combined { stroke: #1E293B; }

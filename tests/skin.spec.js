@@ -45,3 +45,15 @@ test("clicking Pro restores dark skin and persists", async ({ page }) => {
   await page.reload();
   await expect(page.locator("body")).toHaveClass(/skin-pro/);
 });
+
+test("returning user with learning data but no skin key defaults to pro", async ({ page }) => {
+  await page.goto(URL);
+  await page.evaluate(() => {
+    localStorage.clear();
+    localStorage.setItem("os_d1_learning", JSON.stringify({ completedModules: ["m1"] }));
+  });
+  await page.reload();
+  await expect(page.locator("body")).toHaveClass(/skin-pro/);
+  const hasEasy = await page.evaluate(() => document.body.classList.contains("skin-easy"));
+  expect(hasEasy).toBe(false);
+});
