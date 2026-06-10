@@ -259,7 +259,7 @@ function defaultD1LearningProgress() {
     sprintStartedAt: null,
     generatedProgressReport: "",
     scenarioFilter: "all",
-    scenarioMonthFilter: "all",
+    scenarioSectorFilter: "all",
     scenarioTopicFilter: "all",
     language: "cn",
   };
@@ -2264,6 +2264,7 @@ const LEARNING_UI_TEXT = {
       "exotics-risk": "Exotics Risk",
       "professional-sprint": "专业冲刺",
       scenarios: "场景题库",
+      "research-bridge": "研究桥接",
     },
     progressModules: "模块",
     progressScenarios: "场景",
@@ -2272,8 +2273,8 @@ const LEARNING_UI_TEXT = {
     active: "开放",
     locked: "未开放",
     deliverables: "交付内容",
-    month: "第",
-    monthSuffix: "月",
+    sector: "第",
+    sectorSuffix: "区",
     week: "第",
     weekSuffix: "周",
     coreQuestion: "核心问题",
@@ -2355,7 +2356,7 @@ const LEARNING_UI_TEXT = {
     pnl: "P&L",
     marketMaking: "做市",
     strategy: "策略",
-    allMonths: "全部月份",
+    allSectors: "全部区域",
     allTopics: "全部主题",
     revealAnswer: "查看答案",
     understood: "已理解",
@@ -2379,6 +2380,7 @@ const LEARNING_UI_TEXT = {
       "exotics-risk": "Exotics Risk",
       "professional-sprint": "Professional Sprint",
       scenarios: "Scenario Bank",
+      "research-bridge": "Research Bridge",
     },
     progressModules: "Modules",
     progressScenarios: "Scenarios",
@@ -2388,8 +2390,8 @@ const LEARNING_UI_TEXT = {
     active: "Active",
     locked: "Locked",
     deliverables: "Deliverables",
-    month: "Month",
-    monthSuffix: "",
+    sector: "Sector",
+    sectorSuffix: "",
     week: "Week",
     weekSuffix: "",
     coreQuestion: "Core question",
@@ -2471,7 +2473,7 @@ const LEARNING_UI_TEXT = {
     pnl: "P&L",
     marketMaking: "Market-making",
     strategy: "Strategy",
-    allMonths: "All Months",
+    allSectors: "All Sectors",
     allTopics: "All Topics",
     revealAnswer: "Reveal answer",
     understood: "已理解",
@@ -2612,7 +2614,7 @@ function learningUiText(key) {
 
 function localizedLearning(kind, item, field) {
   if (learningLanguage() === "en") return item[field];
-  const key = item.id || item.month;
+  const key = item.id || item.sector;
   const localized = window.D1_LEARNING_CONTENT_ZH?.[kind]?.[key]?.[field];
   return localized ?? item[field];
 }
@@ -2637,6 +2639,7 @@ function localizedDirectList(item, field) {
 }
 
 function formatLearningPeriod(type, value) {
+  if (type === "sector" && (!value || value === "sprint")) return "Sprint";
   if (learningLanguage() === "cn") return `${learningUiText(type)} ${value} ${learningUiText(`${type}Suffix`)}`;
   return `${learningUiText(type)} ${value}`;
 }
@@ -2661,7 +2664,7 @@ function renderLearningProgressSummary() {
 }
 
 function renderLearningTabs() {
-  const validTabs = new Set(["roadmap", "modules", "bridge", "construction", "client-drills", "vol-framework", "dealer-desk", "exotics-bridge", "exotics-risk", "professional-sprint", "scenarios"]);
+  const validTabs = new Set(["roadmap", "modules", "bridge", "construction", "client-drills", "vol-framework", "dealer-desk", "exotics-bridge", "exotics-risk", "research-bridge", "professional-sprint", "scenarios"]);
   const active = validTabs.has(state.learning.activeLearningTab) ? state.learning.activeLearningTab : "roadmap";
   state.learning.activeLearningTab = active;
   const labels = LEARNING_UI_TEXT[learningLanguage()].tabs;
@@ -2676,21 +2679,33 @@ function renderLearningTabs() {
   });
 }
 
+function formatSectorBadge(sector) {
+  if (!sector || sector === "sprint") return "Sprint";
+  return `Sector ${sector}`;
+}
+
 function renderLearningRoadmap() {
   const target = document.getElementById("learningRoadmap");
   if (!target) return;
   target.innerHTML = `
     <p class="learning-copy">${escapeHtml(learningUiText("roadmapIntro"))}</p>
     <div class="roadmap-grid">
-      ${learningContent().roadmap.map((item) => `
-        <article class="roadmap-card ${item.status === "locked" ? "locked" : "active"}">
-          <p class="learning-kicker">${formatLearningPeriod("month", item.month)} · ${item.status === "active" ? learningUiText("active") : learningUiText("locked")}</p>
-          <h4 class="learning-title">${escapeHtml(localizedLearning("roadmap", item, "title"))}</h4>
-          <p class="learning-copy">${escapeHtml(localizedLearning("roadmap", item, "focus"))}</p>
+      ${learningContent().roadmap.map((item) => {
+        const note = item.note || item.noteCn ? `<p class="learning-note">${escapeHtml(learningLanguage() === "cn" ? (item.noteCn || item.note || "") : (item.note || ""))}</p>` : "";
+        const isCn = learningLanguage() === "cn";
+        const title = isCn ? (item.titleCn || item.title) : item.title;
+        const focus = isCn ? (item.focusCn || item.focus) : item.focus;
+        const deliverables = isCn ? (item.deliverablesCn || item.deliverables || []) : (item.deliverables || []);
+        return `
+        <article class="roadmap-card ${item.status === "locked" ? "locked" : "active"}" data-sector="${escapeHtml(item.sector || "")}">
+          <p class="learning-kicker">${escapeHtml(formatSectorBadge(item.sector))} · ${item.status === "active" ? learningUiText("active") : learningUiText("locked")}</p>
+          <h4 class="learning-title">${escapeHtml(title)}</h4>
+          <p class="learning-copy">${escapeHtml(focus)}</p>
+          ${note}
           <span class="learning-label">${escapeHtml(learningUiText("deliverables"))}</span>
-          <ul>${localizedLearningList("roadmap", item, "deliverables").map((deliverable) => `<li>${escapeHtml(deliverable)}</li>`).join("")}</ul>
+          <ul>${deliverables.map((d) => `<li>${escapeHtml(d)}</li>`).join("")}</ul>
         </article>
-      `).join("")}
+      `}).join("")}
     </div>
   `;
 }
@@ -2709,7 +2724,7 @@ function renderLearningModules() {
     const completeLabel = done ? learningUiText("completed") : learningUiText("markComplete");
     return `
       <article class="module-card">
-        <p class="learning-kicker">${formatLearningPeriod("month", module.month || 1)} · ${formatLearningPeriod("week", module.week)}</p>
+        <p class="learning-kicker">${formatLearningPeriod("sector", module.sector || "A")} · ${formatLearningPeriod("week", module.week)}</p>
         <h4 class="learning-title">${escapeHtml(localizedLearning("modules", module, "title"))}</h4>
         <p class="learning-copy"><strong>${escapeHtml(learningUiText("coreQuestion"))}:</strong> ${escapeHtml(localizedLearning("modules", module, "coreQuestion"))}</p>
         <span class="learning-label">${escapeHtml(learningUiText("d1Anchor"))}</span>
@@ -2837,7 +2852,7 @@ function renderLearningClientDrills() {
     return `
       <article class="client-drill-card" data-client-drill-card="${escapeHtml(drill.id)}">
         <div class="scenario-meta">
-          <span>${escapeHtml(formatLearningPeriod("month", drill.month || 2))}</span>
+          <span>${escapeHtml(formatLearningPeriod("sector", drill.sector || "B"))}</span>
           <span>${escapeHtml(drill.level || "foundation")}</span>
         </div>
         <p class="learning-kicker">${escapeHtml(learningUiText("clientDrill"))}</p>
@@ -3621,16 +3636,17 @@ function renderScenarioFilters() {
     </button>
   `).join("");
 
-  const monthIds = new Set(["all", ...content.scenarios.map((scenario) => String(scenario.month || 1))]);
-  if (!monthIds.has(state.learning.scenarioMonthFilter)) {
-    state.learning.scenarioMonthFilter = "all";
+  const sectorOrder = ["A", "B", "C", "D", "E", "sprint"];
+  const sectorIds = new Set(["all", ...content.scenarios.map((s) => s.sector || "A")]);
+  if (!sectorIds.has(state.learning.scenarioSectorFilter)) {
+    state.learning.scenarioSectorFilter = "all";
   }
   if (monthTarget) {
-    const monthFilters = ["all", ...[...monthIds].filter((id) => id !== "all").sort((a, b) => Number(a) - Number(b))];
-    monthTarget.innerHTML = monthFilters.map((id) => {
-      const label = id === "all" ? learningUiText("allMonths") : formatLearningPeriod("month", id);
+    const sectorFilters = ["all", ...sectorOrder.filter((id) => sectorIds.has(id))];
+    monthTarget.innerHTML = sectorFilters.map((id) => {
+      const label = id === "all" ? learningUiText("allSectors") : formatLearningPeriod("sector", id);
       return `
-        <button class="scenario-month-filter ${state.learning.scenarioMonthFilter === id ? "active" : ""}" type="button" data-scenario-month-filter="${id}">
+        <button class="scenario-sector-filter ${state.learning.scenarioSectorFilter === id ? "active" : ""}" type="button" data-scenario-sector-filter="${id}">
           ${label}
         </button>
       `;
@@ -3660,16 +3676,16 @@ function renderLearningScenarios() {
   const validFilters = new Set(["all", "client", "risk", "pnl", "market-making", "strategy"]);
   const filter = validFilters.has(state.learning.scenarioFilter) ? state.learning.scenarioFilter : "all";
   state.learning.scenarioFilter = filter;
-  const validMonths = new Set(["all", ...content.scenarios.map((scenario) => String(scenario.month || 1))]);
-  const monthFilter = validMonths.has(state.learning.scenarioMonthFilter) ? state.learning.scenarioMonthFilter : "all";
-  state.learning.scenarioMonthFilter = monthFilter;
+  const validSectors = new Set(["all", ...content.scenarios.map((s) => s.sector || "A")]);
+  const sectorFilter = validSectors.has(state.learning.scenarioSectorFilter) ? state.learning.scenarioSectorFilter : "all";
+  state.learning.scenarioSectorFilter = sectorFilter;
   const validTopics = new Set((content.scenarioTopicFilters || [["all"]]).map(([id]) => id));
   const topicFilter = validTopics.has(state.learning.scenarioTopicFilter) ? state.learning.scenarioTopicFilter : "all";
   state.learning.scenarioTopicFilter = topicFilter;
   const scenarios = content.scenarios.filter((scenario) => {
     const scenarioTopics = scenario.topics || scenario.tags || [];
     return (filter === "all" || scenario.category === filter)
-      && (monthFilter === "all" || String(scenario.month || 1) === monthFilter)
+      && (sectorFilter === "all" || (scenario.sector || "A") === sectorFilter)
       && (topicFilter === "all" || scenarioTopics.includes(topicFilter));
   });
   const cards = scenarios.map((scenario) => {
@@ -3679,7 +3695,7 @@ function renderLearningScenarios() {
     return `
       <article class="scenario-card" data-scenario-card="${escapeHtml(scenario.id)}">
         <div class="scenario-meta">
-          <span>${escapeHtml(formatLearningPeriod("month", scenario.month || 1))}</span>
+          <span>${escapeHtml(formatLearningPeriod("sector", scenario.sector || "A"))}</span>
           <span>${escapeHtml(scenario.category)}</span>
           <span>${escapeHtml(scenario.level)}</span>
           <span>${tags.map(escapeHtml).join(" · ")}</span>
@@ -4063,8 +4079,8 @@ function handleClick(event) {
     renderLearningHub();
     return;
   }
-  if (event.target.matches(".scenario-month-filter")) {
-    state.learning.scenarioMonthFilter = event.target.dataset.scenarioMonthFilter;
+  if (event.target.matches(".scenario-sector-filter")) {
+    state.learning.scenarioSectorFilter = event.target.dataset.scenarioSectorFilter;
     saveD1LearningProgress();
     renderLearningHub();
     return;

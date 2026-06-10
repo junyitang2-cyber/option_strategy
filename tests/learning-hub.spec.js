@@ -10,11 +10,11 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await expect(page.locator("#learning-roadmap-tab")).toContainText("路线图");
 
   await expect(page.locator("#learningRoadmap .roadmap-card")).toHaveCount(6);
-  await expect(page.locator("#learningRoadmap")).toContainText("Greeks 直觉：从 D1 exposure 出发");
-  await expect(page.locator("#learningRoadmap")).toContainText("策略构建");
-  await expect(page.locator("#learningRoadmap")).toContainText("Volatility trading 框架");
-  await expect(page.locator("#learningRoadmap")).toContainText("动态对冲与做市");
-  await expect(page.locator("#learningRoadmap")).toContainText("Exotics 与 structuring");
+  await expect(page.locator("#learningRoadmap")).toContainText("Risk Mechanics：Greeks 直觉");
+  await expect(page.locator("#learningRoadmap")).toContainText("Trade Construction：策略构建");
+  await expect(page.locator("#learningRoadmap")).toContainText("Market Dynamics：Vol 框架与 Dealer Desk");
+  await expect(page.locator("#learningRoadmap")).toContainText("Research Bridge：研究驱动的期权决策");
+  await expect(page.locator("#learningRoadmap")).toContainText("Complex Products：Exotics 与结构化产品");
   await expect(page.locator("#learningRoadmap .roadmap-card").nth(4)).toContainText("Exotics Bridge 面板");
   await expect(page.locator("#learningRoadmap .roadmap-card").nth(5)).toContainText("60 个专业冲刺题");
 
@@ -122,7 +122,7 @@ test("D1 phase 2A strategy construction content renders and filters", async ({ p
   await page.locator("#learning-scenarios-tab").click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(191);
 
-  await page.locator('[data-scenario-month-filter="2"]').click();
+  await page.locator('[data-scenario-sector-filter="B"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(40);
   await expect(page.locator("#learningScenarios")).toContainText("Bull call spread 替代 long call");
 
@@ -156,8 +156,8 @@ test("D1 phase 3 volatility framework renders calculator, playbook, and filters"
   await expect(page.locator("#volSurfaceChart svg")).toBeVisible();
 
   await page.locator("#learning-scenarios-tab").click();
-  await page.locator('[data-scenario-month-filter="3"]').click();
-  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(45);
+  await page.locator('[data-scenario-sector-filter="C"]').click();
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(85);
   await page.locator('[data-scenario-topic-filter="vol"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(27);
   await expect(page.locator("#learningScenarios")).toContainText("高 IV 但有真实 catalyst");
@@ -185,8 +185,8 @@ test("D1 phase 4 dealer desk renders workflow, attribution, and gamma controls",
   await expect(page.locator("#gammaPnlResults")).toContainText("Rehedge rule");
 
   await page.locator("#learning-scenarios-tab").click();
-  await page.locator('[data-scenario-month-filter="4"]').click();
-  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(40);
+  await page.locator('[data-scenario-sector-filter="C"]').click();
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(85);
   await page.locator('[data-scenario-topic-filter="dealer"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(40);
   await expect(page.locator("#learningScenarios")).toContainText("客户买 calls 时 dealer 的 exposure");
@@ -213,7 +213,7 @@ test("D1 phase 5 exotics bridge renders payoff sketches, structuring cases, and 
   await expect(page.locator("#parity-tab")).toHaveClass(/active/);
 
   await page.locator("#learning-scenarios-tab").click();
-  await page.locator('[data-scenario-month-filter="5"]').click();
+  await page.locator('[data-scenario-sector-filter="E"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(36);
   await page.locator('[data-scenario-topic-filter="exotics"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(36);
@@ -376,4 +376,46 @@ test("D1 learning hub recovers from invalid saved scenario filter", async ({ pag
   await expect(page.locator("#learning-scenarios-tab")).toHaveClass(/active/);
   await expect(page.locator('[data-scenario-filter="all"]')).toHaveClass(/active/);
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(191);
+});
+
+test("scenario bank uses sector filters A B C E not month numbers", async ({ page }) => {
+  await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
+
+  await page.locator("#learning-scenarios-tab").click();
+
+  // Sector filter buttons must exist
+  await expect(page.locator('[data-scenario-sector-filter="A"]')).toBeVisible();
+  await expect(page.locator('[data-scenario-sector-filter="B"]')).toBeVisible();
+  await expect(page.locator('[data-scenario-sector-filter="C"]')).toBeVisible();
+  await expect(page.locator('[data-scenario-sector-filter="E"]')).toBeVisible();
+
+  // Sector C combines old Month 3 (45) + Month 4 (40) = 85 scenarios
+  await page.locator('[data-scenario-sector-filter="C"]').click();
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(85);
+
+  // Sector B = old Month 2 = 40 scenarios
+  await page.locator('[data-scenario-sector-filter="B"]').click();
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(40);
+
+  // No old month-number filter buttons
+  await expect(page.locator('[data-scenario-month-filter="3"]')).toHaveCount(0);
+});
+
+test("roadmap shows Sector A-E cards with correct names", async ({ page }) => {
+  await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
+
+  // Switch to EN so English sector labels are visible
+  await page.locator("#langEn").click();
+
+  await expect(page.locator("#learningRoadmap .roadmap-card")).toHaveCount(6);
+  await expect(page.locator("#learningRoadmap")).toContainText("Sector A");
+  await expect(page.locator("#learningRoadmap")).toContainText("Risk Mechanics");
+  await expect(page.locator("#learningRoadmap")).toContainText("Sector C");
+  await expect(page.locator("#learningRoadmap")).toContainText("Market Dynamics");
+  await expect(page.locator("#learningRoadmap")).toContainText("Combines Vol Framework");
+  await expect(page.locator("#learningRoadmap")).toContainText("Sector D");
+  await expect(page.locator("#learningRoadmap")).toContainText("Research Bridge");
+  // no Month labels
+  await expect(page.locator("#learningRoadmap")).not.toContainText("Month 1");
+  await expect(page.locator("#learningRoadmap")).not.toContainText("Month 3");
 });

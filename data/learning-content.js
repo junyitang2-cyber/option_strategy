@@ -1,46 +1,66 @@
 window.D1_LEARNING_CONTENT = {
   roadmap: [
     {
-      month: 1,
-      title: "Greeks intuition from D1 exposure",
+      sector: "A",
+      title: "Risk Mechanics",
+      titleCn: "Risk Mechanics：Greeks 直觉",
       status: "active",
       focus: "Translate linear commodities exposure into delta, gamma, vega, theta, and carry intuition.",
+      focusCn: "把线性 commodities 敞口转化为 delta、gamma、vega、theta 和 carry 直觉。",
       deliverables: ["4 Greeks modules", "Commodities bridge", "30 foundation scenarios"],
+      deliverablesCn: ["4 个 Greeks 模块", "Commodities 桥接", "30 个基础场景"],
     },
     {
-      month: 2,
-      title: "Strategy construction",
+      sector: "B",
+      title: "Trade Construction",
+      titleCn: "Trade Construction：策略构建",
       status: "locked",
       focus: "Spreads, straddles, strangles, butterflies, condors, collars, and client suitability.",
-      deliverables: ["Strategy comparison matrix", "Client structure recommendations"],
+      focusCn: "Spreads、straddles、strangles、butterflies、condors、collars 与客户适配。",
+      deliverables: ["Strategy comparison matrix", "20 client structure recommendations"],
+      deliverablesCn: ["策略对比矩阵", "20 个客户结构推荐演练"],
     },
     {
-      month: 3,
-      title: "Volatility trading framework",
+      sector: "C",
+      title: "Market Dynamics",
+      titleCn: "Market Dynamics：Vol 框架与 Dealer Desk",
       status: "locked",
-      focus: "RV vs IV, skew, term structure, event vol, and vol risk premium.",
-      deliverables: ["Vol trade checklist", "Skew and term-structure scenarios"],
+      focus: "RV vs IV, skew, term structure, event vol, delta hedging, gamma scalping, inventory, and P&L attribution. Combines Vol Framework and Dealer/Market Making.",
+      focusCn: "RV vs IV、skew、term structure、event vol、delta hedging、gamma scalping、inventory 与 P&L attribution。合并 Vol Framework 和 Dealer Desk。",
+      deliverables: ["Vol trade checklist", "Dealer workflow drills", "85 vol + dealer scenarios"],
+      deliverablesCn: ["Vol trade 检查清单", "Dealer workflow 演练", "85 个 vol + dealer 场景"],
+      note: "Combines Vol Framework & Dealer/Market Making",
+      noteCn: "合并 Vol Framework 与 Dealer/Market Making",
     },
     {
-      month: 4,
-      title: "Dynamic hedging and market making",
+      sector: "D",
+      title: "Research Bridge",
+      titleCn: "Research Bridge：研究驱动的期权决策",
       status: "locked",
-      focus: "Delta hedging, gamma scalping, inventory, bid-ask, and P&L attribution.",
-      deliverables: ["Dealer workflow drills", "Gamma P&L case studies"],
+      focus: "Translate equity research outputs (earnings previews, sector analysis, comps, IC memos, investment theses) into options strategy decisions.",
+      focusCn: "把股票研究产出（earnings preview、sector analysis、comps、IC memo、investment thesis）转化为期权策略决策。",
+      deliverables: ["16 research case cards", "15 view-to-trade drills", "20+ research-driven scenarios"],
+      deliverablesCn: ["16 张研究案例卡", "15 个 View-to-Trade 演练", "20+ 个研究驱动场景"],
     },
     {
-      month: 5,
-      title: "Exotics and structuring",
+      sector: "E",
+      title: "Complex Products",
+      titleCn: "Complex Products：Exotics 与结构化产品",
       status: "locked",
-      focus: "Asian, barrier, quanto, autocallable, and client-driven payoff design.",
-      deliverables: ["Exotics bridge", "Structured product case studies"],
+      focus: "Asian, barrier, quanto, digital, autocallable, and client-driven payoff design.",
+      focusCn: "Asian、barrier、quanto、digital、autocallable 与客户驱动的收益结构设计。",
+      deliverables: ["Exotics bridge", "36 exotics scenarios"],
+      deliverablesCn: ["Exotics Bridge 面板", "36 个 exotics 场景"],
     },
     {
-      month: 6,
-      title: "Portfolio risk and professional sprint",
+      sector: "sprint",
+      title: "Professional Sprint",
+      titleCn: "专业冲刺",
       status: "locked",
       focus: "Portfolio Greeks limits, stress testing, scenario drills, and trade idea articulation.",
-      deliverables: ["Scenario drill pack", "Skill checklist"],
+      focusCn: "Portfolio Greeks limits、压力测试、场景演练和交易想法表达。",
+      deliverables: ["60 sprint questions", "Skill checklist"],
+      deliverablesCn: ["60 个专业冲刺题", "技能检查清单"],
     },
   ],
   modules: [
@@ -516,13 +536,13 @@ window.D1_LEARNING_CONTENT = {
 window.D1_LEARNING_CONTENT.roadmap[1].status = "active";
 
 window.D1_LEARNING_CONTENT.modules.forEach((module) => {
-  module.month = 1;
+  module.sector = "A";
 });
 
 window.D1_LEARNING_CONTENT.modules.push(
   {
     id: "vertical-spreads",
-    month: 2,
+    sector: "B",
     week: 5,
     title: "Vertical spreads: defined-risk directional expression",
     coreQuestion: "When should a trader choose a vertical spread instead of outright long or short optionality?",
@@ -535,7 +555,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "straddles-strangles",
-    month: 2,
+    sector: "B",
     week: 6,
     title: "Straddles and strangles: movement, premium, and breakevens",
     coreQuestion: "How do you choose between paying for movement and selling expensive implied volatility?",
@@ -548,7 +568,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "condors-butterflies",
-    month: 2,
+    sector: "B",
     week: 7,
     title: "Condors and butterflies: payoff shaping for range views",
     coreQuestion: "How do condors and butterflies convert a range view into defined risk and defined reward?",
@@ -561,7 +581,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "protection-structures",
-    month: 2,
+    sector: "B",
     week: 8,
     title: "Protection structures: collars, protective puts, seagulls, and fences",
     coreQuestion: "How do you turn a client hedge objective into a structure with explicit trade-offs?",
@@ -1091,7 +1111,7 @@ window.D1_LEARNING_CONTENT.strategyComparisons = [
 window.D1_LEARNING_CONTENT.clientDrills = [
   {
     id: "protect-concentrated-stock",
-    month: 2,
+    sector: "B",
     level: "foundation",
     title: "Concentrated stock needs downside protection",
     objective: "Client owns a large single-name stock position and wants three-month downside protection without fully exiting.",
@@ -1107,7 +1127,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "bullish-target-budget",
-    month: 2,
+    sector: "B",
     level: "foundation",
     title: "Bullish view with a target and premium budget",
     objective: "Client expects a stock to rise toward a known target but wants lower premium than a long call.",
@@ -1123,7 +1143,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "income-defined-risk",
-    month: 2,
+    sector: "B",
     level: "foundation",
     title: "Income objective with defined risk",
     objective: "Client wants to collect premium from a range-bound view but cannot take unlimited tail risk.",
@@ -1139,7 +1159,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "event-move-uncertain",
-    month: 2,
+    sector: "B",
     level: "intermediate",
     title: "Event move with uncertain direction",
     objective: "Client expects a large earnings move but is unsure about direction.",
@@ -1155,7 +1175,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "downside-budget-put-spread",
-    month: 2,
+    sector: "B",
     level: "foundation",
     title: "Downside hedge with limited budget",
     objective: "Client wants downside protection but the outright protective put is too expensive.",
@@ -1171,7 +1191,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "zero-cost-hedge",
-    month: 2,
+    sector: "B",
     level: "foundation",
     title: "Near-zero upfront hedge request",
     objective: "Client asks for downside protection with little or no upfront premium.",
@@ -1187,7 +1207,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "range-income-no-tail",
-    month: 2,
+    sector: "B",
     level: "foundation",
     title: "Range income without open-ended tail",
     objective: "Client believes the stock will stay in a range and wants premium income with capped downside.",
@@ -1203,7 +1223,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "employee-stock-lockup",
-    month: 2,
+    sector: "B",
     level: "intermediate",
     title: "Employee stock with trading restrictions",
     objective: "Client has concentrated employer stock but faces trading-window and policy restrictions.",
@@ -1219,7 +1239,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "producer-floor",
-    month: 2,
+    sector: "B",
     level: "intermediate",
     title: "Commodity producer analogy for equity downside floor",
     objective: "Translate a producer floor hedge into an equity holder's downside protection problem.",
@@ -1235,7 +1255,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "consumer-cap",
-    month: 2,
+    sector: "B",
     level: "intermediate",
     title: "Consumer cap analogy for equity upside participation",
     objective: "Translate a commodity consumer cap into a client who wants upside exposure with limited premium.",
@@ -1251,7 +1271,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "post-earnings-iv-crush",
-    month: 2,
+    sector: "B",
     level: "intermediate",
     title: "Post-event IV crush concern",
     objective: "Client wants to buy options before earnings but worries that IV crush will dominate the trade.",
@@ -1267,7 +1287,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "high-dividend-covered-call",
-    month: 2,
+    sector: "B",
     level: "foundation",
     title: "High-dividend stock and covered call income",
     objective: "Client owns a dividend stock and wants to enhance income by selling calls.",
@@ -1283,7 +1303,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "bearish-limited-loss",
-    month: 2,
+    sector: "B",
     level: "foundation",
     title: "Bearish view with limited loss",
     objective: "Client is bearish but does not want unlimited loss from short stock.",
@@ -1299,7 +1319,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "timing-view-calendar",
-    month: 2,
+    sector: "B",
     level: "intermediate",
     title: "Timing view versus directional target",
     objective: "Client thinks the move will happen after the near expiry but wants to avoid overpaying for long-dated optionality.",
@@ -1315,7 +1335,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "vol-rich-short-premium",
-    month: 2,
+    sector: "B",
     level: "intermediate",
     title: "Rich implied vol but suitability limits",
     objective: "Client sees high IV and wants to sell premium but has limited ability to absorb losses.",
@@ -1331,7 +1351,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "acquisition-gap-risk",
-    month: 2,
+    sector: "B",
     level: "advanced",
     title: "Takeover rumor and gap risk",
     objective: "Client wants to sell calls against stock after takeover rumors to harvest high premium.",
@@ -1347,7 +1367,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "tax-aware-collar",
-    month: 2,
+    sector: "B",
     level: "advanced",
     title: "Tax-aware protection request",
     objective: "Client wants to protect appreciated stock but does not want to trigger an unwanted sale.",
@@ -1363,7 +1383,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "protective-put-vs-stop",
-    month: 2,
+    sector: "B",
     level: "foundation",
     title: "Protective put versus stop loss",
     objective: "Client asks why they should pay premium for a put instead of using a stop loss.",
@@ -1379,7 +1399,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "skew-rich-risk-reversal",
-    month: 2,
+    sector: "B",
     level: "intermediate",
     title: "Skew-rich risk reversal discussion",
     objective: "Client wants upside participation and asks whether selling puts can finance calls.",
@@ -1395,7 +1415,7 @@ window.D1_LEARNING_CONTENT.clientDrills = [
   },
   {
     id: "portfolio-beta-overlay",
-    month: 2,
+    sector: "B",
     level: "advanced",
     title: "Portfolio beta overlay hedge",
     objective: "Client has a diversified equity portfolio and wants temporary market downside protection.",
@@ -1423,14 +1443,14 @@ window.D1_LEARNING_CONTENT.scenarioTopicFilters = [
 ];
 
 window.D1_LEARNING_CONTENT.scenarios.forEach((scenario) => {
-  scenario.month = 1;
+  scenario.sector = "A";
   scenario.topics = scenario.topics || scenario.tags;
 });
 
 window.D1_LEARNING_CONTENT.scenarios.push(
   {
     id: "client-bull-call-vs-call",
-    month: 2,
+    sector: "B",
     category: "client",
     level: "foundation",
     title: "Bull call spread instead of long call",
@@ -1444,7 +1464,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-bear-put-budget",
-    month: 2,
+    sector: "B",
     category: "client",
     level: "foundation",
     title: "Bear put spread for budgeted downside view",
@@ -1458,7 +1478,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-income-credit-spread",
-    month: 2,
+    sector: "B",
     category: "client",
     level: "foundation",
     title: "Credit spread for defined-risk income",
@@ -1472,7 +1492,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-call-spread-overwrite",
-    month: 2,
+    sector: "B",
     category: "client",
     level: "intermediate",
     title: "Covered stock with capped upside",
@@ -1486,7 +1506,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-range-income-defined",
-    month: 2,
+    sector: "B",
     category: "client",
     level: "foundation",
     title: "Range income with defined risk",
@@ -1500,7 +1520,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-precision-butterfly",
-    month: 2,
+    sector: "B",
     category: "client",
     level: "intermediate",
     title: "Butterfly for a price target",
@@ -1514,7 +1534,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-straddle-vs-strangle",
-    month: 2,
+    sector: "B",
     category: "client",
     level: "foundation",
     title: "Choosing straddle or strangle",
@@ -1528,7 +1548,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-short-vol-defined",
-    month: 2,
+    sector: "B",
     category: "client",
     level: "intermediate",
     title: "Short volatility with guardrails",
@@ -1542,7 +1562,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-collar-vs-protective-put",
-    month: 2,
+    sector: "B",
     category: "client",
     level: "foundation",
     title: "Collar versus protective put",
@@ -1556,7 +1576,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-zero-cost-fence",
-    month: 2,
+    sector: "B",
     category: "client",
     level: "intermediate",
     title: "Zero-cost fence trade-off",
@@ -1570,7 +1590,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-commodity-consumer-call-spread",
-    month: 2,
+    sector: "B",
     category: "client",
     level: "intermediate",
     title: "Commodity consumer analogy to call spread",
@@ -1584,7 +1604,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-producer-put-spread",
-    month: 2,
+    sector: "B",
     category: "client",
     level: "intermediate",
     title: "Producer hedge with put spread analogy",
@@ -1598,7 +1618,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-select-expiry",
-    month: 2,
+    sector: "B",
     category: "client",
     level: "foundation",
     title: "Selecting expiry for a client structure",
@@ -1612,7 +1632,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-select-strikes",
-    month: 2,
+    sector: "B",
     category: "client",
     level: "foundation",
     title: "Selecting strikes from objective",
@@ -1626,7 +1646,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-explain-max-loss",
-    month: 2,
+    sector: "B",
     category: "client",
     level: "foundation",
     title: "Explain max loss clearly",
@@ -1640,7 +1660,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-bull-call-vs-long-call",
-    month: 2,
+    sector: "B",
     category: "strategy",
     level: "foundation",
     title: "Bull call spread vs long call",
@@ -1654,7 +1674,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-bear-put-vs-short-stock",
-    month: 2,
+    sector: "B",
     category: "strategy",
     level: "foundation",
     title: "Bear put spread vs short stock",
@@ -1668,7 +1688,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-straddle-vs-strangle",
-    month: 2,
+    sector: "B",
     category: "strategy",
     level: "foundation",
     title: "Straddle vs strangle",
@@ -1682,7 +1702,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-short-straddle-vs-short-strangle",
-    month: 2,
+    sector: "B",
     category: "strategy",
     level: "intermediate",
     title: "Short straddle vs short strangle",
@@ -1696,7 +1716,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-iron-condor-vs-short-strangle",
-    month: 2,
+    sector: "B",
     category: "strategy",
     level: "foundation",
     title: "Iron condor vs short strangle",
@@ -1710,7 +1730,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-iron-condor-vs-iron-butterfly",
-    month: 2,
+    sector: "B",
     category: "strategy",
     level: "intermediate",
     title: "Iron condor vs iron butterfly",
@@ -1724,7 +1744,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-collar-vs-protective-put",
-    month: 2,
+    sector: "B",
     category: "strategy",
     level: "foundation",
     title: "Collar vs protective put",
@@ -1738,7 +1758,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-calendar-vs-vertical",
-    month: 2,
+    sector: "B",
     category: "strategy",
     level: "intermediate",
     title: "Calendar spread vs vertical spread",
@@ -1752,7 +1772,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-risk-reversal-vs-collar",
-    month: 2,
+    sector: "B",
     category: "strategy",
     level: "intermediate",
     title: "Risk reversal vs collar",
@@ -1766,7 +1786,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-butterfly-vs-vertical",
-    month: 2,
+    sector: "B",
     category: "strategy",
     level: "intermediate",
     title: "Butterfly vs vertical spread",
@@ -1780,7 +1800,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-short-strike-tested",
-    month: 2,
+    sector: "B",
     category: "risk",
     level: "foundation",
     title: "Short strike gets tested",
@@ -1794,7 +1814,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-credit-spread-gap",
-    month: 2,
+    sector: "B",
     category: "risk",
     level: "foundation",
     title: "Credit spread gaps through both strikes",
@@ -1808,7 +1828,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-short-strangle-tail",
-    month: 2,
+    sector: "B",
     category: "risk",
     level: "foundation",
     title: "Short strangle tail risk",
@@ -1822,7 +1842,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-long-straddle-decay",
-    month: 2,
+    sector: "B",
     category: "risk",
     level: "foundation",
     title: "Long straddle decay before event",
@@ -1836,7 +1856,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-condor-breach",
-    month: 2,
+    sector: "B",
     category: "risk",
     level: "foundation",
     title: "Iron condor breach",
@@ -1850,7 +1870,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-wing-liquidity",
-    month: 2,
+    sector: "B",
     category: "risk",
     level: "intermediate",
     title: "Wing liquidity in defined-risk structures",
@@ -1864,7 +1884,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-sold-call-cap",
-    month: 2,
+    sector: "B",
     category: "risk",
     level: "foundation",
     title: "Sold call cap in collar",
@@ -1878,7 +1898,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-protective-put-expiry",
-    month: 2,
+    sector: "B",
     category: "risk",
     level: "foundation",
     title: "Protective put approaching expiry",
@@ -1892,7 +1912,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-early-assignment-spread",
-    month: 2,
+    sector: "B",
     category: "risk",
     level: "intermediate",
     title: "Early assignment in a spread",
@@ -1906,7 +1926,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-sizing-defined-risk",
-    month: 2,
+    sector: "B",
     category: "risk",
     level: "foundation",
     title: "Sizing defined-risk trades",
@@ -1920,7 +1940,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "trap-spread-is-not-free",
-    month: 2,
+    sector: "B",
     category: "strategy",
     level: "foundation",
     title: "Decision trap: lower premium is not free",
@@ -1934,7 +1954,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "trap-defined-risk-safe",
-    month: 2,
+    sector: "B",
     category: "strategy",
     level: "foundation",
     title: "Decision trap: defined risk is not safe",
@@ -1948,7 +1968,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "trap-short-vol-income",
-    month: 2,
+    sector: "B",
     category: "strategy",
     level: "intermediate",
     title: "Decision trap: short vol is not yield",
@@ -1962,7 +1982,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "trap-zero-cost-is-not-free",
-    month: 2,
+    sector: "B",
     category: "strategy",
     level: "foundation",
     title: "Decision trap: zero-cost is not free",
@@ -1976,7 +1996,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "trap-max-profit-probability",
-    month: 2,
+    sector: "B",
     category: "strategy",
     level: "intermediate",
     title: "Decision trap: max profit is not expected profit",
@@ -1996,7 +2016,7 @@ window.D1_LEARNING_CONTENT.roadmap[2].status = "active";
 window.D1_LEARNING_CONTENT.modules.push(
   {
     id: "rv-iv-framework",
-    month: 3,
+    sector: "C",
     week: 9,
     title: "RV vs IV: volatility as a tradable risk factor",
     coreQuestion: "When is a volatility trade more than a direction-neutral option position?",
@@ -2009,7 +2029,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "event-vol-crush",
-    month: 3,
+    sector: "C",
     week: 10,
     title: "Event vol: expected move, jump risk, and IV crush",
     coreQuestion: "How do you judge an event-vol trade when the move direction is uncertain?",
@@ -2022,7 +2042,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "equity-skew-framework",
-    month: 3,
+    sector: "C",
     week: 11,
     title: "Skew: protection demand and regime-dependent supply risk",
     coreQuestion: "What does skew reveal about the risk the market is paying to hedge?",
@@ -2035,7 +2055,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "term-structure-framework",
-    month: 3,
+    sector: "C",
     week: 12,
     title: "Term structure: calendars, diagonals, and timing risk",
     coreQuestion: "When is the edge about expiry-by-expiry vol rather than direction?",
@@ -2048,7 +2068,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "vol-surface-reading",
-    month: 3,
+    sector: "C",
     week: 13,
     title: "Vol surface reading: strike, expiry, smile, and shifts",
     coreQuestion: "How do you read a vol surface before choosing the structure?",
@@ -2217,7 +2237,7 @@ window.D1_LEARNING_CONTENT_ZH.volFramework = {
 window.D1_LEARNING_CONTENT.scenarios.push(
   {
     id: "vol-rv-iv-rich-but-event",
-    month: 3,
+    sector: "C",
     category: "strategy",
     level: "intermediate",
     title: "High IV before a real catalyst",
@@ -2231,7 +2251,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-long-gamma-breakeven",
-    month: 3,
+    sector: "C",
     category: "pnl",
     level: "foundation",
     title: "Long gamma breakeven realized vol",
@@ -2245,7 +2265,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-risk-premium-not-free",
-    month: 3,
+    sector: "C",
     category: "risk",
     level: "foundation",
     title: "Vol risk premium is not free yield",
@@ -2259,7 +2279,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-earnings-expected-move",
-    month: 3,
+    sector: "C",
     category: "client",
     level: "foundation",
     title: "Earnings expected move",
@@ -2273,7 +2293,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-event-direction-vs-vol",
-    month: 3,
+    sector: "C",
     category: "client",
     level: "intermediate",
     title: "Directional event view or vol view",
@@ -2287,7 +2307,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-calendar-event-term",
-    month: 3,
+    sector: "C",
     category: "strategy",
     level: "intermediate",
     title: "Calendar around event term structure",
@@ -2301,7 +2321,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-put-skew-protection",
-    month: 3,
+    sector: "C",
     category: "client",
     level: "foundation",
     title: "Put skew and protection cost",
@@ -2315,7 +2335,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-risk-reversal-skew",
-    month: 3,
+    sector: "C",
     category: "strategy",
     level: "intermediate",
     title: "Risk reversal and skew direction",
@@ -2329,7 +2349,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-skew-shift-pnl",
-    month: 3,
+    sector: "C",
     category: "pnl",
     level: "intermediate",
     title: "Skew shift without ATM IV move",
@@ -2343,7 +2363,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-term-inversion",
-    month: 3,
+    sector: "C",
     category: "risk",
     level: "intermediate",
     title: "Term structure inversion",
@@ -2357,7 +2377,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-calendar-not-theta",
-    month: 3,
+    sector: "C",
     category: "strategy",
     level: "foundation",
     title: "Calendar is not just theta",
@@ -2371,7 +2391,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-diagonal-direction-timing",
-    month: 3,
+    sector: "C",
     category: "client",
     level: "intermediate",
     title: "Diagonal for direction plus timing",
@@ -2385,7 +2405,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-surface-atm-vs-skew",
-    month: 3,
+    sector: "C",
     category: "pnl",
     level: "intermediate",
     title: "ATM IV versus skew exposure",
@@ -2399,7 +2419,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-false-arb-wide-market",
-    month: 3,
+    sector: "C",
     category: "risk",
     level: "foundation",
     title: "False vol relative value from wide markets",
@@ -2413,7 +2433,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-surface-structure-choice",
-    month: 3,
+    sector: "C",
     category: "client",
     level: "advanced",
     title: "Choose structure from surface view",
@@ -2427,7 +2447,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-commodity-call-skew",
-    month: 3,
+    sector: "C",
     category: "market-making",
     level: "intermediate",
     title: "Commodity call skew intuition",
@@ -2441,7 +2461,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-dealer-surface-buckets",
-    month: 3,
+    sector: "C",
     category: "market-making",
     level: "advanced",
     title: "Dealer surface risk buckets",
@@ -2585,7 +2605,7 @@ window.D1_LEARNING_CONTENT_ZH.roadmap[4].deliverables = ["Dealer workflow 面板
 window.D1_LEARNING_CONTENT.modules.push(
   {
     id: "dealer-flow-inventory",
-    month: 4,
+    sector: "C",
     week: 14,
     title: "Client flow and dealer inventory",
     coreQuestion: "When a client trades an option, what risk does the dealer actually receive?",
@@ -2598,7 +2618,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "delta-hedging-triggers",
-    month: 4,
+    sector: "C",
     week: 15,
     title: "Delta hedging and rehedging triggers",
     coreQuestion: "When should a dealer hedge delta, and when is the hedge itself the risk?",
@@ -2611,7 +2631,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "gamma-scalping-costs",
-    month: 4,
+    sector: "C",
     week: 16,
     title: "Gamma scalping with transaction costs",
     coreQuestion: "How do realized path, hedge frequency, and costs explain long-gamma or short-gamma P&L?",
@@ -2624,7 +2644,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "vega-bucket-hedging",
-    month: 4,
+    sector: "C",
     week: 17,
     title: "Vega hedging across strike and expiry",
     coreQuestion: "Why is total vega not enough to manage an options book?",
@@ -2637,7 +2657,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "quote-skewing-inventory",
-    month: 4,
+    sector: "C",
     week: 18,
     title: "Bid/ask compensation and quote skewing",
     coreQuestion: "How does a dealer quote when inventory, liquidity, and risk limits matter?",
@@ -2650,7 +2670,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "pnl-attribution-desk",
-    month: 4,
+    sector: "C",
     week: 19,
     title: "P&L attribution: delta, gamma, vega, theta, carry, residual",
     coreQuestion: "How do you explain why an options book made or lost money?",
@@ -2961,7 +2981,7 @@ window.D1_LEARNING_CONTENT_ZH.scenarioTopicFilters.push(
 const phase4Scenarios = [
   {
     id: "dealer-client-buys-calls-exposure",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "foundation",
     title: "Dealer exposure when client buys calls",
@@ -2982,7 +3002,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-client-buys-puts-exposure",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "foundation",
     title: "Dealer exposure when client buys puts",
@@ -3003,7 +3023,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-client-sells-calls-to-dealer",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "foundation",
     title: "Client sells calls to dealer",
@@ -3024,7 +3044,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-short-gamma-rally-hedge",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "foundation",
     title: "Short gamma hedge during rally",
@@ -3045,7 +3065,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-short-gamma-selloff-hedge",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "foundation",
     title: "Short gamma hedge during selloff",
@@ -3066,7 +3086,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-inventory-long-calls-quote",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "intermediate",
     title: "Inventory long calls affects quote",
@@ -3087,7 +3107,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-inventory-short-puts-skew",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "intermediate",
     title: "Inventory short puts affects skew quote",
@@ -3108,7 +3128,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-wide-market-near-expiry",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "foundation",
     title: "Wide market near expiry",
@@ -3129,7 +3149,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-event-flow-quote-width",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "intermediate",
     title: "Event flow and quote width",
@@ -3150,7 +3170,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-client-size-limit",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "intermediate",
     title: "Client size exceeds desk limit",
@@ -3171,7 +3191,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-crossing-bid-ask-explain",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "foundation",
     title: "Explain bid-ask to client",
@@ -3192,7 +3212,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-hedge-liquidity-gap",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "advanced",
     title: "Hedge liquidity disappears",
@@ -3213,7 +3233,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-vega-bucket-calendar-flow",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "intermediate",
     title: "Calendar flow and vega bucket",
@@ -3234,7 +3254,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-skew-bucket-put-demand",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "intermediate",
     title: "Put demand and skew bucket",
@@ -3255,7 +3275,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-quote-skew-to-reduce-inventory",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "advanced",
     title: "Quote skew to reduce inventory",
@@ -3276,7 +3296,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-refuse-reshape-flow",
-    month: 4,
+    sector: "C",
     category: "market-making",
     level: "advanced",
     title: "Refuse or reshape flow",
@@ -3297,7 +3317,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-residual-basis-risk",
-    month: 4,
+    sector: "C",
     category: "risk",
     level: "intermediate",
     title: "Residual basis risk in hedge",
@@ -3318,7 +3338,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-hedge-threshold-too-tight",
-    month: 4,
+    sector: "C",
     category: "risk",
     level: "foundation",
     title: "Rehedge threshold too tight",
@@ -3339,7 +3359,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-transaction-cost-overhedge",
-    month: 4,
+    sector: "C",
     category: "risk",
     level: "foundation",
     title: "Transaction cost overwhelms gamma scalp",
@@ -3360,7 +3380,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-jump-risk-not-hedgeable",
-    month: 4,
+    sector: "C",
     category: "risk",
     level: "intermediate",
     title: "Jump risk is not continuously hedgeable",
@@ -3381,7 +3401,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-assignment-after-hedge",
-    month: 4,
+    sector: "C",
     category: "risk",
     level: "intermediate",
     title: "Assignment after hedge",
@@ -3402,7 +3422,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-margin-limit-inventory",
-    month: 4,
+    sector: "C",
     category: "risk",
     level: "intermediate",
     title: "Margin limit and inventory",
@@ -3423,7 +3443,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-model-risk-wing",
-    month: 4,
+    sector: "C",
     category: "risk",
     level: "advanced",
     title: "Model risk in illiquid wing",
@@ -3444,7 +3464,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-correlation-hedge-break",
-    month: 4,
+    sector: "C",
     category: "risk",
     level: "advanced",
     title: "Correlation hedge breaks",
@@ -3465,7 +3485,7 @@ const phase4Scenarios = [
   },
   {
     id: "attribution-delta-pnl",
-    month: 4,
+    sector: "C",
     category: "pnl",
     level: "foundation",
     title: "Attribute delta P&L",
@@ -3486,7 +3506,7 @@ const phase4Scenarios = [
   },
   {
     id: "attribution-gamma-scalping-cost",
-    month: 4,
+    sector: "C",
     category: "pnl",
     level: "intermediate",
     title: "Gamma scalping after costs",
@@ -3507,7 +3527,7 @@ const phase4Scenarios = [
   },
   {
     id: "attribution-short-gamma-loss",
-    month: 4,
+    sector: "C",
     category: "pnl",
     level: "foundation",
     title: "Short gamma loss attribution",
@@ -3528,7 +3548,7 @@ const phase4Scenarios = [
   },
   {
     id: "attribution-vega-parallel-shock",
-    month: 4,
+    sector: "C",
     category: "pnl",
     level: "foundation",
     title: "Parallel IV shock attribution",
@@ -3549,7 +3569,7 @@ const phase4Scenarios = [
   },
   {
     id: "attribution-skew-twist-loss",
-    month: 4,
+    sector: "C",
     category: "pnl",
     level: "intermediate",
     title: "Skew twist attribution",
@@ -3570,7 +3590,7 @@ const phase4Scenarios = [
   },
   {
     id: "attribution-term-vega-pnl",
-    month: 4,
+    sector: "C",
     category: "pnl",
     level: "intermediate",
     title: "Term vega attribution",
@@ -3591,7 +3611,7 @@ const phase4Scenarios = [
   },
   {
     id: "attribution-theta-not-enough",
-    month: 4,
+    sector: "C",
     category: "pnl",
     level: "foundation",
     title: "Theta earned but not enough",
@@ -3612,7 +3632,7 @@ const phase4Scenarios = [
   },
   {
     id: "attribution-carry-dividend-pnl",
-    month: 4,
+    sector: "C",
     category: "pnl",
     level: "intermediate",
     title: "Dividend and carry attribution",
@@ -3633,7 +3653,7 @@ const phase4Scenarios = [
   },
   {
     id: "attribution-execution-slippage",
-    month: 4,
+    sector: "C",
     category: "pnl",
     level: "foundation",
     title: "Execution slippage attribution",
@@ -3654,7 +3674,7 @@ const phase4Scenarios = [
   },
   {
     id: "attribution-residual-model",
-    month: 4,
+    sector: "C",
     category: "pnl",
     level: "advanced",
     title: "Residual model attribution",
@@ -3675,7 +3695,7 @@ const phase4Scenarios = [
   },
   {
     id: "attribution-static-vs-dynamic",
-    month: 4,
+    sector: "C",
     category: "pnl",
     level: "intermediate",
     title: "Static versus dynamic P&L",
@@ -3696,7 +3716,7 @@ const phase4Scenarios = [
   },
   {
     id: "attribution-realized-vs-implied",
-    month: 4,
+    sector: "C",
     category: "pnl",
     level: "intermediate",
     title: "Realized versus implied attribution",
@@ -3717,7 +3737,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-choose-hedge-instrument",
-    month: 4,
+    sector: "C",
     category: "strategy",
     level: "foundation",
     title: "Choose hedge instrument",
@@ -3738,7 +3758,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-calendar-hedge-choice",
-    month: 4,
+    sector: "C",
     category: "strategy",
     level: "intermediate",
     title: "Calendar hedge choice",
@@ -3759,7 +3779,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-risk-transfer-client-alternative",
-    month: 4,
+    sector: "C",
     category: "strategy",
     level: "intermediate",
     title: "Reshape client trade to reduce dealer residual",
@@ -3780,7 +3800,7 @@ const phase4Scenarios = [
   },
   {
     id: "dealer-desk-morning-checklist",
-    month: 4,
+    sector: "C",
     category: "strategy",
     level: "foundation",
     title: "Dealer desk morning checklist",
@@ -4444,7 +4464,7 @@ window.D1_LEARNING_CONTENT_ZH.scenarioTopicFilters.push(
 window.D1_LEARNING_CONTENT.scenarios.push(
   {
     id: "vol-pre-earnings-straddle-breakeven",
-    month: 3,
+    sector: "C",
     category: "strategy",
     level: "intermediate",
     title: "Pre-earnings straddle breakeven",
@@ -4458,7 +4478,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-post-earnings-crush-win-loss",
-    month: 3,
+    sector: "C",
     category: "pnl",
     level: "foundation",
     title: "Right direction, wrong vol after earnings",
@@ -4472,7 +4492,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-macro-cpi-front-gamma",
-    month: 3,
+    sector: "C",
     category: "risk",
     level: "intermediate",
     title: "Macro event front gamma risk",
@@ -4486,7 +4506,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-fda-binary-tail-sizing",
-    month: 3,
+    sector: "C",
     category: "risk",
     level: "advanced",
     title: "Binary FDA event sizing",
@@ -4500,7 +4520,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-event-vertical-over-call",
-    month: 3,
+    sector: "C",
     category: "client",
     level: "foundation",
     title: "Event vertical instead of outright call",
@@ -4514,7 +4534,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-event-calendar-short-front-trap",
-    month: 3,
+    sector: "C",
     category: "strategy",
     level: "advanced",
     title: "Short front event calendar trap",
@@ -4528,7 +4548,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-skew-steepening-put-spread",
-    month: 3,
+    sector: "C",
     category: "pnl",
     level: "intermediate",
     title: "Put spread hurt by skew steepening",
@@ -4542,7 +4562,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-skew-flattening-risk-reversal",
-    month: 3,
+    sector: "C",
     category: "pnl",
     level: "advanced",
     title: "Risk reversal loses from skew flattening",
@@ -4556,7 +4576,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-call-skew-takeover-rumor",
-    month: 3,
+    sector: "C",
     category: "strategy",
     level: "intermediate",
     title: "Call skew after takeover rumors",
@@ -4570,7 +4590,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-collar-zero-cost-trap",
-    month: 3,
+    sector: "C",
     category: "client",
     level: "foundation",
     title: "Zero-cost collar trap",
@@ -4584,7 +4604,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-put-spread-vs-outright-put",
-    month: 3,
+    sector: "C",
     category: "client",
     level: "foundation",
     title: "Put spread versus outright put",
@@ -4598,7 +4618,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-selling-crash-skew-suitability",
-    month: 3,
+    sector: "C",
     category: "risk",
     level: "advanced",
     title: "Selling crash skew and suitability",
@@ -4612,7 +4632,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-front-back-vega-bucket",
-    month: 3,
+    sector: "C",
     category: "pnl",
     level: "intermediate",
     title: "Front vega versus back vega",
@@ -4626,7 +4646,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-calendar-strike-selection",
-    month: 3,
+    sector: "C",
     category: "strategy",
     level: "foundation",
     title: "Calendar strike selection",
@@ -4640,7 +4660,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-diagonal-short-strike-assignment",
-    month: 3,
+    sector: "C",
     category: "risk",
     level: "intermediate",
     title: "Diagonal short-strike risk",
@@ -4654,7 +4674,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-term-flattening-calendar-loss",
-    month: 3,
+    sector: "C",
     category: "pnl",
     level: "advanced",
     title: "Calendar loss from term flattening",
@@ -4668,7 +4688,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-event-roll-down-misread",
-    month: 3,
+    sector: "C",
     category: "risk",
     level: "advanced",
     title: "Misreading vol roll-down before event",
@@ -4682,7 +4702,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-long-dated-vega-vs-front-gamma",
-    month: 3,
+    sector: "C",
     category: "market-making",
     level: "intermediate",
     title: "Long-dated vega versus front gamma",
@@ -4696,7 +4716,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-condor-implied-range-sizing",
-    month: 3,
+    sector: "C",
     category: "strategy",
     level: "foundation",
     title: "Iron condor and implied range",
@@ -4710,7 +4730,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-short-strangle-margin-stress",
-    month: 3,
+    sector: "C",
     category: "risk",
     level: "advanced",
     title: "Short strangle margin stress",
@@ -4724,7 +4744,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-butterfly-pin-vs-vol",
-    month: 3,
+    sector: "C",
     category: "pnl",
     level: "intermediate",
     title: "Butterfly pin versus vol mark",
@@ -4738,7 +4758,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-vega-neutral-not-riskless",
-    month: 3,
+    sector: "C",
     category: "market-making",
     level: "advanced",
     title: "Vega-neutral is not surface-neutral",
@@ -4752,7 +4772,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-wide-bid-ask-erases-edge",
-    month: 3,
+    sector: "C",
     category: "risk",
     level: "foundation",
     title: "Bid-ask erases apparent vol edge",
@@ -4766,7 +4786,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-earnings-dispersion-index-vs-single",
-    month: 3,
+    sector: "C",
     category: "market-making",
     level: "advanced",
     title: "Index event vol versus single-name dispersion",
@@ -4780,7 +4800,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-hedge-frequency-path-risk",
-    month: 3,
+    sector: "C",
     category: "pnl",
     level: "intermediate",
     title: "Hedge frequency changes long-gamma P&L",
@@ -4794,7 +4814,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-borrow-dividend-surface-noise",
-    month: 3,
+    sector: "C",
     category: "risk",
     level: "intermediate",
     title: "Borrow and dividend distort surface reads",
@@ -4808,7 +4828,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-surface-parallel-shock",
-    month: 3,
+    sector: "C",
     category: "pnl",
     level: "foundation",
     title: "Parallel IV shock versus skew twist",
@@ -4822,7 +4842,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "vol-vol-of-vol-sizing",
-    month: 3,
+    sector: "C",
     category: "risk",
     level: "advanced",
     title: "Vol-of-vol and position sizing",
@@ -5127,7 +5147,7 @@ window.D1_LEARNING_CONTENT_ZH.roadmap[5].deliverables = ["Exotics Bridge 面板"
 window.D1_LEARNING_CONTENT.modules.push(
   {
     id: "asian-averaging",
-    month: 5,
+    sector: "E",
     week: 17,
     title: "Asian options: averaging turns timing risk into path risk",
     coreQuestion: "How does an average-price payoff change hedging compared with a vanilla option?",
@@ -5140,7 +5160,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "barrier-monitoring",
-    month: 5,
+    sector: "E",
     week: 18,
     title: "Barrier options: knock conditions, monitoring, and gap risk",
     coreQuestion: "Why can a cheaper barrier payoff carry more operational and hedge risk?",
@@ -5153,7 +5173,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "quanto-cross-asset",
-    month: 5,
+    sector: "E",
     week: 19,
     title: "Quanto options: asset, FX, and correlation as one package",
     coreQuestion: "What extra risk appears when payoff currency differs from underlying currency?",
@@ -5166,7 +5186,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "digital-discontinuity",
-    month: 5,
+    sector: "E",
     week: 20,
     title: "Digital options: discontinuous payoff and pin risk",
     coreQuestion: "Why is a simple yes/no payoff hard to hedge?",
@@ -5179,7 +5199,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "autocallable-decomposition",
-    month: 5,
+    sector: "E",
     week: 21,
     title: "Autocallables: coupon, barrier, callability, and embedded short vol",
     coreQuestion: "How do you decompose a structured note into client payoff and issuer risk?",
@@ -5192,7 +5212,7 @@ window.D1_LEARNING_CONTENT.modules.push(
   },
   {
     id: "structured-product-workflow",
-    month: 5,
+    sector: "E",
     week: 22,
     title: "Structured products: suitability, embedded legs, and disclosure",
     coreQuestion: "How do you turn a client objective into a transparent structured payoff?",
@@ -5605,7 +5625,7 @@ window.D1_LEARNING_CONTENT_ZH.scenarioTopicFilters.push(
 window.D1_LEARNING_CONTENT.scenarios.push(
   {
     id: "client-asian-average-hedge",
-    month: 5,
+    sector: "E",
     category: "client",
     level: "advanced",
     title: "Client wants an average-price hedge",
@@ -5619,7 +5639,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-asian-delta-path",
-    month: 5,
+    sector: "E",
     category: "risk",
     level: "advanced",
     title: "Asian delta changes as fixings accrue",
@@ -5633,7 +5653,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "pnl-asian-fixings",
-    month: 5,
+    sector: "E",
     category: "pnl",
     level: "advanced",
     title: "Asian P&L attribution across fixings",
@@ -5647,7 +5667,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-asian-vs-vanilla",
-    month: 5,
+    sector: "E",
     category: "strategy",
     level: "advanced",
     title: "Asian vs vanilla option choice",
@@ -5661,7 +5681,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "mm-asian-hedge-window",
-    month: 5,
+    sector: "E",
     category: "market-making",
     level: "advanced",
     title: "Dealer hedge during Asian averaging window",
@@ -5675,7 +5695,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-average-price-equity-accumulation",
-    month: 5,
+    sector: "E",
     category: "client",
     level: "advanced",
     title: "Average-price equity accumulation",
@@ -5689,7 +5709,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-barrier-cheaper-protection",
-    month: 5,
+    sector: "E",
     category: "client",
     level: "advanced",
     title: "Barrier feature makes protection cheaper",
@@ -5703,7 +5723,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-barrier-gap-through",
-    month: 5,
+    sector: "E",
     category: "risk",
     level: "advanced",
     title: "Gap through the barrier",
@@ -5717,7 +5737,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "pnl-barrier-monitoring",
-    month: 5,
+    sector: "E",
     category: "pnl",
     level: "advanced",
     title: "Barrier P&L after a touch event",
@@ -5731,7 +5751,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-knockout-vs-vanilla",
-    month: 5,
+    sector: "E",
     category: "strategy",
     level: "advanced",
     title: "Knock-out vs vanilla protection",
@@ -5745,7 +5765,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "mm-barrier-pin-hedging",
-    month: 5,
+    sector: "E",
     category: "market-making",
     level: "advanced",
     title: "Dealer hedging near a barrier",
@@ -5759,7 +5779,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-down-and-in-put-disclosure",
-    month: 5,
+    sector: "E",
     category: "client",
     level: "advanced",
     title: "Down-and-in put disclosure",
@@ -5773,7 +5793,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-quanto-foreign-equity",
-    month: 5,
+    sector: "E",
     category: "client",
     level: "advanced",
     title: "Foreign equity upside without FX payoff",
@@ -5787,7 +5807,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-quanto-correlation-sign",
-    month: 5,
+    sector: "E",
     category: "risk",
     level: "advanced",
     title: "Quanto correlation sign",
@@ -5801,7 +5821,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "pnl-quanto-correlation-move",
-    month: 5,
+    sector: "E",
     category: "pnl",
     level: "advanced",
     title: "Quanto P&L from correlation repricing",
@@ -5815,7 +5835,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-quanto-vs-fx-hedge",
-    month: 5,
+    sector: "E",
     category: "strategy",
     level: "advanced",
     title: "Quanto vs separate FX hedge",
@@ -5829,7 +5849,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "mm-quanto-hedge-basis",
-    month: 5,
+    sector: "E",
     category: "market-making",
     level: "advanced",
     title: "Dealer hedge basis in quanto flow",
@@ -5843,7 +5863,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-lme-fx-bridge",
-    month: 5,
+    sector: "E",
     category: "client",
     level: "advanced",
     title: "LME plus FX bridge to quanto",
@@ -5857,7 +5877,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-digital-income",
-    month: 5,
+    sector: "E",
     category: "client",
     level: "advanced",
     title: "Digital coupon income pitch",
@@ -5871,7 +5891,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-digital-pin",
-    month: 5,
+    sector: "E",
     category: "risk",
     level: "advanced",
     title: "Digital pin risk",
@@ -5885,7 +5905,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "pnl-digital-jump",
-    month: 5,
+    sector: "E",
     category: "pnl",
     level: "advanced",
     title: "Digital P&L after jump",
@@ -5899,7 +5919,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-digital-vs-call-spread",
-    month: 5,
+    sector: "E",
     category: "strategy",
     level: "advanced",
     title: "Digital vs tight call spread",
@@ -5913,7 +5933,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "mm-digital-discontinuity",
-    month: 5,
+    sector: "E",
     category: "market-making",
     level: "advanced",
     title: "Dealer risk in digital threshold",
@@ -5927,7 +5947,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-digital-disclosure",
-    month: 5,
+    sector: "E",
     category: "client",
     level: "advanced",
     title: "Digital disclosure language",
@@ -5941,7 +5961,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-autocallable-yield",
-    month: 5,
+    sector: "E",
     category: "client",
     level: "advanced",
     title: "Autocallable high coupon discussion",
@@ -5955,7 +5975,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-autocallable-short-vol",
-    month: 5,
+    sector: "E",
     category: "risk",
     level: "advanced",
     title: "Autocallable embedded short vol",
@@ -5969,7 +5989,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "pnl-autocallable-coupon-call",
-    month: 5,
+    sector: "E",
     category: "pnl",
     level: "advanced",
     title: "Autocallable P&L after rally",
@@ -5983,7 +6003,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-autocallable-decomposition",
-    month: 5,
+    sector: "E",
     category: "strategy",
     level: "advanced",
     title: "Autocallable payoff decomposition",
@@ -5997,7 +6017,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "mm-autocallable-issuer-hedge",
-    month: 5,
+    sector: "E",
     category: "market-making",
     level: "advanced",
     title: "Issuer hedge for autocallable",
@@ -6011,7 +6031,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-autocallable-suitability",
-    month: 5,
+    sector: "E",
     category: "client",
     level: "advanced",
     title: "Autocallable suitability check",
@@ -6025,7 +6045,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-structured-note-capital-protection",
-    month: 5,
+    sector: "E",
     category: "client",
     level: "advanced",
     title: "Capital protection is not daily liquidity",
@@ -6039,7 +6059,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "risk-issuer-credit-liquidity",
-    month: 5,
+    sector: "E",
     category: "risk",
     level: "advanced",
     title: "Issuer credit and liquidity risk",
@@ -6053,7 +6073,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "pnl-structured-product-mark",
-    month: 5,
+    sector: "E",
     category: "pnl",
     level: "advanced",
     title: "Structured product mark below expectation",
@@ -6067,7 +6087,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "strategy-embedded-options-map",
-    month: 5,
+    sector: "E",
     category: "strategy",
     level: "advanced",
     title: "Map the embedded option legs",
@@ -6081,7 +6101,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "mm-secondary-market-wide-bid-ask",
-    month: 5,
+    sector: "E",
     category: "market-making",
     level: "advanced",
     title: "Secondary market bid/ask in structured notes",
@@ -6095,7 +6115,7 @@ window.D1_LEARNING_CONTENT.scenarios.push(
   },
   {
     id: "client-structure-disclosure-checklist",
-    month: 5,
+    sector: "E",
     category: "client",
     level: "advanced",
     title: "Structured product disclosure checklist",
