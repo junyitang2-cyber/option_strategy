@@ -5,7 +5,7 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
 
   await expect(page.locator("#learningHubPanel")).toBeVisible();
   await expect(page.locator("#learningProgressSummary")).toContainText("模块 0/30");
-  await expect(page.locator("#learningProgressSummary")).toContainText("场景 0/191");
+  await expect(page.locator("#learningProgressSummary")).toContainText("场景 0/211");
   await expect(page.locator("#learningProgressSummary")).toContainText("专业冲刺 0/60");
   await expect(page.locator("#learning-roadmap-tab")).toContainText("路线图");
 
@@ -42,7 +42,7 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await expect(page.locator("#learningBridge")).not.toContainText(/面试|Interview/i);
 
   await page.locator("#learning-scenarios-tab").click();
-  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(191);
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(211);
   await page.locator('[data-scenario-filter="client"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(43);
 
@@ -51,11 +51,11 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await expect(page.locator("#scenario-answer-client-collar-downside")).toContainText("protective put 或 collar");
 
   await page.locator('[data-complete-scenario="client-collar-downside"]').click();
-  await expect(page.locator("#learningProgressSummary")).toContainText("场景 1/191");
+  await expect(page.locator("#learningProgressSummary")).toContainText("场景 1/211");
 
   await page.reload();
   await expect(page.locator("#learningProgressSummary")).toContainText("模块 1/30");
-  await expect(page.locator("#learningProgressSummary")).toContainText("场景 1/191");
+  await expect(page.locator("#learningProgressSummary")).toContainText("场景 1/211");
   await expect(page.locator("#learning-scenarios-tab")).toHaveClass(/active/);
   await expect(page.locator("#learningScenarios")).not.toContainText(/面试|Interview|interview-traps/i);
 });
@@ -103,7 +103,7 @@ test("D1 learning content has complete CN scenario localization", async ({ page 
     };
   });
 
-  expect(localization.scenarioCount).toBe(191);
+  expect(localization.scenarioCount).toBe(211);
   expect(localization.missingScenarioIds).toEqual([]);
   expect(localization.missingPlaybookIds).toEqual([]);
   expect(localization.missingExoticsIds).toEqual([]);
@@ -120,7 +120,7 @@ test("D1 phase 2A strategy construction content renders and filters", async ({ p
   await expect(page.locator("#learningComparisons")).not.toContainText(/面试|Interview/i);
 
   await page.locator("#learning-scenarios-tab").click();
-  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(191);
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(211);
 
   await page.locator('[data-scenario-sector-filter="B"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(40);
@@ -375,7 +375,7 @@ test("D1 learning hub recovers from invalid saved scenario filter", async ({ pag
 
   await expect(page.locator("#learning-scenarios-tab")).toHaveClass(/active/);
   await expect(page.locator('[data-scenario-filter="all"]')).toHaveClass(/active/);
-  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(191);
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(211);
 });
 
 test("scenario bank uses sector filters A B C E not month numbers", async ({ page }) => {
@@ -387,6 +387,7 @@ test("scenario bank uses sector filters A B C E not month numbers", async ({ pag
   await expect(page.locator('[data-scenario-sector-filter="A"]')).toBeVisible();
   await expect(page.locator('[data-scenario-sector-filter="B"]')).toBeVisible();
   await expect(page.locator('[data-scenario-sector-filter="C"]')).toBeVisible();
+  await expect(page.locator('[data-scenario-sector-filter="D"]')).toBeVisible();
   await expect(page.locator('[data-scenario-sector-filter="E"]')).toBeVisible();
 
   // Sector C combines old Month 3 (45) + Month 4 (40) = 85 scenarios
@@ -396,6 +397,10 @@ test("scenario bank uses sector filters A B C E not month numbers", async ({ pag
   // Sector B = old Month 2 = 40 scenarios
   await page.locator('[data-scenario-sector-filter="B"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(40);
+
+  // Sector D = Research Bridge = 20 scenarios
+  await page.locator('[data-scenario-sector-filter="D"]').click();
+  await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(20);
 
   // No old month-number filter buttons
   await expect(page.locator('[data-scenario-month-filter="3"]')).toHaveCount(0);
