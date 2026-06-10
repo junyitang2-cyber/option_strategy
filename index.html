@@ -83,7 +83,7 @@
             <button class="learning-tab" data-learning-tab="exotics-risk" type="button"
                     role="tab" aria-selected="false" aria-controls="learning-exotics-risk-panel" id="learning-exotics-risk-tab"></button>
             <button class="learning-tab" data-learning-tab="research-bridge" type="button"
-                    role="tab" aria-selected="false"></button>
+                    role="tab" aria-selected="false" aria-controls="learning-research-bridge-panel" id="learning-research-bridge-tab"></button>
             <button class="learning-tab" data-learning-tab="professional-sprint" type="button"
                     role="tab" aria-selected="false" aria-controls="learning-professional-sprint-panel" id="learning-professional-sprint-tab"></button>
             <button class="learning-tab" data-learning-tab="scenarios" type="button"
@@ -127,7 +127,8 @@
                  role="tabpanel" aria-labelledby="learning-exotics-risk-tab" id="learning-exotics-risk-panel">
               <div id="learningExoticsRisk"></div>
             </div>
-            <div class="learning-panel" data-learning-panel="research-bridge">
+            <div class="learning-panel" data-learning-panel="research-bridge"
+                 role="tabpanel" aria-labelledby="learning-research-bridge-tab" id="learning-research-bridge-panel">
               <div id="learningResearchBridge"></div>
             </div>
             <div class="learning-panel" data-learning-panel="professional-sprint"
@@ -137,7 +138,7 @@
             <div class="learning-panel" data-learning-panel="scenarios"
                  role="tabpanel" aria-labelledby="learning-scenarios-tab" id="learning-scenarios-panel">
               <div class="scenario-filter-row" id="scenarioFilterRow"></div>
-              <div class="scenario-filter-row" id="scenarioMonthFilterRow"></div>
+              <div class="scenario-filter-row" id="scenarioSectorFilterRow"></div>
               <div class="scenario-filter-row" id="scenarioTopicFilterRow"></div>
               <div id="learningScenarios"></div>
             </div>

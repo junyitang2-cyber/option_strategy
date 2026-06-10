@@ -1158,7 +1158,7 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 
 .learning-tab,
 .scenario-filter,
-.scenario-month-filter,
+.scenario-sector-filter,
 .scenario-topic-filter {
   background: transparent;
   border: 0;
@@ -1172,7 +1172,7 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 
 .learning-tab:hover,
 .scenario-filter:hover,
-.scenario-month-filter:hover,
+.scenario-sector-filter:hover,
 .scenario-topic-filter:hover {
   background: var(--panel-2);
   color: var(--text);
@@ -1180,7 +1180,7 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 
 .learning-tab.active,
 .scenario-filter.active,
-.scenario-month-filter.active,
+.scenario-sector-filter.active,
 .scenario-topic-filter.active {
   border-bottom-color: var(--cyan);
   color: var(--cyan);
@@ -1188,7 +1188,7 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 
 .learning-tab:focus-visible,
 .scenario-filter:focus-visible,
-.scenario-month-filter:focus-visible,
+.scenario-sector-filter:focus-visible,
 .scenario-topic-filter:focus-visible,
 .learning-action:focus-visible,
 .vol-playbook-filter:focus-visible,

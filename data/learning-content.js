@@ -595,38 +595,6 @@ window.D1_LEARNING_CONTENT.modules.push(
 );
 
 window.D1_LEARNING_CONTENT_ZH = {
-  roadmap: {
-    1: {
-      title: "Greeks 直觉：从 D1 exposure 出发",
-      focus: "把线性 commodities exposure 转成 Delta、Gamma、Vega、Theta 和 carry 直觉。",
-      deliverables: ["4 个 Greeks 模块", "Commodities 桥接", "30 个基础场景题"],
-    },
-    2: {
-      title: "策略构建",
-      focus: "围绕 spreads、straddles、strangles、butterflies、condors、collars 和客户适当性来选择结构。",
-      deliverables: ["策略对比矩阵", "客户结构推荐"],
-    },
-    3: {
-      title: "Volatility trading 框架",
-      focus: "RV vs IV、skew、term structure、event vol 和 vol risk premium。",
-      deliverables: ["Vol trade checklist", "Skew 和 term-structure 场景题"],
-    },
-    4: {
-      title: "动态对冲与做市",
-      focus: "Delta hedging、gamma scalping、inventory、bid-ask 和 P&L attribution。",
-      deliverables: ["Dealer workflow drills", "Gamma P&L 案例"],
-    },
-    5: {
-      title: "Exotics 与 structuring",
-      focus: "Asian、barrier、quanto、autocallable 和客户驱动 payoff 设计。",
-      deliverables: ["Exotics bridge", "Structured product 案例"],
-    },
-    6: {
-      title: "Portfolio risk 与专业冲刺",
-      focus: "Portfolio Greeks 限额、stress testing、情景演练和 trade idea 表达。",
-      deliverables: ["情景演练包", "能力检查清单"],
-    },
-  },
   modules: {
     "delta-d1": {
       title: "Delta：D1 方向敞口变成动态敞口",
@@ -2600,7 +2568,6 @@ Object.assign(window.D1_LEARNING_CONTENT_ZH.scenarios, {
 // Phase 4A/4B: Dealer Hedging, Market Making, Dynamic Hedging, And P&L Attribution
 window.D1_LEARNING_CONTENT.roadmap[3].status = "active";
 window.D1_LEARNING_CONTENT.roadmap[3].deliverables = ["Dealer workflow panel", "Dynamic hedging controls", "P&L attribution drills", "40 dealer scenarios"];
-window.D1_LEARNING_CONTENT_ZH.roadmap[4].deliverables = ["Dealer workflow 面板", "动态对冲控制", "P&L attribution 演练", "40 个 dealer 场景"];
 
 window.D1_LEARNING_CONTENT.modules.push(
   {
@@ -4312,7 +4279,6 @@ Object.assign(window.D1_LEARNING_CONTENT_ZH.scenarios, {
 
 // Phase 3B: Volatility Trade Construction And Risk Management
 window.D1_LEARNING_CONTENT.roadmap[2].deliverables = ["Vol trade checklist", "Vol trade playbook", "45 volatility scenarios"];
-window.D1_LEARNING_CONTENT_ZH.roadmap[3].deliverables = ["Vol 交易检查清单", "Vol 交易 Playbook", "45 个波动率场景"];
 
 window.D1_LEARNING_CONTENT.volPlaybookFilters = [
   ["all", "All Vol Setups"],
@@ -5142,7 +5108,6 @@ Object.assign(window.D1_LEARNING_CONTENT_ZH.scenarios, {
 // Phase 5: Month 5 Exotics And Structuring Bridge.
 window.D1_LEARNING_CONTENT.roadmap[4].status = "active";
 window.D1_LEARNING_CONTENT.roadmap[4].deliverables = ["Exotics Bridge panel", "Simplified payoff diagrams", "Structuring workflow cases", "36 exotics scenarios"];
-window.D1_LEARNING_CONTENT_ZH.roadmap[5].deliverables = ["Exotics Bridge 面板", "简化 payoff 图", "结构化产品工作流案例", "36 个 exotics 场景"];
 
 window.D1_LEARNING_CONTENT.modules.push(
   {

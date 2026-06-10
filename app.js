@@ -2614,7 +2614,7 @@ function learningUiText(key) {
 
 function localizedLearning(kind, item, field) {
   if (learningLanguage() === "en") return item[field];
-  const key = item.id || item.sector;
+  const key = item.id;
   const localized = window.D1_LEARNING_CONTENT_ZH?.[kind]?.[key]?.[field];
   return localized ?? item[field];
 }
@@ -2680,8 +2680,7 @@ function renderLearningTabs() {
 }
 
 function formatSectorBadge(sector) {
-  if (!sector || sector === "sprint") return "Sprint";
-  return `Sector ${sector}`;
+  return formatLearningPeriod("sector", sector);
 }
 
 function renderLearningRoadmap() {
@@ -3614,7 +3613,7 @@ function renderLearningProfessionalSprint() {
 
 function renderScenarioFilters() {
   const target = document.getElementById("scenarioFilterRow");
-  const monthTarget = document.getElementById("scenarioMonthFilterRow");
+  const sectorTarget = document.getElementById("scenarioSectorFilterRow");
   const topicTarget = document.getElementById("scenarioTopicFilterRow");
   if (!target) return;
   const content = learningContent();
@@ -3641,9 +3640,9 @@ function renderScenarioFilters() {
   if (!sectorIds.has(state.learning.scenarioSectorFilter)) {
     state.learning.scenarioSectorFilter = "all";
   }
-  if (monthTarget) {
+  if (sectorTarget) {
     const sectorFilters = ["all", ...sectorOrder.filter((id) => sectorIds.has(id))];
-    monthTarget.innerHTML = sectorFilters.map((id) => {
+    sectorTarget.innerHTML = sectorFilters.map((id) => {
       const label = id === "all" ? learningUiText("allSectors") : formatLearningPeriod("sector", id);
       return `
         <button class="scenario-sector-filter ${state.learning.scenarioSectorFilter === id ? "active" : ""}" type="button" data-scenario-sector-filter="${id}">
