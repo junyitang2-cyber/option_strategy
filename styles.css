@@ -1850,3 +1850,263 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
 .vtt-reveal-step[hidden] {
   display: none;
 }
+
+/* ============================================================================
+   Easy Skin — light mode overrides
+   All rules scoped to body.skin-easy.
+   Pro skin = existing CSS, zero changes needed.
+   ============================================================================ */
+
+/* Task 4: CSS variable overrides ------------------------------------------ */
+body.skin-easy {
+  color-scheme: light;
+  background: #F8FAFC;
+  color: #0F172A;
+
+  --bg:      #F8FAFC;
+  --rail:    #F1F5F9;
+  --panel:   #FFFFFF;
+  --panel-2: #F8FAFC;
+  --panel-3: #FAFBFE;
+  --line:    #E2E8F0;
+
+  --text:    #0F172A;
+  --muted:   #64748B;
+  --subtle:  #94A3B8;
+
+  --cyan:    #2563EB;
+  --green:   #16A34A;
+  --red:     #DC2626;
+  --amber:   #D97706;
+  --violet:  #7C3AED;
+  --blue:    #6366F1;
+
+  --shadow:  0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Task 5: Component-specific overrides ------------------------------------ */
+
+/* Panels and cards */
+body.skin-easy .panel         { border-radius: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+body.skin-easy .metric        { border-radius: 16px; background: #FFFFFF; border-color: #E2E8F0; }
+body.skin-easy .metric.positive { background: #F0FDF4; border-color: #BBF7D0; }
+body.skin-easy .metric.negative { background: #FFF1F2; border-color: #FECACA; }
+body.skin-easy .metric strong { color: #0F172A; font-family: inherit; }
+body.skin-easy .metric span   { color: #64748B; }
+
+/* Chart containers — hardcoded dark backgrounds */
+body.skin-easy .main-chart    { background: #FAFBFE; border: 1.5px solid #E2E8F0; border-radius: 16px; }
+body.skin-easy .mini-svg      { background: #FAFBFE; border: 1.5px solid #E2E8F0; border-radius: 16px; }
+
+/* SVG fill areas — hardcoded rgba values */
+body.skin-easy .profit-area   { fill: rgba(22, 163, 74, 0.22); }
+body.skin-easy .loss-area     { fill: rgba(220, 38, 38, 0.18); }
+
+/* SVG grid and zero lines — hardcoded rgba light-text values */
+body.skin-easy .grid-line     { stroke: #E2E8F0; }
+body.skin-easy .zero-line     { stroke: rgba(15, 23, 42, 0.35); }
+
+/* Strategy hover preview */
+body.skin-easy .strategy-preview-tip { background: #FFFFFF; border-color: #BFDBFE; color: #0F172A; }
+body.skin-easy .strategy-preview-tip span:first-child { color: #2563EB; }
+
+/* Strategy rail — items and selected state */
+body.skin-easy .strategy-item { background: #FFFFFF; border-color: #E2E8F0; }
+body.skin-easy .strategy-item:hover,
+body.skin-easy .strategy-item.is-selected { background: #EFF6FF; border-color: #BFDBFE; }
+body.skin-easy .strategy-description,
+body.skin-easy .strategy-tags { color: #64748B; }
+
+/* Inputs and selects */
+body.skin-easy .search-box input,
+body.skin-easy .control-field input,
+body.skin-easy .leg-field input,
+body.skin-easy .leg-field select { background: #FFFFFF; color: #0F172A; border-color: #E2E8F0; }
+body.skin-easy .search-box input:focus,
+body.skin-easy .control-field input:focus { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+
+/* Range slider */
+body.skin-easy input[type="range"] { accent-color: #2563EB; }
+
+/* Tabs */
+body.skin-easy .learning-tab.active,
+body.skin-easy .scenario-filter.active,
+body.skin-easy .scenario-sector-filter.active,
+body.skin-easy .scenario-topic-filter.active { color: #2563EB; border-bottom-color: #2563EB; }
+body.skin-easy .learning-tab:hover,
+body.skin-easy .scenario-filter:hover,
+body.skin-easy .scenario-sector-filter:hover,
+body.skin-easy .scenario-topic-filter:hover { background: #EFF6FF; color: #0F172A; }
+
+body.skin-easy .tool-tab.active { color: #2563EB; border-bottom-color: #2563EB; }
+body.skin-easy .tool-tab:hover  { background: #EFF6FF; color: #0F172A; }
+
+/* Filter pills active state */
+body.skin-easy .filter-pill.is-active { background: #DBEAFE; border-color: #93C5FD; color: #1D4ED8; }
+body.skin-easy .vol-playbook-filter.active,
+body.skin-easy .vol-playbook-filter:hover,
+body.skin-easy .exotics-filter.active,
+body.skin-easy .exotics-filter:hover,
+body.skin-easy .exotics-risk-filter.active,
+body.skin-easy .exotics-risk-filter:hover,
+body.skin-easy .sprint-topic-filter.active,
+body.skin-easy .sprint-topic-filter:hover,
+body.skin-easy .research-filter.active,
+body.skin-easy .research-filter:hover { border-color: #2563EB; color: #2563EB; }
+
+/* Mode toggle */
+body.skin-easy .mode-btn.active   { background: #2563EB; color: #FFFFFF; }
+body.skin-easy .mode-toggle,
+body.skin-easy .language-toggle   { background: #F1F5F9; }
+
+/* Stress table */
+body.skin-easy .stress-table th   { background: #F1F5F9; color: #2563EB; }
+body.skin-easy .stress-table td   { background: #FFFFFF; }
+
+/* Chart tooltip */
+body.skin-easy .chart-tooltip      { background: rgba(255,255,255,0.96); border-color: #BFDBFE; color: #64748B; }
+body.skin-easy .chart-tooltip strong { color: #0F172A; }
+
+/* Concept card (modal) — hardcoded #111827 background */
+body.skin-easy .concept-card { background: #FFFFFF; border-color: #BFDBFE; box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
+body.skin-easy .concept-card h4 { color: #2563EB; }
+body.skin-easy .concept-card h5 { color: #0F172A; }
+body.skin-easy .concept-card p,
+body.skin-easy .concept-card li { color: #64748B; }
+body.skin-easy .concept-card .interpret { border-left-color: #2563EB; color: #0F172A; }
+
+/* Disclaimer panel — hardcoded #1c170f background */
+body.skin-easy .disclaimer-panel { background: #FFFBEB; border-color: rgba(217,119,6,0.4); }
+
+/* Related actions — hardcoded cyan rgba backgrounds */
+body.skin-easy .related-actions button { background: #EFF6FF; border-color: #BFDBFE; color: #0F172A; }
+body.skin-easy .related-actions button:hover { background: #DBEAFE; border-color: #93C5FD; }
+
+/* Missing list buttons — hardcoded amber rgba backgrounds */
+body.skin-easy .missing-list button { background: #FFFBEB; border-color: rgba(217,119,6,0.4); color: #0F172A; }
+
+/* Primary button — hardcoded gradient */
+body.skin-easy .primary-button { background: #2563EB; color: #FFFFFF; }
+
+/* Leg row — panel-3 background dark */
+body.skin-easy .leg-row        { background: #FAFBFE; border-color: #E2E8F0; }
+
+/* Client drill steps */
+body.skin-easy .client-drill-step { background: #FFFFFF; border-color: #E2E8F0; }
+
+/* Research badges — hardcoded cyan/amber rgba backgrounds */
+body.skin-easy .research-skill-badge { background: #EFF6FF; border-color: #93C5FD; color: #2563EB; }
+body.skin-easy .research-badge       { background: #FFFBEB; border-color: #D97706; color: #92400E; }
+
+/* Decay preset btn — hardcoded cyan rgba */
+body.skin-easy .decay-preset-btn.active { background: #DBEAFE; border-color: #93C5FD; color: #1D4ED8; }
+
+/* Greeks decay note — hardcoded cyan rgba */
+body.skin-easy .greeks-decay-note { background: #EFF6FF; }
+
+/* Gamma interpretation note — hardcoded cyan rgba */
+body.skin-easy .gamma-interpretation .note { background: #EFF6FF; }
+
+/* Vtt steps (drill steps) */
+body.skin-easy .vtt-step  { background: #FAFBFE; border-color: #E2E8F0; }
+
+/* Exotics payoff mini chart */
+body.skin-easy .exotics-payoff { background: #FAFBFE; border-color: #E2E8F0; }
+
+/* Hero panels in learning hub */
+body.skin-easy .dealer-desk-hero,
+body.skin-easy .exotics-bridge-hero,
+body.skin-easy .exotics-risk-hero,
+body.skin-easy .professional-sprint-hero { background: #FFFFFF; border-color: #E2E8F0; }
+
+/* Roadmap / module / scenario cards */
+body.skin-easy .roadmap-card,
+body.skin-easy .module-card,
+body.skin-easy .bridge-card,
+body.skin-easy .comparison-card,
+body.skin-easy .client-drill-card,
+body.skin-easy .vol-playbook-card,
+body.skin-easy .vol-framework-card,
+body.skin-easy .dealer-workflow-card,
+body.skin-easy .dealer-attribution-card,
+body.skin-easy .exotics-bridge-card,
+body.skin-easy .structuring-case-card,
+body.skin-easy .exotics-risk-drill-card,
+body.skin-easy .model-limit-card,
+body.skin-easy .sprint-question-card,
+body.skin-easy .dashboard-card,
+body.skin-easy .notebook-item,
+body.skin-easy .scenario-card,
+body.skin-easy .research-case-card,
+body.skin-easy .vtt-drill-card { background: #FFFFFF; border-color: #E2E8F0; border-radius: 12px; }
+
+body.skin-easy .learning-label  { color: #2563EB; }
+
+/* Sprint rubric reveal — white bg for readability */
+body.skin-easy .sprint-score-row     { background: #FAFBFE; border-color: #E2E8F0; }
+body.skin-easy .recommendation-item  { background: #FAFBFE; border-color: #E2E8F0; }
+body.skin-easy .progress-report-export { background: #F1F5F9; border-color: #E2E8F0; color: #64748B; }
+
+/* Sector color stripes for roadmap cards */
+body.skin-easy .roadmap-card[data-sector="A"] { border-left: 4px solid #2563EB; }
+body.skin-easy .roadmap-card[data-sector="B"] { border-left: 4px solid #6366F1; }
+body.skin-easy .roadmap-card[data-sector="C"] { border-left: 4px solid #7C3AED; }
+body.skin-easy .roadmap-card[data-sector="D"] { border-left: 4px solid #D97706; }
+body.skin-easy .roadmap-card[data-sector="E"] { border-left: 4px solid #059669; }
+
+/* Module/scenario cards — sector left stripe */
+body.skin-easy .module-card[data-sector="A"],
+body.skin-easy .scenario-card[data-sector="A"],
+body.skin-easy .sprint-question-card[data-sector="A"] { border-left: 4px solid #2563EB; }
+body.skin-easy .module-card[data-sector="B"],
+body.skin-easy .scenario-card[data-sector="B"],
+body.skin-easy .sprint-question-card[data-sector="B"] { border-left: 4px solid #6366F1; }
+body.skin-easy .module-card[data-sector="C"],
+body.skin-easy .scenario-card[data-sector="C"],
+body.skin-easy .sprint-question-card[data-sector="C"] { border-left: 4px solid #7C3AED; }
+body.skin-easy .module-card[data-sector="D"],
+body.skin-easy .scenario-card[data-sector="D"],
+body.skin-easy .sprint-question-card[data-sector="D"] { border-left: 4px solid #D97706; }
+body.skin-easy .module-card[data-sector="E"],
+body.skin-easy .scenario-card[data-sector="E"],
+body.skin-easy .sprint-question-card[data-sector="E"] { border-left: 4px solid #059669; }
+
+/* Memo sections */
+body.skin-easy .memo-section  { background: #FAFBFE; border-color: #E2E8F0; }
+body.skin-easy .memo-section h4 { color: #2563EB; }
+
+/* Shock estimate */
+body.skin-easy .shock-estimate { background: #FAFBFE; border-color: #E2E8F0; }
+body.skin-easy .shock-item     { background: #F1F5F9; }
+body.skin-easy .shock-item.total { background: #FFFFFF; border-color: #2563EB; }
+
+/* Parity result */
+body.skin-easy .parity-result  { background: #FAFBFE; border-color: #E2E8F0; }
+body.skin-easy .parity-result h4 { color: #2563EB; }
+body.skin-easy .parity-calc    { background: #F1F5F9; }
+body.skin-easy .parity-inputs input { background: #FFFFFF; border-color: #E2E8F0; color: #0F172A; }
+
+/* Gamma / Vol chart containers */
+body.skin-easy .gamma-pnl-chart,
+body.skin-easy .gamma-pnl-results,
+body.skin-easy .vol-surface-chart,
+body.skin-easy .vol-surface-info,
+body.skin-easy .greeks-decay-chart { background: #FAFBFE; border: 1px solid #E2E8F0; }
+body.skin-easy .gamma-result-item  { background: #F1F5F9; }
+body.skin-easy .gamma-interpretation h4 { color: #2563EB; }
+
+/* Stress case panels */
+body.skin-easy .stress-case    { background: #FAFBFE; border-color: #E2E8F0; }
+
+/* Interview QA */
+body.skin-easy .interview-qa   { background: #FAFBFE; border-left-color: #2563EB; }
+body.skin-easy .qa-question    { color: #2563EB; }
+
+/* Portfolio panels */
+body.skin-easy .portfolio-position,
+body.skin-easy .portfolio-summary { background: #FFFFFF; border-color: #E2E8F0; }
+body.skin-easy .portfolio-summary h4 { color: #2563EB; }
+body.skin-easy .greek-item     { background: #F1F5F9; }
+body.skin-easy .margin-item    { background: #F1F5F9; }
+body.skin-easy .warning-text   { background: rgba(217,119,6,0.08); }
+body.skin-easy .error-text     { background: rgba(220,38,38,0.08); }
