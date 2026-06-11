@@ -103,7 +103,7 @@ Research Desk 下方为 15 个 View-to-Trade 演练：
 
 页面右下角有一个浮动胶囊按钮，包含两个选项：
 
-- **Pro（默认）**：深色 terminal 风格，适合习惯深色界面的用户。
+- **Pro（默认）**：Heritage Terminal 风格，琥珀色主色（Bloomberg 特征色）、近黑 OLED 背景、等宽数字（IBM Plex Mono）、F 键位 tab 前缀、斑马纹数据表格。适合习惯专业 terminal 界面的用户。
 - **Easy**：浅色模式（白色卡片、蓝色主色调），对浅色偏好用户更友好。
 
 切换方式：点击胶囊中的"Easy"或"Pro"按钮即可立即切换，选择持久化至 localStorage（`os_d1_skin`），下次打开页面自动恢复。皮肤切换与内容难度（初级/进阶/专业）完全独立，不影响任何学习进度或内容显示。

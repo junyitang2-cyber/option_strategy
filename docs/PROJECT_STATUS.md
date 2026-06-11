@@ -81,14 +81,26 @@ Learning Hub 新增"Research Bridge / 研究桥接"独立 Tab：
 
 页面右下角新增浮动胶囊按钮：
 
-- **Pro（默认）**：现有深色 terminal 风格。
+- **Pro（默认）**：深色 terminal 风格（详见下方 Pro Terminal Upgrade）。
 - **Easy**：浅色模式（#F8FAFC 背景、白色卡片、蓝色主色调）。
 - 皮肤选择持久化至 localStorage `os_d1_skin`，与内容模式（Basic/Advanced/Professional）独立。
 - `tests/skin.spec.js` 新增 5 个皮肤切换测试。
 
+### Pro Terminal Upgrade — "Heritage Terminal"（commits b20829c / cf3e53b）
+
+Pro 皮肤升级为琥珀色终端风格，所有规则收敛于 `body.skin-pro`，Easy 皮肤和 base CSS 零改动：
+
+- **色彩**：`--cyan` token 在 Pro 作用域映射为琥珀色 `#ffb000`（Bloomberg 特征色），背景 OLED `#050505`，暖色文本 palette（`#f2f0e9 / #a8a496 / #6e6a5e`）。
+- **布局**：全面改为 2 px 圆角，面板阴影消除（flat terminal）。
+- **字体**：IBM Plex Mono（Google Fonts + 离线 fallback），数字数据启用 `font-variant-numeric: tabular-nums`；正文和中文保持 Inter。
+- **图表**：现价线改为白色虚线（`rgba(242,240,233,0.55)`），Theta 曲线改为蓝色 `#639bff`（`--leg-2` token 重映射），主 P&L 线继承 `var(--cyan)` = 琥珀色。
+- **Leg 颜色**：通过 `--leg-0..5` CSS token 体系管理，Pro 仅需 override `--leg-2`；JS `LEG_COLORS` 使用 `var(--leg-N)` 字符串，只注入 `style=` 属性，不写 SVG presentation attribute。
+- **终端 chrome**：斑马纹 stress 表格（奇数行 amber 3% tint），F 键前缀 tab 标签（CSS counter，零 JS），顶栏策略标题等宽大写加琥珀色 `▮` 前缀。
+- `tests/pro-terminal.spec.js` 新增 8 个终端样式验证测试。
+
 ### 测试状态
 
-当前 Playwright 测试套件：**32 个测试全部通过**（新增 `tests/skin.spec.js`，新增 learning-hub 中 Sector 过滤、Research Bridge 和 Roadmap Sector A-E 验证测试）。
+当前 Playwright 测试套件：**39 个测试全部通过**（含 `tests/skin.spec.js` 5 个 + `tests/pro-terminal.spec.js` 8 个）。
 
 ---
 
@@ -192,7 +204,7 @@ Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.（已重
 - Exotics Bridge：6 个简化 exotic payoff cards + 6 个 structuring workflow cases，并可跳转到 Put-Call Parity 工具。
 - Research Bridge：16 张研究案例卡（可按 earnings / sector-analysis / comps / ic-memo / thesis 过滤）+ 15 个 View-to-Trade 演练（六步展开），数据文件 `data/research-bridge-content.js`。
 - Scenario Bank：**211 个** client/risk/P&L/market-making/strategy/research-driven 场景，支持 category/sector（A/B/C/D/E）/topic 过滤。
-- Easy/Pro 皮肤切换：右下角浮动胶囊，Pro（深色 terminal）/ Easy（浅色），持久化至 `os_d1_skin`。
+- Easy/Pro 皮肤切换：右下角浮动胶囊，Pro（Heritage Terminal：琥珀色主色、OLED 近黑背景、等宽数字、F 键 tab 前缀）/ Easy（浅色），持久化至 `os_d1_skin`。
 - 中文本地化：全部 Scenario Bank 场景、9 个 Vol trade playbook、6 个 dealer workflow、6 个 P&L attribution、6 个 exotics bridge cards 和 6 个 structuring cases 均有中文 override，不再依赖英文 fallback。
 - 本地进度追踪：模块完成、场景完成、客户推荐演练完成、View-to-Trade 演练完成、逐步展开状态、复习标记和当前学习 tab。
 - 已批准 Phase 1 MVP 规格：`docs/superpowers/specs/2026-05-27-d1-to-derivatives-learning-system-design.md`。
@@ -210,6 +222,8 @@ Phase 5 (Exotics And Structuring Bridge) is now implemented as Month 5.（已重
 - `tests/professional.spec.js`：进阶/专业模式、Professional Concepts、组合级 Greeks Decay、压力测试、Parity、Portfolio、增强 Gamma P&L。
 - `tests/learning-hub.spec.js`：D1 Learning Hub、tab、filter、answer reveal、client drill step reveal、Vol Framework/RV-IV calculator、Vol trade playbook、Dealer Desk、P&L attribution、Exotics Bridge、structuring cases、progress persistence、策略跳转。
 - `tests/learning-hub.spec.js` 同时检查 Scenario Bank、Vol trade playbook、Exotics Bridge 与 structuring cases 的中文本地化完整性。
+- `tests/skin.spec.js`：Easy/Pro 皮肤切换（5 个测试）。
+- `tests/pro-terminal.spec.js`：Heritage Terminal 样式验证 — amber 主色、2 px 圆角、无阴影、等宽数字、F 键 tab 前缀（8 个测试）。
 
 最近验收命令：
 
