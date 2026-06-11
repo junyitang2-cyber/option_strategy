@@ -502,7 +502,7 @@ function priceRange(count = 160, rangePct = state.scenario.priceRange) {
   return Array.from({ length: count }, (_, index) => low + ((high - low) * index) / (count - 1));
 }
 
-const LEG_COLORS = ["#48d47a", "#f06474", "#39c7e5", "#e6b84a", "#c084fc", "#f08c4a"];
+const LEG_COLORS = ["var(--leg-0)", "var(--leg-1)", "var(--leg-2)", "var(--leg-3)", "var(--leg-4)", "var(--leg-5)"];
 let chartViewMode = "combined"; // "combined" | "perLeg" | "probability"
 let hiddenLegs = new Set();
 
