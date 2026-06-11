@@ -2112,3 +2112,171 @@ body.skin-easy .warning-text   { background: rgba(217,119,6,0.08); }
 body.skin-easy .error-text     { background: rgba(220,38,38,0.08); }
 
 body.skin-easy .payoff-leg-combined { stroke: #1E293B; }
+
+/* ============================================================================
+   Pro Skin — Heritage Terminal upgrade
+   All rules scoped to body.skin-pro. Easy skin and base CSS untouched.
+   ============================================================================ */
+
+/* --- Token overrides --- */
+body.skin-pro {
+  --bg:      #050505;
+  --rail:    #070708;
+  --panel:   #0c0d10;
+  --panel-2: #12141a;
+  --panel-3: #08090b;
+  --line:    #23262f;
+
+  --text:    #f2f0e9;
+  --muted:   #a8a496;
+  --subtle:  #6e6a5e;
+
+  --cyan:    #ffb000;
+
+  --shadow:  none;
+
+  --mono: 'IBM Plex Mono', 'SF Mono', Monaco, Consolas, monospace;
+  background: #050505;
+}
+
+/* --- Form / density: flatten radii, kill shadow, tighten padding --- */
+body.skin-pro .panel         { border-radius: 2px; box-shadow: none; padding: 14px; }
+body.skin-pro .metric        { border-radius: 2px; padding: 8px 10px; }
+body.skin-pro .stat          { border-radius: 2px; }
+
+/* Inputs, selects, buttons, filter pills — all 2px (pill toggle not in scope: inline-styled) */
+body.skin-pro button:not(#skinToggle button),
+body.skin-pro input,
+body.skin-pro select         { border-radius: 2px; }
+body.skin-pro .filter-pill   { border-radius: 2px; }
+body.skin-pro .toggle-btn    { border-radius: 2px; }
+
+/* strategy-item in sidebar */
+body.skin-pro .strategy-item { border-radius: 2px; padding: 7px 9px; }
+
+/* leg rows, education items */
+body.skin-pro .leg-row       { border-radius: 2px; }
+body.skin-pro .education-item { border-radius: 2px; }
+
+/* action buttons */
+body.skin-pro .related-actions button { border-radius: 2px; }
+body.skin-pro .missing-list button    { border-radius: 2px; }
+
+/* content panels with 8px radius */
+body.skin-pro .memo-section  { border-radius: 2px; }
+body.skin-pro .interview-qa  { border-radius: 2px; }
+body.skin-pro .stress-case   { border-radius: 2px; }
+body.skin-pro .shock-estimate { border-radius: 2px; }
+body.skin-pro .parity-result { border-radius: 2px; }
+body.skin-pro .strategy-preview-tip { border-radius: 2px; }
+body.skin-pro .chart-tooltip { border-radius: 2px; }
+
+/* concept card modal — keep a little radius so it reads as overlay, but flatten */
+body.skin-pro .concept-card  { border-radius: 2px; }
+
+/* learning hub cards */
+body.skin-pro .roadmap-card,
+body.skin-pro .module-card,
+body.skin-pro .bridge-card,
+body.skin-pro .comparison-card,
+body.skin-pro .client-drill-card,
+body.skin-pro .vol-playbook-card,
+body.skin-pro .vol-framework-card,
+body.skin-pro .dealer-workflow-card,
+body.skin-pro .dealer-attribution-card,
+body.skin-pro .exotics-bridge-card,
+body.skin-pro .structuring-case-card,
+body.skin-pro .exotics-risk-drill-card,
+body.skin-pro .model-limit-card,
+body.skin-pro .sprint-question-card,
+body.skin-pro .dashboard-card,
+body.skin-pro .notebook-item,
+body.skin-pro .scenario-card,
+body.skin-pro .research-case-card,
+body.skin-pro .vtt-drill-card { border-radius: 2px; }
+
+/* vol-framework calculator */
+body.skin-pro .vol-framework-calculator { border-radius: 2px; }
+
+/* hero panels */
+body.skin-pro .dealer-desk-hero,
+body.skin-pro .exotics-bridge-hero,
+body.skin-pro .exotics-risk-hero,
+body.skin-pro .professional-sprint-hero { border-radius: 2px; }
+
+/* vol/gamma chart sub-panels */
+body.skin-pro .gamma-pnl-chart,
+body.skin-pro .gamma-pnl-results,
+body.skin-pro .vol-surface-chart,
+body.skin-pro .vol-surface-info,
+body.skin-pro .greeks-decay-chart { border-radius: 2px; }
+
+/* parity / stress sub-panels */
+body.skin-pro .parity-calc    { border-radius: 2px; }
+body.skin-pro .stress-case    { border-radius: 2px; }
+
+/* portfolio panels */
+body.skin-pro .portfolio-position,
+body.skin-pro .portfolio-summary { border-radius: 2px; }
+
+/* vtt drill steps */
+body.skin-pro .vtt-step       { border-radius: 2px; }
+body.skin-pro .vtt-drill-card { border-radius: 2px; }
+
+/* exotics payoff mini chart */
+body.skin-pro .exotics-payoff { border-radius: 2px; }
+
+/* --- Chart containers: flush near-black --- */
+body.skin-pro .main-chart { background: #050505; border-radius: 0; border-color: #1a1c22; }
+body.skin-pro .mini-svg   { background: #050505; border-radius: 0; border-color: #1a1c22; }
+
+/* spot/current-price line: amber → warm-white dashed (avoids amber-on-amber with main line) */
+body.skin-pro .spot-line  { stroke: rgba(242, 240, 233, 0.55); }
+
+/* theta curve: was cyan → amber in Pro, but clashes with rho gold → restore distinct blue */
+body.skin-pro .curve-theta  { stroke: var(--blue); }
+body.skin-pro .decay-theta  { stroke: var(--blue); }
+body.skin-pro .legend-line.curve-theta { background: var(--blue); color: var(--blue); }
+
+/* per-leg-2 SVG path: hardcoded #39c7e5 in CSS → remap to amber in Pro */
+body.skin-pro .payoff-leg-2 { stroke: #ffb000; }
+
+/* framework difficulty dot: hardcoded #39c7e5 → amber in Pro */
+body.skin-pro .diff-framework { background: #ffb000; }
+
+/* tick / axis text: mono */
+body.skin-pro .main-chart text,
+body.skin-pro .mini-svg text  { font-family: var(--mono); }
+
+/* --- Terminal chrome: mono numerals + tabular figures --- */
+body.skin-pro .metric strong,
+body.skin-pro .stat strong,
+body.skin-pro .stress-table td,
+body.skin-pro .stress-table th,
+body.skin-pro .legend,
+body.skin-pro .strategy-item .meta { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* Zebra rows + amber header rule for stress table */
+body.skin-pro .stress-table tbody tr:nth-child(odd) td { background: rgba(255, 176, 0, 0.03); }
+body.skin-pro .stress-table th { border-bottom: 1px solid rgba(255, 176, 0, 0.45); }
+
+/* F-key tab prefixes (CSS counters — zero JS, toContainText assertions unaffected) */
+body.skin-pro .tools-tabs    { counter-reset: fkey; }
+body.skin-pro .learning-tabs { counter-reset: fkey; }
+body.skin-pro .tool-tab::before,
+body.skin-pro .learning-tab::before {
+  counter-increment: fkey;
+  content: "F" counter(fkey) " ";
+  font-family: var(--mono);
+  font-size: 9px;
+  opacity: 0.55;
+}
+
+/* Topbar heading: mono uppercase with amber cursor prefix */
+body.skin-pro .topbar h2 {
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 15px;
+}
+body.skin-pro .topbar h2::before { content: "\25AE "; color: var(--cyan); }

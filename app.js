@@ -4403,7 +4403,7 @@ function renderSkinToggle() {
   el.innerHTML =
     '<div style="background:#1c202b;border:1px solid #303646;border-radius:999px;padding:4px 5px;display:flex;gap:3px;box-shadow:0 4px 20px rgba(0,0,0,0.45);">' +
       '<button data-skin="easy" type="button" style="border:0;cursor:pointer;font-size:11px;font-weight:700;padding:5px 14px;border-radius:999px;transition:all 0.15s;background:' + (skin === 'easy' ? '#2563EB' : 'transparent') + ';color:' + (skin === 'easy' ? '#fff' : '#778195') + ';">Easy</button>' +
-      '<button data-skin="pro" type="button" style="border:0;cursor:pointer;font-size:11px;font-weight:700;padding:5px 14px;border-radius:999px;transition:all 0.15s;background:' + (skin !== 'easy' ? '#39c7e5' : 'transparent') + ';color:' + (skin !== 'easy' ? '#000' : '#778195') + ';">Pro</button>' +
+      '<button data-skin="pro" type="button" style="border:0;cursor:pointer;font-size:11px;font-weight:700;padding:5px 14px;border-radius:999px;transition:all 0.15s;background:' + (skin !== 'easy' ? '#ffb000' : 'transparent') + ';color:' + (skin !== 'easy' ? '#000' : '#778195') + ';">Pro</button>' +
     '</div>';
 }
 
