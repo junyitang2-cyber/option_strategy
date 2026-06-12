@@ -7,7 +7,7 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await expect(page.locator("#learningProgressSummary")).toContainText("模块 0/30");
   await expect(page.locator("#learningProgressSummary")).toContainText("场景 0/211");
   await expect(page.locator("#learningProgressSummary")).toContainText("专业冲刺 0/60");
-  await expect(page.locator("#learning-roadmap-tab")).toContainText("路线图");
+  await expect(page.locator('[data-sector-spine="overview"]')).toContainText("总览");
 
   await expect(page.locator("#learningRoadmap .roadmap-card")).toHaveCount(6);
   await expect(page.locator("#learningRoadmap")).toContainText("Risk Mechanics：Greeks 直觉");
@@ -18,30 +18,40 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await expect(page.locator("#learningRoadmap .roadmap-card").nth(4)).toContainText("Exotics Bridge 面板");
   await expect(page.locator("#learningRoadmap .roadmap-card").nth(5)).toContainText("60 个专业冲刺题");
 
-  await page.locator("#learning-modules-tab").click();
-  await expect(page.locator("#learningModules .module-card")).toHaveCount(30);
+  await page.locator('[data-sector-spine="A"]').click();
+  await expect(page.locator("#learningModules .module-card")).toHaveCount(9);
   await expect(page.locator("#learningModules")).toContainText("Delta：D1 方向敞口变成动态敞口");
+  await expect(page.locator("#learningModules")).toContainText("高频技术问题冲刺");
+
+  await page.locator('[data-sector-spine="B"]').click();
+  await expect(page.locator("#learningModules .module-card")).toHaveCount(4);
   await expect(page.locator("#learningModules")).toContainText("Vertical spreads：有定义风险的方向表达");
+
+  await page.locator('[data-sector-spine="C"]').click();
+  await expect(page.locator("#learningModules .module-card")).toHaveCount(11);
   await expect(page.locator("#learningModules")).toContainText("RV vs IV：把波动率当成可交易风险因子");
   await expect(page.locator("#learningModules")).toContainText("Client flow 与 dealer inventory");
+
+  await page.locator('[data-sector-spine="E"]').click();
+  await expect(page.locator("#learningModules .module-card")).toHaveCount(6);
   await expect(page.locator("#learningModules")).toContainText("Asian options：averaging 把 timing risk 变成 path risk");
-  await expect(page.locator("#learningModules")).toContainText("高频技术问题冲刺");
   await expect(page.locator("#learningModules")).toContainText("Dealer 视角");
 
   await expect(page.locator("#learningModules")).toContainText("核心表达");
   await expect(page.locator("#learningModules")).not.toContainText(/面试|Interview/i);
 
+  await page.locator('[data-sector-spine="A"]').click();
   await page.locator('[data-complete-module="delta-d1"]').first().click();
   await expect(page.locator("#learningProgressSummary")).toContainText("模块 1/30");
 
-  await page.locator("#learning-bridge-tab").click();
+  await page.locator('[data-sector-spine="A"]').click();
   await expect(page.locator("#learningBridge .bridge-card")).toHaveCount(6);
   await expect(page.locator("#learningBridge")).toContainText("不要把一种 skew 方向套到所有市场");
 
   await expect(page.locator("#learningBridge")).toContainText("专业表述");
   await expect(page.locator("#learningBridge")).not.toContainText(/面试|Interview/i);
 
-  await page.locator("#learning-scenarios-tab").click();
+  await page.locator('.primary-nav-item[data-dest="practice"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(211);
   await page.locator('[data-scenario-filter="client"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(43);
@@ -56,7 +66,7 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await page.reload();
   await expect(page.locator("#learningProgressSummary")).toContainText("模块 1/30");
   await expect(page.locator("#learningProgressSummary")).toContainText("场景 1/211");
-  await expect(page.locator("#learning-scenarios-tab")).toHaveClass(/active/);
+  await expect(page.locator('.learning-panel[data-learning-panel="scenarios"]')).toHaveClass(/active/);
   await expect(page.locator("#learningScenarios")).not.toContainText(/面试|Interview|interview-traps/i);
 });
 
@@ -64,22 +74,22 @@ test("Learning Hub language toggle switches CN and EN", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
   await expect(page.locator("#langCn")).toHaveClass(/active/);
-  await expect(page.locator("#learning-roadmap-tab")).toContainText("路线图");
+  await expect(page.locator('[data-sector-spine="overview"]')).toContainText("总览");
   await expect(page.locator("#learningRoadmap")).toContainText("每日节奏");
   await expect(page.locator("#learningRoadmap")).not.toContainText("Daily rhythm");
 
   await page.locator("#langEn").click();
   await expect(page.locator("#langEn")).toHaveClass(/active/);
-  await expect(page.locator("#learning-roadmap-tab")).toContainText("Roadmap");
+  await expect(page.locator('[data-sector-spine="overview"]')).toContainText("Overview");
   await expect(page.locator("#learningRoadmap")).toContainText("Daily rhythm");
 
   await page.reload();
   await expect(page.locator("#langEn")).toHaveClass(/active/);
-  await expect(page.locator("#learning-roadmap-tab")).toContainText("Roadmap");
+  await expect(page.locator('[data-sector-spine="overview"]')).toContainText("Overview");
 
   await page.locator("#langCn").click();
   await expect(page.locator("#langCn")).toHaveClass(/active/);
-  await expect(page.locator("#learning-roadmap-tab")).toContainText("路线图");
+  await expect(page.locator('[data-sector-spine="overview"]')).toContainText("总览");
 });
 
 test("D1 learning content has complete CN scenario localization", async ({ page }) => {
@@ -113,13 +123,13 @@ test("D1 learning content has complete CN scenario localization", async ({ page 
 test("D1 phase 2A strategy construction content renders and filters", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator("#learning-construction-tab").click();
+  await page.locator('[data-sector-spine="B"]').click();
   await expect(page.locator("#learningComparisons .comparison-card")).toHaveCount(5);
   await expect(page.locator("#learningComparisons")).toContainText("Iron Condor vs Short Strangle");
   await expect(page.locator("#learningComparisons")).toContainText("客户问题");
   await expect(page.locator("#learningComparisons")).not.toContainText(/面试|Interview/i);
 
-  await page.locator("#learning-scenarios-tab").click();
+  await page.locator('.primary-nav-item[data-dest="practice"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(211);
 
   await page.locator('[data-scenario-sector-filter="B"]').click();
@@ -134,7 +144,7 @@ test("D1 phase 2A strategy construction content renders and filters", async ({ p
 test("D1 phase 3 volatility framework renders calculator, playbook, and filters", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator("#learning-vol-framework-tab").click();
+  await page.locator('[data-sector-spine="C"]').click();
   await expect(page.locator("#learningVolFramework .vol-framework-card")).toHaveCount(5);
   await expect(page.locator("#learningVolFramework .vol-playbook-card")).toHaveCount(9);
   await expect(page.locator("#learningVolFramework")).toContainText("RV / IV 是 distribution 问题");
@@ -167,7 +177,7 @@ test("D1 phase 3 volatility framework renders calculator, playbook, and filters"
 test("D1 phase 4 dealer desk renders workflow, attribution, and gamma controls", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator("#learning-dealer-desk-tab").click();
+  await page.locator('[data-sector-spine="C"]').click();
   await expect(page.locator("#learningDealerDesk .dealer-workflow-card")).toHaveCount(6);
   await expect(page.locator("#learningDealerDesk .dealer-attribution-card")).toHaveCount(6);
   await expect(page.locator("#learningDealerDesk")).toContainText("客户买入 upside calls");
@@ -195,7 +205,7 @@ test("D1 phase 4 dealer desk renders workflow, attribution, and gamma controls",
 test("D1 phase 5 exotics bridge renders payoff sketches, structuring cases, and filters", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator("#learning-exotics-bridge-tab").click();
+  await page.locator('[data-sector-spine="E"]').click();
   await expect(page.locator("#learningExoticsBridge .exotics-bridge-card")).toHaveCount(6);
   await expect(page.locator("#learningExoticsBridge .structuring-case-card")).toHaveCount(6);
   await expect(page.locator("#learningExoticsBridge .exotics-payoff-svg")).toHaveCount(6);
@@ -226,7 +236,7 @@ test("D1 phase 5 exotics bridge renders payoff sketches, structuring cases, and 
 test("D1 phase 5B exotics risk lab renders decomposition drills and model-limit cards", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator("#learning-exotics-risk-tab").click();
+  await page.locator('[data-sector-spine="E"]').click();
   await expect(page.locator("#learningExoticsRisk .exotics-risk-drill-card")).toHaveCount(6);
   await expect(page.locator("#learningExoticsRisk .model-limit-card")).toHaveCount(6);
   await expect(page.locator("#learningExoticsRisk")).toContainText("Exotics risk decomposition");
@@ -243,7 +253,7 @@ test("D1 phase 5B exotics risk lab renders decomposition drills and model-limit 
 test("D1 phase 6 professional sprint creates sessions, reveals rubrics, and updates dashboard", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator("#learning-professional-sprint-tab").click();
+  await page.locator('[data-sector-spine="sprint"]').click();
   await expect(page.locator("#learningProfessionalSprint")).toContainText("Professional Sprint");
   await expect(page.locator("#sprintQuestionBankSummary")).toContainText("60");
   await expect(page.locator("#skillDashboard")).toContainText("本地能力分");
@@ -266,7 +276,7 @@ test("D1 phase 6 professional sprint creates sessions, reveals rubrics, and upda
   await expect(page.locator("#wrongAnswerNotebook")).not.toContainText("暂无弱项");
 
   await page.reload();
-  await expect(page.locator("#learning-professional-sprint-tab")).toHaveClass(/active/);
+  await expect(page.locator('.learning-panel[data-learning-panel="professional-sprint"]')).toHaveClass(/active/);
   await expect(page.locator("#learningProfessionalSprint .sprint-question-card")).toHaveCount(5);
   await expect(page.locator("#learningProgressSummary")).toContainText("专业冲刺 1/60");
 });
@@ -274,7 +284,7 @@ test("D1 phase 6 professional sprint creates sessions, reveals rubrics, and upda
 test("D1 phase 6B scores sprint answers, recommends weak-topic practice, and exports progress", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator("#learning-professional-sprint-tab").click();
+  await page.locator('[data-sector-spine="sprint"]').click();
   await page.locator('[data-sprint-topic-filter="exotics"]').click();
   await page.locator("#sprintSessionSize").selectOption("5");
   await page.locator("[data-start-sprint-session]").click();
@@ -304,7 +314,7 @@ test("D1 phase 6B scores sprint answers, recommends weak-topic practice, and exp
   expect(saved.generatedProgressReport).toContain("Phase 6B Progress Report");
 
   await page.reload();
-  await expect(page.locator("#learning-professional-sprint-tab")).toHaveClass(/active/);
+  await expect(page.locator('.learning-panel[data-learning-panel="professional-sprint"]')).toHaveClass(/active/);
   await expect(page.locator("#progressReportExport")).toContainText("Phase 6B Progress Report");
 });
 
@@ -313,7 +323,7 @@ test("D1 phase 2B client recommendation drills reveal steps and persist", async 
 
   await expect(page.locator("#learningProgressSummary")).toContainText("演练 0/20");
 
-  await page.locator("#learning-client-drills-tab").click();
+  await page.locator('[data-sector-spine="B"]').click();
   await expect(page.locator("#learningClientDrills .client-drill-card")).toHaveCount(20);
 
   const firstDrill = page.locator('[data-client-drill-card="protect-concentrated-stock"]');
@@ -339,7 +349,7 @@ test("D1 phase 2B client recommendation drills reveal steps and persist", async 
   await expect(page.locator("#learningProgressSummary")).toContainText("演练 1/20");
 
   await page.reload();
-  await expect(page.locator("#learning-client-drills-tab")).toHaveClass(/active/);
+  await expect(page.locator('.learning-panel[data-learning-panel="client-drills"]')).toHaveClass(/active/);
   await expect(page.locator("#learningProgressSummary")).toContainText("演练 1/20");
   await expect(page.locator('[data-client-drill-card="protect-concentrated-stock"]')).toContainText("推荐结构");
 
@@ -354,7 +364,7 @@ test("D1 phase 2B client recommendation drills reveal steps and persist", async 
 test("strategy chips in learning modules select existing strategies", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator("#learning-modules-tab").click();
+  await page.locator('[data-sector-spine="A"]').click();
   await page.locator('[data-select-strategy="long-call"]').first().click();
 
   // chip opens the lab as an overlay; the user stays in the plan
@@ -375,11 +385,12 @@ test("D1 learning hub recovers from invalid saved scenario filter", async ({ pag
       activeLearningTab: "scenarios",
       scenarioFilter: "bad-filter",
     }));
+    localStorage.setItem("os_d1_dest", "practice");
   });
 
   await page.reload();
 
-  await expect(page.locator("#learning-scenarios-tab")).toHaveClass(/active/);
+  await expect(page.locator('.learning-panel[data-learning-panel="scenarios"]')).toHaveClass(/active/);
   await expect(page.locator('[data-scenario-filter="all"]')).toHaveClass(/active/);
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(211);
 });
@@ -387,7 +398,7 @@ test("D1 learning hub recovers from invalid saved scenario filter", async ({ pag
 test("scenario bank uses sector filters A B C E not month numbers", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator("#learning-scenarios-tab").click();
+  await page.locator('.primary-nav-item[data-dest="practice"]').click();
 
   // Sector filter buttons must exist
   await expect(page.locator('[data-scenario-sector-filter="A"]')).toBeVisible();
@@ -418,7 +429,7 @@ test("Research Bridge tab renders cases, filters, and VTT drills", async ({ page
   // Switch to EN so English strings are predictable for assertions
   await page.locator("#langEn").click();
 
-  await page.locator('[data-learning-tab="research-bridge"]').click();
+  await page.locator('[data-sector-spine="D"]').click();
   await expect(page.locator("#learningResearchBridge")).toBeVisible();
 
   await expect(page.locator("#learningResearchBridge .research-case-card")).toHaveCount(16);
@@ -446,7 +457,7 @@ test("Research Bridge tab renders cases, filters, and VTT drills", async ({ page
 test("Sector D scenarios appear in scenario bank sector filter with NVDA content", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator("#learning-scenarios-tab").click();
+  await page.locator('.primary-nav-item[data-dest="practice"]').click();
   await page.locator('[data-scenario-sector-filter="D"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(20);
   await expect(page.locator("#learningScenarios")).toContainText("NVDA");

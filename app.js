@@ -248,6 +248,7 @@ function defaultD1LearningProgress() {
     reviewLaterScenarios: [],
     clientDrillStepCounts: {},
     activeLearningTab: "roadmap",
+    activeSector: "overview",
     activeVolPlaybookFilter: "all",
     activeExoticsFilter: "all",
     activeExoticsRiskFilter: "all",
@@ -2721,7 +2722,8 @@ function renderLearningModules() {
   const target = document.getElementById("learningModules");
   if (!target) return;
   const strategiesById = new Map(STRATEGIES.map((strategy) => [strategy.id, strategy]));
-  const cards = learningContent().modules.map((module) => {
+  const activeSector = state.learning.activeSector;
+  const cards = learningContent().modules.filter((module) => (module.sector || "A") === activeSector).map((module) => {
     const done = state.learning.completedModules.includes(module.id);
     const links = module.strategyLinks.map((id) => {
       const strategy = strategiesById.get(id);
@@ -2730,7 +2732,7 @@ function renderLearningModules() {
     }).join("");
     const completeLabel = done ? learningUiText("completed") : learningUiText("markComplete");
     return `
-      <article class="module-card">
+      <article class="module-card" data-sector="${escapeHtml(module.sector || "A")}">
         <p class="learning-kicker">${formatLearningPeriod("sector", module.sector || "A")} · ${formatLearningPeriod("week", module.week)}</p>
         <h4 class="learning-title">${escapeHtml(localizedLearning("modules", module, "title"))}</h4>
         <p class="learning-copy"><strong>${escapeHtml(learningUiText("coreQuestion"))}:</strong> ${escapeHtml(localizedLearning("modules", module, "coreQuestion"))}</p>
@@ -3820,10 +3822,65 @@ function renderLearningScenarios() {
   target.innerHTML = `<div class="scenario-grid">${cards}</div>`;
 }
 
+var SECTOR_PANELS = {
+  overview: ["roadmap"],
+  A: ["modules", "bridge"],
+  B: ["modules", "construction", "client-drills"],
+  C: ["modules", "vol-framework", "dealer-desk"],
+  D: ["research-bridge"],
+  E: ["modules", "exotics-bridge", "exotics-risk"],
+  sprint: ["professional-sprint"],
+};
+var SECTOR_SPINE_ORDER = ["overview", "A", "B", "C", "D", "E", "sprint"];
+
+function sectorSpineLabel(key) {
+  if (key === "overview") return learningLanguage() === "cn" ? "总览" : "Overview";
+  if (key === "sprint") return learningLanguage() === "cn" ? "🏁 冲刺" : "🏁 Sprint";
+  return "Sector " + key;
+}
+
+function renderSectorSpine() {
+  var el = document.getElementById("sectorSpine");
+  if (!el) return;
+  var active = state.learning.activeSector;
+  if (SECTOR_SPINE_ORDER.indexOf(active) === -1) active = "overview";
+  state.learning.activeSector = active;
+  el.innerHTML = SECTOR_SPINE_ORDER.map(function (key) {
+    var isActive = key === active;
+    return '<button class="sector-spine-item ' + (isActive ? "active" : "") + '" type="button" role="tab" aria-selected="' + isActive + '" data-sector-spine="' + key + '">' + escapeHtml(sectorSpineLabel(key)) + "</button>";
+  }).join("");
+}
+
+// Decide which learning panels are visible. In the practice destination only the
+// scenarios panel shows; otherwise (plan) the active sector's panels show.
+function updateLearningPanels() {
+  var visible;
+  if (state.destination === "practice") {
+    visible = ["scenarios"];
+  } else {
+    visible = SECTOR_PANELS[state.learning.activeSector] || SECTOR_PANELS.overview;
+  }
+  var set = {};
+  for (var i = 0; i < visible.length; i++) set[visible[i]] = true;
+  var panels = document.querySelectorAll(".learning-panel");
+  for (var j = 0; j < panels.length; j++) {
+    panels[j].classList.toggle("active", !!set[panels[j].dataset.learningPanel]);
+  }
+}
+
+function applySector(sector) {
+  if (SECTOR_SPINE_ORDER.indexOf(sector) === -1) sector = "overview";
+  state.learning.activeSector = sector;
+  saveD1LearningProgress();
+  renderLearningModules();   // re-filter modules to the new sector
+  renderSectorSpine();
+  updateLearningPanels();
+}
+
 function renderLearningHub() {
   renderLanguageToggle();
   renderLearningProgressSummary();
-  renderLearningTabs();
+  renderSectorSpine();
   renderLearningRoadmap();
   renderLearningModules();
   renderLearningBridge();
@@ -3837,6 +3894,7 @@ function renderLearningHub() {
   renderLearningProfessionalSprint();
   renderScenarioFilters();
   renderLearningScenarios();
+  updateLearningPanels();
 }
 
 function renderStaticShell() {
@@ -3907,8 +3965,10 @@ function applyDestination(dest) {
   document.body.dataset.dest = dest;
   localStorage.setItem("os_d1_dest", dest);
   if (dest === "practice") {
-    state.learning.activeLearningTab = "scenarios";
-    renderLearningTabs();
+    updateLearningPanels();
+  }
+  if (dest === "plan") {
+    updateLearningPanels();
   }
   if (dest === "lab") {
     renderLab(); // re-measure chart at the lab-stage width
@@ -4167,10 +4227,8 @@ function handleClick(event) {
     renderLearningHub();
     return;
   }
-  if (event.target.matches(".learning-tab")) {
-    state.learning.activeLearningTab = event.target.dataset.learningTab;
-    saveD1LearningProgress();
-    renderLearningHub();
+  if (event.target.matches("[data-sector-spine]")) {
+    applySector(event.target.dataset.sectorSpine);
     return;
   }
   if (event.target.matches(".vol-playbook-filter")) {

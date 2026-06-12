@@ -2411,3 +2411,33 @@ body[data-dest="library"] .strategy-list {
 body[data-dest="lab"] #learningHubPanel { display: none; }
 body[data-dest="plan"] #labStage,
 body[data-dest="practice"] #labStage { display: none; }
+body[data-dest="practice"] #sectorSpine { display: none; }
+
+/* ============================================================================
+   P3b — Sector spine (replaces the 12-tab Learning Hub bar)
+   ============================================================================ */
+.sector-spine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+}
+.sector-spine-item {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-2);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+.sector-spine-item:hover { color: var(--text); }
+.sector-spine-item.active {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  background: rgba(57, 199, 229, 0.12);
+}
