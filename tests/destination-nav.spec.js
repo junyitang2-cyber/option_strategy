@@ -86,3 +86,19 @@ test("practice destination shows only the scenarios panel", async ({ page }) => 
   await expect(page.locator('.learning-panel[data-learning-panel="scenarios"]')).toHaveClass(/active/);
   await expect(page.locator('.learning-panel[data-learning-panel="modules"]')).not.toHaveClass(/active/);
 });
+
+test("global language and mode controls live in the nav and work in every destination", async ({ page }) => {
+  await page.goto(URL);
+  // the controls are inside the always-visible primary nav, not the workspace topbar
+  await expect(page.locator(".primary-nav #langEn")).toHaveCount(1);
+  await expect(page.locator(".primary-nav #modePro")).toHaveCount(1);
+
+  // switch to the library destination (workspace hidden) and confirm the controls still work
+  await page.locator('.primary-nav-item[data-dest="library"]').click();
+  await expect(page.locator("#langEn")).toBeVisible();
+  await expect(page.locator("#modePro")).toBeVisible();
+  await page.locator("#langEn").click();
+  await expect(page.locator("#langEn")).toHaveClass(/active/);
+  await page.locator("#modePro").click();
+  await expect(page.locator("#modePro")).toHaveClass(/active/);
+});

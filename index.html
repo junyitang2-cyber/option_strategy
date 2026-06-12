@@ -17,6 +17,17 @@
         <button class="primary-nav-item" type="button" data-dest="library"><span class="primary-nav-label">策略库</span></button>
         <button class="primary-nav-item" type="button" data-dest="lab"><span class="primary-nav-label">实验室</span></button>
         <button class="primary-nav-item" type="button" data-dest="practice"><span class="primary-nav-label">练习场</span></button>
+        <div class="nav-controls">
+          <div class="language-toggle" aria-label="页面语言">
+            <button id="langCn" class="mode-btn active" type="button" data-learning-language="cn">CN</button>
+            <button id="langEn" class="mode-btn" type="button" data-learning-language="en">EN</button>
+          </div>
+          <div class="mode-toggle">
+            <button id="modeBasic" class="mode-btn active" type="button" title="初级学习模式">初级</button>
+            <button id="modePro" class="mode-btn" type="button" title="进阶交易员视角">进阶</button>
+            <button id="modeInterview" class="mode-btn" type="button" title="专业训练模式">专业</button>
+          </div>
+        </div>
       </nav>
       <aside class="strategy-rail" aria-label="策略库">
         <div class="rail-header">
@@ -49,15 +60,6 @@
             <p id="strategySubtitle" class="strategy-subtitle"></p>
           </div>
           <div class="top-actions">
-            <div class="language-toggle" aria-label="页面语言">
-              <button id="langCn" class="mode-btn active" type="button" data-learning-language="cn">CN</button>
-              <button id="langEn" class="mode-btn" type="button" data-learning-language="en">EN</button>
-            </div>
-            <div class="mode-toggle">
-              <button id="modeBasic" class="mode-btn active" type="button" title="初级学习模式">初级</button>
-              <button id="modePro" class="mode-btn" type="button" title="进阶交易员视角">进阶</button>
-              <button id="modeInterview" class="mode-btn" type="button" title="专业训练模式">专业</button>
-            </div>
             <button id="markCompletedBtn" class="primary-button" type="button" style="margin-right:8px">✓ 已理解</button>
             <button id="resetStrategy" class="primary-button" type="button">重置模板</button>
           </div>
@@ -76,52 +78,40 @@
           <div class="sector-spine" id="sectorSpine" role="tablist" aria-label="转型计划 Sectors"></div>
 
           <div class="learning-content">
-            <div class="learning-panel" data-learning-panel="roadmap"
-                 role="tabpanel" aria-labelledby="learning-roadmap-tab" id="learning-roadmap-panel">
+            <div class="learning-panel" data-learning-panel="roadmap" id="learning-roadmap-panel">
               <div id="learningRoadmap"></div>
             </div>
-            <div class="learning-panel" data-learning-panel="modules"
-                 role="tabpanel" aria-labelledby="learning-modules-tab" id="learning-modules-panel">
+            <div class="learning-panel" data-learning-panel="modules" id="learning-modules-panel">
               <div id="learningModules"></div>
             </div>
-            <div class="learning-panel" data-learning-panel="bridge"
-                 role="tabpanel" aria-labelledby="learning-bridge-tab" id="learning-bridge-panel">
+            <div class="learning-panel" data-learning-panel="bridge" id="learning-bridge-panel">
               <div id="learningBridge"></div>
             </div>
-            <div class="learning-panel" data-learning-panel="construction"
-                 role="tabpanel" aria-labelledby="learning-construction-tab" id="learning-construction-panel">
+            <div class="learning-panel" data-learning-panel="construction" id="learning-construction-panel">
               <div id="learningComparisons"></div>
             </div>
-            <div class="learning-panel" data-learning-panel="client-drills"
-                 role="tabpanel" aria-labelledby="learning-client-drills-tab" id="learning-client-drills-panel">
+            <div class="learning-panel" data-learning-panel="client-drills" id="learning-client-drills-panel">
               <div id="learningClientDrills"></div>
             </div>
-            <div class="learning-panel" data-learning-panel="vol-framework"
-                 role="tabpanel" aria-labelledby="learning-vol-framework-tab" id="learning-vol-framework-panel">
+            <div class="learning-panel" data-learning-panel="vol-framework" id="learning-vol-framework-panel">
               <div id="learningVolFramework"></div>
             </div>
-            <div class="learning-panel" data-learning-panel="dealer-desk"
-                 role="tabpanel" aria-labelledby="learning-dealer-desk-tab" id="learning-dealer-desk-panel">
+            <div class="learning-panel" data-learning-panel="dealer-desk" id="learning-dealer-desk-panel">
               <div id="learningDealerDesk"></div>
             </div>
-            <div class="learning-panel" data-learning-panel="exotics-bridge"
-                 role="tabpanel" aria-labelledby="learning-exotics-bridge-tab" id="learning-exotics-bridge-panel">
+            <div class="learning-panel" data-learning-panel="exotics-bridge" id="learning-exotics-bridge-panel">
               <div id="learningExoticsBridge"></div>
             </div>
-            <div class="learning-panel" data-learning-panel="exotics-risk"
-                 role="tabpanel" aria-labelledby="learning-exotics-risk-tab" id="learning-exotics-risk-panel">
+            <div class="learning-panel" data-learning-panel="exotics-risk" id="learning-exotics-risk-panel">
               <div id="learningExoticsRisk"></div>
             </div>
-            <div class="learning-panel" data-learning-panel="research-bridge"
-                 role="tabpanel" aria-labelledby="learning-research-bridge-tab" id="learning-research-bridge-panel">
+            <div class="learning-panel" data-learning-panel="research-bridge" id="learning-research-bridge-panel">
               <div id="learningResearchBridge"></div>
             </div>
-            <div class="learning-panel" data-learning-panel="professional-sprint"
-                 role="tabpanel" aria-labelledby="learning-professional-sprint-tab" id="learning-professional-sprint-panel">
+            <div class="learning-panel" data-learning-panel="professional-sprint" id="learning-professional-sprint-panel">
               <div id="learningProfessionalSprint"></div>
             </div>
-            <div class="learning-panel" data-learning-panel="scenarios"
-                 role="tabpanel" aria-labelledby="learning-scenarios-tab" id="learning-scenarios-panel">
+            <div class="learning-panel" data-learning-panel="scenarios" id="learning-scenarios-panel">
               <div class="scenario-filter-row" id="scenarioFilterRow"></div>
               <div class="scenario-filter-row" id="scenarioSectorFilterRow"></div>
               <div class="scenario-filter-row" id="scenarioTopicFilterRow"></div>

@@ -382,7 +382,6 @@ test("D1 learning hub recovers from invalid saved scenario filter", async ({ pag
       completedModules: [],
       completedScenarios: [],
       reviewLaterScenarios: [],
-      activeLearningTab: "scenarios",
       scenarioFilter: "bad-filter",
     }));
     localStorage.setItem("os_d1_dest", "practice");

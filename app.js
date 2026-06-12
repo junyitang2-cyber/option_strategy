@@ -247,7 +247,6 @@ function defaultD1LearningProgress() {
     completedClientDrills: [],
     reviewLaterScenarios: [],
     clientDrillStepCounts: {},
-    activeLearningTab: "roadmap",
     activeSector: "overview",
     activeVolPlaybookFilter: "all",
     activeExoticsFilter: "all",
@@ -2670,22 +2669,6 @@ function renderLearningProgressSummary() {
   const vttTotal = (content.viewToTradeDrills || []).length;
   const vttProgress = vttTotal ? ` · ${learningLanguage() === "cn" ? "研究演练" : "Research Drills"} ${state.learning.completedViewToTradeDrills.length}/${vttTotal}` : "";
   target.textContent = `${learningUiText("progressModules")} ${state.learning.completedModules.length}/${content.modules.length} · ${learningUiText("progressScenarios")} ${state.learning.completedScenarios.length}/${content.scenarios.length} · ${learningUiText("progressClientDrills")} ${state.learning.completedClientDrills.length}/${(content.clientDrills || []).length}${sprintProgress}${vttProgress}`;
-}
-
-function renderLearningTabs() {
-  const validTabs = new Set(["roadmap", "modules", "bridge", "construction", "client-drills", "vol-framework", "dealer-desk", "exotics-bridge", "exotics-risk", "research-bridge", "professional-sprint", "scenarios"]);
-  const active = validTabs.has(state.learning.activeLearningTab) ? state.learning.activeLearningTab : "roadmap";
-  state.learning.activeLearningTab = active;
-  const labels = LEARNING_UI_TEXT[learningLanguage()].tabs;
-  document.querySelectorAll(".learning-tab").forEach((tab) => {
-    const isActive = tab.dataset.learningTab === active;
-    tab.textContent = labels[tab.dataset.learningTab] || tab.dataset.learningTab;
-    tab.classList.toggle("active", isActive);
-    tab.setAttribute("aria-selected", String(isActive));
-  });
-  document.querySelectorAll(".learning-panel").forEach((panel) => {
-    panel.classList.toggle("active", panel.dataset.learningPanel === active);
-  });
 }
 
 function formatSectorBadge(sector) {

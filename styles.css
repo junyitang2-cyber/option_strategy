@@ -1152,7 +1152,6 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
   text-align: right;
 }
 
-.learning-tabs,
 .scenario-filter-row {
   display: flex;
   gap: 6px;
@@ -1162,7 +1161,6 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
   padding-bottom: 2px;
 }
 
-.learning-tab,
 .scenario-filter,
 .scenario-sector-filter,
 .scenario-topic-filter {
@@ -1176,7 +1174,6 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
   white-space: nowrap;
 }
 
-.learning-tab:hover,
 .scenario-filter:hover,
 .scenario-sector-filter:hover,
 .scenario-topic-filter:hover {
@@ -1184,7 +1181,6 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
   color: var(--text);
 }
 
-.learning-tab.active,
 .scenario-filter.active,
 .scenario-sector-filter.active,
 .scenario-topic-filter.active {
@@ -1192,7 +1188,6 @@ input[type="range"] { accent-color: var(--cyan); width: 100%; }
   color: var(--cyan);
 }
 
-.learning-tab:focus-visible,
 .scenario-filter:focus-visible,
 .scenario-sector-filter:focus-visible,
 .scenario-topic-filter:focus-visible,
@@ -1935,11 +1930,9 @@ body.skin-easy .control-field input:focus { border-color: #2563EB; box-shadow: 0
 body.skin-easy input[type="range"] { accent-color: #2563EB; }
 
 /* Tabs */
-body.skin-easy .learning-tab.active,
 body.skin-easy .scenario-filter.active,
 body.skin-easy .scenario-sector-filter.active,
 body.skin-easy .scenario-topic-filter.active { color: #2563EB; border-bottom-color: #2563EB; }
-body.skin-easy .learning-tab:hover,
 body.skin-easy .scenario-filter:hover,
 body.skin-easy .scenario-sector-filter:hover,
 body.skin-easy .scenario-topic-filter:hover { background: #EFF6FF; color: #0F172A; }
@@ -2279,9 +2272,7 @@ body.skin-pro .stress-table th { border-bottom: 1px solid rgba(255, 176, 0, 0.45
 
 /* F-key tab prefixes (CSS counters — zero JS, toContainText assertions unaffected) */
 body.skin-pro .tools-tabs    { counter-reset: fkey; }
-body.skin-pro .learning-tabs { counter-reset: fkey; }
-body.skin-pro .tool-tab::before,
-body.skin-pro .learning-tab::before {
+body.skin-pro .tool-tab::before {
   counter-increment: fkey;
   content: "F" counter(fkey) " ";
   font-family: var(--mono);
@@ -2440,4 +2431,31 @@ body[data-dest="practice"] #sectorSpine { display: none; }
   color: var(--cyan);
   border-color: var(--cyan);
   background: rgba(57, 199, 229, 0.12);
+}
+
+/* ============================================================================
+   P4 — Global controls moved into the primary nav (compact, bottom of nav)
+   ============================================================================ */
+.nav-controls {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.nav-controls .language-toggle,
+.nav-controls .mode-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: var(--panel-3);
+  border-radius: 6px;
+  padding: 3px;
+}
+.nav-controls .mode-btn {
+  width: 100%;
+  font-size: 11px;
+  padding: 5px 4px;
+  text-align: center;
 }
