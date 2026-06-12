@@ -11,11 +11,14 @@ test("phase 2 learning path and per-leg decomposition work", async ({ page }) =>
   await page.goto(`file://${path.resolve(__dirname, "../index.html")}`);
   await page.evaluate(() => localStorage.clear());
   await page.reload();
+  await page.locator('.primary-nav-item[data-dest="lab"]').click();
 
   await expect(page.locator("#strategyTitle")).toHaveText("Long Call");
   await expect(page.locator("#learningPathBar")).toContainText("Long Call");
 
+  await page.locator('.primary-nav-item[data-dest="library"]').click();
   await page.locator('#strategyList [data-strategy="box-spread"]').click();
+  await expect(page.locator("body")).toHaveAttribute("data-dest", "lab");
   await expect(page.locator("#diffWarnModal")).toBeVisible();
   await expect(page.locator("#diffWarnContent")).toContainText("难度跃升提示");
   await expect(page.locator("#strategyTitle")).toHaveText("Long Call");

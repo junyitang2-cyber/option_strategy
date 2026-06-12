@@ -16,6 +16,7 @@ const state = {
   legs: [],
   mode: "basic", // "basic" | "professional" | "interview"
   labOverlayOpen: false,
+  destination: localStorage.getItem("os_d1_dest") || "plan",
   activeTool: localStorage.getItem('activeTool') || 'stress',
   learning: loadD1LearningProgress(),
   portfolio: {
@@ -3888,6 +3889,33 @@ function closeLabOverlay() {
   renderLab();                     // re-render at home width
 }
 
+function uiDestination() {
+  return localStorage.getItem("os_d1_dest") || "plan";
+}
+
+function renderPrimaryNav() {
+  var items = document.querySelectorAll(".primary-nav-item");
+  for (var i = 0; i < items.length; i++) {
+    items[i].classList.toggle("active", items[i].dataset.dest === state.destination);
+  }
+}
+
+function applyDestination(dest) {
+  var valid = ["plan", "library", "lab", "practice"];
+  if (valid.indexOf(dest) === -1) dest = "plan";
+  state.destination = dest;
+  document.body.dataset.dest = dest;
+  localStorage.setItem("os_d1_dest", dest);
+  if (dest === "practice") {
+    state.learning.activeLearningTab = "scenarios";
+    renderLearningTabs();
+  }
+  if (dest === "lab") {
+    renderLab(); // re-measure chart at the lab-stage width
+  }
+  renderPrimaryNav();
+}
+
 function renderAll() {
   renderStaticShell();
   renderStrategyList();
@@ -4124,6 +4152,11 @@ function handleClick(event) {
     closeLabOverlay();
     return;
   }
+  var navItem = event.target.closest(".primary-nav-item[data-dest]");
+  if (navItem) {
+    applyDestination(navItem.dataset.dest);
+    return;
+  }
   if (event.target.matches("[data-skin]")) {
     applySkin(event.target.dataset.skin);
     return;
@@ -4311,11 +4344,13 @@ function handleClick(event) {
   }
   if (event.target.matches("[data-select-strategy]")) {
     selectStrategy(event.target.dataset.selectStrategy);
+    applyDestination("lab");
     return;
   }
   if (event.target.matches("[data-open-tool]")) {
     handleModeToggle("professional");
     switchTool(event.target.dataset.openTool);
+    applyDestination("lab");
     document.getElementById("professionalToolsPanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
     return;
   }
@@ -4423,6 +4458,7 @@ function handleClick(event) {
   const strategyButton = event.target.closest("[data-strategy]");
   if (strategyButton) {
     selectStrategy(strategyButton.dataset.strategy);
+    if (state.destination === "library") applyDestination("lab");
   }
 }
 
@@ -4482,6 +4518,7 @@ function boot() {
     switchTool(state.activeTool);
   }
   applySkin(uiSkin());
+  applyDestination(uiDestination());
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && state.labOverlayOpen) closeLabOverlay();
   });

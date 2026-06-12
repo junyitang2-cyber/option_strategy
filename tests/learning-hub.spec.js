@@ -155,7 +155,7 @@ test("D1 phase 3 volatility framework renders calculator, playbook, and filters"
   await expect(page.locator("#vol-tab")).toHaveClass(/active/);
   await expect(page.locator("#volSurfaceChart svg")).toBeVisible();
 
-  await page.locator("#learning-scenarios-tab").click();
+  await page.locator('.primary-nav-item[data-dest="practice"]').click();
   await page.locator('[data-scenario-sector-filter="C"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(85);
   await page.locator('[data-scenario-topic-filter="vol"]').click();
@@ -184,7 +184,7 @@ test("D1 phase 4 dealer desk renders workflow, attribution, and gamma controls",
   await expect(page.locator("#gammaPnlResults")).toContainText("交易成本");
   await expect(page.locator("#gammaPnlResults")).toContainText("Rehedge rule");
 
-  await page.locator("#learning-scenarios-tab").click();
+  await page.locator('.primary-nav-item[data-dest="practice"]').click();
   await page.locator('[data-scenario-sector-filter="C"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(85);
   await page.locator('[data-scenario-topic-filter="dealer"]').click();
@@ -212,7 +212,7 @@ test("D1 phase 5 exotics bridge renders payoff sketches, structuring cases, and 
   await expect(page.locator("#modePro")).toHaveClass(/active/);
   await expect(page.locator("#parity-tab")).toHaveClass(/active/);
 
-  await page.locator("#learning-scenarios-tab").click();
+  await page.locator('.primary-nav-item[data-dest="practice"]').click();
   await page.locator('[data-scenario-sector-filter="E"]').click();
   await expect(page.locator("#learningScenarios .scenario-card")).toHaveCount(36);
   await page.locator('[data-scenario-topic-filter="exotics"]').click();
@@ -344,6 +344,7 @@ test("D1 phase 2B client recommendation drills reveal steps and persist", async 
   await expect(page.locator('[data-client-drill-card="protect-concentrated-stock"]')).toContainText("推荐结构");
 
   await page.locator('[data-client-drill-card="protect-concentrated-stock"] [data-select-strategy="collar"]').click();
+  await expect(page.locator("body")).toHaveAttribute("data-dest", "lab");
   await expect(page.locator("#strategyTitle")).toContainText("Collar");
   await expect(page.locator("#mainChart svg")).toBeVisible();
 });
@@ -354,6 +355,7 @@ test("strategy chips in learning modules select existing strategies", async ({ p
   await page.locator("#learning-modules-tab").click();
   await page.locator('[data-select-strategy="long-call"]').first().click();
 
+  await expect(page.locator("body")).toHaveAttribute("data-dest", "lab");
   await expect(page.locator("#strategyTitle")).toContainText("Long Call");
   await expect(page.locator("#mainChart svg")).toBeVisible();
 });

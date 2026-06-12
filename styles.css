@@ -33,7 +33,7 @@ a { color: var(--cyan); }
 
 .app-shell {
   display: grid;
-  grid-template-columns: 340px minmax(780px, 1fr);
+  grid-template-columns: 88px minmax(0, 1fr);
   min-height: 100vh;
 }
 .app-shell > *, .layout-grid > *, .panel { min-width: 0; }
@@ -2356,3 +2356,58 @@ body.skin-pro .topbar h2::before { content: "\25AE "; color: var(--cyan); }
   overflow: auto;
   padding: 16px;
 }
+
+/* ============================================================================
+   P2 — Primary destination nav + destination switching
+   Exactly one of .strategy-rail (library) / .workspace (everything else) shows,
+   so display:none keeps the grid at two effective columns.
+   ============================================================================ */
+.primary-nav {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 8px;
+  border-right: 1px solid var(--line);
+  background: var(--rail);
+}
+.primary-nav-item {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  padding: 10px 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+.primary-nav-item:hover { color: var(--text); background: var(--panel-2); }
+.primary-nav-item.active {
+  color: var(--cyan);
+  border-color: var(--line);
+  background: var(--panel-2);
+}
+
+/* Library destination: show the rail (as a grid), hide the workspace */
+body:not([data-dest="library"]) .strategy-rail { display: none; }
+body[data-dest="library"] .workspace { display: none; }
+body[data-dest="library"] .strategy-rail {
+  position: static;
+  height: auto;
+  overflow: visible;
+}
+body[data-dest="library"] .strategy-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+/* Within the workspace: learning hub (plan/practice) vs lab stage (lab) */
+body[data-dest="lab"] #learningHubPanel { display: none; }
+body[data-dest="plan"] #labStage,
+body[data-dest="practice"] #labStage { display: none; }

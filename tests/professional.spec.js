@@ -15,6 +15,7 @@ test("tiered learning modes and professional practice panels stay interactive", 
   await page.goto(`file://${path.resolve(__dirname, "../index.html")}`);
   await page.evaluate(() => localStorage.clear());
   await page.reload();
+  await page.locator('.primary-nav-item[data-dest="lab"]').click();
 
   await expect(page.locator("#modeBasic")).toHaveText("初级");
   await expect(page.locator("#modePro")).toHaveText("进阶");
@@ -64,8 +65,10 @@ test("tiered learning modes and professional practice panels stay interactive", 
   await expect(page.locator("#customStrikeControl")).toBeHidden();
 
   // Test strategy switching
+  await page.locator('.primary-nav-item[data-dest="library"]').click();
   await page.locator("#searchInput").fill("Iron Condor");
   await page.locator('#strategyList [data-strategy="iron-condor"]').click();
+  await expect(page.locator("body")).toHaveAttribute("data-dest", "lab");
   await expect(page.locator("#strategyTitle")).toHaveText("Iron Condor");
 
   // Test stress test tab
@@ -99,8 +102,10 @@ test("tiered learning modes and professional practice panels stay interactive", 
   await expect(page.locator("#gammaPnlResults")).toContainText("Rehedge rule");
 
   // Test switching to Poor Man's Covered Call
+  await page.locator('.primary-nav-item[data-dest="library"]').click();
   await page.locator("#searchInput").fill("Poor Man");
   await page.locator('#strategyList [data-strategy="poor-man-s-covered-call"]').click();
+  await expect(page.locator("body")).toHaveAttribute("data-dest", "lab");
   if (await page.locator("#diffWarnModal").isVisible()) {
     await page.locator("#skipDiffWarn").click();
   }
@@ -132,18 +137,23 @@ test("phase 7 professional content renders for new target strategies", async ({ 
   });
 
   await page.goto(`file://${path.resolve(__dirname, "../index.html")}`);
+  await page.locator('.primary-nav-item[data-dest="lab"]').click();
   await page.locator("#modeInterview").click();
 
+  await page.locator('.primary-nav-item[data-dest="library"]').click();
   await page.locator("#searchInput").fill("Bull Put Spread");
   await page.locator('#strategyList [data-strategy="bull-put-spread"]').click();
+  await expect(page.locator("body")).toHaveAttribute("data-dest", "lab");
   await expect(page.locator("#strategyTitle")).toHaveText("Bull Put Spread");
   await expect(page.locator("#professionalPanel")).toContainText("short put");
   await expect(page.locator("#commonMistakesContent")).toContainText("错误表达");
   await expect(page.locator(".interview-qa")).toHaveCount(3);
   await expect(page.locator("#interviewQuestions")).toContainText("Bull Put Spread");
 
+  await page.locator('.primary-nav-item[data-dest="library"]').click();
   await page.locator("#searchInput").fill("Short Synthetic Future");
   await page.locator('#strategyList [data-strategy="short-synthetic-future"]').click();
+  await expect(page.locator("body")).toHaveAttribute("data-dest", "lab");
   if (await page.locator("#diffWarnModal").isVisible()) {
     await page.locator("#skipDiffWarn").click();
   }
@@ -152,8 +162,10 @@ test("phase 7 professional content renders for new target strategies", async ({ 
   await expect(page.locator("#commonMistakesContent")).toContainText("错误表达");
   await expect(page.locator(".interview-qa")).toHaveCount(3);
 
+  await page.locator('.primary-nav-item[data-dest="library"]').click();
   await page.locator("#searchInput").fill("Vega");
   await page.locator('#strategyList [data-strategy="vega-套利"]').click();
+  await expect(page.locator("body")).toHaveAttribute("data-dest", "lab");
   if (await page.locator("#diffWarnModal").isVisible()) {
     await page.locator("#skipDiffWarn").click();
   }

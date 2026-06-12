@@ -52,7 +52,9 @@ test("skin toggle pro button is amber when pro active", async ({ page }) => {
 test("pro skin has no cyan leg color on multi-leg strategy", async ({ page }) => {
   await page.goto(URL);
   // Select Iron Condor (4 legs) — data-strategy attribute derived from slugified name
+  await page.locator('.primary-nav-item[data-dest="library"]').click();
   await page.locator("[data-strategy='iron-condor']").click();
+  await expect(page.locator("body")).toHaveAttribute("data-dest", "lab");
   // Switch to per-leg view to render leg legend and color chips
   await page.locator("#viewPerLeg").click();
   // Check computed color of leg index 2 legend label (leg-check-label for leg index 2)
