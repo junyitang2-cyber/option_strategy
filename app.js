@@ -15,6 +15,7 @@ const state = {
   scenario: defaultScenario(),
   legs: [],
   mode: "basic", // "basic" | "professional" | "interview"
+  labOverlayOpen: false,
   activeTool: localStorage.getItem('activeTool') || 'stress',
   learning: loadD1LearningProgress(),
   portfolio: {
@@ -3843,9 +3844,7 @@ function renderStaticShell() {
   renderLearningHub();
 }
 
-function renderAll() {
-  renderStaticShell();
-  renderStrategyList();
+function renderLab() {
   renderTopbar();
   renderScenarioControls();
   renderSliders();
@@ -3854,6 +3853,45 @@ function renderAll() {
   renderMetrics();
   renderLegsEditor();
   renderEducation();
+}
+
+function labRootEl() { return document.getElementById("labRoot"); }
+
+function openLabOverlay(id) {
+  var overlay = document.getElementById("labOverlay");
+  var slot = document.getElementById("labOverlaySlot");
+  var root = labRootEl();
+  if (!overlay || !slot || !root) return;
+
+  if (id) {
+    var strategy = STRATEGIES.find(function (s) { return s.id === id; });
+    if (strategy && strategy.id !== state.selectedId) {
+      doSelectStrategy(strategy);
+    }
+  }
+
+  slot.appendChild(root);          // relocate the single lab subtree into the overlay
+  overlay.hidden = false;
+  state.labOverlayOpen = true;
+  renderLab();                     // re-render so the chart sizes to the overlay width
+}
+
+function closeLabOverlay() {
+  var overlay = document.getElementById("labOverlay");
+  var home = document.getElementById("labHome");
+  var root = labRootEl();
+  if (!overlay || !home || !root) return;
+
+  home.parentNode.insertBefore(root, home.nextSibling);  // restore to home slot
+  overlay.hidden = true;
+  state.labOverlayOpen = false;
+  renderLab();                     // re-render at home width
+}
+
+function renderAll() {
+  renderStaticShell();
+  renderStrategyList();
+  renderLab();
 }
 
 // --- URL state persistence ---
@@ -4082,6 +4120,10 @@ function handleChange(event) {
 }
 
 function handleClick(event) {
+  if (event.target.id === "labOverlayClose" || event.target.matches("[data-lab-overlay-dismiss]")) {
+    closeLabOverlay();
+    return;
+  }
   if (event.target.matches("[data-skin]")) {
     applySkin(event.target.dataset.skin);
     return;
@@ -4440,6 +4482,9 @@ function boot() {
     switchTool(state.activeTool);
   }
   applySkin(uiSkin());
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && state.labOverlayOpen) closeLabOverlay();
+  });
 }
 
 boot();

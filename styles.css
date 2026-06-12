@@ -2297,3 +2297,62 @@ body.skin-pro .topbar h2 {
   font-size: 15px;
 }
 body.skin-pro .topbar h2::before { content: "\25AE "; color: var(--cyan); }
+
+/* ============================================================================
+   Lab overlay host (P1 foundation; exercised by tests, wired to chips in P3)
+   ============================================================================ */
+.lab-overlay[hidden] { display: none; }
+.lab-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+}
+.lab-overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+.lab-overlay-shell {
+  position: relative;
+  margin: 24px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+.lab-overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.lab-overlay-title {
+  color: var(--cyan);
+  font-weight: 700;
+  font-size: 13px;
+}
+.lab-overlay-close {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 6px;
+}
+.lab-overlay-close:hover { color: var(--text); }
+.lab-overlay-slot {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 16px;
+}
