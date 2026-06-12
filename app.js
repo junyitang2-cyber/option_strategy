@@ -2675,29 +2675,80 @@ function formatSectorBadge(sector) {
   return formatLearningPeriod("sector", sector);
 }
 
+function sectorProgress(sector) {
+  var content = learningContent();
+  if (sector === "sprint") {
+    return {
+      done: state.learning.completedSprintQuestions.length,
+      total: (content.professionalSprintQuestions || []).length,
+      unit: learningLanguage() === "cn" ? "冲刺题" : "sprint Qs",
+    };
+  }
+  if (sector === "D") {
+    return {
+      done: state.learning.completedViewToTradeDrills.length,
+      total: (content.viewToTradeDrills || []).length,
+      unit: learningLanguage() === "cn" ? "研究演练" : "drills",
+    };
+  }
+  var inSector = (content.modules || []).filter(function (m) { return (m.sector || "A") === sector; });
+  var done = inSector.filter(function (m) { return state.learning.completedModules.includes(m.id); }).length;
+  return { done: done, total: inSector.length, unit: learningLanguage() === "cn" ? "模块" : "modules" };
+}
+
+function nextIncompleteSector() {
+  var order = ["A", "B", "C", "D", "E", "sprint"];
+  for (var i = 0; i < order.length; i++) {
+    var p = sectorProgress(order[i]);
+    if (p.total > 0 && p.done < p.total) return order[i];
+  }
+  return null;
+}
+
 function renderLearningRoadmap() {
   const target = document.getElementById("learningRoadmap");
   if (!target) return;
+  const isCn = learningLanguage() === "cn";
+  const next = nextIncompleteSector();
+  const ctaLabel = next
+    ? (isCn ? "继续学习 → " : "Continue → ") + formatSectorBadge(next)
+    : (isCn ? "🎉 全部完成" : "🎉 All complete");
+  const cta = next
+    ? `<button class="overview-cta" type="button" data-sector-spine="${escapeHtml(next)}">${escapeHtml(ctaLabel)}</button>`
+    : `<span class="overview-cta done">${escapeHtml(ctaLabel)}</span>`;
+
+  const cards = learningContent().roadmap.map((item) => {
+    const sector = item.sector || "A";
+    const title = isCn ? (item.titleCn || item.title) : item.title;
+    const focus = isCn ? (item.focusCn || item.focus) : item.focus;
+    const deliverables = isCn ? (item.deliverablesCn || item.deliverables || []) : (item.deliverables || []);
+    const note = (item.note || item.noteCn)
+      ? `<p class="learning-note">${escapeHtml(isCn ? (item.noteCn || item.note || "") : (item.note || ""))}</p>`
+      : "";
+    const p = sectorProgress(sector);
+    const pct = p.total ? Math.round((p.done / p.total) * 100) : 0;
+    const progress = p.total
+      ? `<div class="overview-progress"><span class="overview-progress-text">${p.done}/${p.total} ${escapeHtml(p.unit)}</span><span class="overview-progress-bar"><span style="width:${pct}%"></span></span></div>`
+      : "";
+    return `
+      <article class="roadmap-card" role="button" tabindex="0" data-sector-spine="${escapeHtml(sector)}">
+        <p class="learning-kicker">${escapeHtml(formatSectorBadge(sector))}</p>
+        <h4 class="learning-title">${escapeHtml(title)}</h4>
+        ${progress}
+        <p class="learning-copy">${escapeHtml(focus)}</p>
+        ${note}
+        <span class="learning-label">${escapeHtml(learningUiText("deliverables"))}</span>
+        <ul>${deliverables.map((d) => `<li>${escapeHtml(d)}</li>`).join("")}</ul>
+      </article>
+    `;
+  }).join("");
+
   target.innerHTML = `
-    <p class="learning-copy">${escapeHtml(learningUiText("roadmapIntro"))}</p>
-    <div class="roadmap-grid">
-      ${learningContent().roadmap.map((item) => {
-        const note = item.note || item.noteCn ? `<p class="learning-note">${escapeHtml(learningLanguage() === "cn" ? (item.noteCn || item.note || "") : (item.note || ""))}</p>` : "";
-        const isCn = learningLanguage() === "cn";
-        const title = isCn ? (item.titleCn || item.title) : item.title;
-        const focus = isCn ? (item.focusCn || item.focus) : item.focus;
-        const deliverables = isCn ? (item.deliverablesCn || item.deliverables || []) : (item.deliverables || []);
-        return `
-        <article class="roadmap-card ${item.status === "locked" ? "locked" : "active"}" data-sector="${escapeHtml(item.sector || "")}">
-          <p class="learning-kicker">${escapeHtml(formatSectorBadge(item.sector))} · ${item.status === "active" ? learningUiText("active") : learningUiText("locked")}</p>
-          <h4 class="learning-title">${escapeHtml(title)}</h4>
-          <p class="learning-copy">${escapeHtml(focus)}</p>
-          ${note}
-          <span class="learning-label">${escapeHtml(learningUiText("deliverables"))}</span>
-          <ul>${deliverables.map((d) => `<li>${escapeHtml(d)}</li>`).join("")}</ul>
-        </article>
-      `}).join("")}
+    <div class="overview-header">
+      <p class="learning-copy">${escapeHtml(learningUiText("roadmapIntro"))}</p>
+      ${cta}
     </div>
+    <div class="roadmap-grid">${cards}</div>
   `;
 }
 
@@ -4210,8 +4261,9 @@ function handleClick(event) {
     renderLearningHub();
     return;
   }
-  if (event.target.matches("[data-sector-spine]")) {
-    applySector(event.target.dataset.sectorSpine);
+  var spineTarget = event.target.closest("[data-sector-spine]");
+  if (spineTarget) {
+    applySector(spineTarget.dataset.sectorSpine);
     return;
   }
   if (event.target.matches(".vol-playbook-filter")) {

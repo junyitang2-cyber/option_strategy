@@ -4,7 +4,6 @@ window.D1_LEARNING_CONTENT = {
       sector: "A",
       title: "Risk Mechanics",
       titleCn: "Risk Mechanics：Greeks 直觉",
-      status: "active",
       focus: "Translate linear commodities exposure into delta, gamma, vega, theta, and carry intuition.",
       focusCn: "把线性 commodities 敞口转化为 delta、gamma、vega、theta 和 carry 直觉。",
       deliverables: ["4 Greeks modules", "Commodities bridge", "30 foundation scenarios"],
@@ -14,7 +13,6 @@ window.D1_LEARNING_CONTENT = {
       sector: "B",
       title: "Trade Construction",
       titleCn: "Trade Construction：策略构建",
-      status: "locked",
       focus: "Spreads, straddles, strangles, butterflies, condors, collars, and client suitability.",
       focusCn: "Spreads、straddles、strangles、butterflies、condors、collars 与客户适配。",
       deliverables: ["Strategy comparison matrix", "20 client structure recommendations"],
@@ -24,7 +22,6 @@ window.D1_LEARNING_CONTENT = {
       sector: "C",
       title: "Market Dynamics",
       titleCn: "Market Dynamics：Vol 框架与 Dealer Desk",
-      status: "locked",
       focus: "RV vs IV, skew, term structure, event vol, delta hedging, gamma scalping, inventory, and P&L attribution. Combines Vol Framework and Dealer/Market Making.",
       focusCn: "RV vs IV、skew、term structure、event vol、delta hedging、gamma scalping、inventory 与 P&L attribution。合并 Vol Framework 和 Dealer Desk。",
       deliverables: ["Vol trade checklist", "Dealer workflow drills", "85 vol + dealer scenarios"],
@@ -36,7 +33,6 @@ window.D1_LEARNING_CONTENT = {
       sector: "D",
       title: "Research Bridge",
       titleCn: "Research Bridge：研究驱动的期权决策",
-      status: "locked",
       focus: "Translate equity research outputs (earnings previews, sector analysis, comps, IC memos, investment theses) into options strategy decisions.",
       focusCn: "把股票研究产出（earnings preview、sector analysis、comps、IC memo、investment thesis）转化为期权策略决策。",
       deliverables: ["16 research case cards", "15 view-to-trade drills", "20+ research-driven scenarios"],
@@ -46,7 +42,6 @@ window.D1_LEARNING_CONTENT = {
       sector: "E",
       title: "Complex Products",
       titleCn: "Complex Products：Exotics 与结构化产品",
-      status: "locked",
       focus: "Asian, barrier, quanto, digital, autocallable, and client-driven payoff design.",
       focusCn: "Asian、barrier、quanto、digital、autocallable 与客户驱动的收益结构设计。",
       deliverables: ["Exotics bridge", "36 exotics scenarios"],
@@ -56,7 +51,6 @@ window.D1_LEARNING_CONTENT = {
       sector: "sprint",
       title: "Professional Sprint",
       titleCn: "专业冲刺",
-      status: "locked",
       focus: "Portfolio Greeks limits, stress testing, scenario drills, and trade idea articulation.",
       focusCn: "Portfolio Greeks limits、压力测试、场景演练和交易想法表达。",
       deliverables: ["60 sprint questions", "Skill checklist"],
@@ -532,8 +526,6 @@ window.D1_LEARNING_CONTENT = {
     },
   ],
 };
-
-window.D1_LEARNING_CONTENT.roadmap[1].status = "active";
 
 window.D1_LEARNING_CONTENT.modules.forEach((module) => {
   module.sector = "A";
@@ -1979,8 +1971,6 @@ window.D1_LEARNING_CONTENT.scenarios.push(
 );
 
 // Phase 3A: Month 3 Volatility Trading Framework
-window.D1_LEARNING_CONTENT.roadmap[2].status = "active";
-
 window.D1_LEARNING_CONTENT.modules.push(
   {
     id: "rv-iv-framework",
@@ -2566,7 +2556,6 @@ Object.assign(window.D1_LEARNING_CONTENT_ZH.scenarios, {
 });
 
 // Phase 4A/4B: Dealer Hedging, Market Making, Dynamic Hedging, And P&L Attribution
-window.D1_LEARNING_CONTENT.roadmap[3].status = "active";
 window.D1_LEARNING_CONTENT.roadmap[3].deliverables = ["Dealer workflow panel", "Dynamic hedging controls", "P&L attribution drills", "40 dealer scenarios"];
 
 window.D1_LEARNING_CONTENT.modules.push(
@@ -5539,7 +5528,6 @@ Object.assign(window.D1_LEARNING_CONTENT_ZH.scenarios, {
 });
 
 // Phase 5: Month 5 Exotics And Structuring Bridge.
-window.D1_LEARNING_CONTENT.roadmap[4].status = "active";
 window.D1_LEARNING_CONTENT.roadmap[4].deliverables = ["Exotics Bridge panel", "Simplified payoff diagrams", "Structuring workflow cases", "36 exotics scenarios"];
 
 window.D1_LEARNING_CONTENT.modules.push(

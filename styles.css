@@ -2459,3 +2459,53 @@ body[data-dest="practice"] #sectorSpine { display: none; }
   padding: 5px 4px;
   text-align: center;
 }
+
+/* ============================================================================
+   转型计划 overview dashboard (progress cards + continue CTA)
+   ============================================================================ */
+.overview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.overview-cta {
+  border: 1px solid var(--cyan);
+  border-radius: 999px;
+  background: rgba(57, 199, 229, 0.12);
+  color: var(--cyan);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 18px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.overview-cta:hover { background: rgba(57, 199, 229, 0.2); }
+.overview-cta.done { cursor: default; border-color: var(--green); color: var(--green); background: rgba(72, 212, 122, 0.12); }
+
+.roadmap-card[role="button"] { cursor: pointer; transition: border-color 0.15s, transform 0.05s; }
+.roadmap-card[role="button"]:hover { border-color: var(--cyan); }
+.roadmap-card[role="button"]:active { transform: translateY(1px); }
+
+.overview-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0 10px;
+}
+.overview-progress-text { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.overview-progress-bar {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--panel-3);
+  overflow: hidden;
+}
+.overview-progress-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--cyan);
+  border-radius: 999px;
+}

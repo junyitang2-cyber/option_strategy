@@ -50,7 +50,7 @@ test("destination persists across reload", async ({ page }) => {
 test("plan shows a sector spine and defaults to the overview (roadmap)", async ({ page }) => {
   await page.goto(URL);
   await expect(page.locator("#sectorSpine [data-sector-spine]")).toHaveCount(7); // overview,A,B,C,D,E,sprint
-  await expect(page.locator('[data-sector-spine="overview"]')).toHaveClass(/active/);
+  await expect(page.locator('.sector-spine-item[data-sector-spine="overview"]')).toHaveClass(/active/);
   await expect(page.locator('.learning-panel[data-learning-panel="roadmap"]')).toHaveClass(/active/);
   // the old tab bar is gone
   await expect(page.locator(".learning-tabs")).toHaveCount(0);
@@ -58,7 +58,7 @@ test("plan shows a sector spine and defaults to the overview (roadmap)", async (
 
 test("selecting sector C shows C modules plus vol-framework and dealer-desk panels", async ({ page }) => {
   await page.goto(URL);
-  await page.locator('[data-sector-spine="C"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="C"]').click();
   await expect(page.locator('.learning-panel[data-learning-panel="modules"]')).toHaveClass(/active/);
   await expect(page.locator('.learning-panel[data-learning-panel="vol-framework"]')).toHaveClass(/active/);
   await expect(page.locator('.learning-panel[data-learning-panel="dealer-desk"]')).toHaveClass(/active/);
@@ -74,9 +74,9 @@ test("selecting sector C shows C modules plus vol-framework and dealer-desk pane
 
 test("sector selection persists across reload", async ({ page }) => {
   await page.goto(URL);
-  await page.locator('[data-sector-spine="E"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="E"]').click();
   await page.reload();
-  await expect(page.locator('[data-sector-spine="E"]')).toHaveClass(/active/);
+  await expect(page.locator('.sector-spine-item[data-sector-spine="E"]')).toHaveClass(/active/);
   await expect(page.locator('.learning-panel[data-learning-panel="exotics-bridge"]')).toHaveClass(/active/);
 });
 

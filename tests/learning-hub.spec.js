@@ -7,7 +7,7 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await expect(page.locator("#learningProgressSummary")).toContainText("模块 0/30");
   await expect(page.locator("#learningProgressSummary")).toContainText("场景 0/211");
   await expect(page.locator("#learningProgressSummary")).toContainText("专业冲刺 0/60");
-  await expect(page.locator('[data-sector-spine="overview"]')).toContainText("总览");
+  await expect(page.locator('.sector-spine-item[data-sector-spine="overview"]')).toContainText("总览");
 
   await expect(page.locator("#learningRoadmap .roadmap-card")).toHaveCount(6);
   await expect(page.locator("#learningRoadmap")).toContainText("Risk Mechanics：Greeks 直觉");
@@ -18,21 +18,21 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await expect(page.locator("#learningRoadmap .roadmap-card").nth(4)).toContainText("Exotics Bridge 面板");
   await expect(page.locator("#learningRoadmap .roadmap-card").nth(5)).toContainText("60 个专业冲刺题");
 
-  await page.locator('[data-sector-spine="A"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="A"]').click();
   await expect(page.locator("#learningModules .module-card")).toHaveCount(9);
   await expect(page.locator("#learningModules")).toContainText("Delta：D1 方向敞口变成动态敞口");
   await expect(page.locator("#learningModules")).toContainText("高频技术问题冲刺");
 
-  await page.locator('[data-sector-spine="B"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="B"]').click();
   await expect(page.locator("#learningModules .module-card")).toHaveCount(4);
   await expect(page.locator("#learningModules")).toContainText("Vertical spreads：有定义风险的方向表达");
 
-  await page.locator('[data-sector-spine="C"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="C"]').click();
   await expect(page.locator("#learningModules .module-card")).toHaveCount(11);
   await expect(page.locator("#learningModules")).toContainText("RV vs IV：把波动率当成可交易风险因子");
   await expect(page.locator("#learningModules")).toContainText("Client flow 与 dealer inventory");
 
-  await page.locator('[data-sector-spine="E"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="E"]').click();
   await expect(page.locator("#learningModules .module-card")).toHaveCount(6);
   await expect(page.locator("#learningModules")).toContainText("Asian options：averaging 把 timing risk 变成 path risk");
   await expect(page.locator("#learningModules")).toContainText("Dealer 视角");
@@ -40,11 +40,11 @@ test("D1 learning hub renders and supports progress", async ({ page }) => {
   await expect(page.locator("#learningModules")).toContainText("核心表达");
   await expect(page.locator("#learningModules")).not.toContainText(/面试|Interview/i);
 
-  await page.locator('[data-sector-spine="A"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="A"]').click();
   await page.locator('[data-complete-module="delta-d1"]').first().click();
   await expect(page.locator("#learningProgressSummary")).toContainText("模块 1/30");
 
-  await page.locator('[data-sector-spine="A"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="A"]').click();
   await expect(page.locator("#learningBridge .bridge-card")).toHaveCount(6);
   await expect(page.locator("#learningBridge")).toContainText("不要把一种 skew 方向套到所有市场");
 
@@ -74,22 +74,22 @@ test("Learning Hub language toggle switches CN and EN", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
   await expect(page.locator("#langCn")).toHaveClass(/active/);
-  await expect(page.locator('[data-sector-spine="overview"]')).toContainText("总览");
+  await expect(page.locator('.sector-spine-item[data-sector-spine="overview"]')).toContainText("总览");
   await expect(page.locator("#learningRoadmap")).toContainText("每日节奏");
   await expect(page.locator("#learningRoadmap")).not.toContainText("Daily rhythm");
 
   await page.locator("#langEn").click();
   await expect(page.locator("#langEn")).toHaveClass(/active/);
-  await expect(page.locator('[data-sector-spine="overview"]')).toContainText("Overview");
+  await expect(page.locator('.sector-spine-item[data-sector-spine="overview"]')).toContainText("Overview");
   await expect(page.locator("#learningRoadmap")).toContainText("Daily rhythm");
 
   await page.reload();
   await expect(page.locator("#langEn")).toHaveClass(/active/);
-  await expect(page.locator('[data-sector-spine="overview"]')).toContainText("Overview");
+  await expect(page.locator('.sector-spine-item[data-sector-spine="overview"]')).toContainText("Overview");
 
   await page.locator("#langCn").click();
   await expect(page.locator("#langCn")).toHaveClass(/active/);
-  await expect(page.locator('[data-sector-spine="overview"]')).toContainText("总览");
+  await expect(page.locator('.sector-spine-item[data-sector-spine="overview"]')).toContainText("总览");
 });
 
 test("D1 learning content has complete CN scenario localization", async ({ page }) => {
@@ -123,7 +123,7 @@ test("D1 learning content has complete CN scenario localization", async ({ page 
 test("D1 phase 2A strategy construction content renders and filters", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator('[data-sector-spine="B"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="B"]').click();
   await expect(page.locator("#learningComparisons .comparison-card")).toHaveCount(5);
   await expect(page.locator("#learningComparisons")).toContainText("Iron Condor vs Short Strangle");
   await expect(page.locator("#learningComparisons")).toContainText("客户问题");
@@ -144,7 +144,7 @@ test("D1 phase 2A strategy construction content renders and filters", async ({ p
 test("D1 phase 3 volatility framework renders calculator, playbook, and filters", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator('[data-sector-spine="C"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="C"]').click();
   await expect(page.locator("#learningVolFramework .vol-framework-card")).toHaveCount(5);
   await expect(page.locator("#learningVolFramework .vol-playbook-card")).toHaveCount(9);
   await expect(page.locator("#learningVolFramework")).toContainText("RV / IV 是 distribution 问题");
@@ -177,7 +177,7 @@ test("D1 phase 3 volatility framework renders calculator, playbook, and filters"
 test("D1 phase 4 dealer desk renders workflow, attribution, and gamma controls", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator('[data-sector-spine="C"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="C"]').click();
   await expect(page.locator("#learningDealerDesk .dealer-workflow-card")).toHaveCount(6);
   await expect(page.locator("#learningDealerDesk .dealer-attribution-card")).toHaveCount(6);
   await expect(page.locator("#learningDealerDesk")).toContainText("客户买入 upside calls");
@@ -205,7 +205,7 @@ test("D1 phase 4 dealer desk renders workflow, attribution, and gamma controls",
 test("D1 phase 5 exotics bridge renders payoff sketches, structuring cases, and filters", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator('[data-sector-spine="E"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="E"]').click();
   await expect(page.locator("#learningExoticsBridge .exotics-bridge-card")).toHaveCount(6);
   await expect(page.locator("#learningExoticsBridge .structuring-case-card")).toHaveCount(6);
   await expect(page.locator("#learningExoticsBridge .exotics-payoff-svg")).toHaveCount(6);
@@ -236,7 +236,7 @@ test("D1 phase 5 exotics bridge renders payoff sketches, structuring cases, and 
 test("D1 phase 5B exotics risk lab renders decomposition drills and model-limit cards", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator('[data-sector-spine="E"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="E"]').click();
   await expect(page.locator("#learningExoticsRisk .exotics-risk-drill-card")).toHaveCount(6);
   await expect(page.locator("#learningExoticsRisk .model-limit-card")).toHaveCount(6);
   await expect(page.locator("#learningExoticsRisk")).toContainText("Exotics risk decomposition");
@@ -253,7 +253,7 @@ test("D1 phase 5B exotics risk lab renders decomposition drills and model-limit 
 test("D1 phase 6 professional sprint creates sessions, reveals rubrics, and updates dashboard", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator('[data-sector-spine="sprint"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="sprint"]').click();
   await expect(page.locator("#learningProfessionalSprint")).toContainText("Professional Sprint");
   await expect(page.locator("#sprintQuestionBankSummary")).toContainText("60");
   await expect(page.locator("#skillDashboard")).toContainText("本地能力分");
@@ -284,7 +284,7 @@ test("D1 phase 6 professional sprint creates sessions, reveals rubrics, and upda
 test("D1 phase 6B scores sprint answers, recommends weak-topic practice, and exports progress", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator('[data-sector-spine="sprint"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="sprint"]').click();
   await page.locator('[data-sprint-topic-filter="exotics"]').click();
   await page.locator("#sprintSessionSize").selectOption("5");
   await page.locator("[data-start-sprint-session]").click();
@@ -323,7 +323,7 @@ test("D1 phase 2B client recommendation drills reveal steps and persist", async 
 
   await expect(page.locator("#learningProgressSummary")).toContainText("演练 0/20");
 
-  await page.locator('[data-sector-spine="B"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="B"]').click();
   await expect(page.locator("#learningClientDrills .client-drill-card")).toHaveCount(20);
 
   const firstDrill = page.locator('[data-client-drill-card="protect-concentrated-stock"]');
@@ -364,7 +364,7 @@ test("D1 phase 2B client recommendation drills reveal steps and persist", async 
 test("strategy chips in learning modules select existing strategies", async ({ page }) => {
   await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
 
-  await page.locator('[data-sector-spine="A"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="A"]').click();
   await page.locator('[data-select-strategy="long-call"]').first().click();
 
   // chip opens the lab as an overlay; the user stays in the plan
@@ -428,7 +428,7 @@ test("Research Bridge tab renders cases, filters, and VTT drills", async ({ page
   // Switch to EN so English strings are predictable for assertions
   await page.locator("#langEn").click();
 
-  await page.locator('[data-sector-spine="D"]').click();
+  await page.locator('.sector-spine-item[data-sector-spine="D"]').click();
   await expect(page.locator("#learningResearchBridge")).toBeVisible();
 
   await expect(page.locator("#learningResearchBridge .research-case-card")).toHaveCount(16);
@@ -479,4 +479,35 @@ test("roadmap shows Sector A-E cards with correct names", async ({ page }) => {
   // no Month labels
   await expect(page.locator("#learningRoadmap")).not.toContainText("Month 1");
   await expect(page.locator("#learningRoadmap")).not.toContainText("Month 3");
+});
+
+test("plan overview is a progress dashboard with clickable sector cards and no lock labels", async ({ page }) => {
+  await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
+
+  // default destination is plan, default sector is overview
+  await expect(page.locator('[data-sector-spine="overview"].sector-spine-item')).toHaveClass(/active/);
+
+  // the vestigial gating labels are gone
+  await expect(page.locator("#learningRoadmap")).not.toContainText("未开放");
+
+  // per-sector progress is shown on the cards (fresh state = 0 done)
+  await expect(page.locator('#learningRoadmap .roadmap-card[data-sector-spine="A"]')).toContainText("0/9");
+  await expect(page.locator('#learningRoadmap .roadmap-card[data-sector-spine="sprint"]')).toContainText("0/60");
+  await expect(page.locator('#learningRoadmap .roadmap-card[data-sector-spine="D"]')).toContainText("0/15");
+
+  // clicking a sector card jumps to that sector (handler reads the card's data-sector-spine)
+  await page.locator('#learningRoadmap .roadmap-card[data-sector-spine="C"]').click();
+  await expect(page.locator('[data-sector-spine="C"].sector-spine-item')).toHaveClass(/active/);
+  await expect(page.locator('.learning-panel[data-learning-panel="vol-framework"]')).toHaveClass(/active/);
+});
+
+test("plan overview continue CTA jumps to the first incomplete sector", async ({ page }) => {
+  await page.goto("file://" + process.cwd().replace(/\\/g, "/") + "/index.html");
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+
+  // fresh progress -> first incomplete sector is A
+  await expect(page.locator("#learningRoadmap .overview-cta")).toBeVisible();
+  await page.locator("#learningRoadmap .overview-cta").click();
+  await expect(page.locator('[data-sector-spine="A"].sector-spine-item')).toHaveClass(/active/);
 });
