@@ -4343,8 +4343,7 @@ function handleClick(event) {
     return;
   }
   if (event.target.matches("[data-select-strategy]")) {
-    selectStrategy(event.target.dataset.selectStrategy);
-    applyDestination("lab");
+    openLabOverlay(event.target.dataset.selectStrategy);
     return;
   }
   if (event.target.matches("[data-open-tool]")) {

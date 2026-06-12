@@ -344,9 +344,11 @@ test("D1 phase 2B client recommendation drills reveal steps and persist", async 
   await expect(page.locator('[data-client-drill-card="protect-concentrated-stock"]')).toContainText("推荐结构");
 
   await page.locator('[data-client-drill-card="protect-concentrated-stock"] [data-select-strategy="collar"]').click();
-  await expect(page.locator("body")).toHaveAttribute("data-dest", "lab");
+  // chip opens the lab as an overlay; the user stays in the plan
+  await expect(page.locator("#labOverlay")).toBeVisible();
+  await expect(page.locator("#labOverlay #labRoot #mainChart svg")).toHaveCount(1);
   await expect(page.locator("#strategyTitle")).toContainText("Collar");
-  await expect(page.locator("#mainChart svg")).toBeVisible();
+  await expect(page.locator("body")).toHaveAttribute("data-dest", "plan");
 });
 
 test("strategy chips in learning modules select existing strategies", async ({ page }) => {
@@ -355,9 +357,11 @@ test("strategy chips in learning modules select existing strategies", async ({ p
   await page.locator("#learning-modules-tab").click();
   await page.locator('[data-select-strategy="long-call"]').first().click();
 
-  await expect(page.locator("body")).toHaveAttribute("data-dest", "lab");
+  // chip opens the lab as an overlay; the user stays in the plan
+  await expect(page.locator("#labOverlay")).toBeVisible();
+  await expect(page.locator("#labOverlay #labRoot #mainChart svg")).toHaveCount(1);
   await expect(page.locator("#strategyTitle")).toContainText("Long Call");
-  await expect(page.locator("#mainChart svg")).toBeVisible();
+  await expect(page.locator("body")).toHaveAttribute("data-dest", "plan");
 });
 
 test("D1 learning hub recovers from invalid saved scenario filter", async ({ page }) => {
