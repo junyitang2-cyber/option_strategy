@@ -1,6 +1,6 @@
 # Option Strategy Interactive Lab
 
-2026-06-11 更新：Learning Hub Roadmap 已重构为 Sector A-E 拓扑，新增 Sector D Research Bridge（16 张研究案例卡 + 15 个 View-to-Trade 演练），Scenario Bank 扩至 211 个场景，新增 Easy/Pro 皮肤切换，Playwright 测试套件 32 个全部通过。
+2026-06-12 更新：信息架构全面重构为四目的地统一 IA（转型计划 / 策略库 / 实验室 / 练习场），primary nav 左侧切换，Sector 脊柱（Sector A-E + 冲刺）取代原 12 个 Learning Hub tab，实验室为可迁移组件，全局控制移入 nav；Playwright 测试套件 53 个全部通过。（2026-06-11：Learning Hub Roadmap 重构为 Sector A-E 拓扑，新增 Sector D Research Bridge，Scenario Bank 扩至 211 个场景，新增 Easy/Pro 皮肤切换。）
 
 期权策略交互学习与专业交易员能力训练工具。项目最初用于学习并复刻 `https://options-viewer.netlify.app/` 的核心体验，现在已经扩展为本地可运行的策略分析、教学和专业训练平台。
 
@@ -23,6 +23,7 @@
 - 情景参数、风险指标、腿组合编辑、学习路径追踪。
 - 进阶模式：Portfolio Greeks、保证金教育估算、压力测试、Gamma P&L、波动率曲面、Greeks Decay、Put-Call Parity、交易员核心概念。
 - 专业模式：进阶内容 + 专业问答与情景演练。
+- 统一四目的地 IA（2026-06-12）：primary nav 左侧切换**转型计划 / 策略库 / 实验室 / 练习场**；Sector 脊柱（总览 · A · B · C · D · E · 🏁 冲刺）取代原 12 个 Learning Hub tab；实验室可迁移（overlay from plan / fullscreen in library·lab）；CN/EN + 初级/进阶/专业全局控制入 nav；`os_d1_dest` 持久化当前目的地。
 - D1-to-Derivatives Learning Hub Phase 1 + Phase 2A + Phase 2B + Phase 3A/3B + Phase 4A/4B + Phase 5 + Phase 5B + Phase 6 + Phase 6B + Phase 7A + Phase 7B + Phase 7C + Sector Restructure + Research Bridge + Easy/Pro 皮肤切换：Sector A-E + Professional Sprint roadmap、Sector A（Risk Mechanics）、Sector B（Trade Construction）、Sector C（Market Dynamics，合并 Vol Framework 与 Dealer Desk）、Sector D（Research Bridge：16 研究案例卡 + 15 View-to-Trade 演练）、Sector E（Complex Products）、Commodities Bridge、5 个策略对比卡、20 个客户推荐演练、Vol trade playbook、Dealer Desk、Exotics Bridge、Exotics Risk、Skill Dashboard、60 个 Professional Sprint questions、**211 个**实战/专业场景、71 个策略级 Trader Memo、257 个专业问答、本地进度追踪/报告导出和 Easy/Pro 皮肤切换。
 - Playwright 真实浏览器回归测试。
 
@@ -111,7 +112,7 @@ option_strategy/
 
 ## 验证状态
 
-最近一次完整验收：2026-06-11，Sector Restructure + Research Bridge + Easy/Pro 皮肤切换均通过；32 个 Playwright 测试全部通过（含 skin.spec.js 和 Sector A-E、Research Bridge 新测试）。历史验收：2026-05-29，Phase 1 / 2A / 2B / 3A / 3B / 4A / 4B / 5 / 5B / 6 / 6B / 7A / 7B / 7C 均通过；Phase 7 复核确认 71/71 策略专业内容覆盖、257 个策略级专业问答，且所有专业策略都有常见错误表达。
+最近一次完整验收：2026-06-12，统一四目的地 IA 重构（P1–P4）通过；**53 个 Playwright 测试全部通过**。历史验收：2026-06-11，Sector Restructure + Research Bridge + Easy/Pro 皮肤切换通过，32 个测试全通过；2026-05-29，Phase 1–7C 全部通过，71/71 策略专业内容覆盖。
 
 结果摘要：
 

@@ -1,5 +1,56 @@
 # Project Status And Roadmap
 
+## 2026-06-12 Update: Unified IA Redesign（转型计划 / 策略库 / 实验室 / 练习场）
+
+信息架构全面重构完成。App 从"策略浏览器 + 12 个 tab Learning Hub 叠加"模式，重组为以**交易员转型计划**为核心的四目的地统一架构。
+
+### 四个顶级目的地（primary nav，`.primary-nav`）
+
+通过页面左侧 primary nav 选择目的地，状态持久化至 localStorage `os_d1_dest`（默认 `plan`）：
+
+1. **转型计划（plan）** — 学习主脊柱。`#sectorSpine` Sector 脊柱（总览 · Sector A · B · C · D · E · 🏁 冲刺）取代原 12 个 learning tab。选中 Sector 后展示该 Sector 的模块流（module stream）+ 该 Sector 的深度内容堆叠（无子 tab）：Sector C 下为 vol-framework + dealer-desk，Sector E 下为 exotics-bridge + exotics-risk，Sector D 下为 research-bridge，Sector A 下为 bridge（Commodities Bridge），Sector B 下为 construction + client-drills。总览显示 Roadmap。🏁 冲刺为专业冲刺（Professional Sprint）。模块内策略 chip 点击后以**全屏 overlay** 打开实验室，用户仍留在转型计划中。
+2. **策略库（library）** — 71 个策略可搜索 grid（原左侧策略列表），独立目的地。点击策略后切换至实验室目的地并加载该策略。
+3. **实验室（lab）** — 完整交互分析面板（payoff chart、Greeks、scenario slider、metrics、legs）全屏展示，支持直接使用。
+4. **练习场（practice）** — Scenario Bank（211 个场景，sector + topic 过滤器），独立目的地。
+
+### 全局控制
+
+CN/EN 语言切换 + 初级/进阶/专业模式切换已移入 primary nav（`.nav-controls`），在所有目的地均可访问。Easy/Pro 皮肤（右下角浮动胶囊）保持不变。
+
+### 实验室可迁移性
+
+实验室（`#labRoot`）为可迁移组件，在转型计划（chip → overlay `#labOverlay`）、策略库（点击 → 实验室目的地）、实验室目的地（全屏）三个入口之间共享，通过 `openLabOverlay` / `closeLabOverlay` 在 `#labStage` 与 `#labOverlay` 之间移动。
+
+### localStorage 键
+
+| 键 | 含义 |
+|---|---|
+| `os_d1_dest` | 当前目的地（plan / library / lab / practice），默认 plan |
+| `os_d1_skin` | 皮肤（Easy / Pro） |
+| `os_d1_learning` | 学习进度（含 `activeSector`） |
+
+### 实施提交记录（P1–P4）
+
+- P1：96dba9b — 可迁移实验室子树 + overlay host 抽取
+- P2：0fc22f7 — 四目的地 primary nav + library/lab 目的地
+- P3a/3b：3b2b4e1 / 831e943 — 转型计划 sector 脊柱 + 模块流 + 深度内容面板
+- P4：445b958 — 练习场目的地 + 全局控制迁移至 nav + 整合收尾
+
+### 规格与计划文档
+
+- 统一 IA 设计规格：`docs/superpowers/specs/2026-06-12-unified-plan-library-lab-ia-design.md`
+- P1 计划：`docs/superpowers/plans/2026-06-12-p1-lab-componentization.md`
+- P2 计划：`docs/superpowers/plans/2026-06-12-p2-destination-nav.md`
+- P3a 计划：`docs/superpowers/plans/2026-06-12-p3a-plan-destination.md`
+- P3b 计划：`docs/superpowers/plans/2026-06-12-p3b-sector-spine.md`
+- P4 计划：`docs/superpowers/plans/2026-06-12-p4-practice-and-global-controls.md`
+
+### 测试状态
+
+Playwright 测试套件：**53 个测试全部通过**。数据文件未改动，仅导航与呈现层重组。
+
+---
+
 ## 2026-05-29 Update: Phase 7C Content Quality Normalization
 
 Phase 7C is now implemented.
@@ -53,7 +104,7 @@ Phase 6B is now implemented.
 
 ## 2026-06-11 Update: Sector Topology Restructure + Research Bridge + Easy/Pro Skin Toggle
 
-三项新功能已上线。
+三项新功能已上线。（注：该版本的 Learning Hub 标签页导航在 2026-06-12 IA 重构中已改为 Sector 脊柱 + 四目的地架构；Sector A-E 内容本身保留，仅导航层面从 tab 切换为 sector spine + `#sectorSpine`。）
 
 ### Sector A-E 拓扑重构（commits b1c5b58 / c3bce72）
 
@@ -70,7 +121,7 @@ Scenario Bank 过滤器从 month 编号（1/2/3/4/5）更新为 Sector 按钮（
 
 ### Research Bridge — Sector D（commits f6c5e6e / 86ffbb5 / cb8cd95 / 3de0958）
 
-Learning Hub 新增"Research Bridge / 研究桥接"独立 Tab：
+Learning Hub 新增"Research Bridge / 研究桥接"内容（当时为独立 Tab；2026-06-12 IA 重构后改为在转型计划 Sector D 下访问）：
 
 - **Research Desk**：16 张双语研究案例卡，可按类型过滤（earnings / sector-analysis / comps / ic-memo / thesis；中文：业绩前瞻 / 行业分析 / 可比公司 / 首次覆盖 / 投资逻辑）。
 - **View-to-Trade 演练**：15 个演练，六步逐步展开（Market View → Constraints → Candidates → Recommendation → Key Risks → Professional Expression），完成标记持久化至 localStorage，进度摘要显示"Research Drills n/15 / 研究演练 n/15"。
@@ -100,7 +151,7 @@ Pro 皮肤升级为琥珀色终端风格，所有规则收敛于 `body.skin-pro`
 
 ### 测试状态
 
-当前 Playwright 测试套件：**39 个测试全部通过**（含 `tests/skin.spec.js` 5 个 + `tests/pro-terminal.spec.js` 8 个）。
+当前 Playwright 测试套件：**39 个测试全部通过**（含 `tests/skin.spec.js` 5 个 + `tests/pro-terminal.spec.js` 8 个）。（2026-06-12 IA 重构后测试数已增至 53 个，见上方 2026-06-12 Update）
 
 ---
 

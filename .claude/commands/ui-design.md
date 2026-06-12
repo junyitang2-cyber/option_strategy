@@ -44,6 +44,43 @@ Additional Pro-only rules: spot/current-price SVG line → warm-white dashed `rg
 
 ---
 
+## Information Architecture / Navigation
+
+The app uses a **four-destination primary nav** on the left side. All new components must be aware of which destination they live in.
+
+### Destinations (`body[data-dest]`)
+
+The `<body>` element carries a `data-dest` attribute matching the active destination. CSS visibility rules target `.dest-panel[data-dest="X"]` (or equivalent). Destination is persisted in localStorage key **`os_d1_dest`** (default: `plan`).
+
+| `data-dest` | Chinese label | Content |
+|---|---|---|
+| `plan` | 转型计划 | Sector spine + module stream + deep content panels |
+| `library` | 策略库 | 71-strategy searchable grid |
+| `lab` | 实验室 | Full-screen lab analysis surface |
+| `practice` | 练习场 | Scenario Bank (211 scenarios) |
+
+The nav element is `.primary-nav`. Global controls (CN/EN language toggle + 初级/进阶/专业 mode segmented control) live inside `.nav-controls` within `.primary-nav` and are visible in all destinations.
+
+### Sector Spine (`#sectorSpine`)
+
+Inside the 转型计划 destination, a horizontal spine replaces the old learning tabs. Each item is a `.sector-spine-item`. The active sector is stored in `state.learning.activeSector`.
+
+The spine maps to a **`SECTOR_PANELS` object** that lists which content panels are shown for each sector. Multiple `.learning-panel` elements can have class `.active` simultaneously (one sector can reveal several stacked panels). The active spine item gets a `var(--cyan)` pill indicator — use the same active tab style as tool tabs (border-bottom replaced by background pill for spine items).
+
+Sectors: `overview` (总览 / Roadmap), `A` (Risk Mechanics), `B` (Trade Construction), `C` (Market Dynamics), `D` (Research Bridge), `E` (Complex Products), `sprint` (🏁 冲刺 / Professional Sprint).
+
+### Relocatable Lab (`#labRoot`)
+
+The lab component (`#labRoot`) is a **relocatable DOM subtree** shared by all three entry points:
+
+- **转型计划** (strategy chip click) → `openLabOverlay()` moves `#labRoot` into `#labOverlay` and shows it as a full-screen overlay. `closeLabOverlay()` returns it to `#labStage`.
+- **策略库** (strategy click) → switches `data-dest` to `lab` and loads the strategy.
+- **实验室** destination → `#labRoot` is permanently in `#labStage` (full-screen).
+
+When writing lab-related components, do **not** assume the lab's parent container — use `#labRoot` as the root and write styles that work in both the overlay context and the full-screen context.
+
+---
+
 ## Color Tokens
 
 Always use CSS variables — never hardcode hex values inline.
@@ -224,12 +261,20 @@ Dashed variant: use `repeating-linear-gradient`
 
 ## Interactive Components
 
-**Tabs** (both tool tabs and learning tabs):
+**Tabs** (tool tabs; note: learning tabs no longer exist — the sector spine `.sector-spine-item` handles learning navigation):
 ```css
 border-bottom: 1px solid var(--line);
 /* inactive */ color: var(--muted); border-bottom: 2px solid transparent;
 /* active   */ color: var(--cyan);  border-bottom: 2px solid var(--cyan);
 /* hover    */ background: var(--panel-2);
+```
+
+**Sector spine items** (`.sector-spine-item` in `#sectorSpine`):
+```css
+/* inactive */ color: var(--muted); background: transparent;
+/* active   */ color: var(--cyan);  background: rgba(57,199,229,0.12); border-radius: 999px;
+/* hover    */ background: var(--panel-2);
+padding: 6px 14px; font-size: 13px;
 ```
 
 **Filter pills** (rounded, in filter rows):

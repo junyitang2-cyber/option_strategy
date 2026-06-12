@@ -51,25 +51,32 @@ npx playwright install chromium
 npm test
 ```
 
-## D1-to-Derivatives Learning Hub
+## 四目的地导航
 
-Phase 5B、Phase 6 和 Phase 6B 已开放：打开 `Exotics Risk` 训练 model limits、issuer/dealer risk、suitability 和 disclosure correction；打开 `Professional Sprint` 运行 topic-filtered sessions，展开 rubric，做自评分，标记弱项，查看 recommendations，并导出本地 progress report。
+App 打开后默认进入**转型计划**。页面左侧 primary nav 提供四个顶级目的地，点击切换，选择持久化至 localStorage（`os_d1_dest`）：
 
+- **转型计划** — D1-to-Derivatives 学习主路径（见下方详细说明）。
+- **策略库** — 71 个策略可搜索 grid，独立浏览；点击策略跳至实验室。
+- **实验室** — 完整交互分析面板（payoff chart、Greeks、scenario sliders、metrics、legs）全屏展示。
+- **练习场** — Scenario Bank（211 个场景，sector + topic 过滤器），独立练习。
 
-页面顶部的“交易员学习中枢”用于把 commodities D1 经验转成 equity derivatives 专业表达。
+**全局控制**（CN/EN 语言切换 + 初级/进阶/专业模式）位于 primary nav 右侧，在所有目的地均可访问。Easy/Pro 皮肤切换在页面右下角浮动胶囊（见下方”Easy/Pro 皮肤切换”）。
 
-- `Roadmap`：查看 Sector A-E 学习路径。Sector A（Risk Mechanics）、Sector B（Trade Construction）、Sector C（Market Dynamics，合并 Vol 框架与 Dealer Desk）、Sector D（Research Bridge）、Sector E（Complex Products）和 Professional Sprint。
-- `学习模块`：按 Delta、Gamma、Vega、Theta/Rho、strategy construction、RV/IV、event vol、skew、term structure、vol surface、dealer inventory、delta hedging、gamma scalping、vega buckets、quote skewing、P&L attribution、Asian averaging、barrier monitoring、quanto、digital、autocallable 和 structured products 学习。
-- `Strategy Construction`：查看 Sector B 的策略选择对比，包括 straddle/strangle、iron condor/short strangle、collar/protective put 等。
-- `客户推荐`：做 20 个 client recommendation drills，按客户目标、约束条件、候选结构、推荐结构、风险披露、Dealer 视角和专业表达逐步展开。
-- `Vol 框架`：学习 RV/IV、event vol、skew、term structure 和 surface shifts；用小计算器理解 implied move 与 breakeven RV；用 Vol trade playbook 比较 long vol、short vol、event、skew、term structure 和 surface-bucket 交易。
-- `Dealer Desk`：训练 dealer workflow，明确客户 payoff 与 dealer Greeks/inventory 的区别，并学习 delta hedge、quote adjustment、residual risk 和 P&L attribution。
-- `Exotics Bridge`：用简化 payoff 图学习 Asian、Barrier、Quanto、Digital、Autocallable 和 Capital-protected note；每张卡都标注 embedded legs、核心风险、model limit 和专业表达；下方 structuring cases 按客户目标、payoff 设计、dealer risk 和 disclosure language 拆解。
-- `Exotics Risk`：训练 Phase 5B 的 risk decomposition、issuer/dealer risk、suitability checks、错误表达纠偏和 model-limit comparison。
-- `Professional Sprint`：启动 Phase 6 topic-filtered session，展开 rubric，做 0/1/2 自评分，标记弱项，完成题目；Phase 6B 会在 Skill Dashboard 中给出 weak-topic recommendations，并可生成本地 progress report。
-- `Commodities Bridge`：对比 commodities D1 与 equity derivatives 的相同点和需要修正的直觉。
-- `Scenario Bank`：按 category、sector（A/B/C/D/E，中文"第 X 区"）、topic 练习 211 个场景题，可过滤 vol、skew、term-structure、event、surface、short-vol、gamma、liquidity、dealer、hedging、quote、attribution、inventory、exotics、asian、barrier、quanto、digital、autocallable、structured-product、path、suitability、cross-asset 和 research-driven，可 reveal answer、标记理解、加入复习。
-- `Research Bridge`：见下方"Research Bridge 使用说明"。
+## 转型计划（D1-to-Derivatives Learning Hub）
+
+**转型计划**是把 commodities D1 经验转成 equity derivatives 专业表达的学习主脊柱。页面左侧 Sector 脊柱（`#sectorSpine`）展示学习节点，从左到右依次为：
+
+- **总览** — Sector A-E + Professional Sprint 学习路径 Roadmap。
+- **Sector A — Risk Mechanics**：Delta、Gamma、Vega、Theta/Rho 直觉训练；含 Commodities Bridge（D1 经验迁移框架）。
+- **Sector B — Trade Construction**：策略选择与构建；含 strategy comparisons（straddle/strangle、iron condor/short strangle、collar/protective put 等）和 20 个 client recommendation drills。
+- **Sector C — Market Dynamics**：Vol 框架（RV/IV、event vol、skew、term structure、surface）+ Dealer Desk（dealer workflow、inventory、delta hedge、P&L attribution）；约 85 个 vol + dealer 场景。
+- **Sector D — Research Bridge**：把股票研究产出转化为期权决策；含 Research Desk 案例卡 + View-to-Trade 演练（见下方”Research Bridge 使用说明”）。
+- **Sector E — Complex Products**：Asian、Barrier、Quanto、Digital、Autocallable 和 structured product；含 Exotics Bridge 卡 + structuring cases + Exotics Risk 训练。
+- **🏁 冲刺（Professional Sprint）** — topic-filtered sessions，0/1/2 自评分，弱项标记，Skill Dashboard，本地 progress report 导出。
+
+选中 Sector 后，该 Sector 的**学习模块流**（按模块卡片排列）与**深度内容**（vol-framework、dealer-desk、exotics-bridge、exotics-risk、research-bridge、bridge、construction、client-drills 等，视 Sector 而定）均在同一视图内堆叠显示，无需切换子 tab。
+
+模块卡片内的策略 chip 点击后以**全屏 overlay** 打开实验室分析面板，分析完毕关闭 overlay 后自动回到转型计划同一位置。
 
 模块、场景题、客户推荐演练和 Research Bridge 演练进度保存在本机浏览器 localStorage，不会上传到服务器。
 
@@ -79,7 +86,7 @@ Research Bridge 帮助你把股票研究产出（earnings preview、sector analy
 
 ### Research Desk（研究案例卡）
 
-打开 Learning Hub，点击"Research Bridge / 研究桥接"Tab，进入 Research Desk：
+进入**转型计划**，在 Sector 脊柱选 **Sector D（Research Bridge / 研究桥接）**，向下滚动至 Research Desk 区域：
 
 - 页面展示 16 张双语研究案例卡，每张卡包含研究结论、期权策略建议和风险考量。
 - 顶部过滤栏按研究类型筛选：
